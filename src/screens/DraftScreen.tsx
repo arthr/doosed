@@ -26,10 +26,9 @@ export default function DraftScreen() {
       <Header balance={wallet} time={timeLeft} />
 
       {/* Shop Section (Conveyor Belt) */}
-      <div className="flex-1 flex flex-col justify-center relative my-3 md:my-4">
-        {/* Industrial pipes background decoration */}
-        <div className="absolute top-0 left-0 w-full h-4 bg-ui-panel border-y border-border"></div>
-        <div className="absolute bottom-0 left-0 w-full h-4 bg-ui-panel border-y border-border"></div>
+        <div className="flex flex-col justify-center relative my-3 md:my-4">
+        {/* Conveyor Belt Track Graphic */}
+         <div className="h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] border-border opacity-50"></div>
 
         {/* Items Container */}
         <div className="pb-6 pt-4 px-2 sm:px-4">
@@ -46,7 +45,7 @@ export default function DraftScreen() {
         </div>
 
         {/* Conveyor Belt Track Graphic */}
-        <div className="h-6 bg-[repeating-linear-gradient(90deg,transparent,transparent_20px,#333_20px,#333_24px)] border-t-2 border-border opacity-50"></div>
+        <div className="h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] border-border opacity-50"></div>
       </div>
 
       {/* Bottom Section: Inventory + Log + Actions */}
