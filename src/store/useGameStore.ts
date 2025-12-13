@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { IGameState } from '../types/game';
+import { IGameState } from '@/types/game';
 const initialState: IGameState = {
   round: 2,
   currentTurnPlayerId: 'player-1',

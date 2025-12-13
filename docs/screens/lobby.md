@@ -1,14 +1,17 @@
 # Especificação do Projeto: UI da Sala de Espera (Lobby)
 
 ## 1. Visão Geral
+
 Interface de preparação pré-jogo que simula uma "cela de contenção" ou área de embarque, permitindo gerenciamento de até 6 jogadores, chat em tempo real e configurações da sala.
 
 ## 2. Estrutura de Navegação (Rotas)
+
 - **/lobby/:roomId**: Rota dinâmica para uma sala específica.
   - Se o jogador for expulso ou sair, redirecionar para **/** (Home).
   - Quando o Host iniciar, redirecionar todos para **/draft** ou **/match**.
 
 ## 3. Funcionalidades e Regras de Negócio
+
 - **Slots de Jogadores**:
   - Grid de 6 posições. Slots vazios mostram estado "Searching/Empty".
   - Slots ocupados mostram Avatar e Status (Pronto/Não Pronto).
@@ -20,6 +23,7 @@ Interface de preparação pré-jogo que simula uma "cela de contenção" ou áre
   - Exibir código alfa-numérico copiável (ex: "X-7-Z") no topo.
 
 ## 4. Estrutura de Dados (Estado Global)
+
 - `roomInfo`:
   - `code`: string
   - `hostId`: string
@@ -33,6 +37,7 @@ Interface de preparação pré-jogo que simula uma "cela de contenção" ou áre
 - `chatMessages`: Array de `{ author, text, timestamp }`.
 
 ## 5. Componentes de UI Sugeridos
+
 - **`PlayerSlotCard`**: Componente com estados visuais distintos: "Vazio" (efeito estática), "Ocupado" (Avatar) e "Pronto" (Borda Verde brilhante).
 - **`TerminalChat`**: Janela estilo DOS/Terminal (`bg-black`, fonte verde) para o chat.
 - **`RoomHeader`**: Barra superior com o código da sala e indicador de status piscante.

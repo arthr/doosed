@@ -17,12 +17,16 @@ export function GameLogPanel({ logs, className = '' }: GameLogPanelProps) {
       role="log"
       aria-label="Log do jogo"
       aria-live="polite"
-      className={`bg-black border-2 border-evil-purple p-2 font-mono text-xs overflow-y-auto relative shadow-pixel ${className}`}
+      className={`border-evil-purple shadow-pixel relative overflow-y-auto border-2 bg-black p-2 font-mono text-xs ${className}`}
     >
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-scanlines opacity-20" />
+      <div className="bg-scanlines pointer-events-none absolute top-0 left-0 h-full w-full opacity-20" />
       <div className="relative flex flex-col gap-1">
         {logs.map((log, i) => (
-          <div key={i} role="listitem" className={log.startsWith('>') ? 'text-rick-green' : 'text-gray-400'}>
+          <div
+            key={i}
+            role="listitem"
+            className={log.startsWith('>') ? 'text-rick-green' : 'text-gray-400'}
+          >
             {log}
           </div>
         ))}
@@ -31,5 +35,3 @@ export function GameLogPanel({ logs, className = '' }: GameLogPanelProps) {
     </div>
   );
 }
-
-

@@ -15,5 +15,3 @@ export interface DraftShopItem {
   price: number;
   icon: React.ReactNode;
 }
-
-

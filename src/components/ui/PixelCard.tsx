@@ -12,7 +12,7 @@ export const PixelCard = ({ children, className = '', variant = 'default' }: Pix
   };
   return (
     <div
-      className={`relative bg-ui-panel border-4 ${borderColors[variant]} shadow-pixel p-2 rounded-sm ${className}`}
+      className={`bg-ui-panel relative border-4 ${borderColors[variant]} shadow-pixel rounded-sm p-2 ${className}`}
     >
       {children}
     </div>

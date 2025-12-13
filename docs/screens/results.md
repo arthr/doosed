@@ -1,14 +1,17 @@
 # Especificação do Projeto: UI de Fim de Jogo (Results)
 
 ## 1. Visão Geral
+
 Tela de encerramento de partida focada em celebrar o vencedor (estilo "Survivor") ou humilhar os perdedores, exibindo estatísticas detalhadas, ganho de XP e recompensas (Loot Boxes).
 
 ## 2. Estrutura de Navegação (Rotas)
+
 - **/results**: Rota final após o término do `gameState`.
   - Botão "Play Again": Retorna o grupo ao Lobby.
   - Botão "Main Menu": Retorna o jogador para a Home.
 
 ## 3. Funcionalidades e Regras de Negócio
+
 - **Destaque do Vencedor**:
   - Avatar do vencedor em tamanho grande no centro com efeito de spotlight.
   - Texto "SURVIVED" (Vitória) ou "ELIMINATED" (Derrota) dependendo do contexto do jogador local.
@@ -20,6 +23,7 @@ Tela de encerramento de partida focada em celebrar o vencedor (estilo "Survivor"
   - Se houver recompensa, exibir uma caixa pixelada que se abre com clique.
 
 ## 4. Estrutura de Dados (Estado Global)
+
 - `matchResult`:
   - `winnerId`: string
   - `matchDuration`: string
@@ -30,6 +34,7 @@ Tela de encerramento de partida focada em celebrar o vencedor (estilo "Survivor"
   - `itemDrop`: string | null (ex: "Cool Rick Sunglasses")
 
 ## 5. Componentes de UI Sugeridos
+
 - **`SpotlightHero`**: Componente central para exibir o avatar do vencedor com partículas (confete ou gosma).
 - **`StatsTable`**: Tabelas transparentes (`backdrop-blur`) laterais para dados numéricos.
 - **`XpProgressBar`**: Barra de progresso com animação de preenchimento suave.

@@ -1,13 +1,17 @@
 # Especificação do Projeto: UI da Tela de Partida (Match)
 
 ## 1. Visão Geral
+
 Interface principal de gameplay para o jogo "DOSED: Pill Roulette", apresentando um layout de batalha por turnos estilo "mesa de cassino espacial" com estética 8-bit Sci-Fi (Rick and Morty), gerenciando até 6 jogadores, inventário e a máquina central de pílulas.
 
 ## 2. Estrutura de Navegação (Rotas)
+
 Esta especificação foca na rota principal do jogo:
+
 - **/** (Match/Game): A tela ativa onde a partida ocorre. Deve ser responsiva (Desktop 16:9 vs Mobile 9:16).
 
 ## 3. Funcionalidades e Regras de Negócio
+
 - **Sistema de Turnos**:
   - O jogador atual deve ter destaque visual (borda brilhante ou glow neon).
   - O header da máquina central deve exibir "RODADA X | TURNO: [Nome do Jogador]".
@@ -27,6 +31,7 @@ Esta especificação foca na rota principal do jogo:
   - **Game Log**: Área de texto com scroll automático mostrando as últimas ações (ex: "> Rick usou Cerveja.").
 
 ## 4. Estrutura de Dados (Estado Sugerido)
+
 Dados que alimentam a interface para simulação:
 
 - `gameState`:
@@ -48,6 +53,7 @@ Dados que alimentam a interface para simulação:
   - Referência ao jogador principal para exibir no HUD grande.
 
 ## 5. Componentes de UI Sugeridos
+
 Utilizar **Shadcn UI** altamente customizado com **Tailwind CSS** para o estilo Pixel Art/Neon:
 
 - **`GameContainer`**: Wrapper com background de portal espacial e bordas de metal alienígena (Scanlines, Chromatic Aberration).

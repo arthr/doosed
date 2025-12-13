@@ -1,29 +1,74 @@
 import React from 'react';
 import { Coins, Clock } from 'lucide-react';
+import { cn } from '@/lib/cn';
 
 type HeaderProps = {
   balance: number;
   time: number;
 };
 
-export const Header = ({ balance, time }: HeaderProps) => (
-  <div className="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4 border-b-4 border-neutral-700 pb-2 sm:pb-3 md:pb-4 bg-neutral-900/80 p-2 sm:p-3 md:p-4 md:sticky md:top-0 z-40">
-    <div className="border-2 border-neutral-600 bg-black px-3 sm:px-4 md:px-6 py-1.5 md:py-2 rounded shadow-lg flex items-center gap-2 md:gap-3 w-full md:w-auto justify-center">
-      <Coins className="text-neutral-400" size={18} />
-      <span className="text-sm tracking-widest text-neutral-200">
-        SCHMECKLES: <span className="text-white font-normal">{balance}</span>
-      </span>
-    </div>
+const headerContainerClassName = cn(
+  'flex flex-col md:flex-row',
+  'items-center justify-between',
+  'gap-2 md:gap-4',
+  'border-b-4 border-neutral-700',
+  'border-x-border border-x-4 md:border-x-8',
+  'pb-2 sm:pb-3 md:pb-4',
+  'bg-neutral-900/80',
+  'p-2 sm:p-3 md:p-4',
+  'z-40 md:sticky md:top-0',
+);
 
-    <h1 className="hidden md:block text-base text-neutral-500 font-normal tracking-[0.2em] uppercase border-x-4 border-neutral-800 px-6 lg:px-8">
-      Draft / Shop Screen
-    </h1>
+const infoBoxClassName = cn(
+  'border-2 border-neutral-600 bg-black',
+  'px-3 sm:px-4 md:px-6',
+  'py-1.5 md:py-2',
+  'rounded shadow-lg',
+  'flex items-center gap-2 md:gap-3',
+  'w-full justify-center md:w-auto',
+);
 
-    <div className="border-2 border-neutral-600 bg-black px-3 sm:px-4 md:px-6 py-1.5 md:py-2 rounded shadow-lg flex items-center gap-2 md:gap-3 w-full md:w-auto justify-center">
-      <Clock className="text-neutral-400" size={18} />
-      <span className="text-sm tracking-widest text-neutral-200">
-        DRAFT ENDS: <span className="text-white font-normal">00:{time < 10 ? `0${time}` : time}</span>
-      </span>
-    </div>
+const titleClassName = cn(
+  'hidden md:block',
+  'text-base font-normal text-neutral-500',
+  'tracking-[0.2em] uppercase',
+  'border-x-4 border-neutral-800',
+  'px-6 lg:px-8',
+);
+
+type InfoBoxProps = {
+  icon: React.ReactNode;
+  label: string;
+  value: React.ReactNode;
+};
+
+const InfoBox = ({ icon, label, value }: InfoBoxProps) => (
+  <div className={infoBoxClassName}>
+    {icon}
+    <span className="text-sm tracking-widest text-neutral-200">
+      {label}: <span className="font-normal text-white">{value}</span>
+    </span>
   </div>
 );
+
+export const Header = ({ balance, time }: HeaderProps) => {
+  const formattedDraftTime = `00:${time < 10 ? `0${time}` : time}`;
+
+  return (
+    <div className={headerContainerClassName}>
+      <InfoBox
+        icon={<Coins className="text-neutral-400" size={18} />}
+        label="SCHMECKLES"
+        value={balance}
+      />
+
+      <h1 className={titleClassName}>Draft / Shop Screen</h1>
+
+      <InfoBox
+        icon={<Clock className="text-neutral-400" size={18} />}
+        label="DRAFT ENDS"
+        value={formattedDraftTime}
+      />
+    </div>
+  );
+};

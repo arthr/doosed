@@ -16,7 +16,7 @@ export function ActionDock({ onChat, onShop, className = '', layout = 'row' }: A
         <button
           type="button"
           onClick={onShop}
-          className="flex-1 h-12 bg-green-700 hover:bg-green-600 border-b-4 border-green-900 text-white font-pixel text-xs flex items-center justify-center gap-2 active:border-b-0 active:translate-y-1"
+          className="font-pixel flex h-12 flex-1 items-center justify-center gap-2 border-b-4 border-green-900 bg-green-700 text-xs text-white hover:bg-green-600 active:translate-y-1 active:border-b-0"
         >
           <ShoppingCart size={16} />
           <span>SHOP</span>
@@ -28,7 +28,7 @@ export function ActionDock({ onChat, onShop, className = '', layout = 'row' }: A
           type="button"
           onClick={onChat}
           aria-label="Abrir chat"
-          className="flex-1 h-12 bg-purple-700 hover:bg-purple-600 border-b-4 border-purple-900 text-white font-pixel text-xs flex items-center justify-center gap-2 active:border-b-0 active:translate-y-1"
+          className="font-pixel flex h-12 flex-1 items-center justify-center gap-2 border-b-4 border-purple-900 bg-purple-700 text-xs text-white hover:bg-purple-600 active:translate-y-1 active:border-b-0"
         >
           <MessageSquare size={16} />
           <span>CHAT</span>
@@ -37,5 +37,3 @@ export function ActionDock({ onChat, onShop, className = '', layout = 'row' }: A
     </div>
   );
 }
-
-

@@ -6,6 +6,7 @@ A dual-panel image displaying game user interface designs for the "**DOSED: Pill
 The overall aesthetic is a pixelated, grimy interdimensional spaceship console with CRT scanlines, chromatic aberration, and neon glows in sickly greens, electric purples, and radioactive blues against a dark, star-filled portal background. Fonts are blocky pixel art.
 
 **DESKTOP UI (16:9 aspect ratio):**
+
 1. **CENTER HEADER (Logo & Identity):**
    - Dominating the top center is a massive, dripping pixel-art logo: "DOSED".
    - Subtitle below in glitchy font: "PILL ROULETTE".
@@ -34,6 +35,7 @@ A dual-panel image displaying game user interface designs for the "**DOSED: Pill
 The scene resembles a holding cell or a spaceship waiting area. Grimy metal textures, flickering overhead lights, and the same CRT scanline effects.
 
 **DESKTOP UI (16:9 aspect ratio):**
+
 1. **TOP BAR (Room Settings):**
    - Left: "ROOM CODE: [ X-7-Z ]" in a glowing green LCD font.
    - Right: "STATUS: WAITING FOR SUBJECTS..." blinking in yellow.
@@ -61,6 +63,7 @@ A dual-panel image displaying game user interface designs for the "**DOSED: Pill
 Visualized as a shady "Interdimensional Pawn Shop". The background features shelves clutter with sci-fi junk (plumbuses, portal fluid vials). The lighting is dimmer, moody, with emphasis on the items.
 
 **DESKTOP UI (16:9 aspect ratio):**
+
 1. **HEADER (Economy):**
    - Displays "SCHMECKLES: 150" (Currency) with a pixel coin icon.
    - A countdown timer: "DRAFT ENDS IN: 00:15".
@@ -119,9 +122,10 @@ A dual-panel image displaying game user interface designs for the "**DOSED: Pill
 
 **AESTHETIC:**
 Dramatic and high contrast. If the player won, it's a celebration of lights. If lost, it's gloomy and red.
-*Theme for this Prompt:* **VICTORY (Survivor)** scenario.
+_Theme for this Prompt:_ **VICTORY (Survivor)** scenario.
 
 **DESKTOP UI (16:9 aspect ratio):**
+
 1. **CENTER STAGE (The Survivor):**
    - A large, animated spotlight shines on the Winner's Avatar (Rick Sanchez) in the center.
    - Giant Text overlay: "**SURVIVED**" in a shiny, metallic gold pixel font with sparkles.
