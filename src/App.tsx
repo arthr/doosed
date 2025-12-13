@@ -1,4 +1,4 @@
-import DraftScreen from './screens/DraftExtraScreen';
+import DraftScreen from './screens/DraftScreen';
 import './index.css';
 function App() {
   return <DraftScreen />;
