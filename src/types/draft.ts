@@ -8,4 +8,12 @@ export interface Item {
   icon: React.ElementType;
 }
 
+export interface DraftShopItem {
+  id: number;
+  name: string;
+  desc: string;
+  price: number;
+  icon: React.ReactNode;
+}
+
 
