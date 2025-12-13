@@ -16,7 +16,7 @@ const EconomyHeader: React.FC<EconomyHeaderProps> = ({ wallet, timeLeft }) => {
       {/* Wallet Display */}
       <div className="bg-slate-900 border-4 border-green-900 px-4 py-2 rounded-sm shadow-inner flex items-center gap-2 w-full sm:w-auto justify-center">
         <div className="bg-green-500 rounded-full p-1 text-slate-900">
-           <span className="font-bold text-xs">$</span>
+           <span className="font-normal text-xs">$</span>
         </div>
         <span className="text-green-400 text-lg sm:text-xl tracking-wider drop-shadow-md">
           SCHMECKLES: {wallet}

@@ -42,7 +42,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, maxSlots }) =>
             ) : (
               <div className="w-full h-full opacity-10 flex items-center justify-center">
                  {/* Empty slot diagonal lines pattern */}
-                 <div className="w-1/2 h-[1px] bg-slate-500 rotate-45 transform"></div>
+                 <div className="w-1/2 h-px bg-slate-500 rotate-45 transform"></div>
               </div>
             )}
           </div>

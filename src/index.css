@@ -223,9 +223,9 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-space-black text-white font-pixel overflow-hidden;
-    image-rendering: pixelated;
+body {
+  @apply bg-space-black text-white font-pixel overflow-hidden;
+  image-rendering: pixelated;
     position: relative;
   }
   /* Retro CRT Scanline Effect (aplicado globalmente no body) */
@@ -243,15 +243,15 @@
     z-index: 50;
     background-size: 100% 2px, 3px 100%;
     pointer-events: none;
-  }
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    @apply bg-ui-panel;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-rick-green rounded-none;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-ui-panel;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-rick-green rounded-none;
   }
   
   /* Títulos em fonte Pixel Block */

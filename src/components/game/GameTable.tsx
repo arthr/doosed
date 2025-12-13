@@ -4,7 +4,7 @@ export const GameTable = () => {
   const currentPlayer = players.find(p => p.id === currentTurnPlayerId);
   const Stat = ({ label, val, color }: { label: string; val: number; color: string }) => (
     <div className="flex flex-col items-center mx-2">
-      <span className={`text-lg font-bold ${color}`}>[{val}]</span>
+      <span className={`text-lg font-normal ${color}`}>[{val}]</span>
       <span className={`text-[10px] ${color}`}>{label}</span>
     </div>
   );
@@ -30,7 +30,7 @@ export const GameTable = () => {
               className="w-12 h-6 rounded-full bg-gray-300 border-2 border-gray-500 flex items-center justify-center hover:scale-110 transition-transform shadow-lg relative overflow-hidden"
             >
               <div className="w-1/2 h-full bg-gray-400 absolute left-0" />
-              <span className="relative z-10 text-black font-bold text-xs">?</span>
+              <span className="relative z-10 text-black font-normal text-xs">?</span>
             </button>
           ))}
         </div>
