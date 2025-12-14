@@ -19,7 +19,7 @@
 - [x] 3.1 Criar pastas `src/components/game/table/` e `src/components/game/hud/`
   - DoD: pastas existem (placeholders versionáveis), sem alterar runtime.
 
-- [ ] 3.2 Extrair componentes inline do `MatchScreen` para `components/game/*`
+- [x] 3.2 Extrair componentes inline do `MatchScreen` para `components/game/*`
   - DoD: `MatchScreen` vira orquestrador; `pnpm lint` e `pnpm build` passam.
 
 - [ ] 4.1 Criar `Phase` e guard de transição em `src/core/state-machines/`

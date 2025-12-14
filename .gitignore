@@ -37,4 +37,6 @@ Desktop.ini
 .vscode/
 .idea/
 
+# Context Files
+CHAT-CONTEXT.md
 
