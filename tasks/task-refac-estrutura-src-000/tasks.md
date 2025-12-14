@@ -16,7 +16,7 @@
 - [x] 2.2 Criar esqueleto `src/core/state-machines/`
   - DoD: pasta existe (placeholder versionável), sem alterar runtime.
 
-- [ ] 3.1 Criar pastas `src/components/game/table/` e `src/components/game/hud/`
+- [x] 3.1 Criar pastas `src/components/game/table/` e `src/components/game/hud/`
   - DoD: pastas existem (placeholders versionáveis), sem alterar runtime.
 
 - [ ] 3.2 Extrair componentes inline do `MatchScreen` para `components/game/*`
