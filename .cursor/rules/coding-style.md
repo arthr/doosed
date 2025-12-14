@@ -52,14 +52,6 @@ export function useGameActions() {
 - Hooks customizados para expor funcionalidades
 - Stores modulares em `stores/game/` para decomposicao
 
-## Funcoes Puras (Utils)
-
-- Funcoes em `src/utils/` devem ser PURAS
-- Sem imports de stores (`useStore`)
-- Sem DOM ou side effects
-- Recebem dados, retornam dados
-- Facilmente testaveis com Vitest
-
 ## Tailwind CSS
 
 - Classes utilitarias diretamente no JSX

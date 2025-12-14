@@ -93,7 +93,9 @@ App
 - **Props:** `type` (Safe, Poison, etc - se revelado), `shape` (forma visual), `isUnknown`.
 - **Interação:** `onClick` para selecionar a pílula a ser consumida.
 
-###4.4. Seção Inferior (Jogador e Ações)**`PlayerDashboard`**
+###4.4. Seção Inferior (Jogador e Ações)
+
+**`PlayerDashboard`**
 
 - **Responsabilidade:** Exibir dados do jogador local ("YOU").
 - **Destaque:** Deve ser visualmente maior que os `OpponentCard`.
@@ -147,14 +149,14 @@ module.exports = {
 
 2. **Separação de Responsabilidades:**
 
-- Componentes visuais (`components/ui`) não devem conter lógica de negócio complexa.
-- Use Custom Hooks (ex: `useTurnLogic`, `useInventory`) para injetar lógica nos componentes containers.
+- Componentes visuais (`components/ui`) não devem conter lógica de negócio.
+- Use Custom Hooks (ex: `useInventory`) para injetar lógica nos componentes containers, somente se necessário.
 
 3. **Performance:**
 
 - O `GameLog` pode crescer muito. Use virtualização se as mensagens passarem de 100.
 - O `PillDispenser` deve usar `key` única (IDs) para garantir animações corretas ao remover/adicionar pílulas.
 
-4. **Acessibilidade (a11y):**
+4. **Acessibilidade [a11y]:** _(Opcional)_
 
 - Mesmo sendo um jogo pixel art, mantenha navegação por teclado nos slots de inventário e botões de ação.
