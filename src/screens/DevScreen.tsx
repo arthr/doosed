@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
+import type { Phase } from '@/core/state-machines/phase';
+import { useFlowStore } from '@/stores/flowStore';
 
 type ScreenComponent = () => JSX.Element;
 
@@ -37,11 +39,22 @@ function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
 }
 
+function getNextPhase(phase: Phase): Phase {
+  if (phase === 'LOBBY') return 'DRAFT';
+  if (phase === 'DRAFT') return 'MATCH';
+  if (phase === 'MATCH') return 'RESULTS';
+  return 'LOBBY';
+}
+
 export function DevScreen() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [dockPos, setDockPos] = useState<Vec2>({ x: 24, y: 24 });
+
+  const phase = useFlowStore(state => state.phase);
+  const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
+  const resetRun = useFlowStore(state => state.resetRun);
 
   const fabDragRef = useRef<{
     pointerId: number;
@@ -82,46 +95,13 @@ export function DevScreen() {
 
   const selected = selectedKey ? (screens.find(s => s.key === selectedKey) ?? null) : null;
 
-  if (!selected) {
-    return (
-      <div className="bg-space-black text-foreground min-h-screen p-4">
-        <div className="mx-auto max-w-5xl">
-          <h1 className="mb-4 text-sm tracking-widest text-neutral-400 uppercase">Dev Screen</h1>
-
-          <div
-            className={cn(
-              'grid gap-3',
-              'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4',
-              'place-items-center',
-            )}
-          >
-            {screens.map(screen => (
-              <button
-                key={screen.key}
-                type="button"
-                onClick={() => setSelectedKey(screen.key)}
-                className={cn(
-                  'font-pixel w-full max-w-[220px]',
-                  'rounded border-2 border-neutral-700 bg-neutral-950',
-                  'px-3 py-3',
-                  'text-xs tracking-wider text-white uppercase',
-                  'transition-colors hover:border-neutral-300 hover:bg-neutral-900',
-                )}
-              >
-                {screen.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const SelectedComponent = selected.Component;
-
   return (
-    <div className="min-h-screen">
-      <SelectedComponent />
+    <>
+      {selected ? (
+        <div className="fixed inset-0 z-40 overflow-auto">
+          <selected.Component />
+        </div>
+      ) : null}
 
       {/* Draggable dock (FAB + popup compartilham a mesma posição) */}
       <div style={{ position: 'fixed', left: dockPos.x, top: dockPos.y }} className="z-60">
@@ -252,8 +232,8 @@ export function DevScreen() {
               <label className="flex flex-col gap-2">
                 <span className="text-xs tracking-wider text-neutral-400 uppercase">Tela</span>
                 <select
-                  value={selected.key}
-                  onChange={e => setSelectedKey(e.target.value)}
+                  value={selectedKey ?? ''}
+                  onChange={e => setSelectedKey(e.target.value ? e.target.value : null)}
                   onPointerDown={e => e.stopPropagation()}
                   className={cn(
                     'w-full',
@@ -262,6 +242,7 @@ export function DevScreen() {
                     'focus:ring-2 focus:ring-neutral-600 focus:outline-none',
                   )}
                 >
+                  <option value="">(sem preview)</option>
                   {screens.map(screen => (
                     <option key={screen.key} value={screen.key}>
                       {screen.label}
@@ -269,6 +250,53 @@ export function DevScreen() {
                   ))}
                 </select>
               </label>
+
+              <div className="rounded border border-neutral-800 bg-black/50 p-3">
+                <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">Phase</div>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-xs text-white">
+                    Atual: <span className="font-bold">{phase}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onPointerDown={e => e.stopPropagation()}
+                      onClick={() => setPhaseGuarded('LOBBY')}
+                      className={cn(
+                        'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
+                        'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                      )}
+                    >
+                      Lobby
+                    </button>
+                    <button
+                      type="button"
+                      onPointerDown={e => e.stopPropagation()}
+                      onClick={() => {
+                        if (phase === 'RESULTS') resetRun();
+                        else setPhaseGuarded(getNextPhase(phase));
+                      }}
+                      className={cn(
+                        'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
+                        'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                      )}
+                    >
+                      Next
+                    </button>
+                    <button
+                      type="button"
+                      onPointerDown={e => e.stopPropagation()}
+                      onClick={resetRun}
+                      className={cn(
+                        'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
+                        'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                      )}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
 
               <button
                 type="button"
@@ -284,12 +312,12 @@ export function DevScreen() {
                   'hover:border-neutral-300 hover:bg-neutral-800',
                 )}
               >
-                Voltar para lista
+                Fechar preview
               </button>
             </div>
           </div>
         ) : null}
       </div>
-    </div>
+    </>
   );
 }
