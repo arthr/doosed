@@ -1,25 +1,49 @@
 ---
-description: "Always apply: planejamento por tasks atômicas (Solo Dev)"
+description: "Always apply: Spec Driven Development + planning de tasks (Solo Dev)"
 alwaysApply: true
 ---
 
 ## Objetivo
-Garantir que mudanças grandes/complexas (feature/refactor/fix com impacto alto, muitos arquivos, ou decisões arquiteturais) sejam executadas com clareza e rastreabilidade em modo Solo Dev.
+Quando uma mudança for grande/complexa (muitos arquivos, alto impacto, decisões arquiteturais), o agente deve criar um Spec com requirements (EARS), design e uma lista de tasks executáveis.
 
-## Regra
-Quando o usuário solicitar (ou a conversa evoluir para) uma mudança grande/complexa, o agente deve **sempre sugerir** a criação de um arquivo de tasks e, se possível no workspace, **criar** esse arquivo.
+## Regra (criação do Spec)
+Ao identificar uma mudança grande/complexa, o agente deve:
+- Sugerir explicitamente o uso de Spec Driven Development.
+- Criar um diretório de task em `./tasks/` (se tiver permissão no workspace).
 
-- Local: `./tasks/`
-- Nome do arquivo: `TASK-[FEAT|FIX|REFAC]-[NOME]-000.md`
+### Estrutura obrigatória
+Diretório:
+- `./tasks/task-[feat|fix|refac]-[nome]-000/`
 
-## Conteúdo mínimo do arquivo de tasks
-- **Contexto**: 2-5 linhas sobre o porquê.
-- **Escopo**: o que está dentro e fora.
-- **Riscos**: 2-5 bullets.
-- **Tasks atômicas**: lista ordenada com Definition of Done (DoD) por item.
-- **Planos de verificação**: comandos e checks (ex.: `pnpm lint`, `pnpm build`).
+Arquivos:
+- `requirements.md` (obrigatório, usando EARS)
+- `design.md` (obrigatório)
+- `tasks.md` (obrigatório)
 
-## Diretrizes
-- Uma task deve ser pequena o suficiente para caber em 1 commit e manter o projeto “verde”.
-- Priorizar ordem que minimize churn: primeiro mover/compatibilizar caminhos, depois refatorar responsabilidades.
-- Evitar over-engineering e dependências novas sem pedido explícito.
+## `requirements.md` (EARS)
+Escrever requirements com EARS, preferindo frases objetivas.
+Exemplos:
+- Quando o usuário iniciar uma partida, o sistema deve criar uma sessão de match.
+- Enquanto o match estiver em andamento, o sistema deve processar eventos de forma determinística.
+- Se uma transição de fase for inválida, o sistema deve rejeitar a transição.
+
+## `design.md`
+Deve conter:
+- Contexto (por que)
+- Alternativas consideradas e trade-offs
+- Contratos (tipos, eventos, APIs) se aplicável
+- Plano incremental de migração (passo a passo)
+- Riscos e mitigação
+
+## `tasks.md` (lista executável)
+### Legenda (obrigatória no topo)
+- `[ ]` - Pendente
+- `[~]` - Aguardando Revisão
+- `[x]` - Finalizada
+- `[-]` - Cancelada
+
+### Regras
+- Cada item deve ter DoD (Definition of Done).
+- Preferir granularidade: 1 task pequena = 1 commit.
+- Ordem deve minimizar churn (primeiro compatibilidade/paths, depois refatoração, depois melhorias).
+- Atualizar os status ao longo do fluxo (ver rule `task-execute`).
