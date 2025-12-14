@@ -4,9 +4,8 @@
 Validar ações e transmitir estado atualizado (server-authoritative).
 
 ## Endpoints sugeridos
-- match: processa MATCH
-- matchmaking/create-lobby: cria sala
-- draft-buy: transação de itens
+- match-action: processa ações/turnos (MATCH)
+- create-match: inicializa sala/partida
 
 ## Regras
 - Validar payload (schema)

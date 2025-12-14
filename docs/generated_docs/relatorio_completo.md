@@ -61,26 +61,25 @@ dosed/
 ├── supabase/
 │   ├── functions/
 │   │   ├── _shared/           # Lógica Core do Jogo (GameEngine) compartilhada
-│   │   ├── match-action/      # Endpoint: Processa turno
-│   │   ├── create-lobby/      # Endpoint: Matchmaking
-│   │   └── draft-buy/         # Endpoint: Transação de itens
+│   │   ├── match-action/      # Endpoint: Processa ações/turnos
+│   │   └── create-match/      # Endpoint: Inicializa sala/partida
 │   ├── migrations/            # SQL Schemas
-│   └── seed.sql               # Dados iniciais (Itens, Tipos de Pílulas)
 ├── src/
+│   ├── core/
+│   │   ├── adapters/          # Supabase Client Wrappers
+│   │   └── state-machines/    # XState ou lógica de fases
 │   ├── components/
 │   │   ├── game/
-│   │   │   ├── hud/           # PlayerStats, InventoryGrid
-│   │   │   ├── board/         # PillDispenser, OpponentList
-│   │   │   └── effects/       # Confetti, BloodSplatter (Canvas)
-│   │   └── retro-ui/          # Botões, Paineis 8-bit (Reutilizáveis)
+│   │   │   ├── table/         # A mesa de jogo (Conveyor, Bottle)
+│   │   │   └── hud/           # Barras de vida, Stats
+│   │   └── ui/                # 8bit UI Kit
+│   ├── hooks/
 │   ├── stores/
-│   │   ├── match.store.ts     # Zustand: Estado local da partida
-│   │   └── socket.store.ts    # Supabase Realtime wrapper
+│   │   ├── matchStore.ts      # Sincronizado via Realtime
+│   │   └── uiStore.ts         # Estado local (modals, sfx)
+│   ├── types/
 │   ├── lib/
-│   │   ├── game-math.ts       # Probabilidades e Dano
-│   │   └── constants.ts       # IDs de itens e config visual
-│   └── hooks/
-│       └── useGameSound.ts    # SFX Manager
+│   └── screens/
 └── public/
     └── assets/
         └── sprites/           # Spritesheets (Rick, Morty, Pills)

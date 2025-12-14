@@ -5,6 +5,8 @@ Esta pasta contém a documentação oficial (PT-BR) para iniciar o desenvolvimen
 ## Como ler (ordem recomendada)
 - [00-start-here/index.md](00-start-here/index.md)
   - [/dev-workflow.md](00-start-here/dev-workflow.md)
+  - [/setup-local.md](00-start-here/setup-local.md)
+  - [/estrutura-do-projeto.md](00-start-here/estrutura-do-projeto.md)
 - [01-produto/visao-e-pilares.md](01-produto/visao-e-pilares.md)
   - [/modos-de-jogo.md](01-produto/modos-de-jogo.md)
   - [/progressao-meta.md](01-produto/progressao-meta.md)

@@ -14,9 +14,10 @@ Permitir que 1 dev (modo solo) consiga:
 ## O que é a Renovada (v2)
 - Baseada em 4 fases (LOBBY/DRAFT/MATCH/RESULTS)
 - Multiplayer preparado para server-authoritative
-- UI/UX 8-bit sci-fi (React + Tailwind + shadcn)
+- UI/UX 8-bit sci-fi (React + Tailwind)
 
 ## Links rápidos
 - Setup local: setup-local.md
 - Workflow: dev-workflow.md
+- Estrutura do projeto (target): estrutura-do-projeto.md
 - Glossário e terminologia: ../99-apendice/fontes-e-decisoes.md

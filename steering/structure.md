@@ -1,38 +1,13 @@
 # Estrutura do projeto (Fonte Normativa)
 
-Este arquivo descreve a estrutura do repositório e aponta para a documentação Renovada em `docs/v2`.
+Este arquivo define a estrutura **alvo** do projeto e aponta para a documentação Renovada.
 
-## Pastas principais
-- `src/`: aplicação React (UI, stores, tipos)
-- `public/`: assets públicos
-- `docs/`: documentação (inclui `docs/v2`)
-- `steering/`: documentos normativos curtos (produto/stack/fluxo/balance)
+## Estrutura alvo (Renovada)
+A referência detalhada (com árvore completa) está em:
+- `docs/v2/00-start-here/estrutura-do-projeto.md`
 
-## Estrutura atual (alto nível)
-```
-src/
-  components/
-    ui/
-    chat/
-    lobby/
-    draft/
-  hooks/
-  lib/
-  screens/
-  store/
-  types/
-```
-
-## Convenções
-- Components: PascalCase
-- Hooks: prefixo use
-- Estado global: `src/store/` (Zustand)
-- Tipos: `src/types/`
-
-## Documentação Renovada
-- Índice: `docs/v2/index.md`
-- Arquitetura (eventos, FSM): `docs/v2/04-arquitetura/`
-- Gameplay (pílulas, quests, balance): `docs/v2/02-gameplay/`
+## Nota sobre o estado atual do repo
+O repositório pode ter variações temporárias (ex.: `src/store/` vs `src/stores/`) enquanto migrações acontecem. A diretriz é convergir para a estrutura alvo definida na v2.
 
 ## Regra importante
 `steering/` deve permanecer consistente com `docs/v2`.
