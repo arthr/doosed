@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { DraftShopItem } from '@/types/draft';
+import { chatActions } from '@/store/useChatStore';
 
 const MAX_SLOTS = 8;
 const START_IN = 10;
@@ -70,7 +71,8 @@ export function useDraftShopMock(
   };
 
   const openChat = () => {
-    setLogs(prev => [...prev, '> Chat aberto (mock).']);
+    chatActions.open('draft');
+    chatActions.addSystemMessage('Sistema: chat aberto (mock).', 'draft');
   };
 
   const openShop = () => {

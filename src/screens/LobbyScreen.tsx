@@ -1,11 +1,11 @@
 import { ActionControls } from '@/components/lobby/ActionControls';
-import { ChatInterface } from '@/components/lobby/ChatInterface';
 import { PlayerGrid } from '@/components/lobby/PlayerGrid';
 import { RoomHeader } from '@/components/lobby/RoomHeader';
 import { useLobbyMock } from '@/hooks/useLobbyMock';
+import { Chat } from '@/components/chat/Chat';
 
 export const LobbyScreen = () => {
-  const { players, isMobileChatOpen, currentUserReady, toggleChat, toggleReady } = useLobbyMock();
+  const { players, currentUserReady, toggleReady } = useLobbyMock();
 
   return (
     <div className="bg-space-black text-foreground border-border mx-auto flex h-screen max-w-7xl flex-col border-x-4 p-2 font-mono text-xs md:border-x-8 md:p-6 md:text-sm">
@@ -20,8 +20,7 @@ export const LobbyScreen = () => {
 
         {/* Footer: Chat & Actions */}
         <footer className="flex h-auto shrink-0 flex-col gap-3 md:h-64 md:flex-row md:gap-4">
-          {/* Chat Component - Handles responsive visibility internally or via props */}
-          <ChatInterface isOpen={isMobileChatOpen} onToggle={toggleChat} />
+          <Chat mode="inline" threadId="lobby" />
 
           {/* Action Buttons */}
           <ActionControls isReady={currentUserReady} onToggleReady={toggleReady} />

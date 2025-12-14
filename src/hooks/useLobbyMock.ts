@@ -3,10 +3,8 @@ import type { Player } from '@/types/lobby';
 
 type UseLobbyMockResult = {
   players: (Player | null)[];
-  isMobileChatOpen: boolean;
   currentUserReady: boolean;
 
-  toggleChat: () => void;
   toggleReady: () => void;
 };
 
@@ -38,10 +36,7 @@ export function useLobbyMock(): UseLobbyMockResult {
   const initialPlayers = useMemo<(Player | null)[]>(() => [...MOCK_PLAYERS, null, null, null], []);
 
   const [players, setPlayers] = useState<(Player | null)[]>(initialPlayers);
-  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [currentUserReady, setCurrentUserReady] = useState(false);
-
-  const toggleChat = () => setIsMobileChatOpen(prev => !prev);
 
   const toggleReady = () => {
     // Mock otimista (assumindo host como usuário atual)
@@ -55,9 +50,7 @@ export function useLobbyMock(): UseLobbyMockResult {
 
   return {
     players,
-    isMobileChatOpen,
     currentUserReady,
-    toggleChat,
     toggleReady,
   };
 }
