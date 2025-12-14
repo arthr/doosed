@@ -19,8 +19,8 @@ export const LobbyScreen = () => {
         </main>
 
         {/* Footer: Chat & Actions */}
-        <footer className="flex h-auto shrink-0 flex-col gap-3 md:h-64 md:flex-row md:gap-4">
-          <Chat mode="inline" threadId="lobby" />
+        <footer className="flex bg-ui-panel h-auto shrink-0 flex-col gap-3 md:h-64 md:flex-row md:gap-4">
+          <Chat mode="inline" threadId="lobby" className="px-2 md:px-0" />
 
           {/* Action Buttons */}
           <ActionControls isReady={currentUserReady} onToggleReady={toggleReady} />

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DraftShopItem } from '@/types/draft';
 import { postSystemMessage } from '@/lib/systemMessages';
 
@@ -28,6 +28,11 @@ export function useDraftShopMock(
   const [startIn, setStartIn] = useState(initialStartIn);
   const [inventory, setInventory] = useState<DraftShopItem[]>([]);
   const [loadoutConfirmed, setLoadoutConfirmed] = useState(false);
+  const loadoutConfirmedRef = useRef(loadoutConfirmed);
+
+  useEffect(() => {
+    loadoutConfirmedRef.current = loadoutConfirmed;
+  }, [loadoutConfirmed]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -60,11 +65,10 @@ export function useDraftShopMock(
   };
 
   const toggleLoadout = () => {
-    setLoadoutConfirmed(prev => {
-      const next = !prev;
-      postSystemMessage('draft', next ? '> Loadout confirmado.' : '> Loadout cancelado.');
-      return next;
-    });
+    const next = !loadoutConfirmedRef.current;
+    loadoutConfirmedRef.current = next;
+    setLoadoutConfirmed(next);
+    postSystemMessage('draft', next ? '> Loadout confirmado.' : '> Loadout cancelado.');
   };
 
   const openShop = () => {

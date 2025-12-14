@@ -155,7 +155,7 @@ export const DraftScreen = () => {
                 Backpack ({inventory.length}/{maxSlots} Slots)
               </h2>
             </div>
-            <div className="grid grid-cols-8 gap-x-2 gap-y-3 sm:gap-x-3 sm:gap-y-4 md:grid-cols-4 md:gap-x-4 md:gap-y-2">
+            <div className="grid grid-cols-8 gap-2 sm:gap-3 md:grid-cols-4 md:gap-4">
               {[...Array(maxSlots)].map((_, i) => (
                 <div key={i} className="col-span-1 w-full">
                   <InventorySlot item={inventory[i]} />
@@ -166,12 +166,12 @@ export const DraftScreen = () => {
 
           {/* Chat (padrao Lobby) */}
           <div className="flex flex-col md:col-span-5">
-            <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
+            <div className="md:flex hidden items-center gap-2 text-muted-foreground border-border border-b pb-4">
               <Terminal size={20} />
               <h2 className="text-sm uppercase">Chat</h2>
             </div>
-            <div className="pt-3">
-              <Chat mode="inline" threadId="draft" className="h-32 sm:h-36 md:h-44" />
+            <div className='flex h-auto shrink-0 flex-col gap-3 md:h-50 md:flex-row md:gap-4'>
+              <Chat mode="inline" threadId="draft" />
             </div>
           </div>
 
