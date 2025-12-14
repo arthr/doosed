@@ -28,7 +28,7 @@
 - [x] 4.2 Criar `flowStore` em `src/stores/`
   - DoD: `phase`, `setPhaseGuarded`, `resetRun`.
 
-- [ ] 4.3 Ajustar `App.tsx` para renderizar screens por fase
+- [x] 4.3 Ajustar `App.tsx` para renderizar screens por fase
   - DoD: fluxo jogável básico LOBBY -> DRAFT -> MATCH -> RESULTS sem depender do DevScreen.
 
 - [ ] 5.1 Remover emojis do código em `src/`
