@@ -1,7 +1,7 @@
 import { DevScreen } from '@/screens/DevScreen';
 import '@/index.css';
 import { Chat } from '@/components/chat/Chat';
-import { initChatSystemBridge } from '@/store/initChatSystemBridge';
+import { initChatSystemBridge } from '@/stores/initChatSystemBridge';
 
 initChatSystemBridge();
 function App() {

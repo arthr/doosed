@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
-import { useChatStore } from '@/store/useChatStore';
+import { useChatStore } from '@/stores/chatStore';
 import type { ChatAuthor } from '@/types/chat';
 import { ChatMessageRow } from '@/components/chat/ChatMessageRow';
 

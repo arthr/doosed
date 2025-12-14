@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { cn } from '@/lib/cn';
-import { useChatStore } from '@/store/useChatStore';
+import { useChatStore } from '@/stores/chatStore';
 import type { ChatAuthor } from '@/types/chat';
 import { ChatPanel } from '@/components/chat/ChatPanel';
 import { MobileChatToggleButton } from '@/components/chat/MobileChatToggleButton';

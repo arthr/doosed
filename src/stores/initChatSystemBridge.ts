@@ -1,5 +1,5 @@
 import { onSystemMessage } from '@/lib/systemMessages';
-import { useChatStore } from '@/store/useChatStore';
+import { useChatStore } from '@/stores/chatStore';
 
 let didInit = false;
 let unsubscribe: null | (() => void) = null;

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useChatStore } from '@/store/useChatStore';
+import { useChatStore } from '@/stores/chatStore';
 import type { ChatAuthor } from '@/types/chat';
 import { ChatDock } from '@/components/chat/ChatDock';
 import { ChatInline } from '@/components/chat/ChatInline';
