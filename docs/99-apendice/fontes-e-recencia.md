@@ -12,6 +12,7 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
+| 2025-12-14T19:29:17-03:00 | 2025-12-14T19:27:26 | Docs | docs | docs/README.md |
 | 2025-12-14T19:23:34-03:00 | 2025-12-14T19:23:09 | Normativo | .cursor/rules | .cursor/rules/docs-workflow/RULE.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/index.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/00-start-here/index.md |
@@ -62,5 +63,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/07-qualidade/testing.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/08-roadmap/backlog.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/99-apendice/prompts-assets.md |
-| - | 2025-12-14T19:27:02 | Docs | docs | docs/README.md |
+| - | 2025-12-14T19:45:16 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
+| - | 2025-12-14T19:45:16 | Outro | repo | tasks/TASK-REFAC-ESTRUTURA-SRC-000.md |
 | - | 2025-12-14T19:22:44 | Normativo | .cursor/rules | .cursor/rules/OBSERVATION-LOG.md |
