@@ -29,7 +29,7 @@ const infoBoxClassName = cn(
 );
 
 const titleClassName = cn(
-  'hidden md:block',
+  'hidden md:flex',
   'text-base font-normal text-neutral-500',
   'tracking-[0.2em] uppercase',
   'border-x-4 border-neutral-800',
@@ -61,7 +61,16 @@ export const Header = ({ balance, time }: HeaderProps) => {
         value={balance}
       />
 
-      <h1 className={titleClassName}>Draft / Shop Screen</h1>
+      <div className={cn(titleClassName, 'flex-1 items-center justify-center space-x-4 gap-4')}>
+        <span className="text-white">Draft</span>
+        <img
+          src="/images/rick_winner.png"
+          alt="Rick Winner"
+          className="size-16 -my-4 select-none drop-shadow-xs"
+          draggable={false}
+        />
+        <span className="text-white">Shop</span>
+      </div>
 
       <InfoBox
         icon={<Clock className="text-morty-yellow" size={18} />}
