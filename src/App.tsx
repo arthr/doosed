@@ -1,6 +1,6 @@
-import { DraftScreen } from '@/screens/DraftScreen';
+import { DevScreen } from '@/screens/DevScreen';
 import '@/index.css';
 function App() {
-  return <DraftScreen />;
+  return <DevScreen />;
 }
 export default App;

@@ -108,25 +108,32 @@ export const DraftScreen = () => {
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
       {/* Top UI */}
       <Header balance={wallet} time={timeLeft} />
-      <div className="bg-space-black text-foreground border-border flex h-screen flex-col overflow-y-auto p-2 md:p-0 font-mono text-xs md:text-sm">
-
+      <div className="bg-space-black text-foreground border-border flex h-screen flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
         {/* Shop Section (Conveyor Belt) */}
         <div className="relative flex flex-col justify-center md:my-4">
           {/* Conveyor Belt Track Graphic */}
-          <div className="hidden md:block border-border h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50"></div>
+          <div className="border-border hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
 
           {/* Items Container */}
           <div className="py-0 md:pt-4 md:pb-6">
-            <div className="grid grid-cols-1 lg:grid-cols-4 divide-x-6 divide-border justify-center items-center">
+            <div className="divide-border grid grid-cols-1 items-center justify-center divide-x-6 lg:grid-cols-4">
               {/* Category Columns */}
-              {Object.keys(DRAFT_SHOP_CATEGORIES).map((category) => (
-                <div key={category} className="flex flex-col gap-2 px-0 not-last:pb-4  md:px-3 divide-y divide-border md:divide-y-0">
+              {Object.keys(DRAFT_SHOP_CATEGORIES).map(category => (
+                <div
+                  key={category}
+                  className="divide-border flex flex-col gap-2 divide-y px-0 not-last:pb-4 md:divide-y-0 md:px-3"
+                >
                   <h3 className="text-sm uppercase">{category}</h3>
                   <div className="grid grid-cols-5 gap-2 md:gap-3 lg:grid-cols-3">
                     {/* Category Items */}
                     {[...Array(5)].map((_, itemIndex) => (
                       <div key={itemIndex} className="col-span-1 w-full">
-                        <ShopItem item={SHOP_ITEMS[itemIndex]} onBuy={buy} canAfford={canBuy(SHOP_ITEMS[itemIndex])} timeLeft={timeLeft} />
+                        <ShopItem
+                          item={SHOP_ITEMS[itemIndex]}
+                          onBuy={buy}
+                          canAfford={canBuy(SHOP_ITEMS[itemIndex])}
+                          timeLeft={timeLeft}
+                        />
                       </div>
                     ))}
                   </div>
@@ -136,11 +143,11 @@ export const DraftScreen = () => {
           </div>
 
           {/* Conveyor Belt Track Graphic */}
-          <div className="hidden md:block border-border h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50"></div>
+          <div className="border-border hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
         </div>
       </div>
       {/* Log Mobile */}
-      <div className="opacity-40 p-2 flex flex-col md:hidden">
+      <div className="flex flex-col p-2 opacity-40 md:hidden">
         <GameLogPanel logs={logs} className="h-15" />
       </div>
       {/* Bottom Section: Inventory + Log + Actions */}
@@ -154,7 +161,7 @@ export const DraftScreen = () => {
                 Backpack ({inventory.length}/{maxSlots} Slots)
               </h2>
             </div>
-            <div className="md:gap-y-2 grid grid-cols-8 md:grid-cols-4 gap-x-2 gap-y-3 sm:gap-x-3 sm:gap-y-4 md:gap-x-4">
+            <div className="grid grid-cols-8 gap-x-2 gap-y-3 sm:gap-x-3 sm:gap-y-4 md:grid-cols-4 md:gap-x-4 md:gap-y-2">
               {[...Array(maxSlots)].map((_, i) => (
                 <div key={i} className="col-span-1 w-full">
                   <InventorySlot item={inventory[i]} />
@@ -164,7 +171,7 @@ export const DraftScreen = () => {
           </div>
 
           {/* Log */}
-          <div className="md:flex flex-col md:col-span-5 hidden">
+          <div className="hidden flex-col md:col-span-5 md:flex">
             <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
               <Terminal size={20} />
               <h2 className="text-sm uppercase">Game Log</h2>
