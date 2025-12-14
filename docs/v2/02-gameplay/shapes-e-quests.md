@@ -9,6 +9,10 @@
 - Errar reseta progresso.
 - Completar concede 1 Pill Coin/Token.
 
-## Design
-- Começar com quests curtas (2) e evoluir para 3, 4 e 5 a cada certa quantidade rodadas definidas. (ex.: 3)
-- Ajustar para manter 60–80% de sucesso.
+## Progressão de dificuldade (normativa)
+- Rodadas iniciais: quests de 2 shapes.
+- Mid game: quests de 3 shapes.
+- Late game: quests de 4 e 5 shapes (apenas se o alvo de sucesso 60–80% estiver sendo mantido).
+
+## Observação
+Se a implementação atual tiver cap menor (ex.: 3), isso deve ser tratado como tarefa explícita de migração (constantes + UI + geração + balance).
