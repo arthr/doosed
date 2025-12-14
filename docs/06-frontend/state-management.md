@@ -7,5 +7,5 @@
 - Selectors granulares para evitar re-render.
 - Não desestruturar store dentro de loops/callbacks.
 
-## Objetivo (v2)
+## Objetivo
 Aproximar do modelo clean/event-driven.

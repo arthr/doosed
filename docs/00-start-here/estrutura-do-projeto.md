@@ -29,9 +29,7 @@ dosed/
 ├── public/
 │   └── assets/
 │       └── sprites/              # Spritesheets otimizados (assets grandes)
-├── docs/
-│   ├── v2/                       # Documentação Renovada (fonte da verdade)
-│   └── rules/                    # Rules do Agent (para copiar em .cursor/rules)
+├── docs/                         # Documentação (fonte da verdade)
 └── steering/                     # Normativo curto (deve refletir docs)
 ```
 

@@ -11,7 +11,7 @@ Permitir que 1 dev (modo solo) consiga:
 - Documentar decisões (por quê) antes de expandir escopo.
 - Fazer features que fecham loop de valor: jogar -> ganhar -> progredir -> retornar.
 
-## O que é a Renovada (v2)
+## O que é a Renovada
 - Baseada em 4 fases (LOBBY/DRAFT/MATCH/RESULTS)
 - Multiplayer preparado para server-authoritative
 - UI/UX 8-bit sci-fi (React + Tailwind)

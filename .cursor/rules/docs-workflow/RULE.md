@@ -11,7 +11,5 @@ alwaysApply: true
 - Se mudar `docs` ou `steering/`, regenere o apêndice de recência:
 
 ```bash
-python docs/rules/docs-workflow/scripts/update_fontes_recencia.py
+python .cursor/rules/docs-workflow/scripts/update_fontes_recencia.py
 ```
-
-- Se houver inconsistência entre `steering/` e `docs`, corrija para ficar consistente (priorize `docs`).

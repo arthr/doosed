@@ -1,4 +1,4 @@
-# DOSED Renovada (v2) — Documentação
+# DOSED Renovada — Documentação
 
 Esta pasta contém a documentação oficial (PT-BR) para iniciar o desenvolvimento greenfield da versão Renovada do DOSED.
 
@@ -37,7 +37,7 @@ Esta pasta contém a documentação oficial (PT-BR) para iniciar o desenvolvimen
 - [08-roadmap/mvp.md](08-roadmap/mvp.md)
   - [/backlog.md](08-roadmap/backlog.md)
 
-## Decisões normativas (v2)
+## Decisões normativas (Renovada)
 - Inventário padrão: 8 slots (2x4)
 - Economia separada:
   - Schmeckles: meta-moeda persistente (cosméticos, daily challenges)

@@ -1,4 +1,4 @@
-# Fontes e decisões (v2)
+# Fontes e decisões (Renovada)
 
 Este apêndice registra decisões arquiteturais e de design tomadas para a versão Renovada, com justificativas.
 
