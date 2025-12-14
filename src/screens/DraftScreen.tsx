@@ -86,7 +86,7 @@ export const DraftScreen = () => {
           <div className="px-2 pt-4 pb-6 sm:px-4">
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:gap-4 lg:grid-cols-5">
               {SHOP_ITEMS.map(item => (
-                <ShopItem key={item.id} item={item} onBuy={buy} canAfford={canBuy(item)} />
+                <ShopItem key={item.id} item={item} onBuy={buy} canAfford={canBuy(item)} timeLeft={timeLeft} />
               ))}
             </div>
           </div>

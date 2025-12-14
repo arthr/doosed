@@ -13,9 +13,10 @@ type ShopItemProps = {
   item: Item;
   onBuy: (item: Item) => void;
   canAfford: boolean;
+  timeLeft: number;
 };
 
-export const ShopItem = ({ item, onBuy, canAfford }: ShopItemProps) => (
+export const ShopItem = ({ item, onBuy, canAfford, timeLeft }: ShopItemProps) => (
   <div
     className={cn(
       'group relative flex w-full flex-col items-center rounded-lg',
@@ -60,7 +61,7 @@ export const ShopItem = ({ item, onBuy, canAfford }: ShopItemProps) => (
           : 'cursor-not-allowed border-neutral-900 bg-neutral-800 text-neutral-600 opacity-50',
       )}
     >
-      {canAfford ? 'Buy' : 'Too Poor'}
+      {canAfford ? 'Buy' : timeLeft > 0 ? 'Too Poor' : 'Time\'s Up!'}
     </button>
 
     {/* Decorative corner screws */}

@@ -96,7 +96,7 @@ export function ActionDock({
                   loadout.disabled && 'cursor-not-allowed opacity-50',
                   pressed &&
                     hasTimeLeft &&
-                    '!border-red-900 !bg-red-700 hover:!border-red-900 hover:!bg-red-600',
+                    'border-red-900! bg-red-700! hover:border-red-900! hover:bg-red-600!',
                 )}
               >
                 {typeof label === 'string' ? (
