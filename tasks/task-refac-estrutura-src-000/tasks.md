@@ -22,7 +22,7 @@
 - [x] 3.2 Extrair componentes inline do `MatchScreen` para `components/game/*`
   - DoD: `MatchScreen` vira orquestrador; `pnpm lint` e `pnpm build` passam.
 
-- [ ] 4.1 Criar `Phase` e guard de transição em `src/core/state-machines/`
+- [x] 4.1 Criar `Phase` e guard de transição em `src/core/state-machines/`
   - DoD: existe tipo `Phase` + `canTransition(from,to)`.
 
 - [ ] 4.2 Criar `flowStore` em `src/stores/`
