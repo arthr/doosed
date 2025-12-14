@@ -4,7 +4,7 @@ inclusion: always
 
 # Balance (Fonte Normativa)
 
-Este arquivo é a referência normativa para balance e progressão. Versão detalhada em `docs/v2/02-gameplay/balance.md`.
+Este arquivo é a referência normativa para balance e progressão. Versão detalhada em `docs/02-gameplay/balance.md`.
 
 ## Filosofia (não violar)
 - Tensão escalonada
@@ -55,6 +55,6 @@ Guardrails:
 - Alto risco: percentuais >5%, unlocks, fórmula de pool, riskTolerance >0.2
 
 ## Referências
-- Balance detalhado: `docs/v2/02-gameplay/balance.md`
-- Pílulas: `docs/v2/02-gameplay/pills.md`
-- IA: `docs/v2/02-gameplay/ai.md`
+- Balance detalhado: `docs/02-gameplay/balance.md`
+- Pílulas: `docs/02-gameplay/pills.md`
+- IA: `docs/02-gameplay/ai.md`

@@ -3,8 +3,8 @@
 Este documento consolida o padrão de código do projeto para manter consistência e velocidade em modo Solo Dev.
 
 ## Fonte da verdade
-- Documentação de produto/arquitetura: `docs/v2/`
-- Estrutura alvo do projeto: `docs/v2/00-start-here/estrutura-do-projeto.md`
+- Documentação de produto/arquitetura: `docs/`
+- Estrutura alvo do projeto: `docs/00-start-here/estrutura-do-projeto.md`
 - Stack atual: conferir `package.json` e `steering/tech.md`
 
 ## Regras gerais

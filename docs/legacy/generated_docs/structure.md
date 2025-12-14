@@ -1,7 +1,7 @@
 # Project Architecture & File Map
 
 ## 1. Directory Structure
-Este documento é gerado/derivado. A estrutura alvo mais atual está em `docs/v2/00-start-here/estrutura-do-projeto.md`.
+Este documento é gerado/derivado. A estrutura alvo mais atual está em `docs/00-start-here/estrutura-do-projeto.md`.
 
 The project adheres to a strict feature-based architecture optimized for Supabase/React. Implement the following structure exactly:
 

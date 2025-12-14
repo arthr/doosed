@@ -1,6 +1,6 @@
 # Tech Stack (Fonte Normativa) — Dosed
 
-Este arquivo define a stack e guardrails do projeto, e deve permanecer consistente com `docs/v2/06-frontend/stack-e-convencoes.md`.
+Este arquivo define a stack e guardrails do projeto, e deve permanecer consistente com `docs/06-frontend/stack-e-convencoes.md`.
 
 ## Stack atual (conferida no package.json)
 
@@ -18,7 +18,7 @@ Este arquivo define a stack e guardrails do projeto, e deve permanecer consisten
 - **Lucide React**
 - **tw-animate-css**
 
-> Observação: se componentes tipo shadcn/ui forem usados no futuro, devem ser tratados como decisão explícita e documentada em `docs/v2` (evitar inconsistências).
+> Observação: se componentes tipo shadcn/ui forem usados no futuro, devem ser tratados como decisão explícita e documentada em `docs` (evitar inconsistências).
 
 ## Scripts
 ```bash
@@ -38,4 +38,4 @@ pnpm preview
 
 ## Multiplayer (diretriz)
 - **Server-authoritative** (Edge Functions) + UI otimista com rollback.
-- **Event-driven** com no máximo 8 tipos de evento (ver `docs/v2/04-arquitetura/eventos.md`).
+- **Event-driven** com no máximo 8 tipos de evento (ver `docs/04-arquitetura/eventos.md`).

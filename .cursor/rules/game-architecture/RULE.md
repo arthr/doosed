@@ -18,6 +18,6 @@ alwaysApply: true
 - Sequencing obrigatório (ordenação/deduplicação).
 
 ## Referências
-- `docs/v2/04-arquitetura/eventos.md`
-- `docs/v2/04-arquitetura/maquina-de-estados.md`
-- `docs/v2/02-gameplay/`
+- `docs/04-arquitetura/eventos.md`
+- `docs/04-arquitetura/maquina-de-estados.md`
+- `docs/02-gameplay/`

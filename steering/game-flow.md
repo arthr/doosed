@@ -4,7 +4,7 @@ inclusion: always
 
 # Game Flow (Fonte Normativa)
 
-Este arquivo define o fluxo do jogo e guardrails arquiteturais. Detalhes estão em `docs/v2/04-arquitetura` e `docs/v2/03-ux-ui`.
+Este arquivo define o fluxo do jogo e guardrails arquiteturais. Detalhes estão em `docs/04-arquitetura` e `docs/03-ux-ui`.
 
 ## Fases (contrato)
 - LOBBY -> DRAFT -> MATCH -> RESULTS
@@ -23,7 +23,7 @@ Este arquivo define o fluxo do jogo e guardrails arquiteturais. Detalhes estão 
 - Separação: components (UI) -> hooks (bridge) -> store (state) -> core/utils (puro)
 
 ## Eventos (<= 8 tipos)
-A Renovada trabalha com um conjunto pequeno de tipos de evento (ver `docs/v2/04-arquitetura/eventos.md`).
+A Renovada trabalha com um conjunto pequeno de tipos de evento (ver `docs/04-arquitetura/eventos.md`).
 
 Recomendação: usar tipos “macro” (ex.: MATCH) e um campo `action`/`subtype` no payload para granularidade sem explodir o enum de tipos.
 
@@ -35,6 +35,6 @@ Recomendação: usar tipos “macro” (ex.: MATCH) e um campo `action`/`subtype
 - Feedback primário por Game Log e overlays de revelação/efeito.
 
 ## Referências
-- Eventos: `docs/v2/04-arquitetura/eventos.md`
-- FSM: `docs/v2/04-arquitetura/maquina-de-estados.md`
-- UX Match: `docs/v2/03-ux-ui/match.md`
+- Eventos: `docs/04-arquitetura/eventos.md`
+- FSM: `docs/04-arquitetura/maquina-de-estados.md`
+- UX Match: `docs/03-ux-ui/match.md`
