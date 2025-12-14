@@ -25,7 +25,7 @@
 - [x] 4.1 Criar `Phase` e guard de transição em `src/core/state-machines/`
   - DoD: existe tipo `Phase` + `canTransition(from,to)`.
 
-- [ ] 4.2 Criar `flowStore` em `src/stores/`
+- [x] 4.2 Criar `flowStore` em `src/stores/`
   - DoD: `phase`, `setPhaseGuarded`, `resetRun`.
 
 - [ ] 4.3 Ajustar `App.tsx` para renderizar screens por fase
