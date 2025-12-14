@@ -19,11 +19,7 @@ export function ChatInterface({ isOpen, onToggle }: ChatInterfaceProps) {
     <>
       {/* Desktop View: Always visible terminal */}
       <div className={desktopTerminalClassName}>
-        <div className="border-border bg-ui-panel/50 absolute top-0 right-0 left-0 flex h-6 items-center border-b px-2 text-xs text-neutral-500 select-none">
-          TERMINAL_LOG.TXT
-        </div>
-
-        <div className="custom-scrollbar mt-6 h-full grow space-y-1 overflow-y-auto p-2">
+        <div className="custom-scrollbar h-full grow space-y-1 overflow-y-auto p-2">
           <div className="opacity-80">
             <span className="text-neutral-500">[12:01]</span>{' '}
             <span className="font-bold text-neutral-300">RICK:</span> Hurry up, Morty, I got places
