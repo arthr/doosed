@@ -1,6 +1,9 @@
 # Dosed (Pill Roulette) - Especificação de Arquitetura Frontend Inicial
 
-> LEGADO: este documento não é a fonte da verdade de estrutura/stack.\n+> Para a estrutura alvo do projeto, use: `docs/v2/00-start-here/estrutura-do-projeto.md`.\n+> Para a stack atual (conferir `package.json`), use: `steering/tech.md`.\n+> A documentação normativa atual está em `docs/v2/`.
+> LEGADO: este documento foi movido para `docs/legacy` e não é a fonte da verdade de estrutura/stack.
+> Para a estrutura alvo do projeto, use: `docs/00-start-here/estrutura-do-projeto.md`.
+> Para a stack atual (conferir `package.json`), use: `steering/tech.md`.
+> A documentação normativa atual está em `docs/`.
 
 **Versão do Documento:** 1.0
 **Data:** 13/12/2025

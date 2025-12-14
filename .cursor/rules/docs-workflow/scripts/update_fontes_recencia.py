@@ -16,12 +16,12 @@ def git_repo_root() -> str:
 
 
 ROOT = git_repo_root()
-OUT_PATH = os.path.join(ROOT, "docs", "v2", "99-apendice", "fontes-e-recencia.md")
+OUT_PATH = os.path.join(ROOT, "docs", "99-apendice", "fontes-e-recencia.md")
 
 SKIP_PREFIXES = (
     "node_modules",
     "dist",
-    os.path.join("docs", "v2"),
+    os.path.join("docs", "legacy"),
 )
 
 
@@ -63,7 +63,11 @@ def iter_md_files() -> list[str]:
 
         for fn in filenames:
             if fn.lower().endswith(".md"):
-                md_files.append(os.path.join(dirpath, fn))
+                abs_path = os.path.join(dirpath, fn)
+                # Evita auto-inclusão do arquivo gerado
+                if os.path.abspath(abs_path) == os.path.abspath(OUT_PATH):
+                    continue
+                md_files.append(abs_path)
 
     return md_files
 
@@ -86,11 +90,11 @@ def main() -> None:
     out: list[str] = []
     out.append("# Fontes e recencia (Git + mtime)\n")
     out.append(
-        "Este arquivo registra as fontes .md usadas como insumo para a documentacao Renovada (docs/v2) e como o criterio de recencia foi aplicado.\n"
+        "Este arquivo registra as fontes .md usadas como insumo para a documentação oficial e como o critério de recência foi aplicado.\n"
     )
     out.append("## Regras de precedencia\n")
     out.append(
-        "- Autoridade por contexto (primario): steering/* e .cursor/rules/* (normativo) > docs/screens/* (requisitos de UX) > docs/PROMPT-*.md (insumo) > docs/generated_docs/* (derivado).\n"
+        "- Autoridade por contexto (primario): steering/* e .cursor/rules/* (normativo) > docs/* (documentação oficial). Conteúdo legado fica em docs/legacy/*.\n"
     )
     out.append(
         "- Recencia (secundario): usar data do ultimo commit (Git) como principal e mtime local como nota; dentro do mesmo nivel de autoridade, o mais recente tem preferencia.\n"

@@ -1,8 +1,8 @@
 # Instruções do projeto (AGENTS.md)
 
 ## Fonte da verdade
-- Documentação completa e normativa: `docs/v2/`
-- `steering/` é normativo e curto: deve refletir `docs/v2`.
+- Documentação completa e normativa: `docs/`
+- `steering/` é normativo e curto: deve refletir `docs/`.
 
 ## Comunicação
 - Responder sempre em Português (Brasil).

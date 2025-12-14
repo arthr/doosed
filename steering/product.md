@@ -1,6 +1,6 @@
 # Produto — Dosed (Pill Roulette)
 
-Este arquivo é a visão de produto **normativa e curta**. Detalhes completos estão em `docs/v2/01-produto` e `docs/v2/02-gameplay`.
+Este arquivo é a visão de produto **normativa e curta**. Detalhes completos estão em `docs/01-produto` e `docs/02-gameplay`.
 
 ## Visão
 Dosed é um jogo por turnos de alta tensão (single e multiplayer), com estética 8-bit sci-fi. O jogador tenta sobreviver ao baralho de pílulas, manipulando risco e informação via itens, quests e leitura do pool.
@@ -30,13 +30,13 @@ Dosed é um jogo por turnos de alta tensão (single e multiplayer), com estétic
 - Shape Quests geram Pill Coins/Tokens.
 
 ### Conteúdo valioso (não normativo, a validar)
-- Passivas por shape (Sphere/Cube/Pyramid/Capsule) são uma boa ideia de expansão, mas só devem entrar como feature quando houver contrato claro e balance (ver `docs/v2/02-gameplay/shapes-e-quests.md`).
+- Passivas por shape (Sphere/Cube/Pyramid/Capsule) são uma boa ideia de expansão, mas só devem entrar como feature quando houver contrato claro e balance (ver `docs/02-gameplay/shapes-e-quests.md`).
 
 ## Modos
 - Solo (Humano vs IA)
 - Multiplayer (salas e matchmaking)
 
 ## Referências
-- Produto: `docs/v2/01-produto/`
-- Gameplay: `docs/v2/02-gameplay/`
-- UX por telas: `docs/v2/03-ux-ui/`
+- Produto: `docs/01-produto/`
+- Gameplay: `docs/02-gameplay/`
+- UX por telas: `docs/03-ux-ui/`
