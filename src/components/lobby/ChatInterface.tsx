@@ -1,38 +1,46 @@
-import React from 'react';
 import { ChevronRight } from 'lucide-react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/cn';
+import { LobbyPanel } from '@/components/lobby/LobbyPanel';
 
 interface ChatInterfaceProps {
   isOpen: boolean;
   onToggle: () => void;
 }
 
-export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onToggle }) => {
+const desktopTerminalClassName = cn(
+  'relative hidden flex-2 flex-col',
+  'border-border rounded-xl border-4 bg-black',
+  'text-rick-green p-2 font-mono',
+  'shadow-pixel md:flex',
+);
+
+export function ChatInterface({ isOpen, onToggle }: ChatInterfaceProps) {
   return (
     <>
       {/* Desktop View: Always visible terminal */}
-      <div className="relative hidden flex-2 flex-col rounded-lg border-4 border-zinc-600 bg-black p-2 font-mono text-green-500 shadow-inner md:flex">
-        <div className="absolute top-0 right-0 left-0 flex h-6 items-center border-b border-zinc-700 bg-zinc-800/50 px-2 text-xs text-zinc-500 select-none">
+      <div className={desktopTerminalClassName}>
+        <div className="border-border bg-ui-panel/50 absolute top-0 right-0 left-0 flex h-6 items-center border-b px-2 text-xs text-neutral-500 select-none">
           TERMINAL_LOG.TXT
         </div>
 
         <div className="custom-scrollbar mt-6 h-full grow space-y-1 overflow-y-auto p-2">
           <div className="opacity-80">
-            <span className="text-zinc-500">[12:01]</span>{' '}
-            <span className="font-bold text-zinc-300">RICK:</span> Hurry up, Morty, I got places to
-            be!
+            <span className="text-neutral-500">[12:01]</span>{' '}
+            <span className="font-bold text-neutral-300">RICK:</span> Hurry up, Morty, I got places
+            to be!
           </div>
           <div className="opacity-80">
-            <span className="text-zinc-500">[12:02]</span>{' '}
-            <span className="font-bold text-zinc-300">MORTY:</span> Aw jeez, are we starting soon?
+            <span className="text-neutral-500">[12:02]</span>{' '}
+            <span className="font-bold text-neutral-300">MORTY:</span> Aw jeez, are we starting
+            soon?
           </div>
           <div className="opacity-80">
-            <span className="text-zinc-500">[12:03]</span>{' '}
-            <span className="font-bold text-zinc-300">BIRDPERSON:</span> Patience, Morty.
+            <span className="text-neutral-500">[12:03]</span>{' '}
+            <span className="font-bold text-neutral-300">BIRDPERSON:</span> Patience, Morty.
           </div>
           <div className="opacity-80">
-            <span className="text-zinc-500">[12:03]</span>{' '}
-            <span className="font-bold text-zinc-300">SQUANCHY:</span> I'm squanching here!
+            <span className="text-neutral-500">[12:03]</span>{' '}
+            <span className="font-bold text-neutral-300">SQUANCHY:</span> I'm squanching here!
           </div>
         </div>
 
@@ -41,7 +49,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onToggle }
           <input
             type="text"
             placeholder="Enter message..."
-            className="w-full border-none bg-transparent font-mono text-green-400 placeholder-zinc-700 focus:ring-0 focus:outline-none"
+            className="text-rick-green w-full border-none bg-transparent font-mono placeholder-neutral-700 focus:ring-0 focus:outline-none"
           />
         </div>
       </div>
@@ -49,13 +57,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onToggle }
       {/* Mobile View: Toggle Button + Modal/Drawer logic (Simplified to toggle for now) */}
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-between rounded-lg border-2 border-zinc-600 bg-zinc-800 p-4 font-bold text-zinc-300 active:bg-zinc-700 md:hidden"
+        className={cn(
+          'md:hidden',
+          'flex w-full items-center justify-between',
+          'border-border bg-ui-panel rounded-xl border-2',
+          'p-4 font-bold text-neutral-300',
+          'active:bg-black/30',
+        )}
       >
         <span className="flex items-center gap-2">
           <MessageSquareIcon className="h-5 w-5" />
           CHAT LOG {isOpen ? '(OPEN)' : ''}
         </span>
-        <ChevronRight className={clsx('transition-transform', isOpen ? 'rotate-90' : '')} />
+        <ChevronRight className={cn('transition-transform', isOpen ? 'rotate-90' : '')} />
       </button>
 
       {/* Mobile Chat Drawer (Conditional) */}
@@ -69,12 +83,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onToggle }
               Close [X]
             </button>
           </div>
-          <div className="grow overflow-y-auto border border-green-500 p-2 font-mono text-green-500">
+          <LobbyPanel className="border-rick-green text-rick-green grow overflow-y-auto border bg-black p-2 font-mono">
             <div>&gt; Rick: Hurry up!</div>
             <div>&gt; Morty: Ok ok!</div>
-          </div>
+          </LobbyPanel>
           <input
-            className="mt-2 border border-zinc-700 bg-zinc-900 p-4 text-white"
+            className="border-border mt-2 border bg-black p-4 text-white"
             placeholder="Type here..."
             autoFocus
           />
@@ -82,7 +96,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onToggle }
       )}
     </>
   );
-};
+}
 
 function MessageSquareIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
