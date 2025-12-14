@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { DraftShopItem } from '@/types/draft';
-import { chatActions } from '@/store/useChatStore';
+import { postSystemMessage } from '@/lib/systemMessages';
 
 const MAX_SLOTS = 8;
 const START_IN = 10;
@@ -51,27 +51,24 @@ export function useDraftShopMock(
 
   const buy = (item: DraftShopItem) => {
     if (!canBuy(item)) {
-      chatActions.addSystemMessage(`Sistema: compra negada (${item.name}).`, 'draft');
+      postSystemMessage('draft', `Sistema: compra negada (${item.name}).`);
       return;
     }
     setWallet(prev => prev - item.price);
     setInventory(prev => [...prev, item]);
-    chatActions.addSystemMessage(`> Comprou ${item.name} (-${item.price}).`, 'draft');
+    postSystemMessage('draft', `> Comprou ${item.name} (-${item.price}).`);
   };
 
   const toggleLoadout = () => {
     setLoadoutConfirmed(prev => {
       const next = !prev;
-      chatActions.addSystemMessage(
-        next ? '> Loadout confirmado.' : '> Loadout cancelado.',
-        'draft',
-      );
+      postSystemMessage('draft', next ? '> Loadout confirmado.' : '> Loadout cancelado.');
       return next;
     });
   };
 
   const openShop = () => {
-    chatActions.addSystemMessage('> Shop aberto (mock).', 'draft');
+    postSystemMessage('draft', '> Shop aberto (mock).');
   };
 
   return {

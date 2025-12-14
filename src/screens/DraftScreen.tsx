@@ -171,7 +171,7 @@ export const DraftScreen = () => {
               <h2 className="text-sm uppercase">Chat</h2>
             </div>
             <div className="pt-3">
-              <Chat mode="inline" threadId="draft" className='h-32 sm:h-36 md:h-44' />
+              <Chat mode="inline" threadId="draft" className="h-32 sm:h-36 md:h-44" />
             </div>
           </div>
 
