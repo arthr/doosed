@@ -131,7 +131,8 @@ export function DevScreen() {
             onPointerDown={event => {
               const target = event.target as HTMLElement;
               if (target.closest('button,select,option,input,textarea,a')) return;
-              if (event.button !== 0) return;
+              if (event.pointerType === 'mouse' && event.button !== 0) return;
+              event.preventDefault();
               (event.currentTarget as HTMLDivElement).setPointerCapture(event.pointerId);
               fabDragRef.current = {
                 pointerId: event.pointerId,
@@ -160,6 +161,7 @@ export function DevScreen() {
               if (!drag || drag.pointerId !== event.pointerId) return;
               fabDragRef.current = null;
             }}
+            style={{ touchAction: 'none' }}
             className={cn(
               'px-3 py-2!',
               'rounded-lg border-2 border-neutral-700 bg-neutral-950/95 backdrop-blur',
@@ -199,7 +201,8 @@ export function DevScreen() {
               onPointerDown={event => {
                 const target = event.target as HTMLElement;
                 if (target.closest('button,select,option,input,textarea,a')) return;
-                if (event.button !== 0) return;
+                if (event.pointerType === 'mouse' && event.button !== 0) return;
+                event.preventDefault();
                 (event.currentTarget as HTMLDivElement).setPointerCapture(event.pointerId);
                 menuDragRef.current = {
                   pointerId: event.pointerId,
@@ -224,6 +227,7 @@ export function DevScreen() {
                 if (!drag || drag.pointerId !== event.pointerId) return;
                 menuDragRef.current = null;
               }}
+              style={{ touchAction: 'none' }}
               className={cn(
                 'flex items-center justify-between gap-2',
                 'cursor-move select-none',

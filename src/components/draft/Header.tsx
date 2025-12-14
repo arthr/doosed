@@ -61,12 +61,12 @@ export const Header = ({ balance, time }: HeaderProps) => {
         value={balance}
       />
 
-      <div className={cn(titleClassName, 'flex-1 items-center justify-center space-x-4 gap-4')}>
+      <div className={cn(titleClassName, 'flex-1 items-center justify-center gap-4 space-x-4')}>
         <span className="text-white">Draft</span>
         <img
           src="/images/rick_winner.png"
           alt="Rick Winner"
-          className="size-16 -my-4 select-none drop-shadow-xs"
+          className="-my-4 size-16 drop-shadow-xs select-none"
           draggable={false}
         />
         <span className="text-white">Shop</span>
