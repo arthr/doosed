@@ -1,5 +1,5 @@
 ---
-description: "Always apply: workflow de documentação (v2 + steering) e auditoria de recência"
+description: "Always apply: workflow de documentação (docs + steering) e auditoria de recência"
 alwaysApply: true
 ---
 
@@ -13,3 +13,5 @@ alwaysApply: true
 ```bash
 python .cursor/rules/docs-workflow/scripts/update_fontes_recencia.py
 ```
+
+- Se houver inconsistência entre `steering/` e `docs`, corrija para ficar consistente (priorize `docs`).
