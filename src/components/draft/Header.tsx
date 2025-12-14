@@ -8,11 +8,11 @@ type HeaderProps = {
 };
 
 const headerContainerClassName = cn(
-  'flex flex-col md:flex-row',
+  'flex flex-row',
   'items-center justify-between',
   'gap-2 md:gap-4',
   'border-b-4 border-neutral-700',
-  'border-x-border border-x-4 md:border-x-8',
+  'border-x-4 border-x-neutral-800 md:border-x-8',
   'pb-2 sm:pb-3 md:pb-4',
   'bg-neutral-900/80',
   'p-2 sm:p-3 md:p-4',
@@ -45,9 +45,8 @@ type InfoBoxProps = {
 const InfoBox = ({ icon, label, value }: InfoBoxProps) => (
   <div className={infoBoxClassName}>
     {icon}
-    <span className="text-sm tracking-widest text-neutral-200">
-      {label}: <span className="font-normal text-white">{value}</span>
-    </span>
+    <span className="hidden text-sm tracking-widest md:block">{label}:</span>
+    <span className="font-normal text-white">{value}</span>
   </div>
 );
 
@@ -57,15 +56,15 @@ export const Header = ({ balance, time }: HeaderProps) => {
   return (
     <div className={headerContainerClassName}>
       <InfoBox
-        icon={<Coins className="text-neutral-400" size={18} />}
-        label="SCHMECKLES"
+        icon={<Coins className="text-morty-yellow" size={18} />}
+        label="PILL COINS"
         value={balance}
       />
 
       <h1 className={titleClassName}>Draft / Shop Screen</h1>
 
       <InfoBox
-        icon={<Clock className="text-neutral-400" size={18} />}
+        icon={<Clock className="text-morty-yellow" size={18} />}
         label="DRAFT ENDS"
         value={formattedDraftTime}
       />

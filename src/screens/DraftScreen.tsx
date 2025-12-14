@@ -1,11 +1,19 @@
-import React from 'react';
 import { Header } from '@/components/draft/Header';
 import { ShopItem } from '@/components/draft/ShopItem';
 import { InventorySlot } from '@/components/draft/InventorySlot';
 import { ActionDock } from '@/components/ui/ActionDock';
 import { GameLogPanel } from '@/components/ui/GameLogPanel';
 import { useDraftShopMock } from '@/hooks/useDraftShopMock';
-import { Beer, Lock, Search, Sword, AlertTriangle, Backpack, Check } from 'lucide-react';
+import {
+  Beer,
+  Lock,
+  Search,
+  Sword,
+  AlertTriangle,
+  Backpack,
+  Terminal,
+  Joystick,
+} from 'lucide-react';
 import type { DraftShopItem } from '@/types/draft';
 
 // Types
@@ -47,9 +55,21 @@ const SHOP_ITEMS: DraftShopItem[] = [
   },
 ];
 
-export default function DraftScreen() {
-  const { wallet, timeLeft, inventory, logs, canBuy, buy, confirmLoadout, openChat, maxSlots } =
-    useDraftShopMock();
+export const DraftScreen = () => {
+  const {
+    wallet,
+    timeLeft,
+    startIn,
+    inventory,
+    logs,
+    canBuy,
+    buy,
+    toggleLoadout,
+    loadoutConfirmed,
+    openChat,
+    openShop,
+    maxSlots,
+  } = useDraftShopMock();
 
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
@@ -77,19 +97,18 @@ export default function DraftScreen() {
 
         {/* Bottom Section: Inventory + Log + Actions */}
         <div className="bg-ui-panel border-border mt-auto rounded-xl border-4 p-3 sm:p-4 md:p-6">
-          <div className="text-muted-foreground border-border mb-3 flex items-center gap-2 border-b pb-2 md:mb-4">
-            <Backpack size={20} />
-            <h2 className="text-sm tracking-wider uppercase">
-              Your Backpack ({inventory.length}/{maxSlots} Slots)
-            </h2>
-          </div>
-
           <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
             {/* Inventory (smaller) */}
             <div className="md:col-span-4">
-              <div className="inline-grid grid-cols-4 gap-1 sm:gap-1.5">
+              <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
+                <Backpack size={20} />
+                <h2 className="text-sm uppercase">
+                  Backpack ({inventory.length}/{maxSlots} Slots)
+                </h2>
+              </div>
+              <div className="md:gap-y- grid grid-cols-4 gap-x-2 gap-y-3 sm:gap-x-3 sm:gap-y-4 md:gap-x-4">
                 {[...Array(maxSlots)].map((_, i) => (
-                  <div key={i} className="w-9 sm:w-10 md:w-11">
+                  <div key={i} className="col-span-1 w-full">
                     <InventorySlot item={inventory[i]} />
                   </div>
                 ))}
@@ -97,27 +116,38 @@ export default function DraftScreen() {
             </div>
 
             {/* Log */}
-            <div className="md:col-span-5">
-              <GameLogPanel logs={logs} className="h-28 sm:h-32 md:h-36" />
+            <div className="flex flex-col md:col-span-5">
+              <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
+                <Terminal size={20} />
+                <h2 className="text-sm uppercase">Game Log</h2>
+              </div>
+              <GameLogPanel logs={logs} className="h-32 sm:h-36 md:h-44" />
             </div>
 
             {/* Actions: Confirm + Chat */}
-            <div className="flex flex-col gap-2 md:col-span-3">
-              <button
-                type="button"
-                onClick={confirmLoadout}
-                disabled={timeLeft === 0}
-                className="bg-primary text-primary-foreground border-border hover:bg-primary/90 flex min-h-[56px] w-full items-center justify-center gap-2 border-4 text-sm font-normal tracking-[0.15em] uppercase shadow-(--shadow-neon-green) transition-all hover:scale-[1.02] active:scale-95 disabled:scale-100 disabled:opacity-50 md:min-h-[80px] md:gap-3 md:text-base md:tracking-widest"
-              >
-                <span>Confirm Loadout</span>
-                <Check className="hidden sm:block" size={28} strokeWidth={3} />
-              </button>
-
-              <ActionDock onChat={openChat} layout="stack" />
+            <div className="flex flex-col md:col-span-3">
+              <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
+                <Joystick size={20} />
+                <h2 className="text-sm uppercase">Actions</h2>
+              </div>
+              <div className="flex h-full flex-col">
+                <ActionDock
+                  chat={{ onClick: openChat, disabled: false }}
+                  shop={{ onClick: openShop, disabled: false }}
+                  loadout={{
+                    onPress: toggleLoadout,
+                    disabled: timeLeft === 0,
+                    pressed: loadoutConfirmed,
+                    timeLeft: timeLeft,
+                    startIn: startIn,
+                  }}
+                  layout="stack"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
