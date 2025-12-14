@@ -1,10 +1,12 @@
 import React from 'react';
 import { cn } from '@/lib/cn';
+import { DraftShopCategory } from '@/types/draft';
 
 type Item = {
   id: number;
   name: string;
   desc: string;
+  category: DraftShopCategory;
   price: number;
   icon: React.ReactNode;
 };
@@ -39,7 +41,7 @@ export const ShopItem = ({ item, onBuy, canAfford, timeLeft }: ShopItemProps) =>
       <div className="scale-[0.85] sm:scale-100">{item.icon}</div>
     </div>
 
-    <h3 className="mb-1 text-xs font-normal tracking-wide text-white sm:text-sm">{item.name}</h3>
+    {/* <h3 className="mb-1 text-xs font-normal tracking-wide text-white sm:text-sm">{item.name}</h3>
     <p className="mb-1 min-h-0 text-center text-[10px] text-neutral-500 sm:min-h-[40px] sm:text-xs">
       {item.desc}
     </p>
@@ -62,7 +64,7 @@ export const ShopItem = ({ item, onBuy, canAfford, timeLeft }: ShopItemProps) =>
       )}
     >
       {canAfford ? 'Buy' : timeLeft > 0 ? 'Too Poor' : 'Time\'s Up!'}
-    </button>
+    </button> */}
 
     {/* Decorative corner screws */}
     <div className="absolute top-1 left-1 h-1 w-1 rounded-full bg-neutral-500"></div>

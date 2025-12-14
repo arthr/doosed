@@ -68,7 +68,7 @@ export function ActionDock({
   return (
     <div
       className={cn(
-        isStack ? 'grid h-full grid-rows-3 items-stretch gap-4' : 'flex gap-2',
+        isStack ? 'grid h-full grid-rows-3 items-stretch gap-2 md:gap-4' : 'flex gap-2',
         className,
       )}
     >
@@ -91,7 +91,7 @@ export function ActionDock({
                 disabled={!!loadout.disabled}
                 aria-pressed={!!loadout.pressed}
                 className={cn(
-                  'font-pixel flex items-center justify-center gap-2 border-b-4 border-neutral-900 bg-neutral-700 text-xs text-white',
+                  'font-pixel font-light! flex items-center justify-center py-2 gap-2 border-b-4 border-neutral-900 bg-neutral-700 text-xs text-white',
                   hasTimeLeft && 'hover:bg-green-600 active:translate-y-0.5 active:border-b-2',
                   loadout.disabled && 'cursor-not-allowed opacity-50',
                   pressed &&
