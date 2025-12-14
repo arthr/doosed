@@ -1,49 +1,91 @@
-# Product Overview - Dosed
+# Produto: Dosed (Pill Roulette)
 
-## What is Dosed?
+## 1. Visão Geral & Core Concept
+**Dosed** é um jogo de estratégia multiplayer por turnos, de alta tensão, com estética *8-bit Sci-Fi* (inspirada em Rick and Morty). Jogadores competem em uma roleta russa farmacêutica, onde o objetivo é sobreviver a um frasco de pílulas mistas ("Live" vs "Placebo") enquanto manipulam as probabilidades usando itens ilegais e habilidades passivas baseadas em formas geométricas.
 
-**Dosed** is a strategic turn-based game where two or more players compete to be the last survivor in a pill roulette scenario. Players take turns consuming pills from a shared pool, managing risk through a dual health system and tactical item usage.
+**Meta:** Ser o último sobrevivente na mesa, gerenciando sua "Tolerância" (HP) e induzindo "Overdose" nos oponentes.
 
-## Core Mechanics
+---
 
-### Dual Health System
+## 2. Core Loop (O Fluxo da Partida)
+A partida é estruturada em Rounds. O ciclo é: **Intermissão (Quest) -> Draft -> The Bottle (Combate)**.
 
-- **Resistance**: Temporary shield (6 points) - acts as HP buffer
-- **Lives**: Permanent health (3 lives) - lose all lives = game over
-- When resistance hits zero → lose 1 life, resistance resets to maximum
+### Fase 1: Intermissão & The Shape Quest (A "Receita")
+Entre as rodadas, o "Sistema" emite uma nova *Shape Quest* para todos os jogadores (ou individualmente).
 
-### Pill Types & Effects
+* **A Mecânica:** É atribuído um objetivo de coleta específico para o próximo round.
+    * *Exemplo:* "Consuma 2 Triângulos e 1 Quadrado neste round."
+* **Tomada de Decisão:** O jogador analisa o risco. Se ele ignorar a Quest, joga seguro mas fica sem recursos. Se tentar cumprir, pode ter que engolir propositalmente uma *Live Pill* (Dano) só porque ela tem o formato necessário.
+* **Recompensa:** Cumprir a Quest é a única forma consistente de obter "Tokens de Draft" de alto valor ou restaurar Tolerância (Cura).
 
-- **SAFE** (Green): No effect, safe to consume
-- **DMG_LOW** (Yellow): -1 to -2 resistance damage
-- **DMG_HIGH** (Orange): -3 to -4 resistance damage
-- **HEAL** (Cyan): +2 resistance
-- **FATAL** (Purple): -1 life
-- **LIFE** (Pink): +1 life restoration
+### Fase 2: The Draft (Preparação)
+Com os recursos ganhos na Shape Quest anterior, os jogadores compram itens.
+* Jogadores que falharam na Quest anterior terão pouco poder de compra aqui, entrando na arena em desvantagem.
 
-### Strategic Elements
+### Fase 3: The Bottle (A Roleta)
+O gameplay principal de turnos.
+* 🔴 **Live Pill (Vermelha):** Aumenta a toxicidade (Dano).
+* 🔵 **Placebo (Azul):** Seguro.
+* 🔺 **Shapes (Formas):** Cada pílula tem uma forma geométrica (Cubo, Esfera, Pirâmide, Cápsula) visível ou oculta, essencial para a Shape Quest.
 
-- **Hidden Information**: Pill effects are concealed until consumed
-- **Item System**: 9 power-ups across 4 categories (Intel, Sustain, Control, Chaos)
-- **Shape Quests**: Complete shape sequences for Pill Coins
-- **Pill Store**: Spend coins on boosts and additional items
-- **Progressive Difficulty**: New pill types and shapes unlock each round
+> O Round termina quando o frasco esvazia ou por eliminação.
 
-## Game Modes
+---
 
-### Single Player (Current)
+## 3. Sistema de Itens (Items & Gadgets)
 
-- Human vs AI with 4 difficulty levels:
-  - **Easy** (Paciente): Predictable AI, ideal for learning
-  - **Normal** (Cobaia): Balanced experience (default)
-  - **Hard** (Sobrevivente): Aggressive, strategic AI
-  - **Insane** (Hofmann): Calculating AI with no mercy
+Os itens são consumíveis descartáveis usados para mitigar o RNG.
 
-### Multiplayer
+| Ícone (Ref) | Nome | Efeito Técnico | Custo (Draft) |
+| :--- | :--- | :--- | :--- |
+| 🔍 | **Scanner** | Revela a cor da próxima pílula no frasco (Privado). | Baixo |
+| 🔪 | **Serrated Edge** | A próxima pílula causa 2x de Dano (Toxicidade). | Médio |
+| 🍺 | **Beer/Neutralizer** | Ejeta a pílula atual do frasco sem consumir. | Alto |
+| ⛓️ | **Handcuffs** | Pula o turno do oponente na próxima rodada. | Alto |
+| 💉 | **Adrenaline** | Rouba um item do oponente e usa imediatamente. | Muito Alto |
+| 🚬 | **Inverter** | Inverte a polaridade da pílula atual (Live vira Placebo e vice-versa). | Médio |
 
-- Real-time human vs human via Supabase Realtime
-- 2-6 player support with guest-first authentication
+---
 
-## Target Audience
+## 4. Mecânica de "Shapes" (Formas & Passivas)
 
-Players who enjoy strategic games with risk management elements, similar to Russian Roulette but with deeper tactical gameplay and visual appeal.
+Além da cor, cada pílula possui um **Shape** (Forma Geométrica) que interage com o metabolismo do jogador. Isso adiciona uma camada de profundidade além do simples "Dano/Não Dano".
+
+- **The Sphere (Esfera):** Padrão. Sem efeitos adicionais.
+- **The Cube (Cubo):** Estável. Se for uma *Live Pill*, o dano é reduzido em 1.
+- **The Pyramid (Pirâmide):** Instável. Se for *Placebo*, concede +1 Item aleatório.
+- **The Capsule (Cápsula):** Ação Rápida. Se consumida, o turno passa instantaneamente (ignora animações lentas/efeitos de stasis).
+
+*Nota: Shapes são distribuídos aleatoriamente no carregamento do Frasco.*
+
+---
+
+## 5. Quests & Progressão
+
+O sistema de retenção baseia-se em tarefas de curto e longo prazo.
+
+### Daily Prescriptions (Quests Diárias)
+- "Sobreviva a 3 partidas sem usar o Scanner."
+- "Cause 5 Overdoses em oponentes."
+- "Consuma 10 Placebos em sequência."
+- **Recompensa:** Desbloqueio de cosméticos (Skins de Avatar, Mesas, Frascos).
+
+### Lifetime Stats (Dossier Médico)
+- Total de Pílulas Ingeridas.
+- Taxa de Sobrevivência.
+- Itens Favoritos.
+
+---
+
+## 6. Modos de Jogo
+
+1.  **Quick Dose (Normal Matchmaking):** Matchmaking de oponente baseado em MMR/Ranking. Fase de Draft habilitada. Melhor de 3. Sala com 2 jogadores (1v1).
+2.  **Danger Dose (Ranked Matchmaking):** Matchmaking de oponentes baseado em MMR/Ranking. Fase de Draft habilitada. Melhor de 3. Sala com 2 a 6 jogadores.
+3.  **Rehab (Online/Hotseat):** Criar ROOM com amigos. Fase de Draft customizável. Possível adicionar Bots (AI). Melhor de {x} (customizável). Sala com 2 a 6 jogadores.
+
+## 7. Infraestrutura (Supabase Key Points)
+
+- **Auth:** Login anônimo ou via Discord.
+- **Database:** Tabelas para `matches`, `players`, `items_metadata`, `quests`.
+- **Realtime:** Inscrição no canal `match:ID` para sincronizar `current_turn`, `bottle_state` (hash), e `health`.
+- **Edge Functions:** Lógica crítica (`resolve_turn`, `deal_bottle`) roda no servidor para evitar cheats.
