@@ -21,7 +21,7 @@ Vamos alinhar o projeto à estrutura alvo definida em `docs/00-start-here/estrut
 ## Tasks atômicas (ordem sugerida)
 
 ### 1) Migrar `src/store/` -> `src/stores/`
-- **1.1 Criar `src/stores/` e mover arquivos**
+- **1.1 Criar `src/stores/` e mover arquivos** ✅
   - Mover:
     - `src/store/useChatStore.ts` -> `src/stores/chatStore.ts`
     - `src/store/useGameStore.ts` -> `src/stores/gameStore.ts` (ou `matchStore.ts`)
@@ -29,14 +29,14 @@ Vamos alinhar o projeto à estrutura alvo definida em `docs/00-start-here/estrut
   - Atualizar imports `@/store/...` -> `@/stores/...`
   - **DoD**: `pnpm lint` e `pnpm build` passam.
 
-- **1.2 Remover o diretório antigo**
+- **1.2 Remover o diretório antigo** ✅
   - **DoD**: `src/store/` não existe mais; nenhuma referência a `@/store` no repo.
 
 ### 2) Criar o esqueleto de `src/core/`
-- **2.1 Criar `src/core/adapters/`**
+- **2.1 Criar `src/core/adapters/`** ✅
   - **DoD**: pasta existe e está vazia (ou com placeholder), sem alterar runtime.
 
-- **2.2 Criar `src/core/state-machines/`**
+- **2.2 Criar `src/core/state-machines/`** ✅
   - **DoD**: pasta existe e está vazia (ou com placeholder), sem alterar runtime.
 
 ### 3) Iniciar `components/game/*` a partir do `MatchScreen`
