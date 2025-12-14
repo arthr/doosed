@@ -2,6 +2,10 @@ import { useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import type { Phase } from '@/core/state-machines/phase';
 import { useFlowStore } from '@/stores/flowStore';
+import { LobbyScreen } from '@/screens/LobbyScreen';
+import { DraftScreen } from '@/screens/DraftScreen';
+import { MatchScreen } from '@/screens/MatchScreen';
+import ResultScreen from '@/screens/ResultScreen';
 
 type ScreenComponent = () => JSX.Element;
 
@@ -93,11 +97,31 @@ export function DevScreen() {
       .sort((a, b) => a.label.localeCompare(b.label));
   }, []);
 
-  const selected = selectedKey ? (screens.find(s => s.key === selectedKey) ?? null) : null;
+  const selected =
+    selectedKey && selectedKey !== '__phase__' ? (screens.find(s => s.key === selectedKey) ?? null) : null;
+
+  const PhaseRouterPreview = useMemo(() => {
+    switch (phase) {
+      case 'LOBBY':
+        return <LobbyScreen />;
+      case 'DRAFT':
+        return <DraftScreen />;
+      case 'MATCH':
+        return <MatchScreen />;
+      case 'RESULTS':
+        return <ResultScreen />;
+      default: {
+        const _exhaustive: never = phase;
+        return _exhaustive;
+      }
+    }
+  }, [phase]);
 
   return (
     <>
-      {selected ? (
+      {selectedKey === '__phase__' ? (
+        <div className="fixed inset-0 z-40 overflow-auto">{PhaseRouterPreview}</div>
+      ) : selected ? (
         <div className="fixed inset-0 z-40 overflow-auto">
           <selected.Component />
         </div>
@@ -243,6 +267,7 @@ export function DevScreen() {
                   )}
                 >
                   <option value="">(sem preview)</option>
+                  <option value="__phase__">(seguir phase)</option>
                   {screens.map(screen => (
                     <option key={screen.key} value={screen.key}>
                       {screen.label}
