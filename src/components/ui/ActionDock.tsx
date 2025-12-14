@@ -64,11 +64,18 @@ export function ActionDock({
   layout = 'row',
 }: ActionDockProps) {
   const isStack = layout === 'stack';
+  const stackRows = (() => {
+    if (!isStack) return '';
+    const count = Number(!!loadout?.onPress) + Number(!!shop?.onClick) + Number(!!chat?.onClick);
+    if (count <= 1) return 'grid-rows-1';
+    if (count === 2) return 'grid-rows-2';
+    return 'grid-rows-3';
+  })();
 
   return (
     <div
       className={cn(
-        isStack ? 'grid h-full grid-rows-3 items-stretch gap-2 md:gap-4' : 'flex gap-2',
+        isStack ? cn('grid h-full items-stretch gap-2 md:gap-4', stackRows) : 'flex gap-2',
         className,
       )}
     >

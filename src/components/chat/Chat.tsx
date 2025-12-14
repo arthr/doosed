@@ -284,7 +284,7 @@ function DockChat({
   return (
     <div
       className={cn(
-        'fixed md:right-3 bottom-15 z-50',
+        'fixed bottom-15 z-50 md:right-3',
         'w-full md:w-[min(440px,calc(100vw-2rem))]',
         'h-[min(520px,calc(100vh-2rem))]',
       )}

@@ -2,8 +2,8 @@ import { Header } from '@/components/draft/Header';
 import { ShopItem } from '@/components/draft/ShopItem';
 import { InventorySlot } from '@/components/draft/InventorySlot';
 import { ActionDock } from '@/components/ui/ActionDock';
-import { GameLogPanel } from '@/components/ui/GameLogPanel';
 import { useDraftShopMock } from '@/hooks/useDraftShopMock';
+import { Chat } from '@/components/chat/Chat';
 import {
   Beer,
   Lock,
@@ -94,12 +94,10 @@ export const DraftScreen = () => {
     timeLeft,
     startIn,
     inventory,
-    logs,
     canBuy,
     buy,
     toggleLoadout,
     loadoutConfirmed,
-    openChat,
     openShop,
     maxSlots,
   } = useDraftShopMock();
@@ -146,10 +144,6 @@ export const DraftScreen = () => {
           <div className="border-border hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
         </div>
       </div>
-      {/* Log Mobile */}
-      <div className="flex flex-col p-2 opacity-40 md:hidden">
-        <GameLogPanel logs={logs} className="h-15" />
-      </div>
       {/* Bottom Section: Inventory + Log + Actions */}
       <div className="bg-ui-panel border-border mt-auto rounded-xl border-4 p-3 sm:p-4 md:p-6">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
@@ -170,13 +164,15 @@ export const DraftScreen = () => {
             </div>
           </div>
 
-          {/* Log */}
-          <div className="hidden flex-col md:col-span-5 md:flex">
+          {/* Chat (padrao Lobby) */}
+          <div className="flex flex-col md:col-span-5">
             <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
               <Terminal size={20} />
-              <h2 className="text-sm uppercase">Game Log</h2>
+              <h2 className="text-sm uppercase">Chat</h2>
             </div>
-            <GameLogPanel logs={logs} className="h-32 sm:h-36 md:h-44" />
+            <div className="pt-3">
+              <Chat mode="inline" threadId="draft" className='h-32 sm:h-36 md:h-44' />
+            </div>
           </div>
 
           {/* Actions: Confirm + Chat */}
@@ -187,7 +183,6 @@ export const DraftScreen = () => {
             </div>
             <div className="flex h-full flex-col">
               <ActionDock
-                chat={{ onClick: openChat, disabled: false }}
                 shop={{ onClick: openShop, disabled: false }}
                 loadout={{
                   onPress: toggleLoadout,

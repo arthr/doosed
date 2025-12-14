@@ -10,12 +10,10 @@ type UseDraftShopMockResult = {
   timeLeft: number;
   startIn: number;
   inventory: DraftShopItem[];
-  logs: string[];
   loadoutConfirmed: boolean;
   canBuy: (item: DraftShopItem) => boolean;
   buy: (item: DraftShopItem) => void;
   toggleLoadout: () => void;
-  openChat: () => void;
   openShop: () => void;
   maxSlots: number;
 };
@@ -30,10 +28,6 @@ export function useDraftShopMock(
   const [startIn, setStartIn] = useState(initialStartIn);
   const [inventory, setInventory] = useState<DraftShopItem[]>([]);
   const [loadoutConfirmed, setLoadoutConfirmed] = useState(false);
-  const [logs, setLogs] = useState<string[]>(() => [
-    '> Draft iniciado.',
-    'Sistema: escolha seus itens antes do tempo acabar.',
-  ]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -57,26 +51,27 @@ export function useDraftShopMock(
 
   const buy = (item: DraftShopItem) => {
     if (!canBuy(item)) {
-      setLogs(prev => [...prev, `Sistema: compra negada (${item.name}).`]);
+      chatActions.addSystemMessage(`Sistema: compra negada (${item.name}).`, 'draft');
       return;
     }
     setWallet(prev => prev - item.price);
     setInventory(prev => [...prev, item]);
-    setLogs(prev => [...prev, `> Comprou ${item.name} (-${item.price}).`]);
+    chatActions.addSystemMessage(`> Comprou ${item.name} (-${item.price}).`, 'draft');
   };
 
   const toggleLoadout = () => {
-    setLoadoutConfirmed(!loadoutConfirmed);
-    setLogs(prev => [...prev, loadoutConfirmed ? '> Loadout confirmado.' : '> Loadout cancelado.']);
-  };
-
-  const openChat = () => {
-    chatActions.open('draft');
-    chatActions.addSystemMessage('Sistema: chat aberto (mock).', 'draft');
+    setLoadoutConfirmed(prev => {
+      const next = !prev;
+      chatActions.addSystemMessage(
+        next ? '> Loadout confirmado.' : '> Loadout cancelado.',
+        'draft',
+      );
+      return next;
+    });
   };
 
   const openShop = () => {
-    setLogs(prev => [...prev, '> Shop aberto (mock).']);
+    chatActions.addSystemMessage('> Shop aberto (mock).', 'draft');
   };
 
   return {
@@ -84,12 +79,10 @@ export function useDraftShopMock(
     timeLeft,
     startIn,
     inventory,
-    logs,
     loadoutConfirmed,
     canBuy,
     buy,
     toggleLoadout,
-    openChat,
     openShop,
     maxSlots: MAX_SLOTS,
   };
