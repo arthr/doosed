@@ -56,11 +56,11 @@ export function ChatInline({
       {isOpen ? (
         <div className="fixed inset-0 z-50 flex flex-col bg-black/90 p-4 md:hidden">
           <div className="mb-4 flex items-center justify-between">
-            <div className="font-bold tracking-widest text-neutral-300 uppercase">CHAT</div>
+            <div className="font-normal tracking-widest text-neutral-300 uppercase">CHAT</div>
             <button
               type="button"
               onClick={() => toggle(threadId)}
-              className="border border-white px-4 py-2 font-bold text-white uppercase"
+              className="border border-white px-4 py-2 font-normal text-white uppercase"
             >
               Fechar [X]
             </button>

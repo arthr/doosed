@@ -21,7 +21,7 @@ export function PlayerDashboard() {
       </div>
 
       <div className="flex-1">
-        <h2 className="text-xl font-bold text-text-primary mb-2">Rick Sanchez (YOU)</h2>
+        <h2 className="text-xl font-normal text-text-primary mb-2">Rick Sanchez (YOU)</h2>
 
         {/* Barras de Status */}
         <div className="flex gap-8 mb-2">

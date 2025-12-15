@@ -56,7 +56,7 @@ const PlayerCard = ({ player }: { player: Player | null }) => {
           <span className="font-pixel text-slate-400 text-xl md:text-2xl tracking-widest uppercase animate-pulse">
             SEARCHING...
           </span>
-          <button className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-black font-pixel font-bold px-4 py-1 rounded shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-none transition-all">
+          <button className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-black font-pixel font-normal px-4 py-1 rounded shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-none transition-all">
             <Plus size={16} strokeWidth={4} /> INVITE
           </button>
         </div>
@@ -157,13 +157,13 @@ const LobbyFooter = () => (
       {/* Ready Button */}
       <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-center gap-2 md:w-40 bg-linear-to-b from-green-500 to-green-700 border-4 border-green-900 rounded-xl shadow-[0_4px_0_#14532d] active:shadow-none active:translate-y-1 transition-all group">
         <ThumbsUp className="w-6 h-6 md:w-10 md:h-10 text-green-950 group-hover:scale-110 transition-transform" strokeWidth={3} />
-        <span className="font-pixel text-xl md:text-2xl text-green-950 font-bold leading-none">READY UP</span>
+        <span className="font-pixel text-xl md:text-2xl text-green-950 font-normal leading-none">READY UP</span>
       </button>
 
       {/* Loadout Button */}
       <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-center gap-2 md:w-40 bg-linear-to-b from-cyan-500 to-cyan-700 border-4 border-cyan-900 rounded-xl shadow-[0_4px_0_#0e7490] active:shadow-none active:translate-y-1 transition-all group">
         <Backpack className="w-6 h-6 md:w-10 md:h-10 text-cyan-950 group-hover:rotate-12 transition-transform" strokeWidth={3} />
-        <span className="font-pixel text-lg md:text-xl text-cyan-950 font-bold leading-none text-center">CUSTOMIZE<br className="hidden md:block" /> LOADOUT</span>
+        <span className="font-pixel text-lg md:text-xl text-cyan-950 font-normal leading-none text-center">CUSTOMIZE<br className="hidden md:block" /> LOADOUT</span>
       </button>
     </div>
 

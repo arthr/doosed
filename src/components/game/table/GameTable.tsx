@@ -2,7 +2,7 @@ export function GameTable() {
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 mb-4 bg-neutral-800 border-4 border-border-muted rounded-xl relative">
       {/* Header da Mesa */}
-      <div className="absolute -top-5 bg-panel px-4 py-1 border-2 border-neon-green text-neon-green font-bold rounded">
+      <div className="absolute -top-5 bg-panel px-4 py-1 border-2 border-neon-green text-neon-green font-normal rounded">
         THE TABLE
       </div>
 
@@ -13,7 +13,7 @@ export function GameTable() {
       </div>
 
       {/* Status dos Itens (Counts) */}
-      <div className="flex justify-center gap-4 mb-4 text-xs md:text-sm font-mono font-bold">
+      <div className="flex justify-center gap-4 mb-4 text-xs md:text-sm font-mono font-normal">
         <span className="text-pill-safe">[7] SAFE</span>
         <span className="text-neon-purple">[4] POISON</span>
         <span className="text-neon-yellow">[2] TOXIC</span>

@@ -13,7 +13,7 @@ const StatRow = ({ label, value, icon, color }: { label: string; value: string |
             <div className={`p-1.5 rounded bg-black/40 ${color}`}>{icon}</div>
             <span className="text-slate-300 font-pixel text-lg uppercase tracking-wide">{label}:</span>
         </div>
-        <span className={`font-pixel text-2xl font-bold ${color} drop-shadow-md`}>{value}</span>
+        <span className={`font-pixel text-2xl font-normal ${color} drop-shadow-md`}>{value}</span>
     </div>
 );
 
@@ -24,7 +24,7 @@ const XpBar = ({ isVictory, value }: { isVictory: boolean; value: number }) => (
             <span className={isVictory ? "text-green-400" : "text-red-400"}>
                 {isVictory ? "XP GAINED" : "XP LOST"}
             </span>
-            <span className="text-white font-bold">{isVictory ? `+${value}` : `-${value}`}</span>
+            <span className="text-white font-normal">{isVictory ? `+${value}` : `-${value}`}</span>
         </div>
         <div className="h-4 w-full bg-black border-2 border-slate-600 rounded-full overflow-hidden relative">
             {/* Background Pattern */}
@@ -50,12 +50,12 @@ const LootDisplay = ({ isVictory }: { isVictory: boolean }) => (
         <div className="text-center">
             {isVictory ? (
                 <>
-                    <div className="text-cyan-400 font-pixel text-sm font-bold animate-pulse">COOL RICK SUNGLASSES</div>
+                    <div className="text-cyan-400 font-pixel text-sm font-normal animate-pulse">COOL RICK SUNGLASSES</div>
                     <div className="text-yellow-500 font-pixel text-[10px] uppercase tracking-widest mt-1">New Cosmetic Unlocked!</div>
                 </>
             ) : (
                 <>
-                    <div className="text-slate-500 font-pixel text-sm font-bold line-through">NO LOOT</div>
+                    <div className="text-slate-500 font-pixel text-sm font-normal line-through">NO LOOT</div>
                     <div className="text-red-500 font-pixel text-[10px] uppercase tracking-widest mt-1">Better luck next timeline</div>
                 </>
             )}
@@ -120,7 +120,7 @@ const ResultScreen = () => {
             px-8 py-2 rounded-full border-4 bg-slate-900/90 backdrop-blur-md
             ${currentTheme.border} ${currentTheme.glow}
         `}>
-                    <h2 className={`text-xl md:text-2xl font-bold tracking-[0.2em] uppercase ${isVictory ? 'text-white' : 'text-red-500'}`}>
+                    <h2 className={`text-xl md:text-2xl font-normal tracking-[0.2em] uppercase ${isVictory ? 'text-white' : 'text-red-500'}`}>
                         {isVictory ? 'VICTORY' : 'DEAD'}
                     </h2>
                 </div>
@@ -174,7 +174,7 @@ const ResultScreen = () => {
                 bg-slate-900/80 border-4 rounded-xl p-4 flex flex-col shadow-lg
                 ${currentTheme.border}
             `}>
-                        <h3 className={`text-center text-xl font-bold uppercase mb-4 border-b-2 border-slate-700 pb-2 ${currentTheme.accent}`}>
+                        <h3 className={`text-center text-xl font-normal uppercase mb-4 border-b-2 border-slate-700 pb-2 ${currentTheme.accent}`}>
                             Match Stats
                         </h3>
 
@@ -213,7 +213,7 @@ const ResultScreen = () => {
                 ${isVictory ? 'border-yellow-600' : 'border-slate-600'}
             `}>
                         {/* Header */}
-                        <h3 className={`text-center text-xl font-bold uppercase mb-2 border-b-2 border-slate-700 pb-2 ${isVictory ? 'text-yellow-400' : 'text-slate-400'}`}>
+                        <h3 className={`text-center text-xl font-normal uppercase mb-2 border-b-2 border-slate-700 pb-2 ${isVictory ? 'text-yellow-400' : 'text-slate-400'}`}>
                             Rewards
                         </h3>
 
@@ -232,7 +232,7 @@ const ResultScreen = () => {
                     <div className="flex gap-4 w-full md:w-auto">
                         {/* Primary Button (Play/Try Again) */}
                         <button className={`
-                    flex-1 md:w-64 py-4 rounded-xl border-b-8 font-pixel text-xl font-bold uppercase tracking-wider
+                    flex-1 md:w-64 py-4 rounded-xl border-b-8 font-pixel text-xl font-normal uppercase tracking-wider
                     shadow-lg active:border-b-0 active:translate-y-2 transition-all
                     ${currentTheme.button}
                 `}>
@@ -249,7 +249,7 @@ const ResultScreen = () => {
                     </button>
 
                     {/* Report Link */}
-                    <div className="flex items-center gap-1 text-red-900/50 hover:text-red-500 cursor-pointer transition-colors text-xs font-bold uppercase mt-4">
+                    <div className="flex items-center gap-1 text-red-900/50 hover:text-red-500 cursor-pointer transition-colors text-xs font-normal uppercase mt-4">
                         <AlertTriangle size={12} /> Report Player
                     </div>
 

@@ -300,7 +300,7 @@ export function DevScreen() {
                 <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">Phase</div>
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-xs text-white">
-                    Atual: <span className="font-bold">{phase}</span>
+                    Atual: <span className="font-normal">{phase}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button

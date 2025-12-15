@@ -1,5 +1,5 @@
 import React from 'react';
-import { Hand, Users, Settings, Skull, Zap, CircleDollarSign } from 'lucide-react';
+import { Hand, Users, Settings, Skull } from 'lucide-react';
 import { CromolumAnimated } from '@/components/ui/decorations/CromolumAnimated';
 import { PortalGunAnimated } from '@/components/ui/decorations/PortalGunAnimated';
 
@@ -9,7 +9,7 @@ import { PortalGunAnimated } from '@/components/ui/decorations/PortalGunAnimated
 interface GameButtonProps {
   title: string;
   subtitle: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   color: 'green' | 'purple' | 'blue' | 'red';
   onClick?: () => void;
 }
@@ -33,21 +33,21 @@ const GameButton = ({ title, subtitle, icon, color, onClick }: GameButtonProps) 
       `}
     >
       {/* Icon Area */}
-      <div className="flex items-center justify-center w-12 h-12 mr-4 text-3xl">
-        {icon}
+      <div className="flex items-center justify-center w-12 h-12 mr-4 text-2xl">
+        {icon && icon}
       </div>
 
       {/* Text Area */}
-      <div className="flex flex-col items-center flex-1 lg:items-start">
-        <span className="text-3xl font-bold tracking-widest font-pixel uppercase drop-shadow-md">
+      <div className="flex flex-col flex-1 items-start">
+        <span className="text-md md:text-2xl font-normal tracking-widest font-pixel uppercase drop-shadow-md">
           {title}
         </span>
-        <span className="text-lg opacity-80 font-pixel tracking-wide">
+        <span className="text-sm md:text-md opacity-80 font-pixel tracking-wide">
           {subtitle}
         </span>
       </div>
 
-      {/* Dripping Sludge Effect (CSS Decoration) | TODO: Precisa de polimento */}
+      {/* Button: Dripping Sludge Effect (CSS Decoration) | TODO: Precisa de polimento */}
       {/* <div className={`absolute -bottom-2 right-4 w-2 h-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${color === 'green' ? 'bg-green-500' : 'bg-transparent'}`} /> */}
     </button>
   );
@@ -57,15 +57,15 @@ const GameButton = ({ title, subtitle, icon, color, onClick }: GameButtonProps) 
 interface InfoCardProps {
   title: string;
   value: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   imageSrc?: string;
   align?: 'left' | 'right';
 }
 
 const InfoCard = ({ title, value, icon, imageSrc, align = 'left' }: InfoCardProps) => (
-  <div className="relative flex items-center p-1 bg-neutral-900/90 border-2 border-slate-600 rounded-lg shadow-lg w-full lg:w-64 h-24">
+  <div className="relative flex items-center p-1 px-3 bg-neutral-900/90 border-2 border-slate-600 rounded-lg shadow-lg w-full lg:w-80 h-24">
     {/* Portrait Image Placeholder */}
-    <div className={`w-20 h-20 shrink-0 bg-slate-800 rounded border-2 border-slate-500 overflow-hidden flex items-center justify-center ${align === 'right' ? 'order-2 ml-3' : 'mr-3'}`}>
+    <div className={`size-16 shrink-0 bg-slate-800 rounded border-2 border-slate-500 overflow-hidden flex items-center justify-center ${align === 'right' ? 'order-2 ml-3' : 'mr-3'}`}>
       {imageSrc ? (
         <img src={imageSrc} alt="Character" className="w-full h-full object-cover" />
       ) : (
@@ -75,9 +75,9 @@ const InfoCard = ({ title, value, icon, imageSrc, align = 'left' }: InfoCardProp
 
     {/* Text Content */}
     <div className={`flex flex-col flex-1 ${align === 'right' ? 'items-end text-right' : 'items-start text-left'}`}>
-      <span className="text-slate-300 font-pixel text-lg leading-tight mb-1">{title}</span>
-      <div className="flex items-center gap-1 text-yellow-400 font-bold font-pixel text-xl">
-        {icon}
+      <span className="text-slate-300 font-pixel text-xs leading-tight mb-1">{title}</span>
+      <div className="flex items-center gap-1 text-yellow-400 font-normal font-pixel text-xs">
+        {icon && icon}
         <span>{value}</span>
       </div>
     </div>
@@ -128,12 +128,12 @@ const HomeScreen = () => {
 
         {/* HEADER: Logo Area */}
         <div className="text-center mb-8 relative">
-          <h1 className="text-7xl lg:text-9xl font-bold text-green-500 drop-shadow-[4px_4px_0_rgba(0,0,0,1)] stroke-black"
+          <h1 className="text-7xl lg:text-9xl font-normal text-green-500 drop-shadow-[4px_4px_0_rgba(0,0,0,1)] stroke-black"
             style={{ WebkitTextStroke: '2px black', textShadow: '0 0 20px rgba(34,197,94,0.8)' }}>
             DOSED
           </h1>
           {/* Dripping effect SVG could go here */}
-          <h2 className="text-3xl lg:text-4xl text-white font-bold tracking-[0.2em] -mt-2 lg:-mt-4 relative inline-block">
+          <h2 className="text-3xl lg:text-4xl text-white font-normal tracking-[0.2em] -mt-2 lg:-mt-4 relative inline-block">
             <span className="text-red-500 absolute -left-1 -top-0.5 opacity-50 blur-[1px]">PILL ROULETTE</span>
             <span className="relative z-10 drop-shadow-md">PILL ROULETTE</span>
           </h2>
@@ -180,15 +180,17 @@ const HomeScreen = () => {
           <InfoCard
             title="Daily Challenge"
             value="500 SCHMECKLES"
-            icon={<CircleDollarSign size={20} />}
+            imageSrc="/images/avatar/rick_winner_md.png"
+          // icon={<CircleDollarSign size={20} />}
           // align="left"
           />
 
           {/* Player Info (Pickle Rick) */}
           <InfoCard
             title="Pickle Rick"
-            value="LEVEL: 137"
-            icon={<Zap size={20} />}
+            value="LEVEL 137"
+            imageSrc="/images/avatar/pickle_rick_md.png"
+          // icon={<Zap size={20} />}
             align="right"
           />
         </div>
