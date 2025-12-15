@@ -174,33 +174,23 @@ const LobbyFooter = () => (
 
 export const LobbyScreen = () => {
   return (
-    // Outer Container (Simulating the screen boundaries)
-    <div className="min-h-screen w-full p-2 md:p-6 lg:p-8 flex items-center justify-center font-pixel">
-
-      {/* Background Effect (Optional: Add your animated SVG behind this div) */}
-
-      {/* Inner Content Container */}
-      <div className="w-full max-w-6xl h-[90vh] flex flex-col gap-4 relative z-10">
-
-        {/* HEADER */}
+    <div className="bg-void-black text-text-primary font-pixel min-h-screen w-full">
+      {/* Screen: Content */}
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col">
+        {/* Section: Header */}
         <LobbyHeader roomCode="X-7-Z" status="WAITING FOR SUBJECTS..." />
 
-        {/* MAIN GRID/LIST AREA */}
-        {/* We use specific overflow handling to match the 'Screen' feel */}
-        <main className="flex-1 bg-neutral-900/50 rounded-xl border-4 border-transparent md:border-slate-800/50 overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-slate-900 p-1 md:p-4">
-
-          {/* Grid for Desktop / Stack for Mobile */}
+        {/* Section: Main */}
+        <main className="flex-1 min-h-0 bg-neutral-900/50 rounded-xl border-4 border-transparent md:border-slate-800/50 overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-slate-900 p-1 md:p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 pb-20 md:pb-0">
             {MOCK_PLAYERS.map((player, idx) => (
               <PlayerCard key={player ? player.id : `empty-${idx}`} player={player} />
             ))}
           </div>
-
         </main>
 
-        {/* FOOTER */}
+        {/* Section: Footer */}
         <LobbyFooter />
-
       </div>
     </div>
   );
