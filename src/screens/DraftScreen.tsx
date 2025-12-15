@@ -104,10 +104,12 @@ export const DraftScreen = () => {
 
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
-      {/* Top UI */}
+      {/* Section: Header */}
       <Header balance={wallet} time={timeLeft} />
-      <div className="bg-void-black text-text-primary border-border-muted flex h-screen flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
-        {/* Shop Section (Conveyor Belt) */}
+
+      {/* Section: Content (scroll) */}
+      <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
+        {/* Section: Shop (Conveyor Belt) */}
         <div className="relative flex flex-col justify-center md:my-4">
           {/* Conveyor Belt Track Graphic */}
           <div className="border-border-muted hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
@@ -144,8 +146,9 @@ export const DraftScreen = () => {
           <div className="border-border-muted hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
         </div>
       </div>
-      {/* Bottom Section: Inventory + Log + Actions */}
-      <div className="bg-panel border-border-muted mt-auto rounded-xl border-4 p-3 sm:p-4 md:p-6">
+
+      {/* Section: Footer (Inventory + Chat + Actions) */}
+      <div className="bg-panel border-border-muted rounded-xl border-4 p-3 sm:p-4 md:p-6">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
           {/* Inventory (smaller) */}
           <div className="md:col-span-4">
