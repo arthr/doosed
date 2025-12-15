@@ -1,10 +1,12 @@
-import { Header } from '@/components/draft/Header';
+import { Header } from '@/components/game/hud/Header';
 import { ShopItem } from '@/components/draft/ShopItem';
 import { ActionDock } from '@/components/ui/ActionDock';
 import { useDraftShopMock } from '@/hooks/useDraftShopMock';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
 import {
   Beer,
+  Clock,
+  Coins,
   Lock,
   Search,
   Sword,
@@ -98,10 +100,35 @@ export const DraftScreen = () => {
     maxSlots,
   } = useDraftShopMock();
 
+  const formattedDraftTime = `00:${timeLeft < 10 ? `0${timeLeft}` : timeLeft}`;
+
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
       {/* Section: Header */}
-      <Header balance={wallet} time={timeLeft} />
+      <Header
+        left={{
+          icon: <Coins className="text-neon-yellow" size={18} />,
+          label: 'PILL COINS',
+          value: wallet,
+        }}
+        center={{
+          title: 'Draft',
+          artwork: (
+            <img
+              src="/images/avatar/rick_winner.png"
+              alt="Rick Winner"
+              className="-my-4 size-16 drop-shadow-xs select-none"
+              draggable={false}
+            />
+          ),
+          subtitle: 'Shop',
+        }}
+        right={{
+          icon: <Clock className="text-neon-yellow" size={18} />,
+          label: 'DRAFT ENDS',
+          value: formattedDraftTime,
+        }}
+      />
 
       {/* Section: Content (scroll) */}
       <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">

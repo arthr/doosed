@@ -1,6 +1,5 @@
 import { cn } from '@/lib/cn';
 import { StatsInventorySection } from '@/components/game/hud/StatsInventorySection';
-import { Inventory } from '@/components/game/hud/Inventory';
 import { ChatSection } from '@/components/game/hud/ChatSection';
 import { ActionsSection } from '@/components/game/hud/ActionsSections';
 import { PanelShell } from '@/components/game/hud/PanelShell';

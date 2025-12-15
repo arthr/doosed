@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import type { Player } from '@/types/lobby';
-import { RoomHeader } from '@/components/lobby/RoomHeader';
 import { LobbyPanel } from '@/components/lobby/LobbyPanel';
 import { PlayerGrid } from '@/components/lobby/PlayerGrid';
 import { ActionControls } from '@/components/lobby/ActionControls';
-import { Header } from '@/components/draft/Header';
+import { Header } from '@/components/game/hud/Header';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
+import { Activity, KeyRound } from 'lucide-react';
 
 // --- Mock Data ---
 function createMockPlayers(): (Player | null)[] {
@@ -24,14 +24,26 @@ function createMockPlayers(): (Player | null)[] {
 export const LobbyScreen = () => {
   const [isReady, setIsReady] = useState(false);
   const players = useMemo(() => createMockPlayers(), []);
+  const roomCode = 'X-7-Z';
+  const lobbyStatus = 'AGUARDANDO JOGADORES...';
 
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
         {/* Section: Header */}
-        {/* TODO: Header precisa ser flexivel para todas as screens da aplicação */}
-        {/* Header do Lobby precisa de roomCode e Status de sala */}
-        <Header balance={1000} time={30} />
-        {/* <RoomHeader roomCode="X-7-Z" status="WAITING FOR SUBJECTS..." /> */}
+        {/* TODO: Header do Lobby precisa de roomCode e Status de sala */}
+        <Header
+          left={{
+            icon: <KeyRound className="text-neon-yellow" size={18} />,
+            label: 'ROOM',
+            value: roomCode,
+          }}
+          right={{
+            icon: <Activity className="text-neon-yellow" size={18} />,
+            label: 'STATUS',
+            value: lobbyStatus,
+          }}
+          center={{ title: 'Lobby' }}
+        />
 
         {/* Section: Main */}
         <main className="flex-1 min-h-0">

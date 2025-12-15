@@ -13,8 +13,6 @@ export function StatsInventorySection({
   inventory: PhasePanelHUDInventory;
   className?: string;
 }) {
-  const { items, maxSlots } = inventory;
-  
   return (
     <div className={cn("flex flex-col min-h-0", className)}>
       <div className="flex flex-1 flex-col-2 items-center justify-center">
