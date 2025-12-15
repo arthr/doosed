@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Crown, MessageSquare, ThumbsUp, Backpack, AlertTriangle, Plus } from 'lucide-react';
 
 // --- Types ---
@@ -45,7 +44,7 @@ const LobbyHeader = ({ roomCode, status }: { roomCode: string; status: string })
 );
 
 // 2. Player Card (Responsive: Grid on Desktop, Row on Mobile)
-const PlayerCard = ({ player, index }: { player: Player | null, index: number }) => {
+const PlayerCard = ({ player }: { player: Player | null }) => {
   // Empty Slot Styling (Static Noise Effect)
   if (!player) {
     return (
@@ -193,7 +192,7 @@ export const LobbyScreen = () => {
           {/* Grid for Desktop / Stack for Mobile */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 pb-20 md:pb-0">
             {MOCK_PLAYERS.map((player, idx) => (
-              <PlayerCard key={player ? player.id : `empty-${idx}`} player={player} index={idx} />
+              <PlayerCard key={player ? player.id : `empty-${idx}`} player={player} />
             ))}
           </div>
 

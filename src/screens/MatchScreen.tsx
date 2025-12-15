@@ -5,7 +5,7 @@ import { GameTable } from '@/components/game/table/GameTable';
 
 export const MatchScreen = () => {
   return (
-    <div className="flex flex-col min-h-screen p-2 md:p-6 bg-space-black text-foreground font-sans overflow-hidden">
+    <div className="flex flex-col min-h-screen p-2 md:p-6 bg-void-black text-text-primary font-sans overflow-hidden">
       {/* Area Superior: Oponentes */}
       <OpponentsBar />
 

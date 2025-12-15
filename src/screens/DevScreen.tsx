@@ -120,11 +120,11 @@ export function DevScreen() {
   return (
     <>
       {selectedKey === '__phase__' ? (
-        <div className="fixed inset-0 z-40 overflow-auto bg-space-black text-foreground">
+        <div className="fixed inset-0 z-40 overflow-auto bg-void-black text-text-primary">
           {PhaseRouterPreview}
         </div>
       ) : selected ? (
-        <div className="fixed inset-0 z-40 overflow-auto bg-space-black text-foreground">
+        <div className="fixed inset-0 z-40 overflow-auto bg-void-black text-text-primary">
           <selected.Component />
         </div>
       ) : null}

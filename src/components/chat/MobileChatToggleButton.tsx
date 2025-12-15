@@ -19,7 +19,7 @@ export function MobileChatToggleButton({
       className={cn(
         'md:hidden',
         'flex w-full items-center justify-between',
-        'border-border bg-ui-panel rounded-xl border-2',
+        'border-border-muted bg-panel rounded-xl border-2',
         'py-2 font-normal text-neutral-300',
         'active:bg-black/30',
       )}

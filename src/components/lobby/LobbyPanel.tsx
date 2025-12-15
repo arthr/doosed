@@ -10,7 +10,7 @@ export function LobbyPanel({ children, className }: LobbyPanelProps) {
   return (
     <div
       className={cn(
-        'border-border bg-ui-panel rounded-xl border-4',
+        'border-border-muted bg-panel rounded-xl border-4',
         'shadow-pixel',
         'p-3 sm:p-4',
         className,

@@ -106,11 +106,11 @@ export const DraftScreen = () => {
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
       {/* Top UI */}
       <Header balance={wallet} time={timeLeft} />
-      <div className="bg-space-black text-foreground border-border flex h-screen flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
+      <div className="bg-void-black text-text-primary border-border-muted flex h-screen flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
         {/* Shop Section (Conveyor Belt) */}
         <div className="relative flex flex-col justify-center md:my-4">
           {/* Conveyor Belt Track Graphic */}
-          <div className="border-border hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
+          <div className="border-border-muted hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
 
           {/* Items Container */}
           <div className="py-0 md:pt-4 md:pb-6">
@@ -141,15 +141,15 @@ export const DraftScreen = () => {
           </div>
 
           {/* Conveyor Belt Track Graphic */}
-          <div className="border-border hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
+          <div className="border-border-muted hidden h-4 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
         </div>
       </div>
       {/* Bottom Section: Inventory + Log + Actions */}
-      <div className="bg-ui-panel border-border mt-auto rounded-xl border-4 p-3 sm:p-4 md:p-6">
+      <div className="bg-panel border-border-muted mt-auto rounded-xl border-4 p-3 sm:p-4 md:p-6">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
           {/* Inventory (smaller) */}
           <div className="md:col-span-4">
-            <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
+            <div className="text-text-muted border-border-muted flex items-center gap-2 border-b pb-4">
               <Backpack size={20} />
               <h2 className="text-sm uppercase">
                 Backpack ({inventory.length}/{maxSlots} Slots)
@@ -166,7 +166,7 @@ export const DraftScreen = () => {
 
           {/* Chat (padrao Lobby) */}
           <div className="flex flex-col md:col-span-5">
-            <div className="md:flex hidden items-center gap-2 text-muted-foreground border-border border-b pb-4">
+            <div className="md:flex hidden items-center gap-2 text-text-muted border-border-muted border-b pb-4">
               <Terminal size={20} />
               <h2 className="text-sm uppercase">Chat</h2>
             </div>
@@ -177,7 +177,7 @@ export const DraftScreen = () => {
 
           {/* Actions: Confirm + Chat */}
           <div className="flex flex-col md:col-span-3">
-            <div className="text-muted-foreground border-border flex items-center gap-2 border-b pb-4">
+            <div className="text-text-muted border-border-muted flex items-center gap-2 border-b pb-4">
               <Joystick size={20} />
               <h2 className="text-sm uppercase">Actions</h2>
             </div>

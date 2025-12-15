@@ -21,7 +21,7 @@ export function ChatMessageRow({ message }: ChatMessageRowProps) {
     <div className="opacity-90">
       <span className="text-neutral-500">[{formatChatTime(message.createdAt)}]</span>{' '}
       <span className="font-bold text-neutral-300">{authorName.toUpperCase()}:</span>{' '}
-      <span className="text-rick-green">{message.text}</span>
+      <span className="text-neon-green">{message.text}</span>
     </div>
   );
 }

@@ -1,5 +1,4 @@
-/* Importando fontes 8-bit: VT323 para texto (legível) e Press Start 2P para títulos */
-/*@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');*/
+/* Importando fonte pixel */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
@@ -7,7 +6,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ===================================
-   shadcn/ui Theme Variables (Base)
+   Dosed - Nova Paleta de Cores
+   Baseada na HomeScreen (Rick & Morty Neon Style)
    =================================== */
 
 @theme inline {
@@ -16,9 +16,10 @@
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --font-sans: 'VT323', monospace; /* Fonte padrão do corpo */
-  --font-mono: 'Press Start 2P', monospace; /* Fonte para títulos/números importantes */
+  --font-sans: 'Press Start 2P', monospace;
+  --font-mono: 'Press Start 2P', monospace;
 
+  /* shadcn/ui compatibility */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -52,167 +53,200 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* ===================================
-   Dosed - Game Theme Variables
-   =================================== */
-
 @theme {
   /* ===================================
-     Aliases de compatibilidade (Tailwind v3 -> v4 CSS-first)
-     Mantém classes existentes no código: bg-space-black, bg-ui-panel, border-evil-purple,
-     text-rick-green, font-pixel, shadow-pixel, bg-scanlines, etc.
+     Fonte Pixel
      =================================== */
-
   --font-pixel: var(--font-mono);
 
-  --color-space-black: oklch(0.12 0.03 260);
-  --color-ui-panel: oklch(0.16 0.04 260);
-  --color-rick-green: var(--primary);
-  --color-morty-yellow: var(--secondary);
-  --color-evil-purple: oklch(0.45 0.18 300);
-  --color-portal-blue: oklch(0.72 0.13 232);
-  --color-health: var(--color-heart);
-  --color-shield-gold: oklch(0.85 0.18 90);
+  /* ===================================
+     NEON COLORS - Paleta Principal
+     Mapeamento: alias -> Tailwind color
+     =================================== */
 
+  /* Neon Green (Portal/Primary) - green-* */
+  --color-neon-green: var(--color-green-500);
+  --color-neon-green-light: var(--color-green-400);
+  --color-neon-green-dark: var(--color-green-900);
+  --color-neon-green-glow: oklch(0.72 0.23 142 / 0.6);
+
+  /* Neon Purple (Multiplayer/Accent) - purple-* */
+  --color-neon-purple: var(--color-purple-500);
+  --color-neon-purple-light: var(--color-purple-400);
+  --color-neon-purple-dark: var(--color-purple-900);
+  --color-neon-purple-glow: oklch(0.55 0.27 303 / 0.6);
+
+  /* Neon Cyan (Settings/Info) - cyan-* */
+  --color-neon-cyan: var(--color-cyan-500);
+  --color-neon-cyan-light: var(--color-cyan-400);
+  --color-neon-cyan-dark: var(--color-cyan-900);
+  --color-neon-cyan-glow: oklch(0.78 0.15 200 / 0.6);
+
+  /* Neon Red (Danger/Quit) - red-* */
+  --color-neon-red: var(--color-red-600);
+  --color-neon-red-light: var(--color-red-500);
+  --color-neon-red-dark: var(--color-red-900);
+  --color-neon-red-glow: oklch(0.57 0.24 27 / 0.6);
+
+  /* Neon Yellow (Highlight/Values) - yellow-* */
+  --color-neon-yellow: var(--color-yellow-400);
+  --color-neon-yellow-light: var(--color-yellow-300);
+  --color-neon-yellow-dark: var(--color-yellow-600);
+
+  /* ===================================
+     SURFACE COLORS - Fundos e Paineis
+     =================================== */
+
+  /* Void Black - Fundo base absoluto */
+  --color-void-black: var(--color-black);
+
+  /* Panel - Fundo de cards/botoes */
+  --color-panel: var(--color-neutral-900);
+  --color-panel-solid: oklch(0.15 0.01 260 / 0.9);
+
+  /* Surface - Fundo de elementos internos */
+  --color-surface: var(--color-slate-800);
+  --color-surface-light: var(--color-slate-700);
+
+  /* Void Indigo - Gradiente de fundo espacial */
+  --color-void-indigo: var(--color-indigo-900);
+
+  /* ===================================
+     BORDER COLORS - Bordas
+     =================================== */
+  --color-border-muted: var(--color-slate-600);
+  --color-border-subtle: var(--color-slate-500);
+  --color-border-faint: var(--color-slate-700);
+
+  /* ===================================
+     TEXT COLORS - Textos
+     =================================== */
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: var(--color-slate-300);
+  --color-text-muted: var(--color-slate-500);
+  --color-text-warning: var(--color-red-100);
+
+  /* ===================================
+     LEGACY ALIASES - Compatibilidade
+     (Remover gradualmente)
+     =================================== */
+  --color-space-black: var(--color-void-black);
+  --color-ui-panel: var(--color-panel);
+  --color-rick-green: var(--color-neon-green);
+  --color-morty-yellow: var(--color-neon-yellow);
+  --color-evil-purple: var(--color-neon-purple);
+  --color-portal-blue: var(--color-neon-cyan);
+
+  /* ===================================
+     SEMANTIC COLORS - Estados de Jogo
+     =================================== */
+
+  /* Health/Status */
+  --color-health-full: var(--color-neon-green);
+  --color-health-mid: var(--color-neon-yellow);
+  --color-health-low: var(--color-neon-red);
+  --color-heart: var(--color-neon-red-light);
+  --color-shield: var(--color-neon-cyan);
+
+  /* Pills */
+  --color-pill-safe: var(--color-neon-green);
+  --color-pill-toxic: var(--color-neon-yellow);
+  --color-pill-danger: var(--color-neon-red);
+  --color-pill-heal: var(--color-neon-cyan);
+  --color-pill-chaos: var(--color-neon-purple);
+
+  /* ===================================
+     SHADOWS - Efeitos Neon
+     =================================== */
   --shadow-pixel: 4px 4px 0px 0px rgba(0, 0, 0, 0.5);
-  --shadow-neon-green: 0 0 5px oklch(0.72 0.23 146), 0 0 10px oklch(0.72 0.23 146);
-  --shadow-neon-purple: 0 0 5px oklch(0.45 0.18 300), 0 0 10px oklch(0.45 0.18 300);
+  --shadow-neon-green: 0 0 15px var(--color-neon-green-glow);
+  --shadow-neon-purple: 0 0 15px var(--color-neon-purple-glow);
+  --shadow-neon-cyan: 0 0 15px var(--color-neon-cyan-glow);
+  --shadow-neon-red: 0 0 15px var(--color-neon-red-glow);
 
+  /* ===================================
+     BACKGROUNDS - Efeitos Especiais
+     =================================== */
   --background-image-scanlines:
     linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
     linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-
-  /* Pill Colors - Atualizadas para tons químicos/radioativos em OKLCH */
-  --color-pill-safe: oklch(0.62 0.22 145); /* Portal Green */
-  --color-pill-dmg-low: oklch(0.88 0.16 95); /* Morty Yellow (Acid) */
-  --color-pill-dmg-high: oklch(0.63 0.24 30); /* Blood Red */
-  --color-pill-fatal: oklch(0.25 0.05 260); /* Void Black/Blue */
-  --color-pill-heal: oklch(0.72 0.13 232); /* Serum Blue (Rick's Hair) */
-  --color-pill-life: oklch(0.65 0.25 340); /* Life Pink/Magenta */
-  --color-pill-hidden: oklch(0.3 0.05 260); /* Mystery Box Gray */
-
-  /* Health/Status Colors */
-  --color-health-full: oklch(0.62 0.22 145); /* Portal Green */
-  --color-health-mid: oklch(0.88 0.16 95); /* Alert Yellow */
-  --color-health-low: oklch(0.63 0.24 30); /* Critical Red */
-
-  /* Heart/Shield Colors */
-  --color-heart: oklch(0.63 0.24 30);
-  --color-shield: oklch(0.72 0.13 232);
-
-  /* Game-specific colors */
-  --color-game-bg: var(--background);
-  --color-game-card: var(--card);
-  --color-game-accent: var(--primary);
-  --color-game-accent-hover: oklch(0.72 0.23 146);
 }
 
 /* ===================================
-   Root Variables - Rick & Morty Palette
+   Root Variables
    =================================== */
 
 :root {
   /* 8-BIT RULE: ZERO RADIUS */
   --radius: 0rem;
 
-  /* LIGHT MODE: "The Garage" (Concreto e Metais) */
-  --background: oklch(0.96 0.01 200);
-  --foreground: oklch(0.2 0.03 260);
-
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.03 260);
-
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.03 260);
-
-  /* Primary: Portal Green Escuro (para contraste no light mode) */
-  --primary: oklch(0.6 0.2 145);
-  --primary-foreground: oklch(0.98 0 0);
-
-  /* Secondary: Morty Yellow */
-  --secondary: oklch(0.88 0.16 95);
-  --secondary-foreground: oklch(0.2 0.03 260);
-
-  --muted: oklch(0.9 0.02 200);
-  --muted-foreground: oklch(0.45 0.05 260);
-
-  /* Accent: Rick Hair Blue */
-  --accent: oklch(0.8 0.12 230);
-  --accent-foreground: oklch(0.2 0.03 260);
-
-  --destructive: oklch(0.6 0.23 25);
-
-  --border: oklch(0.2 0.03 260 / 20%);
-  --input: oklch(0.2 0.03 260 / 20%);
-  --ring: oklch(0.6 0.2 145);
-
-  /* Charts mapping: Portal, Morty, Rick, Summer, Jerry */
-  --chart-1: oklch(0.62 0.22 145);
-  --chart-2: oklch(0.88 0.16 95);
-  --chart-3: oklch(0.7 0.15 230);
-  --chart-4: oklch(0.65 0.2 330);
-  --chart-5: oklch(0.55 0.1 40);
-
-  /* Sidebar Light */
-  --sidebar: oklch(0.94 0.02 200);
-  --sidebar-foreground: oklch(0.2 0.03 260);
-  --sidebar-primary: oklch(0.6 0.2 145);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.88 0.16 95);
-  --sidebar-accent-foreground: oklch(0.2 0.03 260);
-  --sidebar-border: oklch(0.2 0.03 260 / 10%);
-  --sidebar-ring: oklch(0.6 0.2 145);
+  /* Light mode base (raramente usado) */
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #171717;
+  --card-foreground: #ffffff;
+  --popover: #171717;
+  --popover-foreground: #ffffff;
+  --primary: #22c55e;
+  --primary-foreground: #000000;
+  --secondary: #a855f7;
+  --secondary-foreground: #ffffff;
+  --muted: #1e293b;
+  --muted-foreground: #64748b;
+  --accent: #06b6d4;
+  --accent-foreground: #000000;
+  --destructive: #dc2626;
+  --border: #475569;
+  --input: #1e293b;
+  --ring: #22c55e;
+  --chart-1: #22c55e;
+  --chart-2: #a855f7;
+  --chart-3: #06b6d4;
+  --chart-4: #facc15;
+  --chart-5: #ef4444;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #22c55e;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #475569;
+  --sidebar-ring: #22c55e;
 }
 
 .dark {
-  /* DARK MODE: "Dimension C-137 / Space" */
-
-  --background: oklch(0.12 0.03 260); /* Deep Space Blue */
-  --foreground: oklch(0.92 0.02 200); /* Ice White */
-
-  --card: oklch(0.16 0.04 260);
-  --card-foreground: oklch(0.92 0.02 200);
-
-  --popover: oklch(0.16 0.04 260);
-  --popover-foreground: oklch(0.92 0.02 200);
-
-  /* Primary: Portal Neon Green (Brilha no escuro) */
-  --primary: oklch(0.72 0.23 146);
-  --primary-foreground: oklch(0.12 0.03 260);
-
-  /* Secondary: Rick Hair Blue (Neon) */
-  --secondary: oklch(0.72 0.13 232);
-  --secondary-foreground: oklch(0.12 0.03 260);
-
-  --muted: oklch(0.25 0.04 260);
-  --muted-foreground: oklch(0.7 0.05 230);
-
-  /* Accent: Galatic Purple */
-  --accent: oklch(0.45 0.18 300);
-  --accent-foreground: oklch(0.98 0 0);
-
-  --destructive: oklch(0.63 0.24 30);
-
-  --border: oklch(0.72 0.23 146 / 30%); /* Bordas verdes neon */
-  --input: oklch(0.25 0.04 260);
-  --ring: oklch(0.72 0.23 146);
-
-  /* Charts Dark */
-  --chart-1: oklch(0.72 0.23 146);
-  --chart-2: oklch(0.72 0.13 232);
-  --chart-3: oklch(0.85 0.18 90);
-  --chart-4: oklch(0.6 0.25 340);
-  --chart-5: oklch(0.6 0.15 180);
-
-  /* Sidebar Dark */
-  --sidebar: oklch(0.14 0.04 260);
-  --sidebar-foreground: oklch(0.92 0.02 200);
-  --sidebar-primary: oklch(0.72 0.23 146);
-  --sidebar-primary-foreground: oklch(0.12 0.03 260);
-  --sidebar-accent: oklch(0.25 0.04 260);
-  --sidebar-accent-foreground: oklch(0.92 0.02 200);
-  --sidebar-border: oklch(0.72 0.23 146 / 20%);
-  --sidebar-ring: oklch(0.72 0.23 146);
+  /* Dark mode = default para o jogo */
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #171717;
+  --card-foreground: #ffffff;
+  --popover: #171717;
+  --popover-foreground: #ffffff;
+  --primary: #22c55e;
+  --primary-foreground: #000000;
+  --secondary: #a855f7;
+  --secondary-foreground: #ffffff;
+  --muted: #1e293b;
+  --muted-foreground: #64748b;
+  --accent: #06b6d4;
+  --accent-foreground: #000000;
+  --destructive: #dc2626;
+  --border: #475569;
+  --input: #1e293b;
+  --ring: #22c55e;
+  --chart-1: #22c55e;
+  --chart-2: #a855f7;
+  --chart-3: #06b6d4;
+  --chart-4: #facc15;
+  --chart-5: #ef4444;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #22c55e;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #475569;
+  --sidebar-ring: #22c55e;
 }
 
 /* ===================================
@@ -224,11 +258,11 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-space-black font-pixel overflow-hidden text-white;
+    @apply bg-void-black font-pixel overflow-hidden text-text-primary;
     image-rendering: pixelated;
     position: relative;
   }
-  /* Retro CRT Scanline Effect (aplicado globalmente no body) */
+  /* Retro CRT Scanline Effect */
   body::before {
     content: ' ';
     display: block;
@@ -250,49 +284,37 @@
     width: 8px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-ui-panel;
+    @apply bg-panel;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-rick-green rounded-none;
+    @apply bg-neon-green rounded-none;
   }
-
-  /* Títulos em fonte Pixel Block */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: 'Press Start 2P', system-ui;
     line-height: 1.5;
   }
 }
 
 /* ===================================
-   Custom Utility Classes (Neon/Glow)
+   Utility Classes - Glow Effects
    =================================== */
 
-/* Portal Green Glow */
-@utility glow-safe {
-  box-shadow: 0 0 15px oklch(0.72 0.23 146 / 0.5);
+@utility glow-green {
+  box-shadow: var(--shadow-neon-green);
 }
 
-/* Critical Red Glow */
-@utility glow-danger {
-  box-shadow: 0 0 20px oklch(0.63 0.24 30 / 0.5);
+@utility glow-purple {
+  box-shadow: var(--shadow-neon-purple);
 }
 
-/* Serum Blue Glow */
-@utility glow-heal {
-  box-shadow: 0 0 20px oklch(0.72 0.13 232 / 0.5);
+@utility glow-cyan {
+  box-shadow: var(--shadow-neon-cyan);
 }
 
-/* Morty Yellow Glow */
-@utility glow-warn {
-  box-shadow: 0 0 15px oklch(0.88 0.16 95 / 0.5);
+@utility glow-red {
+  box-shadow: var(--shadow-neon-red);
 }
 
-/* Efeito CRT Scanline (opcional para dar aquele feel de monitor velho) */
 @utility crt-lines {
   background: linear-gradient(
     to bottom,

@@ -28,11 +28,11 @@ const XpBar = ({ isVictory, value }: { isVictory: boolean; value: number }) => (
         </div>
         <div className="h-4 w-full bg-black border-2 border-slate-600 rounded-full overflow-hidden relative">
             {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:4px_4px]" />
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] bg-size-[4px_4px]" />
 
             {/* Bar Fill */}
             <div
-                className={`h-full transition-all duration-1000 ${isVictory ? "bg-gradient-to-r from-yellow-400 to-yellow-600 w-[80%]" : "bg-red-900 w-[30%]"
+                className={`h-full transition-all duration-1000 ${isVictory ? "bg-linear-to-r from-yellow-400 to-yellow-600 w-[80%]" : "bg-red-900 w-[30%]"
                     }`}
             />
         </div>

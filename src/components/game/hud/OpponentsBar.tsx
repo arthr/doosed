@@ -10,14 +10,14 @@ function OpponentCard({ name, active }: OpponentCardProps) {
   return (
     <div
       className={cn(
-        'p-2 border-2 rounded-lg w-32 md:w-40 flex flex-col items-center bg-ui-panel',
-        active ? 'border-morty-yellow' : 'border-evil-purple',
+        'p-2 border-2 rounded-lg w-32 md:w-40 flex flex-col items-center bg-panel',
+        active ? 'border-neon-yellow' : 'border-neon-purple',
       )}
     >
-      <div className="w-10 h-10 mb-1 bg-neutral-700 rounded-full flex items-center justify-center text-xs text-foreground">
+      <div className="w-10 h-10 mb-1 bg-neutral-700 rounded-full flex items-center justify-center text-xs text-text-primary">
         [AVATAR]
       </div>
-      <span className="text-xs font-bold text-foreground truncate w-full text-center">{name}</span>
+      <span className="text-xs font-bold text-text-primary truncate w-full text-center">{name}</span>
 
       {/* Placeholder para HP e Escudo */}
       <div className="flex gap-2 mt-1 items-center">

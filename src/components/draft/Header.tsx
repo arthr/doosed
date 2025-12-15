@@ -56,7 +56,7 @@ export const Header = ({ balance, time }: HeaderProps) => {
   return (
     <div className={headerContainerClassName}>
       <InfoBox
-        icon={<Coins className="text-morty-yellow" size={18} />}
+        icon={<Coins className="text-neon-yellow" size={18} />}
         label="PILL COINS"
         value={balance}
       />
@@ -73,7 +73,7 @@ export const Header = ({ balance, time }: HeaderProps) => {
       </div>
 
       <InfoBox
-        icon={<Clock className="text-morty-yellow" size={18} />}
+        icon={<Clock className="text-neon-yellow" size={18} />}
         label="DRAFT ENDS"
         value={formattedDraftTime}
       />

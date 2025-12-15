@@ -11,11 +11,11 @@ export function RoomHeader({ roomCode, status }: RoomHeaderProps) {
   return (
     <header className="flex flex-col items-stretch gap-3 md:flex-row md:gap-4">
       <LobbyPanel className="flex flex-1 items-center justify-center md:justify-start">
-        <h1 className="text-rick-green flex items-center gap-3 font-mono text-base font-black tracking-widest uppercase md:text-xl">
+        <h1 className="text-neon-green flex items-center gap-3 font-mono text-base font-black tracking-widest uppercase md:text-xl">
           ROOM CODE:
           <span
             className={cn(
-              'rounded border border-border bg-space-black px-3 py-1 text-foreground',
+              'rounded border border-border-muted bg-void-black px-3 py-1 text-text-primary',
               'shadow-pixel',
             )}
           >
@@ -25,7 +25,7 @@ export function RoomHeader({ roomCode, status }: RoomHeaderProps) {
       </LobbyPanel>
 
       <LobbyPanel className="flex flex-2 items-center justify-center md:justify-start">
-        <div className="text-morty-yellow flex items-center gap-3 text-sm font-bold uppercase md:text-base">
+        <div className="text-neon-yellow flex items-center gap-3 text-sm font-bold uppercase md:text-base">
           <AlertTriangle className="h-5 w-5 animate-pulse md:h-6 md:w-6" />
           <span className="tracking-wide">STATUS: {status}</span>
         </div>

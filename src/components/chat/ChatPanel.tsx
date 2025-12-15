@@ -42,7 +42,7 @@ export function ChatPanel({
   return (
     <div
       className={cn(
-        'border-border shadow-pixel relative flex flex-col overflow-hidden rounded-xl border-4 bg-black',
+        'border-border-muted shadow-pixel relative flex flex-col overflow-hidden rounded-xl border-4 bg-black',
         'font-mono text-xs md:text-sm',
         className,
       )}
@@ -76,14 +76,14 @@ export function ChatPanel({
           onChange={e => setText(e.target.value)}
           placeholder={placeholder}
           className={cn(
-            'text-rick-green w-full border-none bg-transparent font-mono placeholder-neutral-700',
+            'text-neon-green w-full border-none bg-transparent font-mono placeholder-neutral-700',
             'focus:ring-0 focus:outline-none',
           )}
         />
         <button
           type="submit"
           className={cn(
-            'border-border bg-ui-panel text-foreground rounded border px-3 py-1 font-bold uppercase',
+            'border-border-muted bg-panel text-text-primary rounded border px-3 py-1 font-bold uppercase',
             'hover:bg-black/20 active:translate-y-0.5',
           )}
         >

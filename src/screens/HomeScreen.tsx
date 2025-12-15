@@ -52,7 +52,15 @@ const GameButton = ({ title, subtitle, icon, color, onClick }: GameButtonProps) 
 };
 
 // 2. Info Cards (Daily Challenge / Player Stats)
-const InfoCard = ({ title, value, icon, imageSrc, align = 'left' }: any) => (
+interface InfoCardProps {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+  imageSrc?: string;
+  align?: 'left' | 'right';
+}
+
+const InfoCard = ({ title, value, icon, imageSrc, align = 'left' }: InfoCardProps) => (
   <div className="relative flex items-center p-1 bg-neutral-900/90 border-2 border-slate-600 rounded-lg shadow-lg w-full lg:w-64 h-24">
     {/* Portrait Image Placeholder */}
     <div className={`w-20 h-20 shrink-0 bg-slate-800 rounded border-2 border-slate-500 overflow-hidden flex items-center justify-center ${align === 'right' ? 'order-2 ml-3' : 'mr-3'}`}>
@@ -86,7 +94,7 @@ const FloatingDecoration = ({ type }: { type: 'gun' | 'head' | 'pills' }) => {
   // You should replace the contents of these divs with <img src="..." />
   if (type === 'gun') {
     return (
-      <div className="hidden lg:block absolute left-[-180px] top-10 animate-bounce duration-[3000ms]">
+      <div className="hidden lg:block absolute left-[-180px] top-10 animate-bounce duration-3000">
         <div className="w-40 h-40 bg-contain bg-no-repeat bg-center rotate-12 drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]"
           style={{ backgroundImage: 'url(/path-to-portal-gun.png)' }}>
           {/* Fallback visual if no image */}
@@ -122,7 +130,7 @@ const HomeScreen = () => {
       {/* BACKGROUND: Swirling Void Effect */}
       {/* Replace this div with your animated SVG or Canvas background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900/40 via-[#0a0a0a] to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-900/40 via-[#0a0a0a] to-black" />
         {/* Star field simulation */}
         <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(white 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
       </div>

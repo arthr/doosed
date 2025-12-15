@@ -40,15 +40,15 @@ export function ChatDock({ threadId = 'global', currentUser, placeholder }: Chat
         onClick={() => open(threadId)}
         className={cn(
           'fixed right-4 bottom-4 z-50',
-          'border-border shadow-pixel bg-ui-panel flex items-center gap-2 rounded-full border-4 px-4 py-2',
+          'border-border-muted shadow-pixel bg-panel flex items-center gap-2 rounded-full border-4 px-4 py-2',
           'font-mono text-xs font-black tracking-widest text-neutral-200 uppercase',
           'hover:bg-black/20 active:translate-y-0.5',
         )}
       >
-        <MessageSquare className="text-morty-yellow h-4 w-4" />
+        <MessageSquare className="text-neon-yellow h-4 w-4" />
         CHAT
         {unreadTotal > 0 ? (
-          <span className="bg-rick-green text-space-black rounded-full px-2 py-0.5 text-[10px] font-black">
+          <span className="bg-neon-green text-space-black rounded-full px-2 py-0.5 text-[10px] font-black">
             {unreadTotal}
           </span>
         ) : null}
@@ -64,9 +64,9 @@ export function ChatDock({ threadId = 'global', currentUser, placeholder }: Chat
         'h-[min(520px,calc(100vh-2rem))]',
       )}
     >
-      <div className="border-border shadow-pixel bg-ui-panel flex items-center justify-between gap-2 rounded-t-xl border-4 border-b-0 px-3 py-2">
+      <div className="border-border-muted shadow-pixel bg-panel flex items-center justify-between gap-2 rounded-t-xl border-4 border-b-0 px-3 py-2">
         <div className="flex items-center gap-2">
-          <MessageSquare className="text-morty-yellow h-4 w-4" />
+          <MessageSquare className="text-neon-yellow h-4 w-4" />
           <span className="font-mono text-xs font-black tracking-widest text-neutral-200 uppercase">
             CHAT
           </span>
@@ -81,7 +81,7 @@ export function ChatDock({ threadId = 'global', currentUser, placeholder }: Chat
               markRead(next);
             }}
             className={cn(
-              'border-border bg-black text-neutral-200',
+              'border-border-muted bg-black text-neutral-200',
               'rounded border px-2 py-1 font-mono text-xs',
               'focus:ring-0 focus:outline-none',
             )}
@@ -98,7 +98,7 @@ export function ChatDock({ threadId = 'global', currentUser, placeholder }: Chat
             aria-label="Fechar chat"
             onClick={() => close()}
             className={cn(
-              'border-border rounded border bg-black p-1 text-neutral-200',
+              'border-border-muted rounded border bg-black p-1 text-neutral-200',
               'hover:bg-black/40 active:translate-y-0.5',
             )}
           >
