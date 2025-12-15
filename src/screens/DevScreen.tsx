@@ -137,6 +137,7 @@ export function DevScreen() {
 
   return (
     <>
+      {/* Screen: Preview (overlay) */}
       {selectedKey === '__phase__' ? (
         <div className="fixed inset-0 z-40 overflow-auto bg-void-black text-text-primary">
           {PhaseRouterPreview}
