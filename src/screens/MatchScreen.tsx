@@ -1,7 +1,7 @@
-import { OpponentsBar } from '@/components/game/hud/OpponentsBar';
-import { PlayerDashboard } from '@/components/game/hud/PlayerDashboard';
-import { ActionPanel } from '@/components/game/hud/ActionPanel';
-import { GameTable } from '@/components/game/table/GameTable';
+import { OpponentsBar } from '@/components/match/hud/OpponentsBar';
+import { PlayerDashboard } from '@/components/match/hud/PlayerDashboard';
+import { ActionPanel } from '@/components/match/hud/ActionPanel';
+import { GameTable } from '@/components/match/table/GameTable';
 
 export const MatchScreen = () => {
   return (

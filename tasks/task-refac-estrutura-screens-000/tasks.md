@@ -35,9 +35,9 @@
 - [-] 3.2 Atualizar docs se necessário
   - DoD: se o contrato de wrapper for relevante para contribuição, adicionar nota em `docs/06-frontend/stack-e-convencoes.md` (curta).
 
-- [ ] 3.3 Atualizar fontes/recência
+- [x] 3.3 Atualizar fontes/recência
   - DoD: rodar `python .cursor/rules/docs-workflow/scripts/update_fontes_recencia.py`.
 
-- [ ] 3.4 Commit final
+- [x] 3.4 Commit final
   - DoD: commits pequenos por screen (preferencial); ou um commit final se você preferir. Mensagens sugeridas:
     - `refactor(screens): padroniza wrapper das screens (estrutura e scroll)`
