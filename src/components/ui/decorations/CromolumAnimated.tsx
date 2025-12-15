@@ -11,12 +11,12 @@ interface CromolumState {
 
 const IMAGES: Record<Expression, Record<EyeState, string>> = {
   normal: {
-    open: '/images/animation/cromolum_eo.png',
-    closed: '/images/animation/cromolum_ec.png',
+    open: '/images/animation/pillmolum_eo.png',
+    closed: '/images/animation/pillmolum_ec.png',
   },
   drooling: {
-    open: '/images/animation/cromolum_drooling_eo.png',
-    closed: '/images/animation/cromolum_drooling_ec.png',
+    open: '/images/animation/pillmolum_drooling_eo.png',
+    closed: '/images/animation/pillmolum_drooling_ec.png',
   },
 };
 
