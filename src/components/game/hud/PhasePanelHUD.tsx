@@ -1,8 +1,6 @@
-import { User } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { PlayerDashboardPanel } from '@/components/game/hud/PlayerDashboardPanel';
-import { SectionHeader } from '@/components/game/hud/SectionHeader';
-import { InventorySection } from '@/components/game/hud/InventorySection';
+import { StatsInventorySection } from '@/components/game/hud/StatsInventorySection';
+import { Inventory } from '@/components/game/hud/Inventory';
 import { ChatSection } from '@/components/game/hud/ChatSection';
 import { ActionsSection } from '@/components/game/hud/ActionsSections';
 import { PanelShell } from '@/components/game/hud/PanelShell';
@@ -31,7 +29,7 @@ export function PhasePanelHUD(props: PhasePanelHUDProps) {
         return (
             <PanelShell className={cn('w-full', props.className)}>
                 <div className="grid min-h-0 grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
-                    <InventorySection inventory={props.inventory} className="md:col-span-4" />
+                    <StatsInventorySection playerName="Rick Sanchez" inventory={props.inventory} className="md:col-span-4" />
                     <ChatSection
                         threadId={props.chatThreadId}
                         displayTime={false}
@@ -48,10 +46,7 @@ export function PhasePanelHUD(props: PhasePanelHUDProps) {
         return (
             <PanelShell className={cn('w-full', props.className)}>
                 <div className="grid min-h-0 grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
-                    <div className="md:col-span-4 min-h-0">
-                        <SectionHeader icon={<User size={20} />} title="PROFILE" />
-                        <PlayerDashboardPanel playerName="Rick Sanchez" />
-                    </div>
+                    <StatsInventorySection playerName="Rick Sanchez" inventory={props.inventory ?? { items: [], maxSlots: 8 }} className="md:col-span-4" />
                     <ChatSection
                         threadId={props.chatThreadId}
                         displayTime={false}

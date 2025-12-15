@@ -8,7 +8,7 @@ type HeaderProps = {
 };
 
 const headerContainerClassName = cn(
-  'flex flex-row',
+  'flex flex-col-3',
   'items-center justify-between',
   'gap-2 md:gap-4',
   'border-b-4 border-neutral-700',

@@ -26,6 +26,6 @@ export type PhasePanelHUDProps =
     | ({
         phase: 'match';
         chatThreadId: string;
-        inventory?: PhasePanelHUDInventory;
+        inventory: PhasePanelHUDInventory;
         actions: ReactNode;
     } & BasePhasePanelHUDProps);
