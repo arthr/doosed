@@ -21,25 +21,34 @@ OUT_PATH = os.path.join(ROOT, "docs", "99-apendice", "fontes-e-recencia.md")
 SKIP_PREFIXES = (
     "node_modules",
     "dist",
-    os.path.join("docs", "legacy"),
+    # os.path.join("docs", "legacy"),
 )
 
 
 def authority(rel: str) -> tuple[str, str]:
     rel = rel.replace("\\", "/")
+    legacy = None
+    authority = (legacy or "Outro", "repo")
+
+    if rel.startswith("docs/legacy/"):
+        legacy = "Legado"
     if rel.startswith("steering/"):
-        return ("Normativo", "steering")
+        authority = (legacy or "Normativo", "steering")
+    if rel.startswith("tasks/"):
+        authority = (legacy or "Requisito", "tasks")
     if rel.startswith(".cursor/rules/"):
-        return ("Normativo", ".cursor/rules")
-    if rel.startswith("docs/screens/"):
-        return ("Requisito_UX", "docs/screens")
-    if rel.startswith("docs/PROMPT-") or rel.startswith("docs/prompts/"):
-        return ("Insumo", "docs/PROMPT-*")
-    if rel.startswith("docs/generated_docs/"):
-        return ("Derivado", "docs/generated_docs")
+        authority = (legacy or "Normativo", ".cursor/rules")
     if rel.startswith("docs/"):
-        return ("Docs", "docs")
-    return ("Outro", "repo")
+        authority = (legacy or "Docs", "docs")
+    if rel.startswith("docs/screens/"):
+        authority = (legacy or "Requisito_UX", "docs/screens")
+    if rel.startswith("docs/generated_docs/"):
+        authority = (legacy or "Derivado", "docs/generated_docs")
+    if rel.startswith("docs/prompts/"):
+        authority = (legacy or "Insumo", "docs/prompts/*")
+    if rel.__contains__("PROMPT-"):
+        authority = (legacy or "Insumo", "PROMPT-*")
+    return authority
 
 
 def git_last_commit_iso(rel_path: str) -> str:
