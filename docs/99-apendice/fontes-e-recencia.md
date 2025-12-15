@@ -12,6 +12,9 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
+| 2025-12-15T04:38:51-03:00 | 2025-12-15T05:12:04 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
+| 2025-12-15T04:38:51-03:00 | 2025-12-15T04:39:10 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/design.md |
+| 2025-12-15T04:38:51-03:00 | 2025-12-15T04:39:10 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/requirements.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T04:21:48 | Outro | repo | AGENTS.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T04:19:01 | Normativo | .cursor/rules | .cursor/rules/docs-workflow/RULE.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T04:18:04 | Normativo | .cursor/rules | .cursor/rules/task-execute/RULE.md |
@@ -102,6 +105,3 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:04:53-03:00 | 2025-12-13T20:33:29 | Legado | docs | docs/legacy/screens/draft.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-13T13:55:23 | Legado | PROMPT-* | docs/legacy/prompts/PROMPT-UI-MOBILE.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-13T13:55:23 | Legado | PROMPT-* | docs/legacy/prompts/PROMPT-UI.md |
-| - | 2025-12-15T04:38:17 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
-| - | 2025-12-15T04:38:06 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/design.md |
-| - | 2025-12-15T04:37:52 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/requirements.md |
