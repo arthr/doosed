@@ -326,3 +326,33 @@
   background-size: 100% 4px;
   pointer-events: none;
 }
+
+/* ===================================
+   Animations - Glow Pulse
+   =================================== */
+
+@keyframes glow-pulse-purple {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8));
+  }
+}
+
+@keyframes glow-pulse-green {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.8));
+  }
+}
+
+@utility animate-glow-purple {
+  animation: glow-pulse-purple 2s ease-in-out infinite;
+}
+
+@utility animate-glow-green {
+  animation: glow-pulse-green 2s ease-in-out infinite;
+}

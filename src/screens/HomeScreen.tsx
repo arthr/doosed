@@ -1,5 +1,6 @@
 import React from 'react';
 import { Hand, Users, Settings, Skull, Zap, CircleDollarSign } from 'lucide-react';
+import { useBlinkAnimation } from '@/hooks/useBlinkAnimation';
 
 // --- Subcomponents ---
 
@@ -90,8 +91,9 @@ const InfoCard = ({ title, value, icon, imageSrc, align = 'left' }: InfoCardProp
 
 // 3. Floating Decorations (Portal Gun / Head)
 const FloatingDecoration = ({ type }: { type: 'gun' | 'head' | 'pills' }) => {
-  // These are placeholders for your specific assets from the image
-  // You should replace the contents of these divs with <img src="..." />
+  // Hook para animacao de piscar (usado apenas no 'head')
+  const isBlinking = useBlinkAnimation({ intervalMs: 4000, blinkDurationMs: 150 });
+
   if (type === 'gun') {
     return (
       <div className="hidden lg:block absolute left-[-180px] top-10 animate-bounce duration-3000">
@@ -106,12 +108,16 @@ const FloatingDecoration = ({ type }: { type: 'gun' | 'head' | 'pills' }) => {
     );
   }
   if (type === 'head') {
+    const src = isBlinking
+      ? '/images/animation/cromolum_ec.png'
+      : '/images/animation/cromolum_eo.png';
+
     return (
-      <div className="hidden lg:block absolute right-[-160px] top-0 animate-pulse">
+      <div className="hidden lg:block absolute right-[-230px] top-0">
         <img
-          src="/images/avatar/cromolum.png"
+          src={src}
           alt="Cromulon"
-          className="w-40 h-40 object-contain -rotate-12 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+          className="size-50 object-contain -rotate-12 animate-glow-purple"
         />
       </div>
     );
