@@ -108,13 +108,11 @@ const FloatingDecoration = ({ type }: { type: 'gun' | 'head' | 'pills' }) => {
   if (type === 'head') {
     return (
       <div className="hidden lg:block absolute right-[-160px] top-0 animate-pulse">
-        <div className="w-40 h-48 bg-contain bg-no-repeat bg-center -rotate-12 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"
-          style={{ backgroundImage: 'url(/path-to-cromulon.png)' }}>
-          {/* Fallback visual */}
-          <div className="w-full h-full border-2 border-dashed border-purple-500/30 rounded-full flex items-center justify-center text-purple-500/50 font-pixel text-center">
-            CROMULON<br />ASSET
-          </div>
-        </div>
+        <img
+          src="/images/avatar/cromolum.png"
+          alt="Cromulon"
+          className="w-40 h-40 object-contain -rotate-12 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+        />
       </div>
     );
   }

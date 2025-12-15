@@ -64,7 +64,7 @@ export const Header = ({ balance, time }: HeaderProps) => {
       <div className={cn(titleClassName, 'flex-1 items-center justify-center gap-4 space-x-4')}>
         <span className="text-white">Draft</span>
         <img
-          src="/images/rick_winner.png"
+          src="/images/avatar/rick_winner.png"
           alt="Rick Winner"
           className="-my-4 size-16 drop-shadow-xs select-none"
           draggable={false}

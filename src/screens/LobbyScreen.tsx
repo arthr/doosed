@@ -13,10 +13,10 @@ interface Player {
 
 // --- Mock Data ---
 const MOCK_PLAYERS: (Player | null)[] = [
-  { id: '1', name: 'RICK_C_137', avatar: '/rick.png', status: 'READY', isHost: true },
-  { id: '2', name: 'MORTY_C_137', avatar: '/morty.png', status: 'READY' },
-  { id: '3', name: 'BIRDPERSON', avatar: '/birdperson.png', status: 'READY' },
-  { id: '4', name: 'SQUANCHY', avatar: '/squanchy.png', status: 'NOT READY' },
+  { id: '1', name: 'RICK_C_137', avatar: '/images/avatar/rick_sanchez.png', status: 'READY', isHost: true },
+  { id: '2', name: 'MORTY_C_137', avatar: '/images/avatar/morty.png', status: 'READY' },
+  { id: '3', name: 'BIRDPERSON', avatar: '/images/avatar/birdperson.png', status: 'READY' },
+  { id: '4', name: 'SQUANCHY', avatar: '/images/avatar/squanchy.png', status: 'NOT READY' },
   null, // Empty slot
   null, // Empty slot
 ];
@@ -34,7 +34,7 @@ const LobbyHeader = ({ roomCode, status }: { roomCode: string; status: string })
     </div>
 
     {/* Status Panel */}
-    <div className="flex-[2] bg-neutral-900/90 border-4 border-slate-600 rounded-xl p-3 flex items-center justify-center md:justify-start md:pl-6 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+    <div className="flex-2 bg-neutral-900/90 border-4 border-slate-600 rounded-xl p-3 flex items-center justify-center md:justify-start md:pl-6 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
       <div className="flex items-center gap-3 text-yellow-500 font-pixel text-xl md:text-2xl animate-pulse">
         <AlertTriangle size={24} className="fill-yellow-500 text-black" />
         <span className="uppercase tracking-wide text-yellow-100">STATUS: {status}</span>
@@ -100,7 +100,7 @@ const PlayerCard = ({ player }: { player: Player | null }) => {
           }}
         />
         {/* Background glow for avatar */}
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-purple-900/50 to-transparent pointer-events-none" />
       </div>
 
       {/* Info Section */}
@@ -155,13 +155,13 @@ const LobbyFooter = () => (
     {/* ACTION BUTTONS */}
     <div className="flex md:flex-col lg:flex-row gap-3 md:w-auto shrink-0 h-20 md:h-auto">
       {/* Ready Button */}
-      <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-center gap-2 md:w-40 bg-gradient-to-b from-green-500 to-green-700 border-4 border-green-900 rounded-xl shadow-[0_4px_0_#14532d] active:shadow-none active:translate-y-1 transition-all group">
+      <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-center gap-2 md:w-40 bg-linear-to-b from-green-500 to-green-700 border-4 border-green-900 rounded-xl shadow-[0_4px_0_#14532d] active:shadow-none active:translate-y-1 transition-all group">
         <ThumbsUp className="w-6 h-6 md:w-10 md:h-10 text-green-950 group-hover:scale-110 transition-transform" strokeWidth={3} />
         <span className="font-pixel text-xl md:text-2xl text-green-950 font-bold leading-none">READY UP</span>
       </button>
 
       {/* Loadout Button */}
-      <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-center gap-2 md:w-40 bg-gradient-to-b from-cyan-500 to-cyan-700 border-4 border-cyan-900 rounded-xl shadow-[0_4px_0_#0e7490] active:shadow-none active:translate-y-1 transition-all group">
+      <button className="flex-1 md:flex-none flex flex-row md:flex-col items-center justify-center gap-2 md:w-40 bg-linear-to-b from-cyan-500 to-cyan-700 border-4 border-cyan-900 rounded-xl shadow-[0_4px_0_#0e7490] active:shadow-none active:translate-y-1 transition-all group">
         <Backpack className="w-6 h-6 md:w-10 md:h-10 text-cyan-950 group-hover:rotate-12 transition-transform" strokeWidth={3} />
         <span className="font-pixel text-lg md:text-xl text-cyan-950 font-bold leading-none text-center">CUSTOMIZE<br className="hidden md:block" /> LOADOUT</span>
       </button>
