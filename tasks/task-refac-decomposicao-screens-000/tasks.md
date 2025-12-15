@@ -24,8 +24,9 @@
   - DoD: `DraftScreen` segue como referência; se houver constantes/mock grandes, mover para módulo apropriado sem regressão; `pnpm lint` passa.
   - Nota: revisão concluída; nenhuma extração adicional necessária agora (manter `SHOP_ITEMS` inline por simplicidade).
 
-- [ ] 2.4 Revisar `MatchScreen` e confirmar decomposição por domínio (`src/components/match/*`)
+- [x] 2.4 Revisar `MatchScreen` e confirmar decomposição por domínio (`src/components/match/*`)
   - DoD: `MatchScreen` segue como orquestração; se necessário, ajustar apenas composição/nomes/props sem refazer UI; `pnpm lint` passa.
+  - Nota: revisão concluída; `MatchScreen` já está fina e compõe via `src/components/match/*` (nenhuma mudança necessária).
 
 - [ ] 2.5 Refatorar `ResultScreen` para usar `src/components/results/*`
   - DoD: `ResultScreen` fica “fina”; `ResultsHero/ResultsStats/ResultsXpBar/ResultsActions` (ou equivalente) existem; `pnpm lint` passa.
