@@ -91,7 +91,7 @@ const PlayerCard = ({ player }: { player: Player | null }) => {
         <img
           src={player.avatar}
           alt={player.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover png-outline"
           // Fallback for demo if image fails
           onError={(e) => {
             e.currentTarget.style.display = 'none';

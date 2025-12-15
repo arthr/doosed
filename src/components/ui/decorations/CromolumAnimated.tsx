@@ -149,6 +149,7 @@ export function CromolumAnimated({
           'object-contain select-none',
           glowEnabled && 'animate-glow-purple',
           className,
+          'png-outline',
         )}
         style={!floatEnabled ? { transform: `rotate(${rotation}deg)` } : undefined}
         draggable={false}

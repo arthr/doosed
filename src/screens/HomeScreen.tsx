@@ -1,6 +1,7 @@
 import React from 'react';
 import { Hand, Users, Settings, Skull, Zap, CircleDollarSign } from 'lucide-react';
 import { CromolumAnimated } from '@/components/ui/decorations/CromolumAnimated';
+import { PortalGunAnimated } from '@/components/ui/decorations/PortalGunAnimated';
 
 // --- Subcomponents ---
 
@@ -93,14 +94,8 @@ const InfoCard = ({ title, value, icon, imageSrc, align = 'left' }: InfoCardProp
 const FloatingDecoration = ({ type }: { type: 'gun' | 'head' | 'pills' }) => {
   if (type === 'gun') {
     return (
-      <div className="hidden lg:block absolute left-[-180px] top-10 animate-bounce duration-3000">
-        <div className="w-40 h-40 bg-contain bg-no-repeat bg-center rotate-12 drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]"
-          style={{ backgroundImage: 'url(/path-to-portal-gun.png)' }}>
-          {/* Fallback visual if no image */}
-          <div className="w-full h-full border-2 border-dashed border-green-500/30 rounded-full flex items-center justify-center text-green-500/50 font-pixel text-center">
-            PORTAL GUN<br />ASSET
-          </div>
-        </div>
+      <div className="hidden lg:block absolute left-[-180px] top-10">
+        <PortalGunAnimated size="md" rotation={12} />
       </div>
     );
   }
