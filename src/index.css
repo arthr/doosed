@@ -356,3 +356,23 @@
 @utility animate-glow-green {
   animation: glow-pulse-green 2s ease-in-out infinite;
 }
+
+/* Floating in Space - Efeito de flutuacao suave */
+@keyframes float-space {
+  0%, 100% {
+    transform: translateY(0) rotate(var(--float-rotation, 0deg));
+  }
+  25% {
+    transform: translateY(-8px) rotate(calc(var(--float-rotation, 0deg) + 1deg));
+  }
+  50% {
+    transform: translateY(-4px) rotate(var(--float-rotation, 0deg));
+  }
+  75% {
+    transform: translateY(-12px) rotate(calc(var(--float-rotation, 0deg) - 1deg));
+  }
+}
+
+@utility animate-float {
+  animation: float-space 6s ease-in-out infinite;
+}

@@ -27,6 +27,8 @@ interface CromolumAnimatedProps {
   rotation?: number;
   /** Ativar animacao de glow. Default: true */
   glowEnabled?: boolean;
+  /** Ativar animacao de flutuacao. Default: true */
+  floatEnabled?: boolean;
   /** Classes CSS adicionais */
   className?: string;
 }
@@ -45,11 +47,13 @@ const sizeClasses = {
  * - As vezes pisca 2x rapido (double blink)
  * - Muda expressao esporadicamente (normal <-> drooling)
  * - Glow roxo pulsante
+ * - Flutuacao suave no espaco
  */
 export function CromolumAnimated({
   size = 'md',
   rotation = -12,
   glowEnabled = true,
+  floatEnabled = true,
   className,
 }: CromolumAnimatedProps) {
   const [state, setState] = useState<CromolumState>({
@@ -133,17 +137,22 @@ export function CromolumAnimated({
   const imageSrc = IMAGES[state.expression][state.eyes];
 
   return (
-    <img
-      src={imageSrc}
-      alt="Cromulon"
-      className={cn(
-        sizeClasses[size],
-        'object-contain select-none',
-        glowEnabled && 'animate-glow-purple',
-        className,
-      )}
-      style={{ transform: `rotate(${rotation}deg)` }}
-      draggable={false}
-    />
+    <div
+      className={cn(floatEnabled && 'animate-float')}
+      style={{ '--float-rotation': `${rotation}deg` } as React.CSSProperties}
+    >
+      <img
+        src={imageSrc}
+        alt="Cromulon"
+        className={cn(
+          sizeClasses[size],
+          'object-contain select-none',
+          glowEnabled && 'animate-glow-purple',
+          className,
+        )}
+        style={!floatEnabled ? { transform: `rotate(${rotation}deg)` } : undefined}
+        draggable={false}
+      />
+    </div>
   );
 }
