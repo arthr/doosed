@@ -28,7 +28,7 @@
   - DoD: `MatchScreen` segue como orquestração; se necessário, ajustar apenas composição/nomes/props sem refazer UI; `pnpm lint` passa.
   - Nota: revisão concluída; `MatchScreen` já está fina e compõe via `src/components/match/*` (nenhuma mudança necessária).
 
-- [ ] 2.5 Refatorar `ResultScreen` para usar `src/components/results/*`
+- [x] 2.5 Refatorar `ResultScreen` para usar `src/components/results/*`
   - DoD: `ResultScreen` fica “fina”; `ResultsHero/ResultsStats/ResultsXpBar/ResultsActions` (ou equivalente) existem; `pnpm lint` passa.
 
 - [ ] 2.6 Refatorar `DevScreen` para usar `src/components/dev/*`
