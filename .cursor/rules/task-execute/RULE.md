@@ -29,6 +29,9 @@ Se aprovada:
 - Rodar verificações do projeto quando aplicável:
   - `pnpm lint`
   - `pnpm build`
+- **Se** a mudança afetar regras de negócio, fluxo, arquitetura, stack, estrutura de pastas ou eventos, o agente **deve** revisar `steering/` e atualizar os arquivos normativos correspondentes (manter `steering/` consistente com `docs/`).
+- Rodar validação de consistência do `steering/`:
+  - `python .cursor/rules/docs-workflow/scripts/check_steering.py`
 
 ### 5) Atualização do Spec (obrigatório)
 - Em `tasks.md`, atualizar status:

@@ -13,7 +13,19 @@ Ao identificar uma mudança grande/complexa, o agente deve:
 
 ### Estrutura obrigatória
 Diretório:
-- `./tasks/task-[feat|fix|refac]-[nome]-000/`
+- `./tasks/task-[feat|fix|refac]-[nome]-[000..999]/`
+
+### Sufixo do diretório (versão do Spec) — Opção A (norma do projeto)
+- O sufixo numérico **NÃO é um contador global do repo**.
+- O sufixo numérico representa a **versão do Spec daquele mesmo tópico**.
+- A primeira versão de um Spec deve começar em `-000`.
+- Quando o Spec do mesmo tópico for revisado de forma relevante (escopo, contratos, plano incremental), deve-se criar uma nova pasta com `-001`, `-002`, etc.
+- Evitar renomear retroativamente diretórios já versionados; prefira criar a próxima versão para manter rastreabilidade.
+
+Exemplos:
+- `tasks/task-feat-navegacao-000/` (v1 do spec de navegação)
+- `tasks/task-feat-navegacao-001/` (v2 do mesmo spec de navegação)
+- `tasks/task-feat-match-core-000/` (v1 do spec de match core)
 
 Arquivos:
 - `requirements.md` (obrigatório, usando EARS)

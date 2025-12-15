@@ -15,3 +15,10 @@ python .cursor/rules/docs-workflow/scripts/update_fontes_recencia.py
 ```
 
 - Se houver inconsistência entre `steering/` e `docs`, corrija para ficar consistente (priorize `docs`).
+
+## Checagem rápida (steering)
+- Sempre que houver mudanças que afetem regras de negócio, fluxo, arquitetura, stack, eventos ou estrutura, rode:
+
+```bash
+python .cursor/rules/docs-workflow/scripts/check_steering.py
+```
