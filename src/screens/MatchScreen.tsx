@@ -5,19 +5,22 @@ import { GameTable } from '@/components/game/table/GameTable';
 
 export const MatchScreen = () => {
   return (
-    <div className="flex flex-col min-h-screen p-2 md:p-6 bg-void-black text-text-primary font-sans overflow-hidden">
-      {/* Area Superior: Oponentes */}
-      <OpponentsBar />
+    <div className="bg-void-black text-text-primary min-h-screen w-full overflow-hidden">
+      {/* Screen: Content */}
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col p-2 md:p-6 font-sans">
+        {/* Section: Opponents */}
+        <OpponentsBar />
 
-      {/* Area Central: Mesa de Jogo */}
-      <div className="flex-1 flex items-center justify-center w-full">
-        <GameTable />
-      </div>
+        {/* Section: Table */}
+        <div className="flex-1 flex items-center justify-center w-full">
+          <GameTable />
+        </div>
 
-      {/* Area Inferior: Dashboard e Acoes */}
-      <div className="w-full flex flex-col md:flex-row gap-4 h-auto md:h-48 mt-auto">
-        <PlayerDashboard />
-        <ActionPanel />
+        {/* Section: Footer */}
+        <div className="w-full flex flex-col md:flex-row gap-4 h-auto md:h-48 mt-auto">
+          <PlayerDashboard />
+          <ActionPanel />
+        </div>
       </div>
     </div>
   );
