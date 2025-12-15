@@ -1,16 +1,5 @@
-import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
-
-export type InventoryItem = {
-  id: string | number;
-  name: string;
-  icon?: ReactNode;
-};
-
-export interface InventorySlotProps {
-  item?: InventoryItem;
-  className?: string;
-}
+import type { InventorySlotProps } from '@/types/inventory';
 
 export function InventorySlot({ item, className = '' }: InventorySlotProps) {
   return (
