@@ -14,7 +14,7 @@
 - [x] 1.2 Inventariar cada Screen (seções + subcomponentes + candidatos UI kit)
   - DoD: `design.md` tem lista/tabela por Screen com: responsabilidade, destino (`components/<dominio>` vs `components/ui`), e justificativa.
 
-- [ ] 2.1 Refatorar `HomeScreen` para usar `src/components/home/*`
+- [x] 2.1 Refatorar `HomeScreen` para usar `src/components/home/*`
   - DoD: `HomeScreen` fica “fina” (orquestração); componentes extraídos com nomes claros; `pnpm lint` passa.
 
 - [ ] 2.2 Refatorar `LobbyScreen` para compor com `src/components/lobby/*` (remover duplicações inline)
