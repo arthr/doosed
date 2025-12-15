@@ -20,7 +20,6 @@ const sizeClasses = {
 };
 
 const IMAGE_SRC = '/images/animation/portal_gun.png';
-const HAS_IMAGE = true;
 
 /**
  * Portal Gun Animado - Decoracao com animacao de bounce e glow verde
@@ -28,9 +27,8 @@ const HAS_IMAGE = true;
  * Comportamentos:
  * - Bounce suave (quando habilitado)
  * - Glow verde pulsante
- * - Placeholder visual enquanto nao ha imagem
  *
- * TODO: Adicionar animacoes extras quando imagem estiver disponivel
+ * TODO: Adicionar animacoes extras quando imagens extras estiverem disponiveis
  */
 export function PortalGunAnimated({
   size = 'md',
@@ -39,28 +37,6 @@ export function PortalGunAnimated({
   bounceEnabled = true,
   className,
 }: PortalGunAnimatedProps) {
-  if (!HAS_IMAGE) {
-    // Placeholder enquanto nao temos a imagem
-    return (
-      <div
-        className={cn(
-          sizeClasses[size],
-          'flex items-center justify-center',
-          'border-2 border-dashed border-green-500/30 rounded-lg',
-          'text-green-500/50 font-pixel text-center text-xs',
-          bounceEnabled && 'animate-bounce',
-          glowEnabled && 'animate-glow-green',
-          className,
-        )}
-        style={{ transform: `rotate(${rotation}deg)` }}
-      >
-        PORTAL GUN
-        <br />
-        ASSET
-      </div>
-    );
-  }
-
   return (
     <div className={cn(bounceEnabled && 'animate-bounce')}>
       <img

@@ -12,6 +12,7 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
+| 2025-12-15T00:31:56-03:00 | 2025-12-15T00:23:20 | Normativo | .cursor/rules | .cursor/rules/CODE-STYLE.md |
 | 2025-12-14T23:04:32-03:00 | 2025-12-14T22:50:53 | Docs | docs | docs/index.md |
 | 2025-12-14T23:04:32-03:00 | 2025-12-14T22:49:41 | Docs | docs | docs/02-gameplay/mecanicas_e_extras.md |
 | 2025-12-14T23:04:32-03:00 | 2025-12-14T22:46:26 | Docs | docs | docs/04-arquitetura/detalhes.md |
@@ -28,7 +29,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/99-apendice/fontes-e-decisoes.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Normativo | steering | steering/structure.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:14:13 | Docs | docs | docs/00-start-here/estrutura-do-projeto.md |
-| 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | .cursor/rules | .cursor/rules/CODE-STYLE.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | .cursor/rules | .cursor/rules/core/RULE.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | .cursor/rules | .cursor/rules/game-architecture/RULE.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | steering | steering/game-balance.md |
@@ -71,5 +71,5 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/07-qualidade/testing.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/08-roadmap/backlog.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/99-apendice/prompts-assets.md |
+| - | 2025-12-15T00:25:41 | Normativo | .cursor/rules | .cursor/rules/OBSERVATION-LOG.md |
 | - | 2025-12-14T20:29:15 | Outro | repo | CHAT-CONTEXT.md |
-| - | 2025-12-14T19:22:44 | Normativo | .cursor/rules | .cursor/rules/OBSERVATION-LOG.md |
