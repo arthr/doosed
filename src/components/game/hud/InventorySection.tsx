@@ -3,7 +3,7 @@ import { Backpack } from "lucide-react";
 import { SectionHeader } from "@/components/game/hud/SectionHeader";
 import { InventorySlot } from "@/components/game/hud/InventorySlot";
 
-import type { PhasePanelHUDInventory } from "@/types/inventory";
+import type { PhasePanelHUDInventory } from "@/types/hud";
 
 export function InventorySection({
     inventory,
