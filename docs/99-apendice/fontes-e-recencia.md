@@ -12,7 +12,11 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
-| 2025-12-15T04:38:51-03:00 | 2025-12-15T05:12:04 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
+| 2025-12-15T07:17:10-03:00 | 2025-12-15T07:17:00 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
+| 2025-12-15T07:17:10-03:00 | 2025-12-15T07:16:58 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/tasks.md |
+| 2025-12-15T06:04:58-03:00 | 2025-12-15T05:30:12 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
+| 2025-12-15T05:56:09-03:00 | 2025-12-15T05:57:42 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/design.md |
+| 2025-12-15T05:49:36-03:00 | 2025-12-15T05:36:24 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/requirements.md |
 | 2025-12-15T04:38:51-03:00 | 2025-12-15T04:39:10 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/design.md |
 | 2025-12-15T04:38:51-03:00 | 2025-12-15T04:39:10 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/requirements.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T04:21:48 | Outro | repo | AGENTS.md |
@@ -35,7 +39,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-15T02:23:15-03:00 | 2025-12-15T02:23:48 | Requisito | tasks | tasks/task-feat-results-funcional-000/requirements.md |
 | 2025-12-15T02:23:15-03:00 | 2025-12-15T02:23:48 | Requisito | tasks | tasks/task-feat-results-funcional-000/tasks.md |
 | 2025-12-15T02:23:15-03:00 | 2025-12-12T19:34:11 | Legado | docs | docs/legacy/GAME-IDEA.md |
-| 2025-12-15T01:53:10-03:00 | 2025-12-15T01:53:48 | Outro | repo | ESTRUTURA-ANALISE.md |
 | 2025-12-15T01:53:10-03:00 | 2025-12-15T01:53:48 | Requisito | tasks | tasks/task-feat-draft-funcional-000/design.md |
 | 2025-12-15T01:53:10-03:00 | 2025-12-15T01:53:48 | Requisito | tasks | tasks/task-feat-draft-funcional-000/requirements.md |
 | 2025-12-15T01:53:10-03:00 | 2025-12-15T01:53:48 | Requisito | tasks | tasks/task-feat-draft-funcional-000/tasks.md |
@@ -44,9 +47,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-15T01:53:10-03:00 | 2025-12-15T01:53:48 | Requisito | tasks | tasks/task-feat-navegacao-000/tasks.md |
 | 2025-12-14T23:04:32-03:00 | 2025-12-14T22:50:53 | Docs | docs | docs/index.md |
 | 2025-12-14T23:04:32-03:00 | 2025-12-14T22:39:05 | Docs | docs | docs/critica_tecnica.md |
-| 2025-12-14T21:14:30-03:00 | 2025-12-14T21:15:04 | Requisito | tasks | tasks/task-refac-estrutura-src-000/tasks.md |
-| 2025-12-14T20:15:18-03:00 | 2025-12-14T20:11:51 | Requisito | tasks | tasks/task-refac-estrutura-src-000/design.md |
-| 2025-12-14T20:15:18-03:00 | 2025-12-14T20:11:48 | Requisito | tasks | tasks/task-refac-estrutura-src-000/requirements.md |
 | 2025-12-14T19:29:17-03:00 | 2025-12-14T19:27:26 | Docs | docs | docs/README.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/00-start-here/index.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/06-frontend/state-management.md |
@@ -69,7 +69,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T18:00:54 | Docs | docs | docs/02-gameplay/balance.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T18:00:52 | Docs | docs | docs/02-gameplay/ai.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T17:21:10 | Docs | docs | docs/08-roadmap/mvp.md |
-| 2025-12-14T19:04:53-03:00 | 2025-12-14T17:19:59 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T17:19:30 | Docs | docs | docs/06-frontend/animacoes-e-feedback.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T17:16:11 | Docs | docs | docs/04-arquitetura/eventos.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T17:11:32 | Docs | docs | docs/03-ux-ui/home.md |
