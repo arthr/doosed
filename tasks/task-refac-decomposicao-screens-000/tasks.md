@@ -34,14 +34,14 @@
 - [x] 2.6 Refatorar `DevScreen` para usar `src/components/dev/*`
   - DoD: preview por phase e seleção continuam funcionando; dock/menu/preview extraídos; `pnpm lint` passa.
 
-- [ ] 3.1 Rodar checks finais
+- [x] 3.1 Rodar checks finais
   - DoD: `pnpm lint` e `pnpm build` passam.
 
-- [ ] 3.2 Atualizar docs se necessário
+- [x] 3.2 Atualizar docs se necessário
   - DoD: se a convenção de decomposição virar “norma prática”, adicionar nota curta em `docs/06-frontend/stack-e-convencoes.md`.
 
-- [ ] 3.3 Atualizar fontes/recência
+- [x] 3.3 Atualizar fontes/recência
   - DoD: rodar `python .cursor/rules/docs-workflow/scripts/update_fontes_recencia.py`.
 
-- [ ] 3.4 Commit e push
+- [x] 3.4 Commit e push
   - DoD: commits pequenos (preferencialmente 1 Screen por commit) com Conventional Commits; `git push`.
