@@ -24,8 +24,8 @@ function createMockPlayers(): (Player | null)[] {
 export const LobbyScreen = () => {
   const [isReady, setIsReady] = useState(false);
   const players = useMemo(() => createMockPlayers(), []);
-  const roomCode = 'X-7-Z';
-  const lobbyStatus = 'AGUARDANDO JOGADORES...';
+  const roomCode = 'X7Z-123';
+  const lobbyStatus = 'AGUARDANDO...';
 
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
@@ -38,11 +38,22 @@ export const LobbyScreen = () => {
             value: roomCode,
           }}
           right={{
-            icon: <Activity className="text-neon-yellow" size={18} />,
+            // icon: <Activity className="text-neon-yellow" size={18} />,
             label: 'STATUS',
             value: lobbyStatus,
           }}
-          center={{ title: 'Lobby' }}
+          center={{
+            title: 'Game',
+            artwork: (
+              <img
+                src="/images/avatar/rick_looser_md.png"
+                alt="Rick Winner"
+                className="-my-4 size-16 drop-shadow-xs select-none"
+                draggable={false}
+              />
+            ),
+            subtitle: 'Lobby',
+          }}
         />
 
         {/* Section: Main */}

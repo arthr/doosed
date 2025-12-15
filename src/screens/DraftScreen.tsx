@@ -112,10 +112,10 @@ export const DraftScreen = () => {
           value: wallet,
         }}
         center={{
-          title: 'Draft',
+          title: 'Game',
           artwork: (
             <img
-              src="/images/avatar/rick_winner.png"
+              src="/images/avatar/rick_winner_md.png"
               alt="Rick Winner"
               className="-my-4 size-16 drop-shadow-xs select-none"
               draggable={false}

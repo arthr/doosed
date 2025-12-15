@@ -3,7 +3,7 @@ import type { HeaderProps } from '@/types/header';
 
 const headerContainerClassName = cn(
   'grid',
-  'grid-cols-1',
+  'grid-cols-2',
   'items-center',
   'md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]',
   'gap-2 md:gap-4',
@@ -29,10 +29,9 @@ const infoBoxClassName = cn(
 );
 
 const titleClassName = cn(
-  'hidden md:flex',
+  'hidden md:grid md:grid-cols-[1fr_auto_1fr]',
   'text-base font-normal text-neutral-500',
   'tracking-[0.2em] uppercase',
-  'border-x-4 border-neutral-800',
   'px-6 lg:px-8',
   'items-center justify-center gap-4',
   'justify-self-center',
@@ -55,10 +54,10 @@ const InfoBox = ({
 }: InfoBoxProps) => (
   <div className={infoBoxClassName}>
     {icon ? icon : null}
-    <span className={cn('text-sm tracking-widest', hideLabelOnMobile ? 'hidden md:block' : '')}>
+    <span className={cn('text-xs tracking-widest', hideLabelOnMobile ? 'hidden md:block' : '')}>
       {label}:
     </span>
-    <span className="font-normal text-white">{value ?? placeholder}</span>
+    <span className="font-normal text-xs text-white">{value ?? placeholder}</span>
   </div>
 );
 
@@ -76,9 +75,9 @@ export const Header = ({ left, right, center, className = '', sticky = true }: H
       </div>
 
       <div className={cn(titleClassName, center?.className)}>
-        {center?.title ? <span className="text-white">{center.title}</span> : null}
+        {center?.title ? <span className="flex justify-end text-white">{center.title}</span> : null}
         {center?.artwork ? center.artwork : null}
-        {center?.subtitle ? <span className="text-white">{center.subtitle}</span> : null}
+        {center?.subtitle ? <span className="flex justify-start text-white">{center.subtitle}</span> : null}
       </div>
 
       <div className="flex justify-center md:justify-end">

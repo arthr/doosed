@@ -20,7 +20,18 @@ export const MatchScreen = () => {
           label: 'SCORE',
           placeholder: '--',
         }}
-        center={{ title: 'Match' }}
+        center={{
+          title: 'Game',
+          artwork: (
+            <img
+              src="/images/avatar/rick_looser_md.png"
+              alt="Rick Winner"
+              className="-my-4 size-16 drop-shadow-xs select-none"
+              draggable={false}
+            />
+          ),
+          subtitle: 'Round',
+        }}
       />
       {/* Section: Content (scroll) */}
       <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
