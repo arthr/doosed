@@ -20,8 +20,9 @@
 - [x] 2.2 Refatorar `LobbyScreen` para compor com `src/components/lobby/*` (remover duplicações inline)
   - DoD: `LobbyScreen` usa `RoomHeader/PlayerGrid/ActionControls/...` (ou equivalente); não existem duplicações grandes inline; `pnpm lint` passa.
 
-- [ ] 2.3 Revisar `DraftScreen` (manter referência; mover apenas o que for ruído)
+- [x] 2.3 Revisar `DraftScreen` (manter referência; mover apenas o que for ruído)
   - DoD: `DraftScreen` segue como referência; se houver constantes/mock grandes, mover para módulo apropriado sem regressão; `pnpm lint` passa.
+  - Nota: revisão concluída; nenhuma extração adicional necessária agora (manter `SHOP_ITEMS` inline por simplicidade).
 
 - [ ] 2.4 Revisar `MatchScreen` e confirmar decomposição por domínio (`src/components/match/*`)
   - DoD: `MatchScreen` segue como orquestração; se necessário, ajustar apenas composição/nomes/props sem refazer UI; `pnpm lint` passa.
