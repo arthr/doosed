@@ -3,7 +3,7 @@
 1. **Database Schema (Postgres):**
    - `profiles`: Armazena Schmeckles, XP, Cosméticos desbloqueados (Inventory).
    - `matches`: Estado macro da sala (status, current_turn_index, host_id).
-   - `match_states`: Tabela de alta frequência (JSONB) contendo o 'Public Game State' (Health, Itens Visíveis, Pílulas Reveladas).
+   - `match_states`: Tabela de alta frequência (JSONB) contendo o 'Public Game State' (Lives/Resistance/Over-resistance, Itens Visíveis, Pílulas Reveladas).
    - `match_secrets`: (RLS: Ninguém ver exceto Server) Contém a ordem real das pílulas no frasco.
 
 2. **Realtime Strategy (Channels):**

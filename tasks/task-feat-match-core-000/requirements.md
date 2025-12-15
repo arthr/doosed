@@ -16,6 +16,13 @@ Implementar a lógica central do gameplay de Match: pool de pílulas (baralho se
 - **Enquanto** a partida estiver em andamento, o sistema **deve** exibir contadores visíveis de cada tipo de pílula restante no pool.
 - **Quando** uma pílula for removida do pool, o sistema **deve** atualizar o contador correspondente imediatamente.
 
+### Sistema de Saúde Duplo (Lives + Resistance)
+- **Quando** uma partida iniciar, o sistema **deve** inicializar cada jogador com `lives` e `resistance` (e `extraResistance = 0`).
+- **Quando** um efeito causar dano normal, o sistema **deve** aplicar o dano primeiro em `extraResistance` (se > 0), e depois em `resistance`.
+- **Quando** um efeito causar cura, o sistema **deve** restaurar `resistance` até o máximo; se houver excedente e **Overflow positivo** estiver ativo, o sistema **deve** converter o excedente em `extraResistance` (respeitando o cap de design).
+- **Quando** `resistance` chegar a 0 após a resolução de um efeito, o sistema **deve** aplicar **Colapso**: `lives -= 1` e `resistance = resistanceMax`, sem perder turno.
+- **Se** `lives` chegar a 0, o sistema **deve** eliminar o jogador.
+
 ### Sistema de Turnos
 - **Quando** a partida iniciar, o sistema **deve** definir o primeiro jogador (player ou oponente) de forma determinística.
 - **Enquanto** a partida estiver em andamento, o sistema **deve** alternar turnos entre player e oponente(s).
@@ -26,15 +33,14 @@ Implementar a lógica central do gameplay de Match: pool de pílulas (baralho se
 - **Quando** o player clicar em uma pílula disponível, o sistema **deve** registrar a escolha e revelar o tipo da pílula.
 - **Quando** uma pílula for revelada, o sistema **deve** aplicar seus efeitos no jogador correspondente.
 - **Se** a pílula for do tipo `SAFE`, o sistema **não deve** aplicar dano.
-- **Se** a pílula for do tipo `DMG_LOW`, o sistema **deve** aplicar 1 de dano.
-- **Se** a pílula for do tipo `DMG_HIGH`, o sistema **deve** aplicar 2 de dano.
-- **Se** a pílula for do tipo `HEAL`, o sistema **deve** curar 1 de vida (máximo: vida inicial).
-- **Se** a pílula for do tipo `FATAL`, o sistema **deve** eliminar 1 vida do jogador imediatamente.
-- **Se** a pílula for do tipo `LIFE`, o sistema **deve** adicionar 1 de vida extra (máximo: vida inicial + 2).
+- **Se** a pílula for do tipo `DMG_LOW`, o sistema **deve** aplicar -2 de Resistência.
+- **Se** a pílula for do tipo `DMG_HIGH`, o sistema **deve** aplicar -4 de Resistência.
+- **Se** a pílula for do tipo `HEAL`, o sistema **deve** aplicar +2 de Resistência (até o máximo; com Overflow positivo pode gerar `extraResistance`).
+- **Se** a pílula for do tipo `FATAL`, o sistema **deve** zerar a Resistência (forçando 1 Colapso; não é morte instantânea).
+- **Se** a pílula for do tipo `LIFE`, o sistema **deve** adicionar +1 Vida (respeitando o cap de design, quando houver).
 
 ### Eliminação e Vitória/Derrota
-- **Quando** a vida de um jogador chegar a 0, o sistema **deve** eliminar o jogador.
-- **Quando** a vida de um jogador ficar negativa (por `FATAL` ou dano acumulado), o sistema **deve** eliminar o jogador.
+- **Quando** as Vidas de um jogador chegarem a 0, o sistema **deve** eliminar o jogador.
 - **Quando** o player for eliminado, o sistema **deve** transicionar para a fase `RESULTS` com status "derrota".
 - **Quando** todos os oponentes forem eliminados, o sistema **deve** transicionar para a fase `RESULTS` com status "vitória".
 
@@ -47,7 +53,8 @@ Implementar a lógica central do gameplay de Match: pool de pílulas (baralho se
 
 ### Feedback Visual
 - **Quando** uma pílula for revelada, o sistema **deve** exibir animação de feedback (cor, ícone, efeito).
-- **Quando** um jogador tomar dano, o sistema **deve** atualizar a barra de vida visualmente.
+- **Quando** um jogador tomar dano, o sistema **deve** atualizar Resistência/Resistência extra visualmente.
+- **Quando** ocorrer Colapso, o sistema **deve** atualizar Vidas e reset de Resistência visualmente.
 - **Quando** um jogador for eliminado, o sistema **deve** exibir estado "morto" no HUD.
 
 ## Critérios de Aceitação

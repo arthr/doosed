@@ -56,8 +56,10 @@ interface ProgressionStore {
 interface MatchStats {
   roundsPlayed: number;
   pillsChosen: number;
-  damageTaken: number;
-  healingReceived: number;
+  resistanceDamageTaken: number;
+  resistanceHealingReceived: number;
+  collapsesSuffered: number;
+  livesLost: number;
   opponentsKilled: number;
   won: boolean;
 }
@@ -118,7 +120,7 @@ function getXPForLevel(level: number): number {
 
 ### Fase 4: Conectar ResultScreen
 1. Atualizar `ResultScreen` para ler `matchStats` do `gameStore`
-2. Exibir stats (rodadas, pílulas, dano, curas, eliminações)
+2. Exibir stats (rodadas, pílulas, dano em Resistência, cura de Resistência, colapsos, vidas perdidas, eliminações)
 3. Exibir resultado (vitória/derrota)
 4. Testar: stats exibidas corretamente
 

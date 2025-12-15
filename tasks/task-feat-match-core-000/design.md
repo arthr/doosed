@@ -79,9 +79,12 @@ interface PlayerState {
   id: string;
   name: string;
   avatar: string;
-  health: number;
-  maxHealth: number;
-  isAlive: boolean;
+  lives: number;
+  maxLives: number;
+  resistance: number;
+  resistanceMax: number;
+  extraResistance: number; // Over-resistance (Overflow positivo)
+  extraResistanceMax: number;
   inventory: Item[]; // futuro: itens do Draft
 }
 ```
@@ -163,32 +166,32 @@ function chooseAIPill(
 1. Criar função `applyPillEffect(pill: Pill, target: PlayerState)`
 2. Implementar lógica para cada tipo:
    - SAFE: nada
-   - DMG_LOW: -1 health
-   - DMG_HIGH: -2 health
-   - HEAL: +1 health (max: maxHealth)
-   - FATAL: health = 0, isAlive = false
-   - LIFE: +1 maxHealth (cap: initial + 2), +1 health
+   - DMG_LOW: -2 resistance (consome extraResistance primeiro)
+   - DMG_HIGH: -4 resistance (consome extraResistance primeiro)
+   - HEAL: +2 resistance (até resistanceMax; excedente vira extraResistance via Overflow positivo, se habilitado)
+   - FATAL: resistance = 0 (força 1 Colapso; não é morte instantânea)
+   - LIFE: +1 lives (respeitando maxLives)
 3. Testar: cada tipo de pílula aplica efeito correto
 
 ### Fase 7: IA Básica
 1. Criar função `chooseAIPill(pool, counters, aiState, config)`
 2. Implementar heurística simples:
-   - Se health baixa: preferir HEAL/SAFE
-   - Se health alta: aceitar risco (DMG_LOW/DMG_HIGH)
+   - Se lives baixo e resistance baixo: preferir HEAL/SAFE
+   - Se lives alto e resistance alto: aceitar risco (DMG_LOW/DMG_HIGH)
    - Evitar FATAL baseado em riskTolerance
 3. Integrar com `processTurn()`: quando for turno do oponente, chamar IA
 4. Testar: IA deve escolher pílulas e aplicar efeitos nela mesma
 
 ### Fase 8: Detecção de Vitória/Derrota
 1. Criar função `checkGameOver()`:
-   - Se player.isAlive === false: transicionar para RESULTS (derrota)
-   - Se todos opponents.isAlive === false: transicionar para RESULTS (vitória)
+   - Se player.lives <= 0: transicionar para RESULTS (derrota)
+   - Se todos opponents.lives <= 0: transicionar para RESULTS (vitória)
 2. Chamar `checkGameOver()` após cada efeito de pílula
 3. Testar: match deve terminar quando player ou todos oponentes morrerem
 
 ### Fase 9: Feedback Visual
-1. Atualizar `PlayerDashboard` para refletir health atual
-2. Atualizar `OpponentsBar` para refletir health e status "morto"
+1. Atualizar `PlayerDashboard` para refletir Vidas/Resistência/Resistência extra
+2. Atualizar `OpponentsBar` para refletir Vidas/Resistência e status "morto"
 3. Adicionar animação simples de reveal de pílula (opcional)
 4. Testar: UI reflete estado corretamente
 
@@ -223,7 +226,7 @@ function chooseAIPill(
 
 1. **Lógica no gameStore**: Por ora, manter lógica no store Zustand. Preparar para extração futura.
 2. **Determinismo**: IA deve ser determinística (mesma seed -> mesma escolha).
-3. **Sem Animações Complexas**: Feedback visual básico (atualização de health, contadores). Animações sofisticadas podem ser adicionadas depois.
+3. **Sem Animações Complexas**: Feedback visual básico (Vidas/Resistência, contadores). Animações sofisticadas podem ser adicionadas depois.
 4. **Pool Generation**: Client-side por ora. Em multiplayer, será server-side.
 5. **Turn System**: Simples (alternar player/opponent). Em multiplayer, será mais complexo (múltiplos jogadores, timeouts).
 

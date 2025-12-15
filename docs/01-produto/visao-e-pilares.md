@@ -7,6 +7,7 @@ Uma roleta russa farmacêutica sci-fi, por turnos, com tensão crescente e esté
 - Tensão escalonada (early acessível -> late letal)
 - Escolhas significativas (itens, quests, risco vs recompensa)
 - Estratégia com informação (baralho sem reposição + contadores)
+- Saúde dupla e colapso (Vidas + Resistência + leitura de risco)
 - Multiplayer justo (validação server-authoritative)
 
 ## Anti-pilares

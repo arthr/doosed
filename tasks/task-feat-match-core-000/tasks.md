@@ -66,7 +66,7 @@
   - DoD: Ao escolher pílula, efeito é aplicado no jogador correto (player ou opponent).
 
 - [ ] 6.3 Testar efeitos de pílulas
-  - DoD: Cada tipo de pílula aplica efeito correto; health atualizado; UI reflete mudanças.
+  - DoD: Cada tipo de pílula aplica efeito correto; Vidas/Resistência/Resistência extra atualizadas; UI reflete mudanças.
 
 ### Fase 7: IA Básica
 - [ ] 7.1 Criar função `chooseAIPill(pool, counters, aiState, config)`
@@ -89,11 +89,11 @@
   - DoD: `ResultScreen` recebe status (vitória/derrota) e exibe corretamente.
 
 ### Fase 9: Feedback Visual
-- [ ] 9.1 Atualizar `PlayerDashboard` para refletir health
-  - DoD: Barra de vida atualiza em tempo real; valores corretos.
+- [ ] 9.1 Atualizar `PlayerDashboard` para refletir Vidas/Resistência/Resistência extra
+  - DoD: UI exibe Vidas, Resistência e Resistência extra; valores atualizam em tempo real.
 
-- [ ] 9.2 Atualizar `OpponentsBar` para refletir health e status
-  - DoD: Oponentes mostram health; oponentes mortos exibem estado "morto".
+- [ ] 9.2 Atualizar `OpponentsBar` para refletir Vidas/Resistência e status
+  - DoD: Oponentes mostram Vidas/Resistência; oponentes eliminados exibem estado "morto".
 
 - [ ] 9.3 Adicionar feedback de reveal de pílula (opcional)
   - DoD: Ao revelar pílula, animação simples (cor, ícone) indica tipo.

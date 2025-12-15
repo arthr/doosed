@@ -14,8 +14,10 @@ Implementar a lógica funcional da tela de Results: exibir resultado da partida 
 - **Quando** a tela de Results for exibida, o sistema **deve** mostrar as seguintes estatísticas:
   - Total de rodadas jogadas
   - Pílulas escolhidas (total)
-  - Dano recebido (total)
-  - Curas recebidas (total)
+  - Dano em Resistência recebido (total)
+  - Cura de Resistência recebida (total)
+  - Colapsos sofridos (total)
+  - Vidas perdidas (total)
   - Oponentes eliminados
 - **Enquanto** a tela estiver ativa, as estatísticas **devem** ser lidas do estado do `gameStore`.
 

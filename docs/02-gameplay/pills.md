@@ -11,6 +11,36 @@ O pool é um **baralho (sampling sem reposição)**. A HUD mostra **contadores p
 - FATAL
 - LIFE
 
+## Efeitos (MVP) — Saúde dupla
+
+### Estado por jogador (referência)
+- **Vidas (Lives)**: ex.: 3
+- **Resistência (Resistance)**: ex.: 6
+- **Resistência extra (Over-resistance)**: começa em 0; só existe com **Overflow positivo**
+
+### Colapso (normativo)
+- Se, após aplicar um efeito, a **Resistência** ficar em **0**, ocorre **Colapso**:
+  - **Vidas -= 1**
+  - **Resistência = Resistência Máxima**
+  - Sem perder turno
+
+### Regras de aplicação (normativas)
+- Dano **normal** afeta **Resistência** (consome **Resistência extra** primeiro, se existir).
+- Cura normal restaura **Resistência** (até a máxima). Excedente pode virar **Resistência extra** via **Overflow positivo**.
+- **Piercing** (quando houver) causa perda direta de **Vida** e ignora Resistência.
+
+### Tabela de efeitos (determinístico)
+- **SAFE**: nenhum efeito
+- **DMG_LOW**: -2 Resistência
+- **DMG_HIGH**: -4 Resistência
+- **HEAL**: +2 Resistência
+- **FATAL**: zera Resistência (força 1 Colapso; não é morte instantânea)
+- **LIFE**: +1 Vida (respeitando cap de design, quando houver)
+
+### Overflow (conceitual)
+- **Overflow (negativo)**: em efeitos de dano específicos, o dano restante pode continuar após um Colapso, causando cascata de Colapsos.
+- **Overflow positivo**: cura excedente acima da Resistência máxima vira **Resistência extra** (segunda camada acima da Resistência padrão). Cap da Resistência extra é um parâmetro de balance (ex.: igual ao máximo de Resistência).
+
 ## Mapeamento de fantasia (opcional)
 - "Placebo" = SAFE (e/ou pílulas sem dano)
 - "Live" = DMG_* e FATAL (pílulas com dano/eliminações)

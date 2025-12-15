@@ -6,6 +6,8 @@
 ## Itens
 - Itens são consumíveis e geram contrajogo ao RNG.
 - Categorias: Intel, Sustain, Control, Chaos.
+- Sustentação (Sustain) deve operar principalmente em **Resistência** e/ou em **Vidas** (quando explicitamente definido).
+- Modificadores como **Piercing** e **Overflow** podem existir como efeitos de itens (não são padrão do dano).
 
 ## Loja (match)
 - Moeda: Pill Coins/Tokens.

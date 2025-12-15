@@ -17,13 +17,13 @@
 
 ### Fase 2: Estatísticas do Match
 - [ ] 2.1 Adicionar `MatchStats` ao `src/types/game.ts`
-  - DoD: Interface `MatchStats` definida (roundsPlayed, pillsChosen, damageTaken, healingReceived, opponentsKilled, won).
+  - DoD: Interface `MatchStats` definida (roundsPlayed, pillsChosen, resistanceDamageTaken, resistanceHealingReceived, collapsesSuffered, livesLost, opponentsKilled, won).
 
 - [ ] 2.2 Integrar `MatchStats` no `gameStore`
   - DoD: `gameStore` tem `stats: MatchStats`; stats inicializadas corretamente.
 
 - [ ] 2.3 Incrementar stats durante o match
-  - DoD: Ao escolher pílula, `pillsChosen++`; ao tomar dano, `damageTaken += dano`; ao curar, `healingReceived += cura`; ao eliminar oponente, `opponentsKilled++`.
+  - DoD: Ao escolher pílula, `pillsChosen++`; ao tomar dano em Resistência, `resistanceDamageTaken += dano`; ao curar Resistência, `resistanceHealingReceived += cura`; ao ocorrer Colapso, `collapsesSuffered++` e `livesLost++`; ao eliminar oponente, `opponentsKilled++`.
 
 - [ ] 2.4 Setar `won` ao terminar match
   - DoD: `checkGameOver()` seta `won = true` se vitória, `won = false` se derrota.
@@ -43,7 +43,7 @@
 
 ### Fase 4: Conectar ResultScreen
 - [ ] 4.1 Atualizar `ResultScreen` para ler `matchStats` do `gameStore`
-  - DoD: `ResultScreen` exibe stats (rodadas, pílulas, dano, curas, eliminações).
+  - DoD: `ResultScreen` exibe stats (rodadas, pílulas, dano/cura de Resistência, colapsos, vidas perdidas, eliminações).
 
 - [ ] 4.2 Exibir resultado (vitória/derrota)
   - DoD: Texto "VICTORY" ou "DEFEAT" exibido baseado em `stats.won`.
