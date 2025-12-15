@@ -1,4 +1,5 @@
-import { useNotificationStore, type NotificationVariant } from '@/stores/notificationStore';
+import { useEffect, useState } from 'react';
+import { useNotificationStore, type Notification, type NotificationVariant } from '@/stores/notificationStore';
 import { cn } from '@/lib/cn';
 import { AlertTriangle, Info, CheckCircle, XCircle, X, Bug } from 'lucide-react';
 
@@ -36,20 +37,51 @@ const variantStyles: Record<NotificationVariant, VariantStyle> = {
   },
 };
 
+const EXIT_DURATION = 300; // ms
+
 export function NotificationBar() {
   const current = useNotificationStore(state => state.current);
   const dismiss = useNotificationStore(state => state.dismiss);
 
-  if (!current) return null;
+  const [visible, setVisible] = useState<Notification | null>(null);
+  const [isExiting, setIsExiting] = useState(false);
 
-  const style = variantStyles[current.variant];
+  useEffect(() => {
+    if (current && !visible) {
+      // Nova notificacao chegou
+      setVisible(current);
+      setIsExiting(false);
+    } else if (current && visible && current.id !== visible.id) {
+      // Notificacao mudou - animar saida da antiga, depois mostrar nova
+      setIsExiting(true);
+      const timeout = setTimeout(() => {
+        setVisible(current);
+        setIsExiting(false);
+      }, EXIT_DURATION);
+      return () => clearTimeout(timeout);
+    } else if (!current && visible) {
+      // Notificacao removida - animar saida
+      setIsExiting(true);
+      const timeout = setTimeout(() => {
+        setVisible(null);
+        setIsExiting(false);
+      }, EXIT_DURATION);
+      return () => clearTimeout(timeout);
+    }
+  }, [current, visible]);
+
+  if (!visible) return null;
+
+  const style = variantStyles[visible.variant];
   const Icon = style.icon;
 
   return (
     <div
       className={cn(
         'fixed bottom-0 left-0 w-full border-t-4 p-2 z-50',
-        'animate-in slide-in-from-bottom duration-300',
+        isExiting
+          ? 'animate-out slide-out-to-bottom duration-300'
+          : 'animate-in slide-in-from-bottom duration-300',
         style.container,
       )}
       role="alert"
@@ -63,11 +95,11 @@ export function NotificationBar() {
             style.text,
           )}
         >
-          {current.message}
+          {visible.message}
         </span>
-        {current.durationTime === 0 && (
+        {visible.durationTime === 0 && (
           <button
-            onClick={() => dismiss(current.id)}
+            onClick={() => dismiss(visible.id)}
             className={cn('p-1 hover:bg-white/10 rounded', style.text)}
             aria-label="Fechar notificacao"
           >
