@@ -10,6 +10,9 @@ interface ChatInlineProps {
   className?: string;
   currentUser?: ChatAuthor;
   placeholder?: string;
+  textClass?: string;
+  displayTime?: boolean;
+  displayAuthor?: boolean;
 }
 
 export function ChatInline({
@@ -17,6 +20,9 @@ export function ChatInline({
   className = '',
   currentUser,
   placeholder,
+  textClass,
+  displayTime = true,
+  displayAuthor = true,
 }: ChatInlineProps) {
   const isOpen = useChatStore(state => state.isOpen);
   const toggle = useChatStore(state => state.toggle);
@@ -41,6 +47,7 @@ export function ChatInline({
           currentUser={currentUser}
           placeholder={placeholder}
           className="h-full"
+          textClass={textClass}
         />
       </div>
 
@@ -70,6 +77,9 @@ export function ChatInline({
             currentUser={currentUser}
             placeholder={placeholder}
             className="grow"
+            textClass={textClass}
+            displayTime={displayTime}
+            displayAuthor={displayAuthor}
           />
         </div>
       ) : null}

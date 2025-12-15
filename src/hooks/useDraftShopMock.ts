@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DraftShopItem } from '@/types/draft';
 import { postSystemMessage } from '@/lib/systemMessages';
 
-const MAX_SLOTS = 8;
+const MAX_SLOTS = 10;
 const START_IN = 10;
 
 type UseDraftShopMockResult = {

@@ -9,9 +9,12 @@ interface ChatDockProps {
   threadId?: string;
   currentUser?: ChatAuthor;
   placeholder?: string;
+  textClass?: string;
+  displayTime?: boolean;
+  displayAuthor?: boolean;
 }
 
-export function ChatDock({ threadId = 'global', currentUser, placeholder }: ChatDockProps) {
+export function ChatDock({ threadId = 'global', currentUser, placeholder, textClass, displayTime = true, displayAuthor = true }: ChatDockProps) {
   const dockEnabled = useChatStore(state => state.dockEnabled);
   const isOpen = useChatStore(state => state.isOpen);
   const activeThreadId = useChatStore(state => state.activeThreadId);
@@ -112,6 +115,9 @@ export function ChatDock({ threadId = 'global', currentUser, placeholder }: Chat
         currentUser={currentUser}
         placeholder={placeholder}
         className="h-full rounded-t-none border-t-0"
+        textClass={textClass}
+        displayTime={displayTime}
+        displayAuthor={displayAuthor}
       />
     </div>
   );

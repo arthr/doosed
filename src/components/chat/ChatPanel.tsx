@@ -9,6 +9,9 @@ interface ChatPanelProps {
   currentUser?: ChatAuthor;
   placeholder?: string;
   className?: string;
+  textClass?: string;
+  displayTime?: boolean;
+  displayAuthor?: boolean;
 }
 
 export function ChatPanel({
@@ -16,6 +19,9 @@ export function ChatPanel({
   currentUser,
   placeholder = 'Digite uma mensagem...',
   className = '',
+  textClass = 'text-xs md:text-sm',
+  displayTime = true,
+  displayAuthor = true,
 }: ChatPanelProps) {
   const messages = useChatStore(state => state.threads[threadId]?.messages ?? []);
   const sendMessage = useChatStore(state => state.sendMessage);
@@ -43,7 +49,8 @@ export function ChatPanel({
     <div
       className={cn(
         'border-border-muted shadow-pixel relative flex flex-col overflow-hidden rounded-xl border-4 bg-black',
-        'font-mono text-xs md:text-sm',
+        'font-mono',
+        textClass,
         className,
       )}
     >
@@ -56,7 +63,7 @@ export function ChatPanel({
         className={cn('custom-scrollbar relative h-full grow space-y-1 overflow-y-auto p-3')}
       >
         {messages.map(message => (
-          <ChatMessageRow key={message.id} message={message} />
+          <ChatMessageRow key={message.id} message={message} displayTime={displayTime} displayAuthor={displayAuthor} />
         ))}
         <div ref={endRef} />
       </div>

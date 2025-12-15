@@ -24,11 +24,11 @@ export const MatchScreen = () => {
       {/* Section: Footer */}
       <PhasePanelHUD
         phase="match"
-        className="h-auto md:h-48"
         chatThreadId="match"
         actions={
           <ActionDock
             shop={{ disabled: false, onClick: () => { } }}
+            leave={{ disabled: false, onClick: () => { } }}
             layout="stack"
           />
         }

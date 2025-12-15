@@ -12,6 +12,13 @@ export interface ChatProps {
   className?: string;
   currentUser?: ChatAuthor;
   placeholder?: string;
+  /**
+   * Classe(s) Tailwind para tamanho do texto do chat (mensagens + input).
+   * Ex.: "text-xs md:text-sm", "text-sm", "text-base".
+   */
+  textClass?: string;
+  displayTime?: boolean;
+  displayAuthor?: boolean;
 }
 
 export function Chat({
@@ -20,6 +27,9 @@ export function Chat({
   className = '',
   currentUser,
   placeholder,
+  textClass,
+  displayTime = true,
+  displayAuthor = true,
 }: ChatProps) {
   const ensureThread = useChatStore(state => state.ensureThread);
   const threadTitle = useChatStore(state => state.threads[threadId]?.title);
@@ -35,9 +45,14 @@ export function Chat({
         className={className}
         currentUser={currentUser}
         placeholder={placeholder}
+        textClass={textClass}
+        displayTime={displayTime}
+        displayAuthor={displayAuthor}
       />
     );
   }
 
-  return <ChatDock threadId={threadId} currentUser={currentUser} placeholder={placeholder} />;
+  return (
+    <ChatDock threadId={threadId} currentUser={currentUser} placeholder={placeholder} textClass={textClass} displayTime={displayTime} displayAuthor={displayAuthor} />
+  );
 }

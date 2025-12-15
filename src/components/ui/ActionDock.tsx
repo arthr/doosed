@@ -1,5 +1,5 @@
 import type { MouseEvent } from 'react';
-import { MessageSquare, ShoppingCart } from 'lucide-react';
+import { LogOut, MessageSquare, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 type ActionDockButtonConfig = {
@@ -19,6 +19,7 @@ export interface ActionDockProps {
   chat?: ActionDockButtonConfig;
   shop?: ActionDockButtonConfig;
   loadout?: ActionDockToggleConfig;
+  leave?: ActionDockButtonConfig;
   className?: string;
   layout?: 'row' | 'stack';
 }
@@ -60,19 +61,20 @@ export function ActionDock({
   chat,
   shop,
   loadout,
+  leave,
   className = '',
   layout = 'row',
 }: ActionDockProps) {
   const isStack = layout === 'stack';
   const stackRows = (() => {
     if (!isStack) return '';
-    const count = Number(!!loadout?.onPress) + Number(!!shop?.onClick) + Number(!!chat?.onClick);
+    const count = Number(!!loadout?.onPress) + Number(!!shop?.onClick) + Number(!!chat?.onClick) + Number(!!leave?.onClick);
     if (count <= 1) return 'grid-rows-1';
     if (count === 2) return 'grid-rows-2';
     return 'grid-rows-3';
   })();
   // se não houver nenhuma ação, não renderizar o ActionDock
-  if (!chat?.onClick && !shop?.onClick && !loadout?.onPress) return null;
+  if (!chat?.onClick && !shop?.onClick && !loadout?.onPress && !leave?.onClick) return null;
 
   return (
     <div
@@ -148,6 +150,21 @@ export function ActionDock({
         >
           <MessageSquare size={16} />
           <span>CHAT</span>
+        </button>
+      ) : null}
+
+      {leave?.onClick ? (
+        <button
+          type="button"
+          onClick={leave.onClick}
+          disabled={!!leave.disabled}
+          className={cn(
+            'font-pixel flex items-center justify-center gap-2 border-b-4 border-destructive bg-destructive text-xs text-white hover:bg-destructive/80 active:translate-y-0.5 active:border-b-2',
+            leave.disabled && 'cursor-not-allowed opacity-50',
+          )}
+        >
+          <LogOut size={16} />
+          <span>LEAVE MATCH</span>
         </button>
       ) : null}
     </div>
