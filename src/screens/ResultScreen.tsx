@@ -1,206 +1,263 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { RefreshCw, Home, AlertTriangle, Pill, Package, Hourglass, Trophy, Skull } from 'lucide-react';
 
-// --- COMPONENTS ---
+// --- TYPES ---
+type GameResult = 'VICTORY' | 'DEFEAT';
 
-// 1. Titulo do Header (VICTORY / DEAD)
-const HeaderPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
-  const isVictory = result === 'victory';
-  const text = isVictory ? 'VICTORY' : 'DEAD';
-  const borderColor = isVictory ? 'border-rick-green' : 'border-destructive';
-  const textColor = isVictory ? 'text-rick-green' : 'text-destructive';
+// --- SUBCOMPONENTS ---
 
-  return (
-    <div className={`w-64 mx-auto mb-4 p-2 text-center bg-ui-panel border-4 ${borderColor} rounded-full`}>
-      <h2 className={`text-xl font-bold tracking-widest ${textColor}`}>{text}</h2>
-    </div>
-  );
-};
-
-// 2. Titulo Principal (SURVIVED / DIED)
-const MainTitlePlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
-  const isVictory = result === 'victory';
-  const text = isVictory ? 'SURVIVED' : 'DIED';
-  const textColor = isVictory ? 'text-morty-yellow' : 'text-destructive';
-
-  return (
-    <div className="text-center mb-6">
-      <h1 className={`text-6xl font-black uppercase drop-shadow-md ${textColor}`}>{text}</h1>
-    </div>
-  );
-};
-
-// 3. Avatar Central (Rick)
-const AvatarPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
-  const isVictory = result === 'victory';
-  const mood = isVictory ? 'HAPPY RICK' : 'DEAD RICK';
-  const halo = !isVictory && (
-    <div className="absolute -top-6 text-morty-yellow text-xs font-bold uppercase">HALO</div>
-  );
-
-  return (
-    <div className="relative flex justify-center mb-6">
-      {halo}
-      <div className="w-40 h-40 bg-neutral-800 border-4 border-border rounded-full flex items-center justify-center text-center p-2">
-        <span className="text-foreground font-bold">{mood}</span>
-      </div>
-    </div>
-  );
-};
-
-// 4. Painel de Estatisticas (Esquerda)
-const StatsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
-  const isVictory = result === 'victory';
-  const borderColor = isVictory ? 'border-rick-green' : 'border-destructive';
-  const titleColor = isVictory ? 'text-rick-green' : 'text-destructive';
-
-  // Labels mudam levemente dependendo do contexto
-  const labels = {
-    pills: isVictory ? 'Pills Survived: 12' : 'Pills Taken: 12',
-    items: isVictory ? 'Items Used: 5' : 'Items Wasted: 5',
-    turns: isVictory ? 'Turns Survived: 8' : 'Turns Lasted: 8',
-  };
-
-  return (
-    <div
-      className={`flex-1 bg-ui-panel/80 border-4 ${borderColor} rounded-xl p-4 flex flex-col justify-between min-h-[200px]`}
-    >
-      <h3 className={`text-center font-bold mb-4 uppercase ${titleColor}`}>Match Stats</h3>
-
-      <div className="space-y-4 text-foreground text-lg font-mono">
-        <div className="flex justify-between">
-          <span>{labels.pills}</span>
-          <span className="text-xs text-muted-foreground">PILLS</span>
+// 1. Stat Row (Individual row in the left panel)
+const StatRow = ({ label, value, icon, color }: { label: string; value: string | number; icon: React.ReactNode; color: string }) => (
+    <div className="flex items-center justify-between py-2 border-b border-white/10 last:border-0">
+        <div className="flex items-center gap-3">
+            <div className={`p-1.5 rounded bg-black/40 ${color}`}>{icon}</div>
+            <span className="text-slate-300 font-pixel text-lg uppercase tracking-wide">{label}:</span>
         </div>
-        <div className="flex justify-between">
-          <span>{labels.items}</span>
-          <span className="text-xs text-muted-foreground">ITEMS</span>
-        </div>
-        <div className="flex justify-between">
-          <span>{labels.turns}</span>
-          <span className="text-xs text-muted-foreground">TURNS</span>
-        </div>
-      </div>
-
-      {/* Icones decorativos extras no rodape do painel */}
-      <div className="mt-4 flex justify-center gap-2 text-2xl">{isVictory ? 'OK' : 'DEFEAT'}</div>
+        <span className={`font-pixel text-2xl font-bold ${color} drop-shadow-md`}>{value}</span>
     </div>
-  );
-};
+);
 
-// 5. Painel de Recompensas (Direita)
-const RewardsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
-  const isVictory = result === 'victory';
-  const borderColor = isVictory ? 'border-rick-green' : 'border-border';
-  const titleColor = isVictory ? 'text-rick-green' : 'text-muted-foreground';
-
-  const xpText = isVictory ? '+1200' : '-500';
-  const xpColor = isVictory ? 'text-rick-green' : 'text-destructive';
-  const lootText = isVictory ? 'Cool Rick Sunglasses' : 'NO LOOT';
-  const lootSubtext = isVictory ? 'NEW COSMETIC UNLOCKED!' : '';
-
-  return (
-    <div
-      className={`flex-1 bg-ui-panel/80 border-4 ${borderColor} rounded-xl p-4 flex flex-col items-center min-h-[200px]`}
-    >
-      <h3 className={`text-center font-bold mb-2 uppercase ${titleColor}`}>Rewards</h3>
-
-      {/* XP Section */}
-      <div className="w-full text-center mb-4">
-        <p className="text-foreground text-sm font-bold">XP {isVictory ? 'GAINED' : 'LOST'}:</p>
-        <p className={`text-2xl font-black ${xpColor}`}>{xpText}</p>
-
-        {/* Progress Bar Placeholder */}
-        <div className="w-full h-4 bg-neutral-700 rounded-full mt-1 border border-border overflow-hidden relative">
-          <div
-            className={`h-full ${isVictory ? 'bg-morty-yellow' : 'bg-destructive'}`}
-            style={{ width: isVictory ? '70%' : '30%' }}
-          ></div>
+// 2. XP Progress Bar
+const XpBar = ({ isVictory, value }: { isVictory: boolean; value: number }) => (
+    <div className="w-full mt-2">
+        <div className="flex justify-between text-xs font-pixel uppercase mb-1">
+            <span className={isVictory ? "text-green-400" : "text-red-400"}>
+                {isVictory ? "XP GAINED" : "XP LOST"}
+            </span>
+            <span className="text-white font-bold">{isVictory ? `+${value}` : `-${value}`}</span>
         </div>
-      </div>
+        <div className="h-4 w-full bg-black border-2 border-slate-600 rounded-full overflow-hidden relative">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:4px_4px]" />
 
-      {/* Loot Section */}
-      <div className="flex flex-col items-center justify-center flex-1 w-full border-t border-border pt-2">
-        <p className="text-xs text-muted-foreground uppercase mb-1">Loot Drop</p>
-        <div className="w-16 h-16 bg-neutral-800 border-2 border-dashed border-border flex items-center justify-center text-3xl mb-2">
-          {isVictory ? 'LOOT' : 'NONE'}
+            {/* Bar Fill */}
+            <div
+                className={`h-full transition-all duration-1000 ${isVictory ? "bg-gradient-to-r from-yellow-400 to-yellow-600 w-[80%]" : "bg-red-900 w-[30%]"
+                    }`}
+            />
         </div>
-        <p className="text-portal-blue font-bold text-sm text-center">{lootText}</p>
-        {lootSubtext && <p className="text-morty-yellow text-[10px] font-bold uppercase">{lootSubtext}</p>}
-      </div>
     </div>
-  );
-};
+);
 
-// 6. Botoes de Rodape
-const FooterButtons = ({ result }: { result: 'victory' | 'defeat' }) => {
-  const isVictory = result === 'victory';
-  const btnColor = isVictory
-    ? 'bg-rick-green border-rick-green hover:bg-rick-green/80 text-space-black'
-    : 'bg-destructive border-destructive hover:bg-destructive/80 text-foreground';
-  const btnText = isVictory ? 'PLAY AGAIN' : 'TRY AGAIN';
+// 3. Loot Box Display
+const LootDisplay = ({ isVictory }: { isVictory: boolean }) => (
+    <div className="flex flex-col items-center justify-center mt-4 p-2 rounded-lg bg-black/20 w-full">
+        {/* Placeholder for Chest Image */}
+        <div className={`w-16 h-16 mb-2 flex items-center justify-center text-4xl animate-bounce`}>
+            {isVictory ? '🎁' : '🪦'}
+        </div>
 
-  return (
-    <div className="flex justify-center gap-4 mt-8 w-full max-w-md">
-      <button
-        className={`flex-1 py-3 px-6 rounded-lg border-b-4 font-bold text-lg uppercase shadow-lg transform active:translate-y-1 ${btnColor}`}
-      >
-        {btnText}
-      </button>
-      <button className="flex-1 py-3 px-6 bg-neutral-600 border-b-4 border-neutral-400 hover:bg-neutral-500 rounded-lg text-foreground font-bold text-lg uppercase shadow-lg transform active:translate-y-1">
-        Main Menu
-      </button>
+        <div className="text-center">
+            {isVictory ? (
+                <>
+                    <div className="text-cyan-400 font-pixel text-sm font-bold animate-pulse">COOL RICK SUNGLASSES</div>
+                    <div className="text-yellow-500 font-pixel text-[10px] uppercase tracking-widest mt-1">New Cosmetic Unlocked!</div>
+                </>
+            ) : (
+                <>
+                    <div className="text-slate-500 font-pixel text-sm font-bold line-through">NO LOOT</div>
+                    <div className="text-red-500 font-pixel text-[10px] uppercase tracking-widest mt-1">Better luck next timeline</div>
+                </>
+            )}
+        </div>
     </div>
-  );
-};
+);
 
-// --- MAIN PAGE ---
+// --- MAIN COMPONENT ---
 
-const ResultPage = () => {
-  // Estado temporario para debug e alternancia de telas
-  const [gameResult, setGameResult] = useState<'victory' | 'defeat'>('victory');
+const ResultScreen = () => {
+    // Toggle for development/preview purposes
+    const [result, setResult] = useState<GameResult>('VICTORY');
+    const isVictory = result === 'VICTORY';
 
-  // Define o background baseado no resultado (Placeholder de cor)
-  const bgClass =
-    gameResult === 'victory'
-      ? 'bg-gradient-to-b from-space-black to-rick-green/30'
-      : 'bg-gradient-to-b from-space-black to-destructive/30';
+    // THEME CONFIGURATION
+    const theme = {
+        victory: {
+            bg: "bg-gradient-to-b from-slate-900 to-green-900/40",
+            accent: "text-green-400",
+            border: "border-green-600",
+            glow: "shadow-[0_0_20px_rgba(34,197,94,0.4)]",
+            titleColor: "text-yellow-400", // Gold
+            button: "bg-gradient-to-b from-green-500 to-green-700 border-green-900 text-white",
+            spotlight: "bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-yellow-200/20 via-transparent to-transparent"
+        },
+        defeat: {
+            bg: "bg-gradient-to-b from-slate-950 to-red-950/40",
+            accent: "text-red-500",
+            border: "border-red-800",
+            glow: "shadow-[0_0_20px_rgba(220,38,38,0.4)]",
+            titleColor: "text-red-600", // Blood Red
+            button: "bg-gradient-to-b from-red-600 to-red-800 border-red-950 text-white",
+            spotlight: "bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent"
+        }
+    };
 
-  return (
-    <div className={`min-h-screen flex items-center justify-center p-4 ${bgClass}`}>
-      {/* --- DEBUG TOGGLE BUTTON (REMOVER DEPOIS) --- */}
-      <div className="fixed top-4 right-4 z-50">
-        <button
-          onClick={() => setGameResult(prev => (prev === 'victory' ? 'defeat' : 'victory'))}
-          className="bg-foreground text-space-black text-xs font-bold py-2 px-4 rounded shadow hover:opacity-90"
-        >
-          TOGGLE STATE (Current: {gameResult.toUpperCase()})
-        </button>
-      </div>
-      {/* ------------------------------------------- */}
+    const currentTheme = isVictory ? theme.victory : theme.defeat;
 
-      <div className="w-full max-w-4xl relative">
-        {/* Moldura Decorativa (Placeholder da borda grossa cinza) */}
-        <div className="bg-neutral-800 border-8 border-border rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
-          {/* Background interno (Swirl placeholder) */}
-          <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://placehold.co/100x100?text=Swirl')] bg-repeat"></div>
+    return (
+        <div className={`min-h-screen w-full flex items-center justify-center p-4 font-pixel overflow-hidden relative ${currentTheme.bg}`}>
 
-          <div className="relative z-10 flex flex-col items-center">
-            <HeaderPlaceholder result={gameResult} />
-            <MainTitlePlaceholder result={gameResult} />
-            <AvatarPlaceholder result={gameResult} />
+            {/* DEVELOPMENT TOGGLE (Remove in production) */}
+            <button
+                onClick={() => setResult(prev => prev === 'VICTORY' ? 'DEFEAT' : 'VICTORY')}
+                className="fixed top-4 right-4 z-50 bg-slate-800 text-white px-4 py-2 rounded font-pixel border-2 border-slate-600"
+            >
+                SWITCH STATE
+            </button>
 
-            {/* Container de Stats e Rewards */}
-            <div className="flex flex-col md:flex-row gap-4 w-full">
-              <StatsPanelPlaceholder result={gameResult} />
-              <RewardsPanelPlaceholder result={gameResult} />
+            {/* BACKGROUND FX */}
+            <div className={`absolute inset-0 z-0 pointer-events-none ${currentTheme.spotlight}`} />
+            {/* Victory Confetti (CSS dots) */}
+            {isVictory && (
+                <div className="absolute inset-0 z-0 opacity-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            )}
+
+            {/* MAIN CARD CONTAINER */}
+            <div className="relative z-10 w-full max-w-lg md:max-w-4xl flex flex-col items-center gap-6">
+
+                {/* 1. TOP STATUS BADGE */}
+                <div className={`
+            px-8 py-2 rounded-full border-4 bg-slate-900/90 backdrop-blur-md
+            ${currentTheme.border} ${currentTheme.glow}
+        `}>
+                    <h2 className={`text-xl md:text-2xl font-bold tracking-[0.2em] uppercase ${isVictory ? 'text-white' : 'text-red-500'}`}>
+                        {isVictory ? 'VICTORY' : 'DEAD'}
+                    </h2>
+                </div>
+
+                {/* 2. MAIN TITLE (SURVIVED / DIED) */}
+                <div className="text-center relative">
+                    <h1 className={`
+                text-6xl md:text-8xl font-black uppercase tracking-widest
+                drop-shadow-[4px_4px_0_rgba(0,0,0,1)]
+                ${currentTheme.titleColor}
+            `}
+                        style={{ WebkitTextStroke: '2px black' }}
+                    >
+                        {isVictory ? 'SURVIVED' : 'DIED'}
+                    </h1>
+                </div>
+
+                {/* 3. AVATAR AREA */}
+                <div className="relative group">
+                    {/* Laurel Wreath or Halo */}
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-full flex justify-center z-20">
+                        {isVictory ? (
+                            <Trophy size={48} className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" />
+                        ) : (
+                            <div className="w-24 h-6 border-4 border-yellow-400/50 rounded-[50%] shadow-[0_0_15px_yellow]" />
+                        )}
+                    </div>
+
+                    {/* Avatar Image Placeholder */}
+                    <div className={`
+                w-40 h-40 md:w-48 md:h-48 rounded-full border-4 bg-slate-800 overflow-hidden relative
+                ${currentTheme.border} shadow-[0_0_30px_rgba(0,0,0,0.5)]
+            `}>
+                        {/* Replace with actual Rick Image */}
+                        <div className="w-full h-full flex items-center justify-center bg-slate-900 text-6xl">
+                            {isVictory ? '😎' : '😵'}
+                        </div>
+                    </div>
+
+                    {/* Thumbs up decoration */}
+                    {isVictory && (
+                        <div className="absolute -bottom-2 -right-4 text-4xl rotate-12 filter drop-shadow-lg">👍</div>
+                    )}
+                </div>
+
+                {/* 4. CONTENT GRID (Stats & Rewards) */}
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+
+                    {/* LEFT PANEL: MATCH STATS */}
+                    <div className={`
+                bg-slate-900/80 border-4 rounded-xl p-4 flex flex-col shadow-lg
+                ${currentTheme.border}
+            `}>
+                        <h3 className={`text-center text-xl font-bold uppercase mb-4 border-b-2 border-slate-700 pb-2 ${currentTheme.accent}`}>
+                            Match Stats
+                        </h3>
+
+                        <div className="space-y-1 flex-1">
+                            <StatRow
+                                label={isVictory ? "Pills Survived" : "Pills Taken"}
+                                value="12"
+                                icon={<Pill size={16} />}
+                                color={isVictory ? "text-cyan-400" : "text-blue-400"}
+                            />
+                            <StatRow
+                                label={isVictory ? "Items Used" : "Items Wasted"}
+                                value="5"
+                                icon={<Package size={16} />}
+                                color={isVictory ? "text-yellow-400" : "text-orange-400"}
+                            />
+                            <StatRow
+                                label={isVictory ? "Turns Survived" : "Turns Lasted"}
+                                value="8"
+                                icon={<Hourglass size={16} />}
+                                color={isVictory ? "text-purple-400" : "text-slate-400"}
+                            />
+                        </div>
+
+                        {/* Skull icons at bottom of stats */}
+                        <div className="flex justify-center gap-2 mt-4 opacity-50">
+                            <Skull size={20} className={isVictory ? "text-slate-600" : "text-red-800"} />
+                            <Skull size={20} className={isVictory ? "text-slate-600" : "text-red-800"} />
+                            <Skull size={20} className={isVictory ? "text-slate-600" : "text-red-800"} />
+                        </div>
+                    </div>
+
+                    {/* RIGHT PANEL: REWARDS */}
+                    <div className={`
+                bg-slate-900/80 border-4 rounded-xl p-4 flex flex-col shadow-lg relative overflow-hidden
+                ${isVictory ? 'border-yellow-600' : 'border-slate-600'}
+            `}>
+                        {/* Header */}
+                        <h3 className={`text-center text-xl font-bold uppercase mb-2 border-b-2 border-slate-700 pb-2 ${isVictory ? 'text-yellow-400' : 'text-slate-400'}`}>
+                            Rewards
+                        </h3>
+
+                        <XpBar isVictory={isVictory} value={isVictory ? 1200 : 500} />
+
+                        <div className="flex-1 flex flex-col justify-end">
+                            <LootDisplay isVictory={isVictory} />
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* 5. FOOTER: ACTION BUTTONS */}
+                <div className="w-full flex flex-col items-center gap-4 mt-2">
+
+                    <div className="flex gap-4 w-full md:w-auto">
+                        {/* Primary Button (Play/Try Again) */}
+                        <button className={`
+                    flex-1 md:w-64 py-4 rounded-xl border-b-8 font-pixel text-xl font-bold uppercase tracking-wider
+                    shadow-lg active:border-b-0 active:translate-y-2 transition-all
+                    ${currentTheme.button}
+                `}>
+                            <div className="flex items-center justify-center gap-2">
+                                <RefreshCw size={24} strokeWidth={3} />
+                                {isVictory ? 'Play Again' : 'Try Again'}
+                            </div>
+                        </button>
+                    </div>
+
+                    {/* Secondary Link */}
+                    <button className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors font-pixel text-sm uppercase">
+                        <Home size={14} /> Return to Main Menu
+                    </button>
+
+                    {/* Report Link */}
+                    <div className="flex items-center gap-1 text-red-900/50 hover:text-red-500 cursor-pointer transition-colors text-xs font-bold uppercase mt-4">
+                        <AlertTriangle size={12} /> Report Player
+                    </div>
+
+                </div>
+
             </div>
-
-            <FooterButtons result={gameResult} />
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default ResultPage;
+export default ResultScreen;

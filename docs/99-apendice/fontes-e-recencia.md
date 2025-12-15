@@ -12,14 +12,14 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
+| 2025-12-14T21:14:30-03:00 | 2025-12-14T21:15:04 | Outro | repo | tasks/task-refac-estrutura-src-000/tasks.md |
 | 2025-12-14T20:18:34-03:00 | 2025-12-14T20:14:40 | Normativo | .cursor/rules | .cursor/rules/task-execute/RULE.md |
 | 2025-12-14T20:18:34-03:00 | 2025-12-14T20:14:32 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
-| 2025-12-14T20:15:18-03:00 | 2025-12-14T20:24:50 | Outro | repo | tasks/task-refac-estrutura-src-000/tasks.md |
 | 2025-12-14T20:15:18-03:00 | 2025-12-14T20:11:51 | Outro | repo | tasks/task-refac-estrutura-src-000/design.md |
 | 2025-12-14T20:15:18-03:00 | 2025-12-14T20:11:48 | Outro | repo | tasks/task-refac-estrutura-src-000/requirements.md |
 | 2025-12-14T19:29:17-03:00 | 2025-12-14T19:27:26 | Docs | docs | docs/README.md |
 | 2025-12-14T19:23:34-03:00 | 2025-12-14T19:23:09 | Normativo | .cursor/rules | .cursor/rules/docs-workflow/RULE.md |
-| 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/index.md |
+| 2025-12-14T19:23:25-03:00 | 2025-12-14T22:50:53 | Docs | docs | docs/index.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/00-start-here/index.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/06-frontend/state-management.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/99-apendice/fontes-e-decisoes.md |
@@ -68,4 +68,8 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/07-qualidade/testing.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/08-roadmap/backlog.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T16:58:54 | Docs | docs | docs/99-apendice/prompts-assets.md |
+| - | 2025-12-14T22:49:41 | Docs | docs | docs/02-gameplay/mecanicas_e_extras.md |
+| - | 2025-12-14T22:46:26 | Docs | docs | docs/04-arquitetura/detalhes.md |
+| - | 2025-12-14T22:39:05 | Docs | docs | docs/critica_tecnica.md |
+| - | 2025-12-14T20:29:15 | Outro | repo | CHAT-CONTEXT.md |
 | - | 2025-12-14T19:22:44 | Normativo | .cursor/rules | .cursor/rules/OBSERVATION-LOG.md |

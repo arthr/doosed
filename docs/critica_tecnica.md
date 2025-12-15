@@ -1,0 +1,5 @@
+A principal vulnerabilidade técnica reside na sincronização do 'Bottle State' (o array de pílulas). Se o cliente receber a lista completa de pílulas (mesmo que ocultas visualmente) para renderizar o frasco, um usuário mal-intencionado poderá inspecionar o JSON de rede e saber o resultado exato (Wallhack/Predetermination). 
+
+SOLUÇÃO OBRIGATÓRIA: O array de pílulas deve residir APENAS no servidor (Supabase Edge Function ou Tabela Privada). O cliente recebe apenas `count` e `hash` para validação, ou um array de objetos 'unknown'. A revelação do tipo da pílula só deve ser enviada via WebSocket (Broadcast) *após* a confirmação da ação 'CONSUME' no servidor. 
+
+Outro risco é a latência do 'Draft Timer' (00:15). Se gerido apenas no cliente, haverá dessincronia. O servidor deve carimbar o `draft_end_timestamp` no banco e o cliente apenas calcula o delta.
