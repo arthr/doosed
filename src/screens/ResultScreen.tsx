@@ -34,8 +34,10 @@ const MainTitlePlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
 // 3. Avatar Central (Rick)
 const AvatarPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
     const isVictory = result === 'victory';
-    const mood = isVictory ? '😎 HAPPY RICK' : '😵 DEAD RICK';
-    const halo = !isVictory && <div className="absolute -top-6 text-yellow-400 text-4xl">😇</div>;
+    const mood = isVictory ? 'HAPPY RICK' : 'DEAD RICK';
+    const halo = !isVictory && (
+        <div className="absolute -top-6 text-yellow-400 text-xs font-bold uppercase">HALO</div>
+    );
 
     return (
         <div className="relative flex justify-center mb-6">
@@ -67,21 +69,21 @@ const StatsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => 
             <div className="space-y-4 text-white text-lg font-mono">
                 <div className="flex justify-between">
                     <span>{labels.pills}</span>
-                    <span>💊</span>
+                    <span className="text-xs text-gray-400">PILLS</span>
                 </div>
                 <div className="flex justify-between">
                     <span>{labels.items}</span>
-                    <span>🎭</span>
+                    <span className="text-xs text-gray-400">ITEMS</span>
                 </div>
                 <div className="flex justify-between">
                     <span>{labels.turns}</span>
-                    <span>⏳</span>
+                    <span className="text-xs text-gray-400">TURNS</span>
                 </div>
             </div>
 
             {/* Ícones decorativos extras no rodapé do painel */}
             <div className="mt-4 flex justify-center gap-2 text-2xl">
-                {isVictory ? '👍' : '💀 💀 💀'}
+                {isVictory ? 'OK' : 'DEFEAT'}
             </div>
         </div>
     );
@@ -120,7 +122,7 @@ const RewardsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) =
             <div className="flex flex-col items-center justify-center flex-1 w-full border-t border-gray-700 pt-2">
                 <p className="text-xs text-gray-400 uppercase mb-1">Loot Drop</p>
                 <div className="w-16 h-16 bg-gray-800 border-2 border-dashed border-gray-500 flex items-center justify-center text-3xl mb-2">
-                    {isVictory ? '🎁' : '🚫'}
+                    {isVictory ? 'LOOT' : 'NONE'}
                 </div>
                 <p className="text-blue-300 font-bold text-sm text-center">{lootText}</p>
                 {lootSubtext && <p className="text-yellow-400 text-[10px] font-bold uppercase">{lootSubtext}</p>}
@@ -138,10 +140,10 @@ const FooterButtons = ({ result }: { result: 'victory' | 'defeat' }) => {
     return (
         <div className="flex justify-center gap-4 mt-8 w-full max-w-md">
             <button className={`flex-1 py-3 px-6 rounded-lg border-b-4 text-white font-bold text-lg uppercase shadow-lg transform active:translate-y-1 ${btnColor}`}>
-                🔄 {btnText}
+                {btnText}
             </button>
             <button className="flex-1 py-3 px-6 bg-gray-600 border-b-4 border-gray-400 hover:bg-gray-500 rounded-lg text-white font-bold text-lg uppercase shadow-lg transform active:translate-y-1">
-                🏠 Main Menu
+                Main Menu
             </button>
         </div>
     )

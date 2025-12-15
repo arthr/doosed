@@ -31,7 +31,7 @@
 - [x] 4.3 Ajustar `App.tsx` para iniciar em `HomeScreen` e manter ferramentas no `DevScreen`
   - DoD: `HomeScreen` é a tela base do app; debug de fases e preview de screens ficam centralizados no `DevScreen`.
 
-- [ ] 5.1 Remover emojis do código em `src/`
+- [x] 5.1 Remover emojis do código em `src/`
   - DoD: nenhuma ocorrência de emoji em `src/`.
 
 ## Verificações
