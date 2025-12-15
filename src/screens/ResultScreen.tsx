@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RefreshCw, Home, AlertTriangle, Pill, Package, Hourglass, Trophy, Skull } from 'lucide-react';
+import { RefreshCw, Home, AlertTriangle, Pill, Package, Hourglass, Trophy, Skull, ThumbsUp } from 'lucide-react';
 
 // --- TYPES ---
 type GameResult = 'VICTORY' | 'DEFEAT';
@@ -43,8 +43,12 @@ const XpBar = ({ isVictory, value }: { isVictory: boolean; value: number }) => (
 const LootDisplay = ({ isVictory }: { isVictory: boolean }) => (
     <div className="flex flex-col items-center justify-center mt-4 p-2 rounded-lg bg-black/20 w-full">
         {/* Placeholder for Chest Image */}
-        <div className={`w-16 h-16 mb-2 flex items-center justify-center text-4xl animate-bounce`}>
-            {isVictory ? '🎁' : '🪦'}
+        <div className="w-16 h-16 mb-2 flex items-center justify-center animate-bounce">
+            {isVictory ? (
+                <Package size={44} className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.35)]" />
+            ) : (
+                <Skull size={44} className="text-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.35)]" />
+            )}
         </div>
 
         <div className="text-center">
@@ -95,25 +99,27 @@ const ResultScreen = () => {
     const currentTheme = isVictory ? theme.victory : theme.defeat;
 
     return (
-        <div className={`min-h-screen w-full flex items-center justify-center p-4 font-pixel overflow-hidden relative ${currentTheme.bg}`}>
+        <div className={`min-h-screen w-full overflow-hidden relative ${currentTheme.bg}`}>
+            {/* Screen: Content */}
+            <div className="mx-auto flex min-h-screen w-full max-w-7xl items-center justify-center p-4 font-pixel">
 
-            {/* DEVELOPMENT TOGGLE (Remove in production) */}
-            <button
-                onClick={() => setResult(prev => prev === 'VICTORY' ? 'DEFEAT' : 'VICTORY')}
-                className="fixed top-4 right-4 z-50 bg-slate-800 text-white px-4 py-2 rounded font-pixel border-2 border-slate-600"
-            >
-                SWITCH STATE
-            </button>
+                {/* DEVELOPMENT TOGGLE (Remove in production) */}
+                <button
+                    onClick={() => setResult(prev => prev === 'VICTORY' ? 'DEFEAT' : 'VICTORY')}
+                    className="fixed top-4 right-4 z-50 bg-slate-800 text-white px-4 py-2 rounded font-pixel border-2 border-slate-600"
+                >
+                    SWITCH STATE
+                </button>
 
-            {/* BACKGROUND FX */}
-            <div className={`absolute inset-0 z-0 pointer-events-none ${currentTheme.spotlight}`} />
-            {/* Victory Confetti (CSS dots) */}
-            {isVictory && (
-                <div className="absolute inset-0 z-0 opacity-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-            )}
+                {/* BACKGROUND FX */}
+                <div className={`absolute inset-0 z-0 pointer-events-none ${currentTheme.spotlight}`} />
+                {/* Victory Confetti (CSS dots) */}
+                {isVictory && (
+                    <div className="absolute inset-0 z-0 opacity-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+                )}
 
-            {/* MAIN CARD CONTAINER */}
-            <div className="relative z-10 w-full max-w-lg md:max-w-4xl flex flex-col items-center gap-6">
+                {/* MAIN CARD CONTAINER */}
+                <div className="relative z-10 w-full max-w-lg md:max-w-4xl flex flex-col items-center gap-6">
 
                 {/* 1. TOP STATUS BADGE */}
                 <div className={`
@@ -154,15 +160,19 @@ const ResultScreen = () => {
                 w-40 h-40 md:w-48 md:h-48 rounded-full border-4 bg-slate-800 overflow-hidden relative
                 ${currentTheme.border} shadow-[0_0_30px_rgba(0,0,0,0.5)]
             `}>
-                        {/* Replace with actual Rick Image */}
-                        <div className="w-full h-full flex items-center justify-center bg-slate-900 text-6xl">
-                            {isVictory ? '😎' : '😵'}
-                        </div>
+                        <img
+                            src={isVictory ? '/images/avatar/rick_winner.png' : '/images/avatar/rick_looser.png'}
+                            alt={isVictory ? 'Rick Winner' : 'Rick Looser'}
+                            className="w-full h-full object-cover png-outline"
+                            draggable={false}
+                        />
                     </div>
 
                     {/* Thumbs up decoration */}
                     {isVictory && (
-                        <div className="absolute -bottom-2 -right-4 text-4xl rotate-12 filter drop-shadow-lg">👍</div>
+                        <div className="absolute -bottom-2 -right-4 rotate-12 drop-shadow-lg">
+                            <ThumbsUp size={40} className="text-yellow-400" />
+                        </div>
                     )}
                 </div>
 
@@ -255,6 +265,7 @@ const ResultScreen = () => {
 
                 </div>
 
+                </div>
             </div>
         </div>
     );
