@@ -15,14 +15,14 @@ export function ActionPanel() {
       <div className="flex flex-col gap-2">
         <button
           type="button"
-          className="bg-primary hover:bg-game-accent-hover text-primary-foreground font-bold py-3 rounded border-2 border-primary text-xl flex items-center justify-center gap-2"
+          className="bg-rick-green hover:bg-rick-green/80 text-space-black font-bold py-3 rounded border-2 border-rick-green text-xl flex items-center justify-center gap-2"
         >
           <ShoppingCart className="h-5 w-5" />
           SHOP
         </button>
         <button
           type="button"
-          className="bg-accent hover:bg-evil-purple text-accent-foreground font-bold py-3 rounded border-2 border-accent text-xl flex items-center justify-center gap-2"
+          className="bg-evil-purple hover:bg-evil-purple/80 text-foreground font-bold py-3 rounded border-2 border-evil-purple text-xl flex items-center justify-center gap-2"
         >
           <MessageSquare className="h-5 w-5" />
           CHAT

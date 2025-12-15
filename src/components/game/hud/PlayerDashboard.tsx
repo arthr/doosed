@@ -10,9 +10,9 @@ function InventoryIcon({ kind }: { kind: 'search' | 'link' | 'sword' | 'shield' 
 
 export function PlayerDashboard() {
   return (
-    <div className="flex-1 flex p-4 bg-ui-panel border-4 border-primary rounded-xl mr-4 min-w-[50%]">
+    <div className="flex-1 flex p-4 bg-ui-panel border-4 border-rick-green rounded-xl mr-4 min-w-[50%]">
       {/* Avatar Grande */}
-      <div className="w-24 h-32 bg-card border-2 border-rick-green flex items-center justify-center text-foreground mr-4">
+      <div className="w-24 h-32 bg-neutral-800 border-2 border-rick-green flex items-center justify-center text-foreground mr-4">
         [YOUR AVATAR]
       </div>
 
@@ -35,20 +35,20 @@ export function PlayerDashboard() {
           </div>
         </div>
 
-        {/* Grid de Inventário */}
+        {/* Grid de Inventario */}
         <div className="mt-2">
           <span className="block text-xs text-muted-foreground mb-1">INVENTORY GRID</span>
           <div className="grid grid-cols-5 gap-1 w-full max-w-xs">
-            <div className="w-8 h-8 bg-card border border-border flex items-center justify-center">
+            <div className="w-8 h-8 bg-neutral-800 border border-border flex items-center justify-center">
               <InventoryIcon kind="search" />
             </div>
-            <div className="w-8 h-8 bg-card border border-border flex items-center justify-center">
+            <div className="w-8 h-8 bg-neutral-800 border border-border flex items-center justify-center">
               <InventoryIcon kind="link" />
             </div>
-            <div className="w-8 h-8 bg-card border border-border flex items-center justify-center">
+            <div className="w-8 h-8 bg-neutral-800 border border-border flex items-center justify-center">
               <InventoryIcon kind="sword" />
             </div>
-            <div className="w-8 h-8 bg-card border border-border flex items-center justify-center">
+            <div className="w-8 h-8 bg-neutral-800 border border-border flex items-center justify-center">
               <InventoryIcon kind="shield" />
             </div>
             {[1, 2, 3, 4, 5, 6].map(i => (

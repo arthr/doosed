@@ -15,7 +15,7 @@ export function RoomHeader({ roomCode, status }: RoomHeaderProps) {
           ROOM CODE:
           <span
             className={cn(
-              'rounded border border-neutral-700 bg-black px-3 py-1 text-white',
+              'rounded border border-border bg-space-black px-3 py-1 text-foreground',
               'shadow-pixel',
             )}
           >

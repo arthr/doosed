@@ -13,7 +13,7 @@ export function ActionControls({ isReady, onToggleReady }: ActionControlsProps) 
       <LobbyButton
         onClick={onToggleReady}
         variant={isReady ? 'neutral' : 'primary'}
-        className={cn('flex flex-1 flex-col p-2 md:p-4', isReady && 'text-neutral-300')}
+        className={cn('flex flex-1 flex-col p-2 md:p-4', isReady && 'text-muted-foreground')}
       >
         <ThumbsUp className="mb-2 h-8 w-8 fill-current md:h-10 md:w-10" />
         {isReady ? 'NOT READY' : 'READY UP'}

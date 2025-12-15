@@ -98,18 +98,18 @@ export function ActionDock({
                 disabled={!!loadout.disabled}
                 aria-pressed={!!loadout.pressed}
                 className={cn(
-                  'font-pixel flex items-center justify-center gap-2 border-b-4 border-neutral-900 bg-neutral-700 py-2 text-xs font-light! text-white',
-                  hasTimeLeft && 'hover:bg-green-600 active:translate-y-0.5 active:border-b-2',
+                  'font-pixel flex items-center justify-center gap-2 border-b-4 border-border bg-neutral-700 py-2 text-xs font-light! text-foreground',
+                  hasTimeLeft && 'hover:bg-rick-green hover:text-space-black active:translate-y-0.5 active:border-b-2',
                   loadout.disabled && 'cursor-not-allowed opacity-50',
                   pressed &&
                     hasTimeLeft &&
-                    'border-red-900! bg-red-700! hover:border-red-900! hover:bg-red-600!',
+                    'border-destructive! bg-destructive! hover:border-destructive! hover:bg-destructive/80!',
                 )}
               >
                 {typeof label === 'string' ? (
-                  <span className="font-normal text-white">{label}</span>
+                  <span className="font-normal">{label}</span>
                 ) : (
-                  <span className="flex flex-col text-center leading-tight font-normal text-white">
+                  <span className="flex flex-col text-center leading-tight font-normal">
                     <span>{label.line1}</span>
                     {label.line2 ? <span>{label.line2}</span> : null}
                   </span>
@@ -124,7 +124,7 @@ export function ActionDock({
           onClick={shop.onClick}
           disabled={!!shop.disabled}
           className={cn(
-            'font-pixel flex items-center justify-center gap-2 border-b-4 border-green-900 bg-green-700 text-xs text-white hover:bg-green-600 active:translate-y-0.5 active:border-b-2',
+            'font-pixel flex items-center justify-center gap-2 border-b-4 border-rick-green/70 bg-rick-green text-xs text-space-black hover:bg-rick-green/80 active:translate-y-0.5 active:border-b-2',
             shop.disabled && 'cursor-not-allowed opacity-50',
           )}
         >
@@ -140,7 +140,7 @@ export function ActionDock({
           aria-label="Abrir chat"
           disabled={!!chat.disabled}
           className={cn(
-            'font-pixel flex items-center justify-center gap-2 border-b-4 border-purple-900 bg-purple-700 text-xs text-white hover:bg-purple-600 active:translate-y-0.5 active:border-b-2',
+            'font-pixel flex items-center justify-center gap-2 border-b-4 border-evil-purple/70 bg-evil-purple text-xs text-foreground hover:bg-evil-purple/80 active:translate-y-0.5 active:border-b-2',
             chat.disabled && 'cursor-not-allowed opacity-50',
           )}
         >

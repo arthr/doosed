@@ -6,7 +6,7 @@ import { useState } from 'react';
 const HeaderPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
   const isVictory = result === 'victory';
   const text = isVictory ? 'VICTORY' : 'DEAD';
-  const borderColor = isVictory ? 'border-primary' : 'border-destructive';
+  const borderColor = isVictory ? 'border-rick-green' : 'border-destructive';
   const textColor = isVictory ? 'text-rick-green' : 'text-destructive';
 
   return (
@@ -40,7 +40,7 @@ const AvatarPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
   return (
     <div className="relative flex justify-center mb-6">
       {halo}
-      <div className="w-40 h-40 bg-card border-4 border-border rounded-full flex items-center justify-center text-center p-2">
+      <div className="w-40 h-40 bg-neutral-800 border-4 border-border rounded-full flex items-center justify-center text-center p-2">
         <span className="text-foreground font-bold">{mood}</span>
       </div>
     </div>
@@ -50,7 +50,7 @@ const AvatarPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
 // 4. Painel de Estatisticas (Esquerda)
 const StatsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
   const isVictory = result === 'victory';
-  const borderColor = isVictory ? 'border-primary' : 'border-destructive';
+  const borderColor = isVictory ? 'border-rick-green' : 'border-destructive';
   const titleColor = isVictory ? 'text-rick-green' : 'text-destructive';
 
   // Labels mudam levemente dependendo do contexto
@@ -90,7 +90,7 @@ const StatsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => 
 // 5. Painel de Recompensas (Direita)
 const RewardsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) => {
   const isVictory = result === 'victory';
-  const borderColor = isVictory ? 'border-primary' : 'border-border';
+  const borderColor = isVictory ? 'border-rick-green' : 'border-border';
   const titleColor = isVictory ? 'text-rick-green' : 'text-muted-foreground';
 
   const xpText = isVictory ? '+1200' : '-500';
@@ -110,7 +110,7 @@ const RewardsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) =
         <p className={`text-2xl font-black ${xpColor}`}>{xpText}</p>
 
         {/* Progress Bar Placeholder */}
-        <div className="w-full h-4 bg-muted rounded-full mt-1 border border-border overflow-hidden relative">
+        <div className="w-full h-4 bg-neutral-700 rounded-full mt-1 border border-border overflow-hidden relative">
           <div
             className={`h-full ${isVictory ? 'bg-morty-yellow' : 'bg-destructive'}`}
             style={{ width: isVictory ? '70%' : '30%' }}
@@ -121,7 +121,7 @@ const RewardsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) =
       {/* Loot Section */}
       <div className="flex flex-col items-center justify-center flex-1 w-full border-t border-border pt-2">
         <p className="text-xs text-muted-foreground uppercase mb-1">Loot Drop</p>
-        <div className="w-16 h-16 bg-card border-2 border-dashed border-border flex items-center justify-center text-3xl mb-2">
+        <div className="w-16 h-16 bg-neutral-800 border-2 border-dashed border-border flex items-center justify-center text-3xl mb-2">
           {isVictory ? 'LOOT' : 'NONE'}
         </div>
         <p className="text-portal-blue font-bold text-sm text-center">{lootText}</p>
@@ -135,18 +135,18 @@ const RewardsPanelPlaceholder = ({ result }: { result: 'victory' | 'defeat' }) =
 const FooterButtons = ({ result }: { result: 'victory' | 'defeat' }) => {
   const isVictory = result === 'victory';
   const btnColor = isVictory
-    ? 'bg-primary border-primary hover:bg-game-accent-hover'
-    : 'bg-destructive border-destructive hover:opacity-90';
+    ? 'bg-rick-green border-rick-green hover:bg-rick-green/80 text-space-black'
+    : 'bg-destructive border-destructive hover:bg-destructive/80 text-foreground';
   const btnText = isVictory ? 'PLAY AGAIN' : 'TRY AGAIN';
 
   return (
     <div className="flex justify-center gap-4 mt-8 w-full max-w-md">
       <button
-        className={`flex-1 py-3 px-6 rounded-lg border-b-4 text-foreground font-bold text-lg uppercase shadow-lg transform active:translate-y-1 ${btnColor}`}
+        className={`flex-1 py-3 px-6 rounded-lg border-b-4 font-bold text-lg uppercase shadow-lg transform active:translate-y-1 ${btnColor}`}
       >
         {btnText}
       </button>
-      <button className="flex-1 py-3 px-6 bg-muted border-b-4 border-border hover:opacity-90 rounded-lg text-foreground font-bold text-lg uppercase shadow-lg transform active:translate-y-1">
+      <button className="flex-1 py-3 px-6 bg-neutral-600 border-b-4 border-neutral-400 hover:bg-neutral-500 rounded-lg text-foreground font-bold text-lg uppercase shadow-lg transform active:translate-y-1">
         Main Menu
       </button>
     </div>
@@ -162,7 +162,7 @@ const ResultPage = () => {
   // Define o background baseado no resultado (Placeholder de cor)
   const bgClass =
     gameResult === 'victory'
-      ? 'bg-gradient-to-b from-space-black to-primary/30'
+      ? 'bg-gradient-to-b from-space-black to-rick-green/30'
       : 'bg-gradient-to-b from-space-black to-destructive/30';
 
   return (
@@ -171,7 +171,7 @@ const ResultPage = () => {
       <div className="fixed top-4 right-4 z-50">
         <button
           onClick={() => setGameResult(prev => (prev === 'victory' ? 'defeat' : 'victory'))}
-          className="bg-foreground text-background text-xs font-bold py-2 px-4 rounded shadow hover:opacity-90"
+          className="bg-foreground text-space-black text-xs font-bold py-2 px-4 rounded shadow hover:opacity-90"
         >
           TOGGLE STATE (Current: {gameResult.toUpperCase()})
         </button>
@@ -180,7 +180,7 @@ const ResultPage = () => {
 
       <div className="w-full max-w-4xl relative">
         {/* Moldura Decorativa (Placeholder da borda grossa cinza) */}
-        <div className="bg-card border-8 border-border rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+        <div className="bg-neutral-800 border-8 border-border rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
           {/* Background interno (Swirl placeholder) */}
           <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://placehold.co/100x100?text=Swirl')] bg-repeat"></div>
 

@@ -14,7 +14,7 @@ function OpponentCard({ name, active }: OpponentCardProps) {
         active ? 'border-morty-yellow' : 'border-evil-purple',
       )}
     >
-      <div className="w-10 h-10 mb-1 bg-muted rounded-full flex items-center justify-center text-xs text-foreground">
+      <div className="w-10 h-10 mb-1 bg-neutral-700 rounded-full flex items-center justify-center text-xs text-foreground">
         [AVATAR]
       </div>
       <span className="text-xs font-bold text-foreground truncate w-full text-center">{name}</span>

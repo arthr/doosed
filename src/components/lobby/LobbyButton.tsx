@@ -7,9 +7,9 @@ const lobbyButtonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'border-green-700 bg-green-500 text-black hover:bg-green-400',
-        secondary: 'border-sky-700 bg-sky-500 text-black hover:bg-sky-400',
-        neutral: 'border-neutral-800 bg-neutral-700 text-white hover:bg-neutral-600',
+        primary: 'border-rick-green/70 bg-rick-green text-space-black hover:bg-rick-green/80',
+        secondary: 'border-portal-blue/70 bg-portal-blue text-space-black hover:bg-portal-blue/80',
+        neutral: 'border-border bg-neutral-700 text-foreground hover:bg-neutral-600',
       },
       state: {
         default: '',

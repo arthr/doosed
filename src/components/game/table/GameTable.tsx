@@ -1,8 +1,8 @@
 export function GameTable() {
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 mb-4 bg-card border-4 border-border rounded-xl relative">
+    <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 mb-4 bg-neutral-800 border-4 border-border rounded-xl relative">
       {/* Header da Mesa */}
-      <div className="absolute -top-5 bg-ui-panel px-4 py-1 border-2 border-primary text-rick-green font-bold rounded">
+      <div className="absolute -top-5 bg-ui-panel px-4 py-1 border-2 border-rick-green text-rick-green font-bold rounded">
         THE TABLE
       </div>
 
@@ -29,7 +29,7 @@ export function GameTable() {
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div
               key={i}
-              className="w-10 h-10 bg-card rounded flex items-center justify-center text-muted-foreground text-xs"
+              className="w-10 h-10 bg-neutral-800 rounded flex items-center justify-center text-muted-foreground text-xs"
             >
               ?
             </div>
@@ -41,7 +41,7 @@ export function GameTable() {
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div
               key={i}
-              className="w-10 h-10 bg-card rounded flex items-center justify-center text-muted-foreground text-xs"
+              className="w-10 h-10 bg-neutral-800 rounded flex items-center justify-center text-muted-foreground text-xs"
             >
               ?
             </div>

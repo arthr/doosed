@@ -19,7 +19,7 @@ export function GameLogPanel({ logs, className = '' }: GameLogPanelProps) {
       aria-label="Log do jogo"
       aria-live="polite"
       className={cn(
-        `border-evil-purple shadow-pixel relative flex overflow-y-auto border-2 bg-black p-2 font-mono text-xs ${className}`,
+        `border-evil-purple shadow-pixel relative flex overflow-y-auto border-2 bg-space-black p-2 font-mono text-xs ${className}`,
       )}
     >
       <div
@@ -32,7 +32,7 @@ export function GameLogPanel({ logs, className = '' }: GameLogPanelProps) {
           <div
             key={i}
             role="listitem"
-            className={cn(log.startsWith('>') ? 'text-rick-green' : 'text-gray-400')}
+            className={cn(log.startsWith('>') ? 'text-rick-green' : 'text-muted-foreground')}
           >
             {log}
           </div>

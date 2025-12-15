@@ -9,7 +9,7 @@ const TitlePlaceholder = () => (
 
 // Placeholder generico para um botao
 const ButtonPlaceholder = ({ text, subtext }: { text: string; subtext: string }) => (
-  <div className="w-full p-4 mb-4 text-center text-foreground bg-card border-4 border-border rounded-lg cursor-pointer hover:bg-ui-panel">
+  <div className="w-full p-4 mb-4 text-center text-foreground bg-neutral-800 border-4 border-border rounded-lg cursor-pointer hover:bg-neutral-700">
     {/* Substituir pelo conteudo do botao */}
     <span className="block text-2xl font-bold">{text}</span>
     <span className="block text-sm">{subtext}</span>
@@ -18,7 +18,7 @@ const ButtonPlaceholder = ({ text, subtext }: { text: string; subtext: string })
 
 // Placeholder para o desafio diario
 const DailyChallengePlaceholder = () => (
-  <div className="p-4 text-center text-foreground bg-card border-4 border-border rounded-lg">
+  <div className="p-4 text-center text-foreground bg-neutral-800 border-4 border-border rounded-lg">
     {/* Substituir pelo conteudo do desafio diario */}
     <h2 className="text-xl font-bold">[DAILY CHALLENGE PLACEHOLDER]</h2>
     <p className="mt-2">[REWARD PLACEHOLDER]</p>
@@ -27,7 +27,7 @@ const DailyChallengePlaceholder = () => (
 
 // Placeholder para as informacoes do jogador
 const PlayerInfoPlaceholder = () => (
-  <div className="p-4 text-center text-foreground bg-card border-4 border-border rounded-lg">
+  <div className="p-4 text-center text-foreground bg-neutral-800 border-4 border-border rounded-lg">
     {/* Substituir pelo conteudo das informacoes do jogador */}
     <h2 className="text-xl font-bold">[PLAYER NAME PLACEHOLDER]</h2>
     <p className="mt-2">[LEVEL & CURRENCY PLACEHOLDER]</p>
