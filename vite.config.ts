@@ -4,6 +4,9 @@ import tailwind from '@tailwindcss/vite';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
+  server: {
+    allowedHosts: [],
+  },
   plugins: [react(), tailwind()],
   resolve: {
     alias: {

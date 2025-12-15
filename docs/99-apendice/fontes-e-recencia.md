@@ -12,6 +12,12 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
+| 2025-12-15T04:23:57-03:00 | 2025-12-15T04:21:48 | Outro | repo | AGENTS.md |
+| 2025-12-15T04:23:57-03:00 | 2025-12-15T04:19:01 | Normativo | .cursor/rules | .cursor/rules/docs-workflow/RULE.md |
+| 2025-12-15T04:23:57-03:00 | 2025-12-15T04:18:04 | Normativo | .cursor/rules | .cursor/rules/task-execute/RULE.md |
+| 2025-12-15T04:23:57-03:00 | 2025-12-15T04:02:48 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
+| 2025-12-15T04:23:57-03:00 | 2025-12-15T00:25:41 | Normativo | .cursor/rules | .cursor/rules/observation-log/RULE.md |
+| 2025-12-15T04:23:57-03:00 | 2025-12-15T00:23:20 | Normativo | .cursor/rules | .cursor/rules/code-style/RULE.md |
 | 2025-12-15T02:23:15-03:00 | 2025-12-15T02:23:48 | Docs | docs | docs/01-produto/visao-e-pilares.md |
 | 2025-12-15T02:23:15-03:00 | 2025-12-15T02:23:48 | Docs | docs | docs/02-gameplay/core-loop.md |
 | 2025-12-15T02:23:15-03:00 | 2025-12-15T02:23:48 | Docs | docs | docs/02-gameplay/itens-e-loja.md |
@@ -36,12 +42,9 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T23:04:32-03:00 | 2025-12-14T22:50:53 | Docs | docs | docs/index.md |
 | 2025-12-14T23:04:32-03:00 | 2025-12-14T22:39:05 | Docs | docs | docs/critica_tecnica.md |
 | 2025-12-14T21:14:30-03:00 | 2025-12-14T21:15:04 | Requisito | tasks | tasks/task-refac-estrutura-src-000/tasks.md |
-| 2025-12-14T20:18:34-03:00 | 2025-12-15T04:18:04 | Normativo | .cursor/rules | .cursor/rules/task-execute/RULE.md |
-| 2025-12-14T20:18:34-03:00 | 2025-12-15T04:02:48 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
 | 2025-12-14T20:15:18-03:00 | 2025-12-14T20:11:51 | Requisito | tasks | tasks/task-refac-estrutura-src-000/design.md |
 | 2025-12-14T20:15:18-03:00 | 2025-12-14T20:11:48 | Requisito | tasks | tasks/task-refac-estrutura-src-000/requirements.md |
 | 2025-12-14T19:29:17-03:00 | 2025-12-14T19:27:26 | Docs | docs | docs/README.md |
-| 2025-12-14T19:23:34-03:00 | 2025-12-15T04:19:01 | Normativo | .cursor/rules | .cursor/rules/docs-workflow/RULE.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/00-start-here/index.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/06-frontend/state-management.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/99-apendice/fontes-e-decisoes.md |
@@ -53,7 +56,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | steering | steering/game-balance.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | steering | steering/game-flow.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | steering | steering/tech.md |
-| 2025-12-14T19:04:53-03:00 | 2025-12-15T04:21:48 | Outro | repo | AGENTS.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T19:05:54 | Legado | docs | docs/legacy/NOTES.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T19:05:54 | Normativo | steering | steering/product.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T18:34:30 | Docs | docs | docs/05-backend-supabase/edge-functions.md |
@@ -100,5 +102,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:04:53-03:00 | 2025-12-13T20:33:29 | Legado | docs | docs/legacy/screens/draft.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-13T13:55:23 | Legado | PROMPT-* | docs/legacy/prompts/PROMPT-UI-MOBILE.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-13T13:55:23 | Legado | PROMPT-* | docs/legacy/prompts/PROMPT-UI.md |
-| - | 2025-12-15T00:25:41 | Normativo | .cursor/rules | .cursor/rules/observation-log/RULE.md |
-| - | 2025-12-15T00:23:20 | Normativo | .cursor/rules | .cursor/rules/code-style/RULE.md |
+| - | 2025-12-15T04:38:17 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
+| - | 2025-12-15T04:38:06 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/design.md |
+| - | 2025-12-15T04:37:52 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/requirements.md |
