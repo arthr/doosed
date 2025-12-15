@@ -5,6 +5,7 @@ import { LobbyPanel } from '@/components/lobby/LobbyPanel';
 import { PlayerGrid } from '@/components/lobby/PlayerGrid';
 import { ActionControls } from '@/components/lobby/ActionControls';
 import { Chat } from '@/components/chat/Chat';
+import { Header } from '@/components/draft/Header';
 
 // --- Mock Data ---
 function createMockPlayers(): (Player | null)[] {
@@ -25,11 +26,12 @@ export const LobbyScreen = () => {
   const players = useMemo(() => createMockPlayers(), []);
 
   return (
-    <div className="bg-void-black text-text-primary font-pixel min-h-screen w-full">
-      {/* Screen: Content */}
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-3 p-2 md:gap-4 md:p-6 lg:p-8">
+    <div className="mx-auto flex h-screen max-w-7xl flex-col">
         {/* Section: Header */}
-        <RoomHeader roomCode="X-7-Z" status="WAITING FOR SUBJECTS..." />
+        {/* TODO: Header precisa ser flexivel para todas as screens da aplicação */}
+        {/* Header do Lobby precisa de roomCode e Status de sala */}
+        <Header balance={1000} time={30} />
+        {/* <RoomHeader roomCode="X-7-Z" status="WAITING FOR SUBJECTS..." /> */}
 
         {/* Section: Main */}
         <main className="flex-1 min-h-0">
@@ -50,7 +52,6 @@ export const LobbyScreen = () => {
           </LobbyPanel>
         </footer>
       </div>
-    </div>
   );
 };
 

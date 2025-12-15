@@ -98,8 +98,8 @@ export function ActionDock({
                 disabled={!!loadout.disabled}
                 aria-pressed={!!loadout.pressed}
                 className={cn(
-                  'font-pixel flex items-center justify-center gap-2 border-b-4 border-border-muted bg-neutral-700 py-2 text-xs font-light! text-text-primary',
-                  hasTimeLeft && 'hover:bg-neon-green hover:text-space-black active:translate-y-0.5 active:border-b-2',
+                  'font-pixel flex items-center justify-center gap-2 border-b-4 border-border bg-neutral-700 py-2 text-xs text-foreground',
+                  hasTimeLeft && 'hover:bg-rick-green hover:text-white active:translate-y-0.5 active:border-b-2',
                   loadout.disabled && 'cursor-not-allowed opacity-50',
                   pressed &&
                     hasTimeLeft &&
@@ -124,7 +124,7 @@ export function ActionDock({
           onClick={shop.onClick}
           disabled={!!shop.disabled}
           className={cn(
-            'font-pixel flex items-center justify-center gap-2 border-b-4 border-neon-green/70 bg-neon-green text-xs text-space-black hover:bg-neon-green/80 active:translate-y-0.5 active:border-b-2',
+            'font-pixel flex items-center justify-center gap-2 border-b-4 border-evil-purple bg-evil-purple text-xs hover:text-white text-foreground hover:bg-evil-purple/80 active:translate-y-0.5 active:border-b-2',
             shop.disabled && 'cursor-not-allowed opacity-50',
           )}
         >
@@ -140,7 +140,7 @@ export function ActionDock({
           aria-label="Abrir chat"
           disabled={!!chat.disabled}
           className={cn(
-            'font-pixel flex items-center justify-center gap-2 border-b-4 border-neon-purple/70 bg-neon-purple text-xs text-text-primary hover:bg-neon-purple/80 active:translate-y-0.5 active:border-b-2',
+            'font-pixel flex items-center justify-center gap-2 border-b-4 border-evil-purple/70 bg-evil-purple text-xs text-accent hover:bg-evil-purple/80 active:translate-y-0.5 active:border-b-2',
             chat.disabled && 'cursor-not-allowed opacity-50',
           )}
         >

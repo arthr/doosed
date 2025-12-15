@@ -1,5 +1,5 @@
 /* Importando fonte pixel */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');;
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -16,7 +16,7 @@
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --font-sans: 'Press Start 2P', monospace;
+  --font-sans: 'VT323', monospace;
   --font-mono: 'Press Start 2P', monospace;
 
   /* shadcn/ui compatibility */
@@ -173,81 +173,113 @@
 }
 
 /* ===================================
-   Root Variables
+   Root Variables - Rick & Morty Palette
    =================================== */
 
 :root {
   /* 8-BIT RULE: ZERO RADIUS */
   --radius: 0rem;
 
-  /* Light mode base (raramente usado) */
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #171717;
-  --card-foreground: #ffffff;
-  --popover: #171717;
-  --popover-foreground: #ffffff;
-  --primary: #22c55e;
-  --primary-foreground: #000000;
-  --secondary: #a855f7;
-  --secondary-foreground: #ffffff;
-  --muted: #1e293b;
-  --muted-foreground: #64748b;
-  --accent: #06b6d4;
-  --accent-foreground: #000000;
-  --destructive: #dc2626;
-  --border: #475569;
-  --input: #1e293b;
-  --ring: #22c55e;
-  --chart-1: #22c55e;
-  --chart-2: #a855f7;
-  --chart-3: #06b6d4;
-  --chart-4: #facc15;
-  --chart-5: #ef4444;
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #22c55e;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #475569;
-  --sidebar-ring: #22c55e;
+ /* LIGHT MODE: "The Garage" (Concreto e Metais) */
+ --background: oklch(0.96 0.01 200);
+ --foreground: oklch(0.2 0.03 260);
+
+ --card: oklch(1 0 0);
+ --card-foreground: oklch(0.2 0.03 260);
+
+ --popover: oklch(1 0 0);
+ --popover-foreground: oklch(0.2 0.03 260);
+
+ /* Primary: Portal Green Escuro (para contraste no light mode) */
+ --primary: oklch(0.6 0.2 145);
+ --primary-foreground: oklch(0.98 0 0);
+
+ /* Secondary: Morty Yellow */
+ --secondary: oklch(0.88 0.16 95);
+ --secondary-foreground: oklch(0.2 0.03 260);
+
+ --muted: oklch(0.9 0.02 200);
+ --muted-foreground: oklch(0.45 0.05 260);
+
+ /* Accent: Rick Hair Blue */
+ --accent: oklch(0.8 0.12 230);
+ --accent-foreground: oklch(0.2 0.03 260);
+
+ --destructive: oklch(0.6 0.23 25);
+
+ --border: oklch(0.2 0.03 260 / 20%);
+ --input: oklch(0.2 0.03 260 / 20%);
+ --ring: oklch(0.6 0.2 145);
+
+ /* Charts mapping: Portal, Morty, Rick, Summer, Jerry */
+ --chart-1: oklch(0.62 0.22 145);
+ --chart-2: oklch(0.88 0.16 95);
+ --chart-3: oklch(0.7 0.15 230);
+ --chart-4: oklch(0.65 0.2 330);
+ --chart-5: oklch(0.55 0.1 40);
+
+ /* Sidebar Light */
+ --sidebar: oklch(0.94 0.02 200);
+ --sidebar-foreground: oklch(0.2 0.03 260);
+ --sidebar-primary: oklch(0.6 0.2 145);
+ --sidebar-primary-foreground: oklch(0.98 0 0);
+ --sidebar-accent: oklch(0.88 0.16 95);
+ --sidebar-accent-foreground: oklch(0.2 0.03 260);
+ --sidebar-border: oklch(0.2 0.03 260 / 10%);
+ --sidebar-ring: oklch(0.6 0.2 145);
 }
 
 .dark {
-  /* Dark mode = default para o jogo */
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #171717;
-  --card-foreground: #ffffff;
-  --popover: #171717;
-  --popover-foreground: #ffffff;
-  --primary: #22c55e;
-  --primary-foreground: #000000;
-  --secondary: #a855f7;
-  --secondary-foreground: #ffffff;
-  --muted: #1e293b;
-  --muted-foreground: #64748b;
-  --accent: #06b6d4;
-  --accent-foreground: #000000;
-  --destructive: #dc2626;
-  --border: #475569;
-  --input: #1e293b;
-  --ring: #22c55e;
-  --chart-1: #22c55e;
-  --chart-2: #a855f7;
-  --chart-3: #06b6d4;
-  --chart-4: #facc15;
-  --chart-5: #ef4444;
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #22c55e;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #475569;
-  --sidebar-ring: #22c55e;
+ /* DARK MODE: "Dimension C-137 / Space" */
+
+ --background: oklch(0.12 0.03 260); /* Deep Space Blue */
+ --foreground: oklch(0.92 0.02 200); /* Ice White */
+
+ --card: oklch(0.16 0.04 260);
+ --card-foreground: oklch(0.92 0.02 200);
+
+ --popover: oklch(0.16 0.04 260);
+ --popover-foreground: oklch(0.92 0.02 200);
+
+ /* Primary: Portal Neon Green (Brilha no escuro) */
+ --primary: oklch(0.72 0.23 146);
+ --primary-foreground: oklch(0.12 0.03 260);
+
+ /* Secondary: Rick Hair Blue (Neon) */
+ --secondary: oklch(0.72 0.13 232);
+ --secondary-foreground: oklch(0.12 0.03 260);
+
+ --muted: oklch(0.25 0.04 260);
+ --muted-foreground: oklch(0.7 0.05 230);
+
+ /* Accent: Galatic Purple */
+ --accent: oklch(0.45 0.18 300);
+ --accent-foreground: oklch(0.98 0 0);
+
+ --destructive: oklch(0.63 0.24 30);
+
+ --border: oklch(0.72 0.23 146 / 30%); /* Bordas verdes neon */
+ --input: oklch(0.25 0.04 260);
+ --ring: oklch(0.72 0.23 146);
+
+ /* Charts Dark */
+ --chart-1: oklch(0.72 0.23 146);
+ --chart-2: oklch(0.72 0.13 232);
+ --chart-3: oklch(0.85 0.18 90);
+ --chart-4: oklch(0.6 0.25 340);
+ --chart-5: oklch(0.6 0.15 180);
+
+ /* Sidebar Dark */
+ --sidebar: oklch(0.14 0.04 260);
+ --sidebar-foreground: oklch(0.92 0.02 200);
+ --sidebar-primary: oklch(0.72 0.23 146);
+ --sidebar-primary-foreground: oklch(0.12 0.03 260);
+ --sidebar-accent: oklch(0.25 0.04 260);
+ --sidebar-accent-foreground: oklch(0.92 0.02 200);
+ --sidebar-border: oklch(0.72 0.23 146 / 20%);
+ --sidebar-ring: oklch(0.72 0.23 146);
 }
+
 
 /* ===================================
    Base Styles
