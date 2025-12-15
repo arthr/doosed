@@ -203,18 +203,10 @@ const HomeScreen = () => {
           />
         </div>
 
-        {/* Spacer for bottom bar */}
+        {/* Spacer for notification bar */}
         <div className="h-16" />
 
       </div>
-
-      {/* BOTTOM WARNING BAR */}
-      <div className="fixed bottom-0 left-0 w-full bg-red-900/90 border-t-4 border-red-600 p-2 z-50 shadow-[0_-5px_20px_rgba(220,38,38,0.5)]">
-        <div className="max-w-4xl mx-auto flex items-center justify-center gap-4 text-red-100 font-pixel text-sm lg:text-base uppercase tracking-wider overflow-hidden whitespace-nowrap">
-          <span className="animate-pulse">⚠ WARNING: DO NOT CONSUME GLOWING ROCKS. SIDE EFFECTS INCLUDE MELTING. ⚠</span>
-        </div>
-      </div>
-
     </div>
   );
 };
