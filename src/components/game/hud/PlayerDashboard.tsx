@@ -12,8 +12,12 @@ export function PlayerDashboard() {
   return (
     <div className="flex-1 flex p-4 bg-panel border-4 border-neon-green rounded-xl mr-4 min-w-[50%]">
       {/* Avatar Grande */}
-      <div className="w-24 h-32 bg-neutral-800 border-2 border-neon-green flex items-center justify-center text-text-primary mr-4">
-        [YOUR AVATAR]
+      <div className="w-24 h-32 bg-neutral-800 border-2 border-neon-green overflow-hidden mr-4">
+        <img
+          src="/images/avatar/rick_sanchez.png"
+          alt="Rick Sanchez"
+          className="w-full h-full object-cover"
+        />
       </div>
 
       <div className="flex-1">

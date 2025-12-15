@@ -3,10 +3,11 @@ import { cn } from '@/lib/cn';
 
 interface OpponentCardProps {
   name: string;
+  avatar: string;
   active: boolean;
 }
 
-function OpponentCard({ name, active }: OpponentCardProps) {
+function OpponentCard({ name, avatar, active }: OpponentCardProps) {
   return (
     <div
       className={cn(
@@ -14,8 +15,8 @@ function OpponentCard({ name, active }: OpponentCardProps) {
         active ? 'border-neon-yellow' : 'border-neon-purple',
       )}
     >
-      <div className="w-10 h-10 mb-1 bg-neutral-700 rounded-full flex items-center justify-center text-xs text-text-primary">
-        [AVATAR]
+      <div className="w-10 h-10 mb-1 bg-neutral-700 rounded-full overflow-hidden">
+        <img src={avatar} alt={name} className="w-full h-full object-cover" />
       </div>
       <span className="text-xs font-bold text-text-primary truncate w-full text-center">{name}</span>
 
@@ -34,11 +35,11 @@ function OpponentCard({ name, active }: OpponentCardProps) {
 export function OpponentsBar() {
   return (
     <div className="flex justify-between w-full gap-2 mb-4 overflow-x-auto p-2">
-      <OpponentCard name="Birdperson" active={false} />
-      <OpponentCard name="Cromulon" active />
-      <OpponentCard name="K. Michael" active={false} />
-      <OpponentCard name="Tammy" active={false} />
-      <OpponentCard name="Morty" active={false} />
+      <OpponentCard name="Birdperson" avatar="/images/avatar/birdperson_md.png" active={false} />
+      <OpponentCard name="Cromulon" avatar="/images/avatar/cromolum_md.png" active />
+      <OpponentCard name="Squanchy" avatar="/images/avatar/squanchy_md.png" active={false} />
+      <OpponentCard name="Beth Smith" avatar="/images/avatar/beth_smith_md.png" active={false} />
+      <OpponentCard name="Morty" avatar="/images/avatar/morty_md.png" active={false} />
     </div>
   );
 }
