@@ -114,19 +114,17 @@ const FloatingDecoration = ({ type }: { type: 'gun' | 'head' | 'pills' }) => {
 const HomeScreen = () => {
   return (
     <div className="relative min-h-screen w-full bg-black overflow-hidden flex flex-col items-center font-pixel selection:bg-green-500 selection:text-black">
-
-      {/* BACKGROUND: Swirling Void Effect */}
-      {/* Replace this div with your animated SVG or Canvas background */}
+      {/* Screen: Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-indigo-900/40 via-[#0a0a0a] to-black" />
         {/* Star field simulation */}
         <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(white 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
       </div>
 
-      {/* Main Content Container */}
-      <div className="relative z-10 w-full max-w-2xl px-4 py-6 flex flex-col min-h-screen lg:justify-center">
+      {/* Screen: Content */}
+      <div className="relative z-10 mx-auto w-full max-w-2xl px-4 py-6 flex flex-col min-h-full lg:justify-center">
 
-        {/* HEADER: Logo Area */}
+        {/* Section: Header */}
         <div className="text-center mb-8 relative">
           <h1 className="text-7xl lg:text-9xl font-normal text-green-500 drop-shadow-[4px_4px_0_rgba(0,0,0,1)] stroke-black"
             style={{ WebkitTextStroke: '2px black', textShadow: '0 0 20px rgba(34,197,94,0.8)' }}>
@@ -139,7 +137,7 @@ const HomeScreen = () => {
           </h2>
         </div>
 
-        {/* CENTER AREA: Buttons & Floating Assets */}
+        {/* Section: Actions */}
         <div className="relative w-full">
           {/* Decorations (Desktop Only) */}
           <FloatingDecoration type="gun" />
@@ -174,7 +172,7 @@ const HomeScreen = () => {
           </div>
         </div>
 
-        {/* FOOTER AREA: Stats & Challenge */}
+        {/* Section: Stats */}
         <div className="mt-8 flex flex-col lg:flex-row gap-4 justify-between w-full">
           {/* Daily Challenge (Morty) */}
           <InfoCard
