@@ -19,9 +19,8 @@ const sizeClasses = {
   lg: 'size-56',
 };
 
-// TODO: Atualizar quando a imagem real estiver disponivel
 const IMAGE_SRC = '/images/animation/portal_gun.png';
-const HAS_IMAGE = false; // Mudar para true quando a imagem existir
+const HAS_IMAGE = true;
 
 /**
  * Portal Gun Animado - Decoracao com animacao de bounce e glow verde

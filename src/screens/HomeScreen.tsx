@@ -94,7 +94,7 @@ const InfoCard = ({ title, value, icon, imageSrc, align = 'left' }: InfoCardProp
 const FloatingDecoration = ({ type }: { type: 'gun' | 'head' | 'pills' }) => {
   if (type === 'gun') {
     return (
-      <div className="hidden lg:block absolute left-[-180px] top-10">
+      <div className="hidden lg:block absolute left-[-230px] top-60">
         <PortalGunAnimated size="md" rotation={12} />
       </div>
     );
