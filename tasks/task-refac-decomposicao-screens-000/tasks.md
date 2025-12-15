@@ -31,7 +31,7 @@
 - [x] 2.5 Refatorar `ResultScreen` para usar `src/components/results/*`
   - DoD: `ResultScreen` fica “fina”; `ResultsHero/ResultsStats/ResultsXpBar/ResultsActions` (ou equivalente) existem; `pnpm lint` passa.
 
-- [ ] 2.6 Refatorar `DevScreen` para usar `src/components/dev/*`
+- [x] 2.6 Refatorar `DevScreen` para usar `src/components/dev/*`
   - DoD: preview por phase e seleção continuam funcionando; dock/menu/preview extraídos; `pnpm lint` passa.
 
 - [ ] 3.1 Rodar checks finais
