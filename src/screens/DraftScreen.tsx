@@ -1,18 +1,14 @@
 import { Header } from '@/components/draft/Header';
 import { ShopItem } from '@/components/draft/ShopItem';
-import { InventorySlot } from '@/components/draft/InventorySlot';
 import { ActionDock } from '@/components/ui/ActionDock';
 import { useDraftShopMock } from '@/hooks/useDraftShopMock';
-import { Chat } from '@/components/chat/Chat';
+import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
 import {
   Beer,
   Lock,
   Search,
   Sword,
   AlertTriangle,
-  Backpack,
-  Terminal,
-  Joystick,
   Shuffle,
   Trash,
   Bomb,
@@ -109,8 +105,9 @@ export const DraftScreen = () => {
 
       {/* Section: Content (scroll) */}
       <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
-        {/* Section: Shop (Conveyor Belt) */}
+        {/* Section: Shop */}
         <div className="relative flex flex-col justify-center md:my-4">
+          
           {/* Conveyor Belt Track Graphic */}
           <div className="border-border-muted hidden h-2 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
 
@@ -148,58 +145,28 @@ export const DraftScreen = () => {
       </div>
 
       {/* Section: Footer (Inventory + Chat + Actions) */}
-      <div className="bg-panel border-border-muted rounded-xl border-4 p-3 sm:p-4 md:p-6">
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
-          {/* Inventory (smaller) */}
-          <div className="md:col-span-4">
-            <div className="text-text-muted border-border-muted flex items-center gap-2 pb-4">
-              <Backpack size={20} />
-              <h2 className="text-sm uppercase">
-                Backpack ({inventory.length}/{maxSlots} Slots)
-              </h2>
-            </div>
-            <div className="grid grid-cols-8 gap-2 sm:gap-3 md:grid-cols-4 md:gap-4">
-              {[...Array(maxSlots)].map((_, i) => (
-                <div key={i} className="col-span-1 w-full">
-                  <InventorySlot item={inventory[i]} />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Chat (padrao Lobby) */}
-          <div className="flex flex-col md:col-span-5">
-            <div className="md:flex hidden items-center gap-2 text-text-muted border-border-muted pb-4">
-              <Terminal size={20} />
-              <h2 className="text-sm uppercase">Chat</h2>
-            </div>
-            <div className='flex h-auto shrink-0 flex-col gap-3 md:h-50 md:flex-row md:gap-4'>
-              <Chat mode="inline" threadId="draft" />
-            </div>
-          </div>
-
-          {/* Actions: Confirm + Chat */}
-          <div className="flex flex-col md:col-span-3">
-            <div className="text-text-muted border-border-muted flex items-center gap-2 pb-4">
-              <Joystick size={20} />
-              <h2 className="text-sm uppercase">Actions</h2>
-            </div>
-            <div className="flex h-full flex-col">
-              <ActionDock
-                shop={{ onClick: openShop, disabled: false }}
-                loadout={{
-                  onPress: toggleLoadout,
-                  disabled: timeLeft === 0,
-                  pressed: loadoutConfirmed,
-                  timeLeft: timeLeft,
-                  startIn: startIn,
-                }}
-                layout="stack"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <PhasePanelHUD
+        phase="draft"
+        chatThreadId="draft"
+        inventory={{
+          items: inventory,
+          maxSlots,
+          title: `Backpack (${inventory.length}/${maxSlots} Slots)`,
+        }}
+        actions={
+          <ActionDock
+            shop={{ onClick: openShop, disabled: false }}
+            loadout={{
+              onPress: toggleLoadout,
+              disabled: timeLeft === 0,
+              pressed: loadoutConfirmed,
+              timeLeft: timeLeft,
+              startIn: startIn,
+            }}
+            layout="stack"
+          />
+        }
+      />
     </div>
   );
 };

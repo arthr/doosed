@@ -1,13 +1,17 @@
 import { OpponentsBar } from '@/components/match/hud/OpponentsBar';
-import { PlayerDashboard } from '@/components/match/hud/PlayerDashboard';
-import { ActionPanel } from '@/components/match/hud/ActionPanel';
 import { GameTable } from '@/components/match/table/GameTable';
+import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
+import { ActionDock } from '@/components/ui/ActionDock';
+import { Header } from '@/components/draft/Header';
 
 export const MatchScreen = () => {
   return (
-    <div className="bg-void-black text-text-primary min-h-screen w-full overflow-hidden">
-      {/* Screen: Content */}
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col p-2 md:p-6 font-sans">
+    <div className="mx-auto flex h-screen max-w-7xl flex-col">
+      {/* Section: Header */}
+      <Header balance={1000} time={30} />
+      {/* Section: Content (scroll) */}
+      <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
+
         {/* Section: Opponents */}
         <OpponentsBar />
 
@@ -15,13 +19,20 @@ export const MatchScreen = () => {
         <div className="flex-1 flex items-center justify-center w-full">
           <GameTable />
         </div>
-
-        {/* Section: Footer */}
-        <div className="w-full flex flex-col md:flex-row gap-4 h-auto md:h-48 mt-auto">
-          <PlayerDashboard />
-          <ActionPanel />
-        </div>
       </div>
+
+      {/* Section: Footer */}
+      <PhasePanelHUD
+        phase="match"
+        className="h-auto md:h-48"
+        chatThreadId="match"
+        actions={
+          <ActionDock
+            shop={{ disabled: false, onClick: () => { } }}
+            layout="stack"
+          />
+        }
+      />
     </div>
   );
 };

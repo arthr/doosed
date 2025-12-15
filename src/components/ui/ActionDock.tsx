@@ -31,9 +31,9 @@ function formatTwoDigits(value?: number) {
 type LoadoutLabel =
   | string
   | {
-      line1: string;
-      line2?: string;
-    };
+    line1: string;
+    line2?: string;
+  };
 
 function getLoadoutLabel({
   pressed,
@@ -71,6 +71,8 @@ export function ActionDock({
     if (count === 2) return 'grid-rows-2';
     return 'grid-rows-3';
   })();
+  // se não houver nenhuma ação, não renderizar o ActionDock
+  if (!chat?.onClick && !shop?.onClick && !loadout?.onPress) return null;
 
   return (
     <div
@@ -81,42 +83,42 @@ export function ActionDock({
     >
       {loadout?.onPress
         ? (() => {
-            const pressed = !!loadout.pressed;
-            const timeLeft = loadout.timeLeft;
-            const startIn = loadout.startIn ?? 0;
-            const hasTimeLeft = typeof timeLeft === 'number' && timeLeft > 0;
+          const pressed = !!loadout.pressed;
+          const timeLeft = loadout.timeLeft;
+          const startIn = loadout.startIn ?? 0;
+          const hasTimeLeft = typeof timeLeft === 'number' && timeLeft > 0;
 
-            const label = getLoadoutLabel({ pressed, hasTimeLeft, timeLeft, startIn });
+          const label = getLoadoutLabel({ pressed, hasTimeLeft, timeLeft, startIn });
 
-            return (
-              <button
-                type="button"
-                onClick={(event: MouseEvent<HTMLButtonElement>) => {
-                  event.preventDefault();
-                  loadout.onPress?.();
-                }}
-                disabled={!!loadout.disabled}
-                aria-pressed={!!loadout.pressed}
-                className={cn(
-                  'font-pixel flex items-center justify-center gap-2 border-b-4 border-border bg-neutral-700 py-2 text-xs text-foreground',
-                  hasTimeLeft && 'hover:bg-rick-green hover:text-white active:translate-y-0.5 active:border-b-2',
-                  loadout.disabled && 'cursor-not-allowed opacity-50',
-                  pressed &&
-                    hasTimeLeft &&
-                    'border-destructive! bg-destructive! hover:border-destructive! hover:bg-destructive/80!',
-                )}
-              >
-                {typeof label === 'string' ? (
-                  <span className="font-normal">{label}</span>
-                ) : (
-                  <span className="flex flex-col text-center leading-tight font-normal">
-                    <span>{label.line1}</span>
-                    {label.line2 ? <span>{label.line2}</span> : null}
-                  </span>
-                )}
-              </button>
-            );
-          })()
+          return (
+            <button
+              type="button"
+              onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                event.preventDefault();
+                loadout.onPress?.();
+              }}
+              disabled={!!loadout.disabled}
+              aria-pressed={!!loadout.pressed}
+              className={cn(
+                'font-pixel flex items-center justify-center gap-2 border-b-4 border-border bg-neutral-700 py-2 text-xs text-foreground',
+                hasTimeLeft && 'hover:bg-rick-green hover:text-white active:translate-y-0.5 active:border-b-2',
+                loadout.disabled && 'cursor-not-allowed opacity-50',
+                pressed &&
+                hasTimeLeft &&
+                'border-destructive! bg-destructive! hover:border-destructive! hover:bg-destructive/80!',
+              )}
+            >
+              {typeof label === 'string' ? (
+                <span className="font-normal">{label}</span>
+              ) : (
+                <span className="flex flex-col text-center leading-tight font-normal">
+                  <span>{label.line1}</span>
+                  {label.line2 ? <span>{label.line2}</span> : null}
+                </span>
+              )}
+            </button>
+          );
+        })()
         : null}
       {shop?.onClick ? (
         <button

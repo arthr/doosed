@@ -4,8 +4,8 @@ import { RoomHeader } from '@/components/lobby/RoomHeader';
 import { LobbyPanel } from '@/components/lobby/LobbyPanel';
 import { PlayerGrid } from '@/components/lobby/PlayerGrid';
 import { ActionControls } from '@/components/lobby/ActionControls';
-import { Chat } from '@/components/chat/Chat';
 import { Header } from '@/components/draft/Header';
+import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
 
 // --- Mock Data ---
 function createMockPlayers(): (Player | null)[] {
@@ -43,13 +43,15 @@ export const LobbyScreen = () => {
         </main>
 
         {/* Section: Footer */}
-        <footer className="flex flex-col gap-3 md:h-48 md:flex-row md:items-stretch md:gap-4">
-          <LobbyPanel className="flex-1 overflow-hidden">
-            <Chat mode="inline" threadId="lobby" />
-          </LobbyPanel>
-          <LobbyPanel className="flex flex-col md:w-[360px]">
-            <ActionControls isReady={isReady} onToggleReady={() => setIsReady(prev => !prev)} />
-          </LobbyPanel>
+        <footer className="mt-auto">
+          <PhasePanelHUD
+            phase="lobby"
+            className="h-auto md:h-48"
+            chatThreadId="lobby"
+            actions={
+              <ActionControls isReady={isReady} onToggleReady={() => setIsReady(prev => !prev)} />
+            }
+          />
         </footer>
       </div>
   );

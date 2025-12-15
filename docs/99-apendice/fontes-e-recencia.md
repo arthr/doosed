@@ -12,8 +12,9 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
-| 2025-12-15T07:17:10-03:00 | 2025-12-15T07:17:00 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
-| 2025-12-15T07:17:10-03:00 | 2025-12-15T07:16:58 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/tasks.md |
+| 2025-12-15T07:24:35-03:00 | 2025-12-15T07:23:55 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
+| 2025-12-15T07:17:10-03:00 | 2025-12-15T07:19:09 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
+| 2025-12-15T07:17:10-03:00 | 2025-12-15T07:19:09 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/tasks.md |
 | 2025-12-15T06:04:58-03:00 | 2025-12-15T05:30:12 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
 | 2025-12-15T05:56:09-03:00 | 2025-12-15T05:57:42 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/design.md |
 | 2025-12-15T05:49:36-03:00 | 2025-12-15T05:36:24 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/requirements.md |
@@ -22,7 +23,6 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T04:21:48 | Outro | repo | AGENTS.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T04:19:01 | Normativo | .cursor/rules | .cursor/rules/docs-workflow/RULE.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T04:18:04 | Normativo | .cursor/rules | .cursor/rules/task-execute/RULE.md |
-| 2025-12-15T04:23:57-03:00 | 2025-12-15T04:02:48 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T00:25:41 | Normativo | .cursor/rules | .cursor/rules/observation-log/RULE.md |
 | 2025-12-15T04:23:57-03:00 | 2025-12-15T00:23:20 | Normativo | .cursor/rules | .cursor/rules/code-style/RULE.md |
 | 2025-12-15T02:23:15-03:00 | 2025-12-15T02:23:48 | Docs | docs | docs/01-produto/visao-e-pilares.md |
