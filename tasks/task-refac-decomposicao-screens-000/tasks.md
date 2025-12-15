@@ -11,7 +11,7 @@
 - [x] 1.1 Consolidar convenção e critérios de extração no `design.md`
   - DoD: `design.md` define (a) onde os componentes vivem, (b) o que é candidato a UI kit, (c) mapeamento por Screen.
 
-- [ ] 1.2 Inventariar cada Screen (seções + subcomponentes + candidatos UI kit)
+- [x] 1.2 Inventariar cada Screen (seções + subcomponentes + candidatos UI kit)
   - DoD: `design.md` tem lista/tabela por Screen com: responsabilidade, destino (`components/<dominio>` vs `components/ui`), e justificativa.
 
 - [ ] 2.1 Refatorar `HomeScreen` para usar `src/components/home/*`
