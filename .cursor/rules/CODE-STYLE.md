@@ -1,3 +1,8 @@
+---
+description: "Always apply: padrões de Code Style"
+alwaysApply: true
+---
+
 # Code Style (DOSED)
 
 Este documento consolida o padrão de código do projeto para manter consistência e velocidade em modo Solo Dev.

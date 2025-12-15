@@ -1,19 +1,25 @@
 import { create } from 'zustand';
 
-export type NotificationType = 'critical' | 'warning' | 'info' | 'success';
+export type NotificationVariant = 'important' | 'warning' | 'success' | 'info' | 'debug';
 
 export interface Notification {
   id: string;
-  type: NotificationType;
+  variant: NotificationVariant;
   message: string;
-  duration: number; // ms, 0 = persistent
+  durationTime: number; // ms, 0 = persistent
+}
+
+export interface ShowNotificationParams {
+  message: string;
+  variant?: NotificationVariant;
+  durationTime?: number;
 }
 
 interface NotificationStore {
   current: Notification | null;
   queue: Notification[];
 
-  show: (params: { type: NotificationType; message: string; duration?: number }) => string;
+  show: (params: ShowNotificationParams) => string;
   dismiss: (id?: string) => void;
   clear: () => void;
 }
@@ -31,9 +37,9 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   current: null,
   queue: [],
 
-  show: ({ type, message, duration = DEFAULT_DURATION }) => {
+  show: ({ message, variant = 'info', durationTime = DEFAULT_DURATION }) => {
     const id = makeId();
-    const notification: Notification = { id, type, message, duration };
+    const notification: Notification = { id, variant, message, durationTime };
 
     set(state => {
       // Se nao ha notificacao atual, exibe diretamente
@@ -45,10 +51,10 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     });
 
     // Auto-dismiss se tiver duracao
-    if (duration > 0) {
+    if (durationTime > 0) {
       setTimeout(() => {
         get().dismiss(id);
-      }, duration);
+      }, durationTime);
     }
 
     return id;
@@ -60,10 +66,10 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       if (!id || state.current?.id === id) {
         const [next, ...rest] = state.queue;
         // Inicia timer para proxima notificacao se existir
-        if (next && next.duration > 0) {
+        if (next && next.durationTime > 0) {
           setTimeout(() => {
             get().dismiss(next.id);
-          }, next.duration);
+          }, next.durationTime);
         }
         return { current: next ?? null, queue: rest };
       }
@@ -77,9 +83,19 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   },
 }));
 
+// Hook para uso em componentes
+export function useNotification() {
+  const show = useNotificationStore(state => state.show);
+  const dismiss = useNotificationStore(state => state.dismiss);
+  const clear = useNotificationStore(state => state.clear);
+  const current = useNotificationStore(state => state.current);
+
+  return { show, dismiss, clear, current };
+}
+
 // Actions para uso externo (sem hooks)
 export const notificationActions = {
-  show(params: { type: NotificationType; message: string; duration?: number }) {
+  show(params: ShowNotificationParams) {
     return useNotificationStore.getState().show(params);
   },
   dismiss(id?: string) {
@@ -89,16 +105,21 @@ export const notificationActions = {
     useNotificationStore.getState().clear();
   },
   // Helpers semanticos
-  critical(message: string, duration?: number) {
-    return this.show({ type: 'critical', message, duration });
+  important(message: string, durationTime?: number) {
+    return this.show({ variant: 'important', message, durationTime });
   },
-  warning(message: string, duration?: number) {
-    return this.show({ type: 'warning', message, duration });
+  warning(message: string, durationTime?: number) {
+    return this.show({ variant: 'warning', message, durationTime });
   },
-  info(message: string, duration?: number) {
-    return this.show({ type: 'info', message, duration });
+  success(message: string, durationTime?: number) {
+    return this.show({ variant: 'success', message, durationTime });
   },
-  success(message: string, duration?: number) {
-    return this.show({ type: 'success', message, duration });
+  info(message: string, durationTime?: number) {
+    return this.show({ variant: 'info', message, durationTime });
+  },
+  debug(message: string, durationTime?: number) {
+    // Debug so aparece em dev
+    if (!import.meta.env.DEV) return '';
+    return this.show({ variant: 'debug', message, durationTime });
   },
 };

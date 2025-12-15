@@ -1,3 +1,8 @@
+---
+description: "Always apply: anotações de aprendizado e observações rápidas sobre o projeto"
+alwaysApply: true
+---
+
 # Registro de Observações (DOSED)
 
 Use este arquivo para registrar observações rápidas (armadilhas, decisões pequenas, heurísticas) durante o desenvolvimento.
