@@ -17,7 +17,7 @@
 - [x] 2.1 Refatorar `HomeScreen` para usar `src/components/home/*`
   - DoD: `HomeScreen` fica “fina” (orquestração); componentes extraídos com nomes claros; `pnpm lint` passa.
 
-- [ ] 2.2 Refatorar `LobbyScreen` para compor com `src/components/lobby/*` (remover duplicações inline)
+- [x] 2.2 Refatorar `LobbyScreen` para compor com `src/components/lobby/*` (remover duplicações inline)
   - DoD: `LobbyScreen` usa `RoomHeader/PlayerGrid/ActionControls/...` (ou equivalente); não existem duplicações grandes inline; `pnpm lint` passa.
 
 - [ ] 2.3 Revisar `DraftScreen` (manter referência; mover apenas o que for ruído)
