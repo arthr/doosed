@@ -46,8 +46,8 @@ const GameButton = ({ title, subtitle, icon, color, onClick }: GameButtonProps) 
         </span>
       </div>
 
-      {/* Dripping Sludge Effect (CSS Decoration) */}
-      <div className={`absolute -bottom-2 right-4 w-2 h-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${color === 'green' ? 'bg-green-500' : 'bg-transparent'}`} />
+      {/* Dripping Sludge Effect (CSS Decoration) | TODO: Precisa de polimento */}
+      {/* <div className={`absolute -bottom-2 right-4 w-2 h-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${color === 'green' ? 'bg-green-500' : 'bg-transparent'}`} /> */}
     </button>
   );
 };

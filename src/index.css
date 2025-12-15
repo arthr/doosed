@@ -333,10 +333,20 @@
 
 @keyframes glow-pulse-purple {
   0%, 100% {
-    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
+    filter: 
+      drop-shadow(1px 0 0 rgba(0,0,0,0.6))
+      drop-shadow(-1px 0 0 rgba(0,0,0,0.6))
+      drop-shadow(0 1px 0 rgba(0,0,0,0.6))
+      drop-shadow(0 -1px 0 rgba(0,0,0,0.6))
+      drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
   }
   50% {
-    filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8));
+    filter: 
+      drop-shadow(1px 0 0 rgba(0,0,0,0.6))
+      drop-shadow(-1px 0 0 rgba(0,0,0,0.6))
+      drop-shadow(0 1px 0 rgba(0,0,0,0.6))
+      drop-shadow(0 -1px 0 rgba(0,0,0,0.6))
+      drop-shadow(0 0 30px rgba(168, 85, 247, 0.8));
   }
 }
 
@@ -375,4 +385,13 @@
 
 @utility animate-float {
   animation: float-space 6s ease-in-out infinite;
+}
+
+/* PNG Outline - Borda sutil que segue o contorno alpha */
+@utility png-outline {
+  filter: 
+    drop-shadow(1px 0 0 rgba(0,0,0,0.6))
+    drop-shadow(-1px 0 0 rgba(0,0,0,0.6))
+    drop-shadow(0 1px 0 rgba(0,0,0,0.6))
+    drop-shadow(0 -1px 0 rgba(0,0,0,0.6));
 }
