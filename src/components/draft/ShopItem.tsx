@@ -41,9 +41,8 @@ export const ShopItem = (props: ShopItemProps) => {
       </p> */}
 
       <GlowButton
-        title={canAfford ? 'Buy' : timeLeft > 0 ? 'Too Poor' : "Time's Up!"}
-        // variant="solid"
-        color="purple"
+        title={canAfford ? 'Buy' : timeLeft > 0 ? 'Poor' : "Buy"}
+        variant="solid"
         size="xs"
         disabled={!canAfford}
         onClick={() => onBuy(item)}

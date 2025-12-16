@@ -173,20 +173,17 @@ export const DraftScreen = () => {
         {/* Section: Shop */}
         <div className="relative flex flex-col justify-center md:my-4">
 
-          {/* Conveyor Belt Track Graphic */}
-          <div className="border-border-muted hidden h-2 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
-
           {/* Items Container */}
           <div className="py-0 md:pt-4 md:pb-6">
-            <div className="divide-border grid grid-cols-1 items-center justify-center divide-x-6 lg:grid-cols-4">
+            <div className="grid grid-cols-1 items-center justify-center lg:grid-cols-4">
               {/* Category Columns */}
               {Object.keys(DRAFT_SHOP_CATEGORIES).map(category => (
                 <div
                   key={category}
-                  className="divide-border flex flex-col gap-2 divide-y px-0 not-last:pb-4 md:divide-y-0 md:px-3"
+                  className="flex flex-col gap-2 px-0 md:px-3"
                 >
                   <h3 className="text-sm uppercase">{category}</h3>
-                  <div className="grid grid-cols-5 gap-2 md:gap-3 lg:grid-cols-3">
+                  <div className="grid grid-cols-5 space-y-4 gap-2 md:gap-3 lg:grid-cols-3">
                     {/* Category Items */}
                     {[...Array(5)].map((_, itemIndex) => (
                       <div key={itemIndex} className="col-span-1 w-full">
@@ -204,11 +201,9 @@ export const DraftScreen = () => {
             </div>
           </div>
 
-          {/* Conveyor Belt Track Graphic */}
-          <div className="border-border-muted hidden h-2 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
         </div>
       </ScrollArea>
-
+      
       {/* Section: Footer (Inventory + Chat + Actions) */}
       <PhasePanelHUD
         phase="draft"

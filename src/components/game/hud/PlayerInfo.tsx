@@ -158,7 +158,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
         <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,255,0,0.02)_50%)] bg-size-[100%_4px] pointer-events-none rounded-xl z-20"></div>
 
         {/* Lado Esquerdo - Avatar */}
-        <div className="sm:w-1/3 flex flex-col z-30">
+        <div className="hidden sm:flex sm:w-1/3 flex-col z-30">
           <div className={cn(
             "relative rounded overflow-hidden border-rick-green shadow-[0_0_8px_inset_#5eff5e]",
             styles.borderWidth
