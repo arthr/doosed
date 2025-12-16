@@ -90,7 +90,7 @@ export function ChatPanel({
         <button
           type="submit"
           className={cn(
-            'border-border-muted bg-panel text-text-primary rounded border px-3 py-1 font-normal uppercase',
+            'border-border-muted bg-panel text-text-primary rounded border px-3 py-1 uppercase',
             'hover:bg-black/20 active:translate-y-0.5',
           )}
         >

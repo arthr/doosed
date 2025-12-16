@@ -49,14 +49,14 @@ function LootDisplay({ isVictory }: LootDisplayProps) {
       <div className="text-center">
         {isVictory ? (
           <>
-            <div className="text-cyan-400 font-pixel text-sm font-normal animate-pulse">COOL RICK SUNGLASSES</div>
+            <div className="text-cyan-400 font-pixel text-sm animate-pulse">COOL RICK SUNGLASSES</div>
             <div className="text-yellow-500 font-pixel text-[10px] uppercase tracking-widest mt-1">
               New Cosmetic Unlocked!
             </div>
           </>
         ) : (
           <>
-            <div className="text-slate-500 font-pixel text-sm font-normal line-through">NO LOOT</div>
+            <div className="text-slate-500 font-pixel text-sm line-through">NO LOOT</div>
             <div className="text-red-500 font-pixel text-[10px] uppercase tracking-widest mt-1">
               Better luck next timeline
             </div>
@@ -84,7 +84,7 @@ export function ResultsRewards({ isVictory }: ResultsRewardsProps) {
       <h3
         className={
           `
-          text-center text-xl font-normal uppercase mb-2 border-b-2 border-slate-700 pb-2
+          text-center text-xl uppercase mb-2 border-b-2 border-slate-700 pb-2
           ${isVictory ? 'text-yellow-400' : 'text-slate-400'}
         `
         }

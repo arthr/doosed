@@ -34,8 +34,8 @@ const ResultScreen = () => {
             spotlight: "bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent"
         },
         bg: {
-            victory: "bg-gradient-to-b from-slate-900 to-green-900/40",
-            defeat: "bg-gradient-to-b from-slate-950 to-red-950/40"
+            victory: "bg-gradient-to-b from-slate-0 to-green-900/20",
+            defeat: "bg-gradient-to-b from-slate-0 to-red-950/20"
         }
     };
 
@@ -57,10 +57,6 @@ const ResultScreen = () => {
 
                 {/* BACKGROUND FX */}
                 <div className={`absolute inset-0 z-0 pointer-events-none ${currentTheme.spotlight}`} />
-                {/* Victory Confetti (CSS dots) */}
-                {isVictory && (
-                    <div className="absolute inset-0 z-0 opacity-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-                )}
 
                 {/* MAIN CARD CONTAINER */}
                 <div className="relative z-10 w-full max-w-lg md:max-w-4xl flex flex-col items-center gap-6">

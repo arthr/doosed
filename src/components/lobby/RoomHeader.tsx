@@ -25,7 +25,7 @@ export function RoomHeader({ roomCode, status }: RoomHeaderProps) {
       </LobbyPanel>
 
       <LobbyPanel className="flex flex-2 items-center justify-center md:justify-start">
-        <div className="text-neon-yellow flex items-center gap-3 text-sm font-normal uppercase md:text-base">
+        <div className="text-neon-yellow flex items-center gap-3 text-sm uppercase md:text-base">
           <AlertTriangle className="h-5 w-5 animate-pulse md:h-6 md:w-6" />
           <span className="tracking-wide">STATUS: {status}</span>
         </div>

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { PortalBackgroundAnimated } from '../ui/decorations/PortalBackgroundAnimated';
 
 export interface DevOverlayPreviewProps {
   preview: ReactNode | null;
@@ -9,6 +10,7 @@ export function DevOverlayPreview({ preview }: DevOverlayPreviewProps) {
 
   return (
     <div className="fixed inset-0 z-40 bg-void-black text-text-primary">
+      <PortalBackgroundAnimated quality="balanced" gooMotion="off" stars="full" portalScale={0.5} />
       {preview}
     </div>
   );

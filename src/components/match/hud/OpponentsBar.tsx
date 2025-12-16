@@ -18,7 +18,7 @@ function OpponentCard({ name, avatar, active }: OpponentCardProps) {
       <div className="w-10 h-10 mb-1 bg-neutral-700 rounded-full overflow-hidden">
         <img src={avatar} alt={name} className="w-full h-full object-cover" />
       </div>
-      <span className="text-xs font-normal text-text-primary truncate w-full text-center">{name}</span>
+      <span className="text-xs text-text-primary truncate w-full text-center">{name}</span>
 
       {/* Placeholder para HP e Escudo */}
       <div className="flex gap-2 mt-1 items-center">

@@ -17,7 +17,7 @@ export function ResultsHero({ isVictory, currentTheme }: ResultsHeroProps) {
         `}
       >
         <h2
-          className={`text-xl md:text-2xl font-normal tracking-[0.2em] uppercase ${
+          className={`text-xl md:text-2xl tracking-[0.2em] uppercase ${
             isVictory ? 'text-white' : 'text-red-500'
           }`}
         >

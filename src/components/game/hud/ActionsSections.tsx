@@ -1,7 +1,5 @@
-import { cn } from "@/lib/cn";
-import { SectionHeader } from "@/components/game/hud/SectionHeader";
-import { Joystick } from "lucide-react";
-import type { ReactNode } from "react";
+import { cn } from '@/lib/cn';
+import type { ReactNode } from 'react';
 
 export function ActionsSection({
     children,
@@ -12,7 +10,7 @@ export function ActionsSection({
 }) {
     return (
         <div className={cn('flex min-h-0 flex-col', className)}>
-            <SectionHeader icon={<Joystick size={20} />} title="Actions" />
+            {/* <SectionHeader icon={<Joystick size={20} />} title="Actions" /> */}
             <div className="flex h-full min-h-0 flex-col">{children}</div>
         </div>
     );

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Hand, Users, Settings, Skull } from 'lucide-react';
-import { HomeBackground } from '@/components/home/HomeBackground';
 import { HomeTitle } from '@/components/home/HomeTitle';
 import { HomeDecorations } from '@/components/home/HomeDecorations';
 import { HomeMenuButton } from '@/components/home/HomeMenuButton';
@@ -10,10 +9,7 @@ import { HomeInfoCard } from '@/components/home/HomeInfoCard';
 
 const HomeScreen = () => {
   return (
-    <div className="relative min-h-screen w-full bg-black overflow-hidden flex flex-col items-center font-pixel selection:bg-green-500 selection:text-black">
-      {/* Screen: Background */}
-      <HomeBackground />
-
+    <div className="relative min-h-screen w-full overflow-hidden flex flex-col items-center font-pixel selection:bg-green-500 selection:text-black">
       {/* Screen: Content */}
       <div className="relative z-10 mx-auto w-full max-w-2xl px-4 py-6 flex flex-col min-h-full lg:justify-center">
 

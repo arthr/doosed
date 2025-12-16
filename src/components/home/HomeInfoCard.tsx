@@ -29,7 +29,7 @@ export function HomeInfoCard({ title, value, icon, imageSrc, align = 'left' }: H
         className={`flex flex-col flex-1 ${align === 'right' ? 'items-end text-right' : 'items-start text-left'}`}
       >
         <span className="text-slate-300 font-pixel text-xs leading-tight mb-1">{title}</span>
-        <div className="flex items-center gap-1 text-yellow-400 font-normal font-pixel text-xs">
+        <div className="flex items-center gap-1 text-yellow-400 font-pixel text-xs">
           {icon}
           <span>{value}</span>
         </div>

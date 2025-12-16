@@ -2,7 +2,7 @@ export function GameTable() {
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 mb-4 bg-neutral-800 border-4 border-border-muted rounded-xl relative">
       {/* Header da Mesa */}
-      <div className="absolute -top-5 bg-panel px-4 py-1 border-2 border-neon-green text-neon-green font-normal rounded">
+      <div className="absolute -top-5 bg-panel px-4 py-1 border-2 border-neon-green text-neon-green rounded">
         THE TABLE
       </div>
 

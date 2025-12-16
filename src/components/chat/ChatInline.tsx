@@ -67,7 +67,7 @@ export function ChatInline({
             <button
               type="button"
               onClick={() => toggle(threadId)}
-              className="border border-white px-4 py-2 font-normal text-white uppercase"
+              className="border border-white px-4 py-2 text-white uppercase"
             >
               Fechar [X]
             </button>

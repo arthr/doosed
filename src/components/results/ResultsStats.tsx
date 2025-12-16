@@ -16,7 +16,7 @@ function StatRow({ label, value, icon, color }: StatRowProps) {
         <div className={`p-1.5 rounded bg-black/40 ${color}`}>{icon}</div>
         <span className="text-slate-300 font-pixel text-lg uppercase tracking-wide">{label}:</span>
       </div>
-      <span className={`font-pixel text-2xl font-normal ${color} drop-shadow-md`}>{value}</span>
+      <span className={`font-pixel text-2xl ${color} drop-shadow-md`}>{value}</span>
     </div>
   );
 }
@@ -35,7 +35,7 @@ export function ResultsStats({ isVictory, currentTheme }: ResultsStatsProps) {
       `}
     >
       <h3
-        className={`text-center text-xl font-normal uppercase mb-4 border-b-2 border-slate-700 pb-2 ${
+        className={`text-center text-xl uppercase mb-4 border-b-2 border-slate-700 pb-2 ${
           currentTheme.accent
         }`}
       >

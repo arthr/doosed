@@ -14,7 +14,7 @@ export function ResultsActions({ isVictory, currentTheme }: ResultsActionsProps)
           type="button"
           className={
             `
-            flex-1 md:w-64 py-4 rounded-xl border-b-8 font-pixel text-xl font-normal uppercase tracking-wider
+            flex-1 md:w-64 py-4 rounded-xl border-b-8 font-pixel text-xl uppercase tracking-wider
             shadow-lg active:border-b-0 active:translate-y-2 transition-all
             ${currentTheme.button}
           `
@@ -34,7 +34,7 @@ export function ResultsActions({ isVictory, currentTheme }: ResultsActionsProps)
         <Home size={14} /> Return to Main Menu
       </button>
 
-      <div className="flex items-center gap-1 text-red-900/50 hover:text-red-500 cursor-pointer transition-colors text-xs font-normal uppercase mt-4">
+      <div className="flex items-center gap-1 text-red-900/50 hover:text-red-500 cursor-pointer transition-colors text-xs uppercase mt-4">
         <AlertTriangle size={12} /> Report Player
       </div>
     </div>

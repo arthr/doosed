@@ -33,7 +33,7 @@ export function HomeMenuButton({ title, subtitle, icon, color, onClick }: HomeMe
 
       {/* Text Area */}
       <div className="flex flex-col flex-1 items-start">
-        <span className="text-md md:text-2xl font-normal tracking-widest font-pixel uppercase drop-shadow-md">{title}</span>
+        <span className="text-xl md:text-2xl tracking-widest font-pixel font-extrabold uppercase drop-shadow-md">{title}</span>
         <span className="text-sm md:text-md opacity-80 font-pixel tracking-wide">{subtitle}</span>
       </div>
 

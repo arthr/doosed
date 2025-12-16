@@ -1,5 +1,7 @@
 /* Importando fonte pixel */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');;
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -16,8 +18,10 @@
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --font-sans: 'VT323', monospace;
-  --font-mono: 'Press Start 2P', monospace;
+  /* --font-sans: 'VT323', monospace; */
+  --font-sans: 'Barlow', sans-serif;
+  /* --font-mono: 'Press Start 2P', monospace; */
+  --font-mono: 'Barlow', sans-serif;
 
   /* shadcn/ui compatibility */
   --color-background: var(--background);
@@ -322,7 +326,9 @@
     @apply bg-neon-green rounded-none;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Press Start 2P', system-ui;
+    /* font-family: 'Press Start 2P', system-ui; */
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
     line-height: 1.5;
   }
 }

@@ -5,6 +5,7 @@ import { ActionsSection } from '@/components/game/hud/ActionsSections';
 import { PanelShell } from '@/components/game/hud/PanelShell';
 
 import type { PhasePanelHUDProps } from '@/types/hud';
+import PlayerInfo from './PlayerInfo';
 
 
 export function PhasePanelHUD(props: PhasePanelHUDProps) {
@@ -28,7 +29,16 @@ export function PhasePanelHUD(props: PhasePanelHUDProps) {
         return (
             <PanelShell className={cn('w-full', props.className)}>
                 <div className="grid min-h-0 grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
-                    <StatsInventorySection playerName="Rick Sanchez" inventory={props.inventory} className="md:col-span-4" />
+                <PlayerInfo
+                        size='sm'
+                        characterName="Rick Sanchez"
+                        avatarSrc="/images/avatar/rick_winner.png"
+                        currentHealth={100}
+                        currentResistance={100}
+                        inventoryItems={[]}
+                        totalInventorySlots={8}
+                        className="flex flex-col md:col-span-4"
+                    />
                     <ChatSection
                         threadId={props.chatThreadId}
                         displayTime={false}

@@ -8,15 +8,15 @@ import {
   Clock,
   Coins,
   Lock,
-  Search,
-  Sword,
-  AlertTriangle,
   Shuffle,
   Trash,
   Bomb,
 } from 'lucide-react';
 import type { DraftShopItem } from '@/types/draft';
 import { DRAFT_SHOP_CATEGORIES } from '@/types/draft';
+import { PillScannerIcon } from '@/components/ui/icons/PillScannerIcon';
+import { PillIcon } from '@/components/ui/icons/PillIcon';
+import { PortalGunIcon } from '@/components/ui/icons/PortalGunIcon';
 
 // Types
 const SHOP_ITEMS: DraftShopItem[] = [
@@ -26,7 +26,12 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- +4 resistance',
     category: 'SUSTAIN',
     price: 50,
-    icon: <Beer size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      scale={3}
+      pill={() => <Beer size={48} strokeWidth={1.5} />}
+    />,
   },
   {
     id: 2,
@@ -34,7 +39,12 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- Immunity to damage for 1 round',
     category: 'CONTROL',
     price: 75,
-    icon: <Lock size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      scale={3}
+      pill={() => <Lock size={48} strokeWidth={1.5} />}
+    />,
   },
   {
     id: 3,
@@ -42,7 +52,11 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- Reveals all pills of shape',
     category: 'INTEL',
     price: 40,
-    icon: <Search size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      pill={() => <PillIcon primaryColor='var(--color-neon-red)' />}
+    />,
   },
   {
     id: 4,
@@ -50,7 +64,11 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- Inverts pill effect',
     category: 'CHAOS',
     price: 100,
-    icon: <Sword size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      pill={() => <PortalGunIcon glowColor='var(--color-neon-green)' />}
+    />,
   },
   {
     id: 5,
@@ -58,7 +76,11 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- Doubles pill effect',
     category: 'CHAOS',
     price: 60,
-    icon: <AlertTriangle size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      pill={() => <PortalGunIcon glowColor='var(--color-neon-green)' />}
+    />,
   },
   {
     id: 6,
@@ -66,7 +88,12 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- Shuffles pill pool',
     category: 'CHAOS',
     price: 80,
-    icon: <Shuffle size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      scale={3}
+      pill={() => <Shuffle size={48} strokeWidth={1.5} />}
+    />,
   },
   {
     id: 7,
@@ -74,7 +101,12 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- Removes pill from pool',
     category: 'CHAOS',
     price: 90,
-    icon: <Trash size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      scale={3}
+      pill={() => <Trash size={48} strokeWidth={1.5} />}
+    />,
   },
   {
     id: 8,
@@ -82,7 +114,12 @@ const SHOP_ITEMS: DraftShopItem[] = [
     desc: '- Removes all pills of shape',
     category: 'CHAOS',
     price: 100,
-    icon: <Bomb size={48} strokeWidth={1.5} />,
+    icon: <PillScannerIcon
+      pillColor='var(--color-neon-green)'
+      size={70}
+      scale={3}
+      pill={() => <Bomb size={48} strokeWidth={1.5} />}
+    />,
   },
 ];
 
@@ -134,7 +171,7 @@ export const DraftScreen = () => {
       <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
         {/* Section: Shop */}
         <div className="relative flex flex-col justify-center md:my-4">
-          
+
           {/* Conveyor Belt Track Graphic */}
           <div className="border-border-muted hidden h-2 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
 

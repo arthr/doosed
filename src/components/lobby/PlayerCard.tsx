@@ -30,7 +30,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
       <div className={emptySlotContainerClassName}>
         <div className="pointer-events-none absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10" />
         <div className="z-10 flex w-full flex-col items-center gap-2">
-          <span className="animate-pulse font-mono text-base font-normal tracking-widest text-text-muted uppercase md:text-lg">
+          <span className="animate-pulse font-mono text-base tracking-widest text-text-muted uppercase md:text-lg">
             SEARCHING...
           </span>
           <LobbyButton variant="primary" className="px-5 py-2 text-xs">
@@ -80,7 +80,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
         </h2>
         <div
           className={cn(
-            'flex items-center gap-2 text-xs font-normal uppercase md:text-sm',
+            'flex items-center gap-2 text-xs uppercase md:text-sm',
             player.isReady ? 'text-neon-green' : 'text-text-muted',
           )}
         >

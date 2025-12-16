@@ -5,7 +5,7 @@ import { PlayerGrid } from '@/components/lobby/PlayerGrid';
 import { ActionControls } from '@/components/lobby/ActionControls';
 import { Header } from '@/components/game/hud/Header';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
-import { Activity, KeyRound } from 'lucide-react';
+import { KeyRound } from 'lucide-react';
 
 // --- Mock Data ---
 function createMockPlayers(): (Player | null)[] {

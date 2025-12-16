@@ -30,7 +30,7 @@ const infoBoxClassName = cn(
 
 const titleClassName = cn(
   'hidden md:grid md:grid-cols-[1fr_auto_1fr]',
-  'text-base font-normal text-neutral-500',
+  'text-base text-neutral-500',
   'tracking-[0.2em] uppercase',
   'px-6 lg:px-8',
   'items-center justify-center gap-4',
