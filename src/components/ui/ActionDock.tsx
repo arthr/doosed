@@ -118,10 +118,11 @@ export function ActionDock({
           title="SHOP"
           icon={<ShoppingCart size={16} />}
           color="purple"
-          size="xs"
+          size="sm"
           disabled={!!shop.disabled}
           onClick={shop.onClick}
           fullWidth
+          textAlign="center"
         />
       ) : null}
 
@@ -130,10 +131,11 @@ export function ActionDock({
           title="CHAT"
           icon={<MessageSquare size={16} />}
           color="purple"
-          size="xs"
+          size="sm"
           disabled={!!chat.disabled}
           onClick={chat.onClick}
           fullWidth
+          textAlign="center"
         />
       ) : null}
 
@@ -142,10 +144,11 @@ export function ActionDock({
           title="LEAVE MATCH"
           icon={<LogOut size={16} />}
           color="red"
-          size="xs"
+          size="sm"
           disabled={!!leave.disabled}
           onClick={leave.onClick}
           fullWidth
+          textAlign="center"
         />
       ) : null}
     </div>

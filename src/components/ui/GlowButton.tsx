@@ -40,30 +40,34 @@ const colorStyles: Record<GlowButtonColor, string> = {
   neutral: 'border-neutral-500 shadow-[0_0_15px_rgba(115,115,115,0.4)] text-neutral-300 hover:bg-neutral-800/40',
 };
 
-const sizeStyles: Record<GlowButtonSize, { container: string; title: string; subtitle: string; iconArea: string }> = {
+const sizeStyles: Record<GlowButtonSize, { container: string; title: string; subtitle: string; iconSize: string; iconGap: string }> = {
   xs: {
     container: 'px-3 py-2 border-2 rounded-lg',
     title: 'text-xs md:text-sm',
     subtitle: 'text-[10px]',
-    iconArea: 'w-6 h-6 mr-2 text-base',
+    iconSize: 'text-base',
+    iconGap: 'gap-2',
   },
   sm: {
     container: 'px-4 py-2 border-2 rounded-lg',
     title: 'text-base md:text-lg',
     subtitle: 'text-xs',
-    iconArea: 'w-8 h-8 mr-3 text-lg',
+    iconSize: 'text-lg',
+    iconGap: 'gap-3',
   },
   md: {
     container: 'px-6 py-4 border-4 rounded-xl',
     title: 'text-xl md:text-2xl',
     subtitle: 'text-sm md:text-base',
-    iconArea: 'w-12 h-12 mr-4 text-2xl',
+    iconSize: 'text-2xl',
+    iconGap: 'gap-4',
   },
   lg: {
     container: 'px-8 py-5 border-4 rounded-xl',
     title: 'text-2xl md:text-3xl',
     subtitle: 'text-base md:text-lg',
-    iconArea: 'w-14 h-14 mr-5 text-3xl',
+    iconSize: 'text-3xl',
+    iconGap: 'gap-5',
   },
 };
 
@@ -82,26 +86,38 @@ export function GlowButton({
   onClick,
 }: GlowButtonProps) {
   const sizeConfig = sizeStyles[size];
+  const isCentered = textAlign === 'center';
 
   const iconElement = icon ? (
-    <div
-      className={cn(
-        'flex items-center justify-center shrink-0',
-        sizeConfig.iconArea,
-        iconPosition === 'right' && 'mr-0 ml-4',
-      )}
-    >
+    <span className={cn('flex items-center justify-center shrink-0', sizeConfig.iconSize)}>
       {icon}
-    </div>
+    </span>
   ) : null;
 
   // Determina alinhamento do texto baseado em textAlign e iconPosition
   const getTextAlignment = () => {
     if (textAlign === 'center') return 'items-center text-center';
     if (textAlign === 'right') return 'items-end text-right';
-    // left (default)
     return iconPosition === 'right' ? 'items-end text-left' : 'items-start text-left';
   };
+
+  const textElement = (
+    <span className={cn('flex flex-col', !isCentered && 'flex-1', getTextAlignment())}>
+      <span
+        className={cn(
+          'tracking-widest font-pixel font-extrabold uppercase drop-shadow-md',
+          sizeConfig.title,
+        )}
+      >
+        {title}
+      </span>
+      {subtitle && (
+        <span className={cn('opacity-80 font-pixel tracking-wide', sizeConfig.subtitle)}>
+          {subtitle}
+        </span>
+      )}
+    </span>
+  );
 
   return (
     <button
@@ -111,7 +127,8 @@ export function GlowButton({
       aria-pressed={pressed}
       className={cn(
         'group relative flex items-center',
-        textAlign === 'center' ? 'justify-center' : 'justify-between',
+        isCentered ? 'justify-center' : 'justify-between',
+        sizeConfig.iconGap,
         'bg-neutral-900/80 backdrop-blur-sm transition-all duration-200',
         'hover:scale-[1.02] active:scale-95',
         'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100',
@@ -121,27 +138,8 @@ export function GlowButton({
         className,
       )}
     >
-      {/* Icon Left */}
       {iconPosition === 'left' && iconElement}
-
-      {/* Text Area */}
-      <div className={cn('flex flex-col flex-1', getTextAlignment())}>
-        <span
-          className={cn(
-            'tracking-widest font-pixel font-extrabold uppercase drop-shadow-md',
-            sizeConfig.title,
-          )}
-        >
-          {title}
-        </span>
-        {subtitle && (
-          <span className={cn('opacity-80 font-pixel tracking-wide', sizeConfig.subtitle)}>
-            {subtitle}
-          </span>
-        )}
-      </div>
-
-      {/* Icon Right */}
+      {textElement}
       {iconPosition === 'right' && iconElement}
     </button>
   );
