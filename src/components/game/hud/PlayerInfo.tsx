@@ -52,7 +52,7 @@ const sizeVariants = {
     iconSize: "text-2xl",
     inventoryPadding: "p-2",
     inventoryGap: "gap-2",
-    borderWidth: "border-[3px]",
+    borderWidth: "border-3",
   },
   lg: {
     containerMax: "max-w-2xl",
@@ -64,7 +64,7 @@ const sizeVariants = {
     iconSize: "text-3xl",
     inventoryPadding: "p-3",
     inventoryGap: "gap-3",
-    borderWidth: "border-[4px]", // Bordas mais grossas no grande
+    borderWidth: "border-4", // Bordas mais grossas no grande
   }
 };
 
@@ -116,9 +116,9 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
         <div
           key={i}
           className={cn(
-            "aspect-square bg-[#1a1c1a] rounded-md flex items-center justify-center overflow-hidden relative group hover:border-[#5eff5e] transition-colors cursor-pointer",
+            "aspect-square backdrop-blur-sm rounded-md flex items-center justify-center overflow-hidden relative group transition-colors cursor-pointer",
             styles.borderWidth, // Borda dinâmica
-            "border-[#4a5f4a]"
+            "border-green-500"
           )}
           title={item ? item.name : "Empty Slot"}
         >
@@ -141,7 +141,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
     // Container Principal
     <div className={cn(
       "mx-auto w-full",
-      "rounded-2xl bg-[#5eff5e] shadow-[0_0_15px_#5eff5e] overflow-hidden font-mono text-white",
+      "rounded-2xl shadow-[0_0_15px_#5eff5e] overflow-hidden font-mono text-white",
       styles.containerMax,
       styles.outerPadding,
       className
@@ -149,7 +149,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
       
       {/* Container Interno Escuro */}
       <div className={cn(
-        "bg-[#0d0f0d] rounded-xl flex flex-col sm:flex-row relative z-10",
+        "rounded-xl flex flex-col sm:flex-row relative z-10",
         styles.innerPadding,
         styles.layoutGap
       )}>
@@ -160,7 +160,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
         {/* Lado Esquerdo - Avatar */}
         <div className="sm:w-1/3 flex flex-col z-30">
           <div className={cn(
-            "relative rounded-lg overflow-hidden border-[#5eff5e] shadow-[0_0_8px_inset_#5eff5e]",
+            "relative rounded-lg overflow-hidden border-rick-green shadow-[0_0_8px_inset_#5eff5e]",
             styles.borderWidth
           )}>
             <img
@@ -175,7 +175,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
         {/* Lado Direito - Stats e Inventário */}
         <div className="sm:w-2/3 flex flex-col gap-3 z-30">
           <h1 className={cn(
-            "font-bold uppercase tracking-wider text-[#e0ffe0] drop-shadow-[0_2px_2px_rgba(0,0,0,1)]",
+            "font-bold uppercase tracking-wider text-rick-green drop-shadow-[0_2px_2px_rgba(0,0,0,1)]",
             styles.nameText
           )}>
             {characterName}
@@ -184,13 +184,13 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
           {/* Seção de Barras de Status */}
           <div className="flex gap-6">
             <div>
-              <h3 className={cn("text-[#7aff7a] uppercase tracking-widest", styles.headerText)}>Health Bar</h3>
+              <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Health Bar</h3>
               <div className="flex">
                 {renderStatusIcons(currentHealth, maxHealth, <PillIcon primaryColor="var(--color-neon-green)" />)}
               </div>
             </div>
             <div>
-              <h3 className={cn("text-[#7aff7a] uppercase tracking-widest", styles.headerText)}>Resistance Bar</h3>
+              <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Resistance Bar</h3>
               <div className="flex">
                 {renderStatusIcons(currentResistance, maxResistance, <PillScannerIcon pillColor="var(--color-neon-cyan)" />)}
               </div>
@@ -199,7 +199,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
 
           {/* Seção de Inventário */}
           <div>
-            <h3 className={cn("text-[#7aff7a] uppercase tracking-widest", styles.headerText)}>Inventory Grid</h3>
+            <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Inventory Grid</h3>
             <div className={cn(
               "grid grid-cols-5 border-[#4a5f4a] rounded-lg bg-[#111311]",
               styles.borderWidth,

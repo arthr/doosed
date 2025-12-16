@@ -107,6 +107,7 @@ export function ActionDock({
                 disabled={!!loadout.disabled}
                 onClick={loadout.onPress}
                 fullWidth
+                textAlign="center"
               />
             );
           })()

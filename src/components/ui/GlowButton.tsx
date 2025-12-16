@@ -13,6 +13,8 @@ export interface GlowButtonProps {
   icon?: ReactNode;
   /** Posição do ícone */
   iconPosition?: 'left' | 'right';
+  /** Alinhamento do texto */
+  textAlign?: 'left' | 'center' | 'right';
   /** Cor do glow/borda */
   color?: GlowButtonColor;
   /** Tamanho geral (padding, texto, ícone) */
@@ -70,6 +72,7 @@ export function GlowButton({
   subtitle,
   icon,
   iconPosition = 'left',
+  textAlign = 'left',
   color = 'green',
   size = 'md',
   disabled = false,
@@ -92,6 +95,14 @@ export function GlowButton({
     </div>
   ) : null;
 
+  // Determina alinhamento do texto baseado em textAlign e iconPosition
+  const getTextAlignment = () => {
+    if (textAlign === 'center') return 'items-center text-center';
+    if (textAlign === 'right') return 'items-end text-right';
+    // left (default)
+    return iconPosition === 'right' ? 'items-end text-left' : 'items-start text-left';
+  };
+
   return (
     <button
       type="button"
@@ -99,7 +110,8 @@ export function GlowButton({
       disabled={disabled}
       aria-pressed={pressed}
       className={cn(
-        'group relative flex items-center justify-between',
+        'group relative flex items-center',
+        textAlign === 'center' ? 'justify-center' : 'justify-between',
         'bg-neutral-900/80 backdrop-blur-sm transition-all duration-200',
         'hover:scale-[1.02] active:scale-95',
         'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100',
@@ -113,7 +125,7 @@ export function GlowButton({
       {iconPosition === 'left' && iconElement}
 
       {/* Text Area */}
-      <div className={cn('flex flex-col flex-1', iconPosition === 'right' ? 'items-end' : 'items-start')}>
+      <div className={cn('flex flex-col flex-1', getTextAlignment())}>
         <span
           className={cn(
             'tracking-widest font-pixel font-extrabold uppercase drop-shadow-md',
