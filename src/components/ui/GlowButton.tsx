@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 export type GlowButtonColor = 'green' | 'purple' | 'blue' | 'red' | 'yellow' | 'neutral';
-export type GlowButtonSize = 'sm' | 'md' | 'lg';
+export type GlowButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export interface GlowButtonProps {
   /** Texto principal do botão */
@@ -19,6 +19,8 @@ export interface GlowButtonProps {
   size?: GlowButtonSize;
   /** Estado desabilitado */
   disabled?: boolean;
+  /** Estado toggle pressionado (para botões toggle) */
+  pressed?: boolean;
   /** Se ocupa 100% da largura */
   fullWidth?: boolean;
   /** Classes adicionais */
@@ -37,6 +39,12 @@ const colorStyles: Record<GlowButtonColor, string> = {
 };
 
 const sizeStyles: Record<GlowButtonSize, { container: string; title: string; subtitle: string; iconArea: string }> = {
+  xs: {
+    container: 'px-3 py-2 border-2 rounded-lg',
+    title: 'text-xs md:text-sm',
+    subtitle: 'text-[10px]',
+    iconArea: 'w-6 h-6 mr-2 text-base',
+  },
   sm: {
     container: 'px-4 py-2 border-2 rounded-lg',
     title: 'text-base md:text-lg',
@@ -65,6 +73,7 @@ export function GlowButton({
   color = 'green',
   size = 'md',
   disabled = false,
+  pressed,
   fullWidth = true,
   className,
   onClick,
@@ -88,6 +97,7 @@ export function GlowButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
+      aria-pressed={pressed}
       className={cn(
         'group relative flex items-center justify-between',
         'bg-neutral-900/80 backdrop-blur-sm transition-all duration-200',

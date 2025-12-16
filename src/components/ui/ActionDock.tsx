@@ -1,6 +1,6 @@
-import type { MouseEvent } from 'react';
 import { LogOut, MessageSquare, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { GlowButton } from './GlowButton';
 
 type ActionDockButtonConfig = {
   disabled?: boolean;
@@ -29,12 +29,10 @@ function formatTwoDigits(value?: number) {
   return value < 10 ? `0${value}` : String(value);
 }
 
-type LoadoutLabel =
-  | string
-  | {
-    line1: string;
-    line2?: string;
-  };
+type LoadoutLabelResult = {
+  title: string;
+  subtitle?: string;
+};
 
 function getLoadoutLabel({
   pressed,
@@ -46,15 +44,17 @@ function getLoadoutLabel({
   hasTimeLeft: boolean;
   timeLeft?: number;
   startIn: number;
-}): LoadoutLabel {
+}): LoadoutLabelResult {
   if (pressed) {
-    if (hasTimeLeft) return `(${formatTwoDigits(timeLeft)}) CANCEL LOADOUT`;
+    if (hasTimeLeft) return { title: `(${formatTwoDigits(timeLeft)}) CANCEL LOADOUT` };
     return startIn > 0
-      ? { line1: 'STARTING IN', line2: `${formatTwoDigits(startIn)} SECONDS...` }
-      : 'GAME STARTED!';
+      ? { title: 'STARTING IN', subtitle: `${formatTwoDigits(startIn)} SECONDS...` }
+      : { title: 'GAME STARTED!' };
   }
 
-  return hasTimeLeft ? `(${formatTwoDigits(timeLeft)}) CONFIRM LOADOUT` : "TIME'S UP!";
+  return hasTimeLeft
+    ? { title: `(${formatTwoDigits(timeLeft)}) CONFIRM LOADOUT` }
+    : { title: "TIME'S UP!" };
 }
 
 export function ActionDock({
@@ -68,11 +68,16 @@ export function ActionDock({
   const isStack = layout === 'stack';
   const stackRows = (() => {
     if (!isStack) return '';
-    const count = Number(!!loadout?.onPress) + Number(!!shop?.onClick) + Number(!!chat?.onClick) + Number(!!leave?.onClick);
+    const count =
+      Number(!!loadout?.onPress) +
+      Number(!!shop?.onClick) +
+      Number(!!chat?.onClick) +
+      Number(!!leave?.onClick);
     if (count <= 1) return 'grid-rows-1';
     if (count === 2) return 'grid-rows-2';
     return 'grid-rows-3';
   })();
+
   // se não houver nenhuma ação, não renderizar o ActionDock
   if (!chat?.onClick && !shop?.onClick && !loadout?.onPress && !leave?.onClick) return null;
 
@@ -85,87 +90,62 @@ export function ActionDock({
     >
       {loadout?.onPress
         ? (() => {
-          const pressed = !!loadout.pressed;
-          const timeLeft = loadout.timeLeft;
-          const startIn = loadout.startIn ?? 0;
-          const hasTimeLeft = typeof timeLeft === 'number' && timeLeft > 0;
+            const pressed = !!loadout.pressed;
+            const timeLeft = loadout.timeLeft;
+            const startIn = loadout.startIn ?? 0;
+            const hasTimeLeft = typeof timeLeft === 'number' && timeLeft > 0;
 
-          const label = getLoadoutLabel({ pressed, hasTimeLeft, timeLeft, startIn });
+            const label = getLoadoutLabel({ pressed, hasTimeLeft, timeLeft, startIn });
 
-          return (
-            <button
-              type="button"
-              onClick={(event: MouseEvent<HTMLButtonElement>) => {
-                event.preventDefault();
-                loadout.onPress?.();
-              }}
-              disabled={!!loadout.disabled}
-              aria-pressed={!!loadout.pressed}
-              className={cn(
-                'font-pixel flex items-center justify-center gap-2 border-b-4 border-border bg-neutral-700 py-2 text-xs text-foreground',
-                hasTimeLeft && 'hover:bg-rick-green hover:text-white active:translate-y-0.5 active:border-b-2',
-                loadout.disabled && 'cursor-not-allowed opacity-50',
-                pressed &&
-                hasTimeLeft &&
-                'border-destructive! bg-destructive! hover:border-destructive! hover:bg-destructive/80!',
-              )}
-            >
-              {typeof label === 'string' ? (
-                <span className="font-normal">{label}</span>
-              ) : (
-                <span className="flex flex-col text-center leading-tight font-normal">
-                  <span>{label.line1}</span>
-                  {label.line2 ? <span>{label.line2}</span> : null}
-                </span>
-              )}
-            </button>
-          );
-        })()
+            return (
+              <GlowButton
+                title={label.title}
+                subtitle={label.subtitle}
+                color={pressed ? 'red' : 'green'}
+                size="sm"
+                pressed={pressed}
+                disabled={!!loadout.disabled}
+                onClick={loadout.onPress}
+                fullWidth
+              />
+            );
+          })()
         : null}
+
       {shop?.onClick ? (
-        <button
-          type="button"
-          onClick={shop.onClick}
+        <GlowButton
+          title="SHOP"
+          icon={<ShoppingCart size={16} />}
+          color="purple"
+          size="xs"
           disabled={!!shop.disabled}
-          className={cn(
-            'font-pixel flex items-center justify-center gap-2 border-b-4 border-evil-purple bg-evil-purple text-xs hover:text-white text-foreground hover:bg-evil-purple/80 active:translate-y-0.5 active:border-b-2',
-            shop.disabled && 'cursor-not-allowed opacity-50',
-          )}
-        >
-          <ShoppingCart size={16} />
-          <span>SHOP</span>
-        </button>
+          onClick={shop.onClick}
+          fullWidth
+        />
       ) : null}
 
       {chat?.onClick ? (
-        <button
-          type="button"
-          onClick={chat.onClick}
-          aria-label="Abrir chat"
+        <GlowButton
+          title="CHAT"
+          icon={<MessageSquare size={16} />}
+          color="purple"
+          size="xs"
           disabled={!!chat.disabled}
-          className={cn(
-            'font-pixel flex items-center justify-center gap-2 border-b-4 border-evil-purple/70 bg-evil-purple text-xs text-accent hover:bg-evil-purple/80 active:translate-y-0.5 active:border-b-2',
-            chat.disabled && 'cursor-not-allowed opacity-50',
-          )}
-        >
-          <MessageSquare size={16} />
-          <span>CHAT</span>
-        </button>
+          onClick={chat.onClick}
+          fullWidth
+        />
       ) : null}
 
       {leave?.onClick ? (
-        <button
-          type="button"
-          onClick={leave.onClick}
+        <GlowButton
+          title="LEAVE MATCH"
+          icon={<LogOut size={16} />}
+          color="red"
+          size="xs"
           disabled={!!leave.disabled}
-          className={cn(
-            'font-pixel flex items-center justify-center gap-2 border-b-4 border-destructive bg-destructive text-xs text-white hover:bg-destructive/80 active:translate-y-0.5 active:border-b-2',
-            leave.disabled && 'cursor-not-allowed opacity-50',
-          )}
-        >
-          <LogOut size={16} />
-          <span>LEAVE MATCH</span>
-        </button>
+          onClick={leave.onClick}
+          fullWidth
+        />
       ) : null}
     </div>
   );
