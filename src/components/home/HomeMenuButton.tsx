@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { GlowButton, type GlowButtonColor } from '@/components/ui/glow-button';
+import { GlowButton, GlowButtonTitle, GlowButtonSubtitle, type GlowButtonColor, GlowButtonIcon, GlowButtonText } from '@/components/ui/glow-button';
 
 export interface HomeMenuButtonProps {
   title: string;
@@ -16,13 +16,16 @@ export interface HomeMenuButtonProps {
 export function HomeMenuButton({ title, subtitle, icon, color, onClick }: HomeMenuButtonProps) {
   return (
     <GlowButton
-      title={title}
-      subtitle={subtitle}
-      icon={icon}
       color={color}
       onClick={onClick}
       size="md"
       className="mb-4"
-    />
+    >
+      <GlowButtonIcon>{icon}</GlowButtonIcon>
+      <GlowButtonText>
+        <GlowButtonTitle className="font-extrabold">{title}</GlowButtonTitle>
+        <GlowButtonSubtitle>{subtitle}</GlowButtonSubtitle>
+      </GlowButtonText>
+    </GlowButton>
   );
 }

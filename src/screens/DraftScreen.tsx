@@ -169,7 +169,7 @@ export const DraftScreen = () => {
       />
 
       {/* Section: Content (scroll) */}
-      <ScrollArea className="bg-void-black text-text-primary border-border-muted flex-1 min-h-0 p-2 font-mono text-xs md:p-0 md:text-sm">
+      <ScrollArea className="flex-1 min-h-0 p-2 font-mono text-xs md:p-0 md:text-sm">
         {/* Section: Shop */}
         <div className="relative flex flex-col justify-center md:my-4">
 

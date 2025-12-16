@@ -49,7 +49,7 @@ export function ChatPanel({
   return (
     <div
       className={cn(
-        'border-border-muted shadow-pixel relative flex flex-col overflow-hidden rounded-xl border-4 bg-black',
+        'border-border-muted shadow-pixel relative flex flex-col overflow-hidden rounded border-4 bg-black',
         'font-mono',
         textClass,
         className,

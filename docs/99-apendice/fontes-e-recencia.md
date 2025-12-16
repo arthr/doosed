@@ -12,8 +12,8 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
+| 2025-12-16T00:25:44-03:00 | 2025-12-16T00:17:01 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
 | 2025-12-15T07:24:35-03:00 | 2025-12-15T07:23:55 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
-| 2025-12-15T07:17:10-03:00 | 2025-12-16T00:17:01 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
 | 2025-12-15T07:17:10-03:00 | 2025-12-15T07:19:09 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/tasks.md |
 | 2025-12-15T06:04:58-03:00 | 2025-12-15T05:30:12 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
 | 2025-12-15T05:56:09-03:00 | 2025-12-15T05:57:42 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/design.md |

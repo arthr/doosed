@@ -1,6 +1,6 @@
 import { ClockAlert, LogOut, MessageSquare, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { GlowButton } from './glow-button';
+import { GlowButton, GlowButtonIcon, GlowButtonText, GlowButtonTitle, GlowButtonSubtitle } from './glow-button';
 
 type ActionDockButtonConfig = {
   disabled?: boolean;
@@ -27,34 +27,6 @@ export interface ActionDockProps {
 function formatTwoDigits(value?: number) {
   if (typeof value !== 'number') return '--';
   return value < 10 ? `0${value}` : String(value);
-}
-
-type LoadoutLabelResult = {
-  title: string;
-  subtitle?: string;
-};
-
-function getLoadoutLabel({
-  pressed,
-  hasTimeLeft,
-  timeLeft,
-  startIn,
-}: {
-  pressed: boolean;
-  hasTimeLeft: boolean;
-  timeLeft?: number;
-  startIn: number;
-}): LoadoutLabelResult {
-  if (pressed) {
-    if (hasTimeLeft) return { title: `(${formatTwoDigits(timeLeft)}) CANCEL LOADOUT` };
-    return startIn > 0
-      ? { title: 'STARTING IN', subtitle: `${formatTwoDigits(startIn)} SECONDS...` }
-      : { title: 'GAME STARTED!' };
-  }
-
-  return hasTimeLeft
-    ? { title: `(${formatTwoDigits(timeLeft)}) CONFIRM LOADOUT` }
-    : { title: "TIME'S UP!" };
 }
 
 export function ActionDock({
@@ -120,15 +92,11 @@ export function ActionDock({
             const timeLeft = loadout.timeLeft;
             const startIn = loadout.startIn ?? 0;
             const hasTimeLeft = typeof timeLeft === 'number' && timeLeft > 0;
-
-            const label = getLoadoutLabel({ pressed, hasTimeLeft, timeLeft, startIn });
-            const icon = hasTimeLeft || <ClockAlert />
+            const isStarting = pressed && !hasTimeLeft && startIn > 0;
+            const hasStarted = pressed && !hasTimeLeft && startIn <= 0;
 
             return (
               <GlowButton
-                title={label.title}
-                icon={icon}
-                subtitle={label.subtitle}
                 color={pressed ? 'red' : 'green'}
                 size="xs"
                 pressed={pressed}
@@ -136,7 +104,26 @@ export function ActionDock({
                 onClick={loadout.onPress}
                 fullWidth
                 textAlign="center"
-              />
+              >
+                {!hasTimeLeft && <GlowButtonIcon><ClockAlert /></GlowButtonIcon>}
+                <GlowButtonText>
+                  <GlowButtonTitle>
+                    {hasTimeLeft && `(${formatTwoDigits(timeLeft)}) `}
+                    {hasStarted
+                      ? 'GAME STARTED!'
+                      : isStarting
+                        ? 'STARTING IN'
+                        : pressed
+                          ? 'CANCEL LOADOUT'
+                          : hasTimeLeft
+                            ? 'CONFIRM LOADOUT'
+                            : "TIME'S UP!"}
+                  </GlowButtonTitle>
+                  {isStarting && (
+                    <GlowButtonSubtitle>{formatTwoDigits(startIn)} SECONDS...</GlowButtonSubtitle>
+                  )}
+                </GlowButtonText>
+              </GlowButton>
             );
           })()
         : null}
