@@ -43,3 +43,19 @@
 ### Nota sobre fases vs screens
 - As **Phases do jogo** são: `LOBBY -> DRAFT -> MATCH -> RESULTS`.
 - A `HomeScreen` é uma **Screen fora das Phases** (antes de entrar no fluxo do jogo).
+
+## Estado básico do App (preparação para FSM)
+Para evitar confusão entre **Screen** e **Phase**, o app deve separar:
+- **AppScreen** (alto nível): `HOME | GAME`
+- **Phase** (jogo): `LOBBY | DRAFT | MATCH | RESULTS`
+
+### Regras
+- `HomeScreen` deve ser controlada por `AppScreen=HOME` (não é Phase).
+- Enquanto `AppScreen=GAME`, a Screen renderizada deve ser derivada da `Phase`.
+
+### Implementação recomendada (sem libs extras)
+- Criar um store do app (ex.: `appShellStore`) com `appScreen` e um `devOverride` (apenas DEV).
+- Criar um `ScreenRouter` (componente pequeno) que resolve a Screen real baseada em:
+  - `appScreen` (estado real)
+  - `phase` (do `flowStore`)
+  - `devOverride` (somente DEV)

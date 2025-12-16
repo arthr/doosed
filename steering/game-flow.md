@@ -12,6 +12,10 @@ Este arquivo define o fluxo do jogo e guardrails arquiteturais. Detalhes estão 
 > Nota: a **Home** (ex.: `HomeScreen`) é uma Screen **fora** das Phases.
 > As Phases se aplicam apenas após o jogador entrar no fluxo do jogo (ex.: criar/entrar em sala).
 
+## Estado do App (alto nível)
+- `HOME`: Screen fora do jogo (menu/entrada)
+- `GAME`: fluxo do jogo guiado por Phase (`LOBBY/DRAFT/MATCH/RESULTS`)
+
 ## Loop de turno (MATCH)
 - (Opcional) usar item
 - escolher pílula
