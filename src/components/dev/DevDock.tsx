@@ -11,10 +11,19 @@ export interface DevDockProps {
   children: React.ReactNode;
 }
 
-const TRANSITION_DURATION = 200; // ms
+const ANIM_DURATION = 200; // ms
+const COLLAPSED_WIDTH_PX = 120;
+const COLLAPSED_HEIGHT_PX = 52;
+const EXPANDED_MAX_WIDTH_PX = 420;
+const EXPANDED_HEIGHT_VH = 80; // max-h-[80vh]
 
 export function DevDock({ children }: DevDockProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Intenção do usuário (abrir/fechar). Usado só para encadear a etapa seguinte via transitionend.
+  const [desiredOpen, setDesiredOpen] = useState(false);
+  // Flags de etapa (sequencial): largura -> altura (abrir) / altura -> largura (fechar)
+  const [widthExpanded, setWidthExpanded] = useState(false);
+  const [heightExpanded, setHeightExpanded] = useState(false);
+
   const [dockPos, setDockPos] = useState<Vec2>({ x: 24, y: 24 });
 
   const dragRef = useRef<{
@@ -25,7 +34,42 @@ export function DevDock({ children }: DevDockProps) {
     originY: number;
   } | null>(null);
 
-  const toggle = () => setIsExpanded(prev => !prev);
+  const isTransitioning = (desiredOpen && widthExpanded && !heightExpanded) || (!desiredOpen && widthExpanded);
+
+  const toggle = () => {
+    if (isTransitioning) return;
+
+    if (!desiredOpen) {
+      // Abrir: 1) expande para direita (largura). A altura será expandida quando a largura terminar.
+      setDesiredOpen(true);
+      setWidthExpanded(true);
+      // Mantém heightExpanded false até o fim da transição de width.
+      return;
+    }
+
+    // Fechar: 1) colapsa para cima (altura). A largura será colapsada quando a altura terminar.
+    setDesiredOpen(false);
+    setHeightExpanded(false);
+  };
+
+  const handleTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) return;
+
+    if (event.propertyName === 'width') {
+      // Abrir: quando a largura terminar, expande a altura.
+      if (desiredOpen && widthExpanded && !heightExpanded) {
+        setHeightExpanded(true);
+      }
+      return;
+    }
+
+    if (event.propertyName === 'max-height') {
+      // Fechar: quando a altura terminar de colapsar, colapsa a largura.
+      if (!desiredOpen && !heightExpanded && widthExpanded) {
+        setWidthExpanded(false);
+      }
+    }
+  };
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
@@ -51,8 +95,14 @@ export function DevDock({ children }: DevDockProps) {
     const dx = event.clientX - drag.startX;
     const dy = event.clientY - drag.startY;
 
-    const maxX = isExpanded ? window.innerWidth - 240 : window.innerWidth - 56;
-    const maxY = isExpanded ? window.innerHeight - 120 : window.innerHeight - 56;
+    const expandedWidth = Math.min(window.innerWidth * 0.92, EXPANDED_MAX_WIDTH_PX);
+    const currentWidth = widthExpanded ? expandedWidth : COLLAPSED_WIDTH_PX;
+
+    const expandedHeight = Math.min(window.innerHeight * (EXPANDED_HEIGHT_VH / 100), window.innerHeight);
+    const currentHeight = heightExpanded ? expandedHeight : COLLAPSED_HEIGHT_PX;
+
+    const maxX = window.innerWidth - currentWidth - 8;
+    const maxY = window.innerHeight - currentHeight - 8;
 
     const nextX = clamp(drag.originX + dx, 8, maxX);
     const nextY = clamp(drag.originY + dy, 8, maxY);
@@ -71,9 +121,10 @@ export function DevDock({ children }: DevDockProps) {
       className="z-60"
     >
       <div
+        onTransitionEnd={handleTransitionEnd}
         style={{
           touchAction: 'none',
-          transitionDuration: `${TRANSITION_DURATION}ms`,
+          transitionDuration: `${ANIM_DURATION}ms`,
         }}
         className={cn(
           'rounded border-2 border-neutral-700 bg-neutral-950/95 backdrop-blur',
@@ -81,9 +132,9 @@ export function DevDock({ children }: DevDockProps) {
           'overflow-hidden',
           'transition-[width,max-height] ease-out',
           // Largura
-          isExpanded ? 'w-[min(92vw,420px)]' : 'w-auto',
+          widthExpanded ? 'w-[min(92vw,420px)]' : 'w-[120px]',
           // Altura maxima
-          isExpanded ? 'max-h-[80vh]' : 'max-h-[52px]',
+          heightExpanded ? 'max-h-[80vh]' : 'max-h-[52px]',
         )}
       >
         {/* Header - sempre visivel */}
@@ -95,21 +146,22 @@ export function DevDock({ children }: DevDockProps) {
             'flex items-center justify-between gap-4',
             'cursor-move select-none',
             'px-3 py-2',
-            isExpanded && 'border-b border-neutral-800',
+            widthExpanded && 'border-b border-neutral-800',
           )}
         >
           <button
             type="button"
             onPointerDown={e => e.stopPropagation()}
             onClick={toggle}
-            aria-label={isExpanded ? 'Fechar menu' : 'Abrir menu'}
-            aria-expanded={isExpanded}
+            aria-label={desiredOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={heightExpanded}
             className={cn(
               'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
               'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+              isTransitioning && 'opacity-60 pointer-events-none',
             )}
           >
-            {isExpanded ? 'Fechar' : 'Abrir'}
+            {desiredOpen ? 'Fechar' : 'Abrir'}
           </button>
           <div className="text-xs tracking-widest text-neutral-400 uppercase">
             Dev Menu
@@ -120,9 +172,9 @@ export function DevDock({ children }: DevDockProps) {
         <div
           className={cn(
             'transition-opacity ease-out',
-            isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none',
+            heightExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none',
           )}
-          style={{ transitionDuration: `${TRANSITION_DURATION}ms` }}
+          style={{ transitionDuration: `${ANIM_DURATION}ms` }}
         >
           <div className="flex flex-col gap-3 p-3">
             {children}
