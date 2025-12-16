@@ -12,7 +12,7 @@
   - DoD: existe `appScreen` (`HOME|GAME`), `setAppScreen`, `devOverride`, `setDevOverride`, `clearDevOverride`; TS strict; sem `any`.
   - Commit: `feat(app): adiciona app state (HOME/GAME) e override DEV`
 
-- [~] 2. Criar `ScreenRouter` (renderização real por estado do App + Phase)
+- [x] 2. Criar `ScreenRouter` (renderização real por estado do App + Phase)
   - DoD: `App.tsx` renderiza `ScreenRouter` dentro do `ScreenShell`; Home fora das Phases; GAME renderiza por Phase (`flowStore.phase`).
   - Commit: `feat(app): adiciona ScreenRouter baseado em appScreen + phase`
 
