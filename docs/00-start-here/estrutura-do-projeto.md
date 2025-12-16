@@ -17,6 +17,7 @@ dosed/
 │   │   ├── adapters/             # Wrappers/clients (Supabase, etc.)
 │   │   └── state-machines/       # FSM (XState opcional) ou lógica de fases
 │   ├── components/
+│   │   ├── app/                   # Shell da aplicação (ex.: ScreenShell)
 │   │   ├── game/
 │   │   │   ├── table/            # Mesa de jogo (bottle, conveyor, pills)
 │   │   │   └── hud/              # HUD (barras, stats, inventário)

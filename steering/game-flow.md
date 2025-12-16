@@ -9,6 +9,9 @@ Este arquivo define o fluxo do jogo e guardrails arquiteturais. Detalhes estão 
 ## Fases (contrato)
 - LOBBY -> DRAFT -> MATCH -> RESULTS
 
+> Nota: a **Home** (ex.: `HomeScreen`) é uma Screen **fora** das Phases.
+> As Phases se aplicam apenas após o jogador entrar no fluxo do jogo (ex.: criar/entrar em sala).
+
 ## Loop de turno (MATCH)
 - (Opcional) usar item
 - escolher pílula

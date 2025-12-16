@@ -72,7 +72,7 @@ export const LobbyScreen = () => {
             className="h-auto md:h-48"
             chatThreadId="lobby"
             actions={
-              <ActionControls isReady={isReady} onToggleReady={() => setIsReady(prev => !prev)} />
+            <ActionControls isReady={isReady} onToggleReady={() => setIsReady(prev => !prev)} />
             }
           />
         </footer>

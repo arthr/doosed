@@ -28,3 +28,18 @@
 - Screen deve ser “fina”: orquestração + composição de seções.
 - Componentes de UI específicos devem viver em `src/components/<dominio>/...` (ex.: `home/`, `lobby/`, `match/`, `results/`, `dev/`).
 - `src/components/ui/` deve conter apenas componentes realmente genéricos (promover por evidência de reuso).
+
+## ScreenShell (container do “monitor”)
+- A aplicação deve ter um **container único** no topo (o “monitor”) responsável por **overlays globais** e por renderizar a Screen atual dentro do viewport.
+- Nome: `ScreenShell`
+- Local: `src/components/app/ScreenShell.tsx`
+
+### Responsabilidades do ScreenShell
+- Renderizar **background global** (decorativo) quando aplicável.
+- Renderizar **Chat dock** e **NotificationBar** (globais).
+- Renderizar **dev tools** apenas em DEV (ex.: dock/preview), fora das Screens.
+- Renderizar a **Screen atual** via `children`.
+
+### Nota sobre fases vs screens
+- As **Phases do jogo** são: `LOBBY -> DRAFT -> MATCH -> RESULTS`.
+- A `HomeScreen` é uma **Screen fora das Phases** (antes de entrar no fluxo do jogo).
