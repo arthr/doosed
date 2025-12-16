@@ -16,7 +16,7 @@
   - DoD: `App.tsx` renderiza `ScreenRouter` dentro do `ScreenShell`; Home fora das Phases; GAME renderiza por Phase (`flowStore.phase`).
   - Commit: `feat(app): adiciona ScreenRouter baseado em appScreen + phase`
 
-- [ ] 3. Conectar `HomeScreen` ao estado do App (entrar no jogo)
+- [x] 3. Conectar `HomeScreen` ao estado do App (entrar no jogo)
   - DoD: botão “Play/Enter” seta `appScreen='GAME'` e inicializa Phase em `LOBBY` (se necessário); sem quebra de layout.
   - Commit: `feat(home): entrar no jogo via appScreen`
 

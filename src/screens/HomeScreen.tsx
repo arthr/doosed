@@ -4,10 +4,21 @@ import { HomeTitle } from '@/components/home/HomeTitle';
 import { HomeDecorations } from '@/components/home/HomeDecorations';
 import { HomeMenuButton } from '@/components/home/HomeMenuButton';
 import { HomeInfoCard } from '@/components/home/HomeInfoCard';
+import { useAppShellStore } from '@/stores/appShellStore';
+import { useFlowStore } from '@/stores/flowStore';
 
 // --- Main Page Component ---
 
 const HomeScreen = () => {
+  const setAppScreen = useAppShellStore(state => state.setAppScreen);
+  const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
+
+  const enterGame = () => {
+    // Home é fora das Phases; ao entrar no jogo, garantimos o ponto de entrada em LOBBY.
+    setPhaseGuarded('LOBBY');
+    setAppScreen('GAME');
+  };
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex flex-col items-center font-pixel selection:bg-green-500 selection:text-black">
       {/* Screen: Content */}
@@ -28,12 +39,14 @@ const HomeScreen = () => {
               subtitle="Play"
               icon={<Hand size={32} />}
               color="green"
+              onClick={enterGame}
             />
             <HomeMenuButton
               title="MULTIPLAYER"
               subtitle="Lobby"
               icon={<Users size={32} />}
               color="purple"
+              onClick={enterGame}
             />
             <HomeMenuButton
               title="THE LAB"
