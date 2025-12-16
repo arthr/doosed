@@ -8,7 +8,7 @@
 
 ## Lista
 
-- [~] 1. Criar store do App (HOME vs GAME) + override DEV
+- [x] 1. Criar store do App (HOME vs GAME) + override DEV
   - DoD: existe `appScreen` (`HOME|GAME`), `setAppScreen`, `devOverride`, `setDevOverride`, `clearDevOverride`; TS strict; sem `any`.
   - Commit: `feat(app): adiciona app state (HOME/GAME) e override DEV`
 
