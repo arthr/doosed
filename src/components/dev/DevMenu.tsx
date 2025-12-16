@@ -18,6 +18,10 @@ function getNextPhase(phase: Phase): Phase {
   return 'LOBBY';
 }
 
+function isInGame(screen: AppScreen): boolean {
+  return screen === 'GAME';
+}
+
 export interface DevMenuProps {
   mode: 'real' | 'preview';
   setMode: (value: 'real' | 'preview') => void;
@@ -66,6 +70,9 @@ export function DevMenu({
   clearNotifications,
   onClosePreview,
 }: DevMenuProps) {
+  const inGameScreen = isInGame(appScreen);
+  const inHomeScreen = !isInGame(appScreen);
+
   return (
     <div className="flex min-h-0 flex-col p-2">
       <div className="flex flex-col gap-3">
@@ -119,45 +126,58 @@ export function DevMenu({
           </label>
         ) : (
           <div className="rounded border border-neutral-800 bg-black/50 p-3">
-            <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">Estado do App</div>
+            <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">APP STATE</div>
             <div className="grid grid-cols-4 items-start justify-between gap-2">
               <div className="col-span-1 text-xs text-white">
                 Atual: <span className="font-normal">{appScreen}</span>
               </div>
               <div className="col-span-3 grid grid-cols-3 gap-2">
                 <button
+                  disabled={inHomeScreen}
                   type="button"
                   onClick={() => setAppScreen('HOME')}
                   className={cn(
                     'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
                     'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                    'disabled:opacity-60 disabled:hover:border-neutral-700 disabled:hover:bg-neutral-900',
                   )}
                 >
                   Home
                 </button>
                 <button
+                  disabled={inGameScreen}
                   type="button"
-                  onClick={() => setAppScreen('GAME')}
+                  onClick={() => {
+                    setAppScreen('GAME');
+                    setPhaseGuarded('LOBBY');
+                  }}
                   className={cn(
                     'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
                     'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                    'disabled:opacity-60 disabled:hover:border-neutral-700 disabled:hover:bg-neutral-900',
                   )}
                 >
                   Game
                 </button>
 
                 <button
+                  disabled={inHomeScreen}
                   type="button"
-                  onClick={() => setPhaseGuarded('LOBBY')}
+                  onClick={() => {
+                    setAppScreen('HOME');
+                    setPhaseGuarded('LOBBY');
+                  }}
                   className={cn(
                     'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
                     'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                    'disabled:opacity-60 disabled:hover:border-neutral-700 disabled:hover:bg-neutral-900',
                   )}
                 >
                   Lobby
                 </button>
                 <button
                   type="button"
+                  disabled={inHomeScreen}
                   onClick={() => {
                     if (phase === 'LOBBY') finishRun();
                     else setPhaseGuarded(getPreviousPhase(phase));
@@ -165,12 +185,26 @@ export function DevMenu({
                   className={cn(
                     'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
                     'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                    'disabled:opacity-60 disabled:hover:border-neutral-700 disabled:hover:bg-neutral-900',
                   )}
                 >
                   Prev
                 </button>
                 <button
                   type="button"
+                  disabled={inHomeScreen}
+                  onClick={resetRun}
+                  className={cn(
+                    'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
+                    'text-xs text-morty-yellow hover:border-neutral-300 hover:bg-neutral-800',
+                    'disabled:opacity-60 disabled:hover:border-neutral-700 disabled:hover:bg-neutral-900',
+                  )}
+                >
+                  Reset
+                </button>
+                <button
+                  type="button"
+                  disabled={inHomeScreen}
                   onClick={() => {
                     if (phase === 'RESULTS') resetRun();
                     else setPhaseGuarded(getNextPhase(phase));
@@ -178,30 +212,28 @@ export function DevMenu({
                   className={cn(
                     'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
                     'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                    'disabled:opacity-60 disabled:hover:border-neutral-700 disabled:hover:bg-neutral-900',
                   )}
                 >
                   Next
-                </button>
-                <button
-                  type="button"
-                  onClick={resetRun}
-                  className={cn(
-                    'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
-                    'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
-                  )}
-                >
-                  Reset
                 </button>
               </div>
             </div>
 
 
             <div className="flex items-center justify-between mt-2 text-xs text-neutral-300">
-              Phase atual: <span className="text-morty-yellow">{phase}</span>
+              Phase atual: <span
+                className={cn(
+                  'tracking-wider uppercase',
+                  inHomeScreen ? 'text-neutral-400' : 'text-morty-yellow'
+                )}
+              >{inGameScreen ? phase : '(sem phase)'}</span>
             </div>
 
             <div className="mt-3 border-t border-neutral-800 pt-3">
-              <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">Override (DEV)</div>
+              <div className="mb-2 text-xs tracking-widest text-neutral-400">
+                OVERRIDE <span className="text-neutral-500"> - (ScreenRouter only)</span>
+              </div>
               <div className="flex flex-col gap-2">
                 <label className="flex items-center justify-between gap-2">
                   <span className="text-xs text-neutral-300">Ativar</span>
@@ -228,14 +260,14 @@ export function DevMenu({
                       'disabled:opacity-60',
                     )}
                   >
-                    <option value="">(sem override)</option>
+                    <option value="">(selecione um appScreen)</option>
                     <option value="HOME">HOME</option>
                     <option value="GAME">GAME</option>
                   </select>
                 </label>
 
                 <label className="flex flex-col gap-1">
-                  <span className="text-xs text-neutral-300">Phase</span>
+                  <span className="text-xs text-neutral-300">PhaseScreen</span>
                   <select
                     value={(devOverride?.phase ?? '') as string}
                     disabled={!devOverride || devOverride?.appScreen === 'HOME'}
@@ -250,7 +282,7 @@ export function DevMenu({
                       'disabled:opacity-60',
                     )}
                   >
-                    <option value="">(sem override)</option>
+                    <option value="">(selecione uma phase)</option>
                     <option value="LOBBY">LOBBY</option>
                     <option value="DRAFT">DRAFT</option>
                     <option value="MATCH">MATCH</option>
