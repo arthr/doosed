@@ -7,6 +7,7 @@ interface FlowStore {
 
   setPhaseGuarded: (next: Phase) => boolean;
   resetRun: () => void;
+  finishRun: () => void;
 }
 
 export const useFlowStore = create<FlowStore>((set, get) => ({
@@ -23,6 +24,10 @@ export const useFlowStore = create<FlowStore>((set, get) => ({
   resetRun: () => {
     set(state => ({ phase: 'LOBBY', runId: state.runId + 1 }));
   },
+
+  finishRun: () => {
+    set(state => ({ phase: 'RESULTS', runId: state.runId + 1 }));
+  },
 }));
 
 export const flowActions = {
@@ -34,5 +39,8 @@ export const flowActions = {
   },
   resetRun() {
     useFlowStore.getState().resetRun();
+  },
+  finishRun() {
+    useFlowStore.getState().finishRun();
   },
 };

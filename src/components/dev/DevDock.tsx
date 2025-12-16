@@ -180,7 +180,7 @@ export function DevDock({ children }: DevDockProps) {
           style={{ transitionDuration: `${ANIM_DURATION}ms` }}
         >
           <div className="flex flex-col gap-3">
-            <ScrollArea className="h-[500px] ring-2">
+            <ScrollArea className="flex h-[500px] shadow-inner! shadow-black">
               {children}
             </ScrollArea>
           </div>

@@ -53,6 +53,7 @@ export function DevToolsOverlay() {
   const phase = useFlowStore(state => state.phase);
   const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
   const resetRun = useFlowStore(state => state.resetRun);
+  const finishRun = useFlowStore(state => state.finishRun);
 
   // App Shell Store
   const appScreen = useAppShellStore(state => state.appScreen);
@@ -124,6 +125,7 @@ export function DevToolsOverlay() {
           phase={phase}
           setPhaseGuarded={setPhaseGuarded}
           resetRun={resetRun}
+          finishRun={finishRun}
           appScreen={appScreen}
           setAppScreen={setAppScreen}
           devOverride={devOverride}

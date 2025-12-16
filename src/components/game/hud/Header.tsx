@@ -51,7 +51,7 @@ const InfoBox = ({
 }: InfoBoxProps) => (
   <div className={infoBoxClassName}>
     {icon ? icon : null}
-    <span className={cn('text-xs tracking-widest', hideLabelOnMobile ? 'hidden md:block' : '')}>
+    <span className={cn('text-xs text-white tracking-widest', hideLabelOnMobile ? 'hidden md:block' : '')}>
       {label}:
     </span>
     <span className="font-normal text-xs text-white">{value ?? placeholder}</span>

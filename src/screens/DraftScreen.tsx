@@ -182,7 +182,7 @@ export const DraftScreen = () => {
                   key={category}
                   className="flex flex-col gap-2 px-0 md:px-3"
                 >
-                  <h3 className="text-sm uppercase">{category}</h3>
+                  <h3 className="text-sm text-white uppercase">{category}</h3>
                   <div className="grid grid-cols-5 space-y-4 gap-2 md:gap-3 lg:grid-cols-3">
                     {/* Category Items */}
                     {[...Array(5)].map((_, itemIndex) => (
