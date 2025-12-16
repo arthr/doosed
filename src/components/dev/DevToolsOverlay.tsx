@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useAppShellStore } from '@/stores/appShellStore';
 import { useFlowStore } from '@/stores/flowStore';
 import { useNotification } from '@/stores/notificationStore';
 import { LobbyScreen } from '@/screens/LobbyScreen';
@@ -45,12 +46,20 @@ function pickScreenComponent(moduleExports: Record<string, unknown>): ScreenComp
  * - abrir um dock flutuante com ações e playgrounds
  */
 export function DevToolsOverlay() {
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [mode, setMode] = useState<'real' | 'preview'>('real');
+  const [previewKey, setPreviewKey] = useState<string | null>(null);
 
   // Flow Store
   const phase = useFlowStore(state => state.phase);
   const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
   const resetRun = useFlowStore(state => state.resetRun);
+
+  // App Shell Store
+  const appScreen = useAppShellStore(state => state.appScreen);
+  const setAppScreen = useAppShellStore(state => state.setAppScreen);
+  const devOverride = useAppShellStore(state => state.devOverride);
+  const setDevOverride = useAppShellStore(state => state.setDevOverride);
+  const clearDevOverride = useAppShellStore(state => state.clearDevOverride);
 
   // Notification Store
   const { show: showNotification, dismiss: dismissNotification, clear: clearNotifications } = useNotification();
@@ -75,7 +84,7 @@ export function DevToolsOverlay() {
   }, []);
 
   const selected =
-    selectedKey && selectedKey !== '__phase__' ? (screens.find(s => s.key === selectedKey) ?? null) : null;
+    previewKey && previewKey !== '__phase__' ? (screens.find(s => s.key === previewKey) ?? null) : null;
 
   const PhaseRouterPreview = useMemo(() => {
     switch (phase) {
@@ -94,29 +103,36 @@ export function DevToolsOverlay() {
     }
   }, [phase]);
 
-  const previewNode = selectedKey === '__phase__' ? PhaseRouterPreview : selected ? <selected.Component /> : null;
+  const previewNode = previewKey === '__phase__' ? PhaseRouterPreview : selected ? <selected.Component /> : null;
 
-  const screenOptions = useMemo(
+  const previewOptions = useMemo(
     () => screens.map(screen => ({ key: screen.key, label: screen.label })),
     [screens],
   );
 
   return (
     <>
-      <DevOverlayPreview preview={previewNode} />
+      <DevOverlayPreview preview={mode === 'preview' ? previewNode : null} />
 
       <DevDock>
         <DevMenu
-          selectedKey={selectedKey}
-          setSelectedKey={setSelectedKey}
-          screenOptions={screenOptions}
+          mode={mode}
+          setMode={setMode}
+          previewKey={previewKey}
+          setPreviewKey={setPreviewKey}
+          previewOptions={previewOptions}
           phase={phase}
           setPhaseGuarded={setPhaseGuarded}
           resetRun={resetRun}
+          appScreen={appScreen}
+          setAppScreen={setAppScreen}
+          devOverride={devOverride}
+          setDevOverride={setDevOverride}
+          clearDevOverride={clearDevOverride}
           showNotification={showNotification}
           dismissNotification={dismissNotification}
           clearNotifications={clearNotifications}
-          onClosePreview={() => setSelectedKey(null)}
+          onClosePreview={() => setPreviewKey(null)}
         />
       </DevDock>
     </>

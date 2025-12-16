@@ -4,7 +4,6 @@ import type { Phase } from '@/core/state-machines/phase';
 export type AppScreen = 'HOME' | 'GAME';
 
 export interface DevOverride {
-  enabled: boolean;
   appScreen?: AppScreen;
   phase?: Phase;
 }

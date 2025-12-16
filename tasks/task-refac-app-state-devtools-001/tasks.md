@@ -20,7 +20,7 @@
   - DoD: botão “Play/Enter” seta `appScreen='GAME'` e inicializa Phase em `LOBBY` (se necessário); sem quebra de layout.
   - Commit: `feat(home): entrar no jogo via appScreen`
 
-- [ ] 4. Refatorar DevTools para manipular estado real (sem preview overlay obrigatório)
+- [~] 4. Refatorar DevTools para manipular estado real (sem preview overlay obrigatório)
   - DoD: DevTools consegue forçar `HOME/GAME` e `phase` reais em DEV; preview overlay vira opcional/modo separado (se mantido).
   - Commit: `refactor(dev): DevTools controla estado real (appScreen/phase)`
 

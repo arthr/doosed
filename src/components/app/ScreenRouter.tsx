@@ -11,10 +11,10 @@ import type { Phase } from '@/core/state-machines/phase';
 function resolveAppScreenWithDevOverride(
   appScreen: AppScreen,
   phase: Phase,
-  devOverride: { enabled: boolean; appScreen?: AppScreen; phase?: Phase } | null,
+  devOverride: { appScreen?: AppScreen; phase?: Phase } | null,
 ) {
   if (!import.meta.env.DEV) return { appScreen, phase };
-  if (!devOverride?.enabled) return { appScreen, phase };
+  if (!devOverride) return { appScreen, phase };
 
   return {
     appScreen: devOverride.appScreen ?? appScreen,

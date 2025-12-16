@@ -1,22 +1,29 @@
 import { cn } from '@/lib/cn';
 import type { Phase } from '@/core/state-machines/phase';
 import type { NotificationVariant } from '@/stores/notificationStore';
+import type { AppScreen, DevOverride } from '@/stores/appShellStore';
 import { DevPhaseControls } from './DevPhaseControls';
 import { NotificationPlayground } from './NotificationPlayground';
 
-export interface DevMenuScreenOption {
-  key: string;
-  label: string;
-}
-
 export interface DevMenuProps {
-  selectedKey: string | null;
-  setSelectedKey: (value: string | null) => void;
-  screenOptions: DevMenuScreenOption[];
+  mode: 'real' | 'preview';
+  setMode: (value: 'real' | 'preview') => void;
+
+  // Preview (overlay)
+  previewKey: string | null;
+  setPreviewKey: (value: string | null) => void;
+  previewOptions: { key: string; label: string }[];
 
   phase: Phase;
   setPhaseGuarded: (phase: Phase) => void;
   resetRun: () => void;
+
+  appScreen: AppScreen;
+  setAppScreen: (next: AppScreen) => void;
+
+  devOverride: DevOverride | null;
+  setDevOverride: (override: DevOverride) => void;
+  clearDevOverride: () => void;
 
   showNotification: (args: { message: string; variant: NotificationVariant; durationTime: number }) => void;
   dismissNotification: () => void;
@@ -26,12 +33,19 @@ export interface DevMenuProps {
 }
 
 export function DevMenu({
-  selectedKey,
-  setSelectedKey,
-  screenOptions,
+  mode,
+  setMode,
+  previewKey,
+  setPreviewKey,
+  previewOptions,
   phase,
   setPhaseGuarded,
   resetRun,
+  appScreen,
+  setAppScreen,
+  devOverride,
+  setDevOverride,
+  clearDevOverride,
   showNotification,
   dismissNotification,
   clearNotifications,
@@ -39,27 +53,160 @@ export function DevMenu({
 }: DevMenuProps) {
   return (
     <div className="flex flex-col gap-3">
-      <label className="flex flex-col gap-2">
-        <span className="text-xs tracking-wider text-neutral-400 uppercase">Tela</span>
-        <select
-          value={selectedKey ?? ''}
-          onChange={e => setSelectedKey(e.target.value ? e.target.value : null)}
-          className={cn(
-            'w-full',
-            'rounded border-2 border-neutral-700 bg-black',
-            'px-3 py-2 text-sm text-white',
-            'focus:ring-2 focus:ring-neutral-600 focus:outline-none',
-          )}
-        >
-          <option value="">(sem preview)</option>
-          <option value="__phase__">(seguir phase)</option>
-          {screenOptions.map(screen => (
-            <option key={screen.key} value={screen.key}>
-              {screen.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="rounded border border-neutral-800 bg-black/50 p-3">
+        <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">Modo</div>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setMode('real')}
+            className={cn(
+              'rounded border border-neutral-700 px-3 py-2 text-xs tracking-wider uppercase',
+              mode === 'real' ? 'bg-neutral-900 text-white' : 'bg-black text-neutral-300 hover:bg-neutral-900/60',
+            )}
+          >
+            Estado real
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('preview')}
+            className={cn(
+              'rounded border border-neutral-700 px-3 py-2 text-xs tracking-wider uppercase',
+              mode === 'preview' ? 'bg-neutral-900 text-white' : 'bg-black text-neutral-300 hover:bg-neutral-900/60',
+            )}
+          >
+            Preview overlay
+          </button>
+        </div>
+      </div>
+
+      {mode === 'preview' ? (
+        <label className="flex flex-col gap-2">
+          <span className="text-xs tracking-wider text-neutral-400 uppercase">Tela (preview)</span>
+          <select
+            value={previewKey ?? ''}
+            onChange={e => setPreviewKey(e.target.value ? e.target.value : null)}
+            className={cn(
+              'w-full',
+              'rounded border-2 border-neutral-700 bg-black',
+              'px-3 py-2 text-sm text-white',
+              'focus:ring-2 focus:ring-neutral-600 focus:outline-none',
+            )}
+          >
+            <option value="">(sem preview)</option>
+            <option value="__phase__">(seguir phase)</option>
+            {previewOptions.map(screen => (
+              <option key={screen.key} value={screen.key}>
+                {screen.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : (
+        <div className="rounded border border-neutral-800 bg-black/50 p-3">
+          <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">Estado do App</div>
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-xs text-white">
+              Atual: <span className="font-normal">{appScreen}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setAppScreen('HOME')}
+                className={cn(
+                  'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
+                  'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                )}
+              >
+                Home
+              </button>
+              <button
+                type="button"
+                onClick={() => setAppScreen('GAME')}
+                className={cn(
+                  'rounded border border-neutral-700 bg-neutral-900 px-2 py-1',
+                  'text-xs text-white hover:border-neutral-300 hover:bg-neutral-800',
+                )}
+              >
+                Game
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-3 border-t border-neutral-800 pt-3">
+            <div className="mb-2 text-xs tracking-widest text-neutral-400 uppercase">Override (DEV)</div>
+            <div className="flex flex-col gap-2">
+              <label className="flex items-center justify-between gap-2">
+                <span className="text-xs text-neutral-300">Ativar</span>
+                <input
+                  type="checkbox"
+                  checked={Boolean(devOverride)}
+                  onChange={e => (e.target.checked ? setDevOverride({}) : clearDevOverride())}
+                />
+              </label>
+
+              <label className="flex flex-col gap-1">
+                <span className="text-xs text-neutral-300">AppScreen</span>
+                <select
+                  value={(devOverride?.appScreen ?? '') as string}
+                  disabled={!devOverride}
+                  onChange={e =>
+                    setDevOverride({
+                      ...(devOverride ?? {}),
+                      appScreen: (e.target.value || undefined) as AppScreen | undefined,
+                    })
+                  }
+                  className={cn(
+                    'w-full rounded border border-neutral-700 bg-black px-3 py-2 text-sm text-white',
+                    'disabled:opacity-60',
+                  )}
+                >
+                  <option value="">(sem override)</option>
+                  <option value="HOME">HOME</option>
+                  <option value="GAME">GAME</option>
+                </select>
+              </label>
+
+              <label className="flex flex-col gap-1">
+                <span className="text-xs text-neutral-300">Phase</span>
+                <select
+                  value={(devOverride?.phase ?? '') as string}
+                  disabled={!devOverride || devOverride?.appScreen === 'HOME'}
+                  onChange={e =>
+                    setDevOverride({
+                      ...(devOverride ?? {}),
+                      phase: (e.target.value || undefined) as Phase | undefined,
+                    })
+                  }
+                  className={cn(
+                    'w-full rounded border border-neutral-700 bg-black px-3 py-2 text-sm text-white',
+                    'disabled:opacity-60',
+                  )}
+                >
+                  <option value="">(sem override)</option>
+                  <option value="LOBBY">LOBBY</option>
+                  <option value="DRAFT">DRAFT</option>
+                  <option value="MATCH">MATCH</option>
+                  <option value="RESULTS">RESULTS</option>
+                </select>
+              </label>
+
+              <button
+                type="button"
+                onClick={clearDevOverride}
+                disabled={!devOverride}
+                className={cn(
+                  'rounded border border-neutral-700 bg-neutral-900 px-3 py-2',
+                  'text-xs tracking-wider text-white uppercase',
+                  'hover:border-neutral-300 hover:bg-neutral-800',
+                  'disabled:opacity-60 disabled:hover:border-neutral-700 disabled:hover:bg-neutral-900',
+                )}
+              >
+                Limpar override
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <DevPhaseControls phase={phase} setPhaseGuarded={setPhaseGuarded} resetRun={resetRun} />
 
