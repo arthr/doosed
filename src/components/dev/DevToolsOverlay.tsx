@@ -28,7 +28,7 @@ function pickScreenComponent(moduleExports: Record<string, unknown>): ScreenComp
 
   // Prefer exports that end with "Screen"
   const screenExportKey = Object.keys(moduleExports).find(
-    key => key !== 'DevScreen' && /Screen$/.test(key) && typeof moduleExports[key] === 'function',
+    key => /Screen$/.test(key) && typeof moduleExports[key] === 'function',
   );
   if (screenExportKey) return moduleExports[screenExportKey] as ScreenComponent;
 
@@ -39,7 +39,12 @@ function pickScreenComponent(moduleExports: Record<string, unknown>): ScreenComp
   return null;
 }
 
-export function DevScreen() {
+/**
+ * DevToolsOverlay é um overlay de DEV (fora das Screens) que permite:
+ * - pré-visualizar Screens (incluindo por Phase)
+ * - abrir um dock flutuante com ações e playgrounds
+ */
+export function DevToolsOverlay() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   // Flow Store
@@ -51,13 +56,12 @@ export function DevScreen() {
   const { show: showNotification, dismiss: dismissNotification, clear: clearNotifications } = useNotification();
 
   const screens = useMemo<DetectedScreen[]>(() => {
-    const modules = import.meta.glob('./*.tsx', { eager: true }) as Record<
+    const modules = import.meta.glob('../../screens/*.tsx', { eager: true }) as Record<
       string,
       Record<string, unknown>
     >;
 
     return Object.entries(modules)
-      .filter(([path]) => !path.endsWith('/DevScreen.tsx'))
       .map(([path, mod]) => {
         const Component = pickScreenComponent(mod);
         if (!Component) return null;
@@ -99,10 +103,8 @@ export function DevScreen() {
 
   return (
     <>
-      {/* Screen: Preview (overlay) */}
       <DevOverlayPreview preview={previewNode} />
 
-      {/* Draggable dock (FAB + popup compartilham a mesma posição) */}
       <DevDock>
         <DevMenu
           selectedKey={selectedKey}
@@ -120,3 +122,5 @@ export function DevScreen() {
     </>
   );
 }
+
+
