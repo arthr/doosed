@@ -1,6 +1,7 @@
 import { Header } from '@/components/game/hud/Header';
 import { ShopItem } from '@/components/draft/ShopItem';
-import { ActionDock } from '@/components/ui/ActionDock';
+import { ActionDock } from '@/components/ui/action-dock';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useDraftShopMock } from '@/hooks/useDraftShopMock';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
 import {
@@ -14,9 +15,9 @@ import {
 } from 'lucide-react';
 import type { DraftShopItem } from '@/types/draft';
 import { DRAFT_SHOP_CATEGORIES } from '@/types/draft';
-import { PillScannerIcon } from '@/components/ui/icons/PillScannerIcon';
-import { PillIcon } from '@/components/ui/icons/PillIcon';
-import { PortalGunIcon } from '@/components/ui/icons/PortalGunIcon';
+import { PillScannerIcon } from '@/components/ui/icons/pill-scanner-icon';
+import { PillIcon } from '@/components/ui/icons/pill-icon';
+import { PortalGunIcon } from '@/components/ui/icons/portal-gun-icon';
 
 // Types
 const SHOP_ITEMS: DraftShopItem[] = [
@@ -168,7 +169,7 @@ export const DraftScreen = () => {
       />
 
       {/* Section: Content (scroll) */}
-      <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
+      <ScrollArea className="bg-void-black text-text-primary border-border-muted flex-1 min-h-0 p-2 font-mono text-xs md:p-0 md:text-sm">
         {/* Section: Shop */}
         <div className="relative flex flex-col justify-center md:my-4">
 
@@ -206,7 +207,7 @@ export const DraftScreen = () => {
           {/* Conveyor Belt Track Graphic */}
           <div className="border-border-muted hidden h-2 bg-[repeating-linear-gradient(90deg,oklch(0.16_0.04_260),oklch(0.16_0.04_260)_20px,#333_20px,#333_24px)] opacity-50 md:block"></div>
         </div>
-      </div>
+      </ScrollArea>
 
       {/* Section: Footer (Inventory + Chat + Actions) */}
       <PhasePanelHUD

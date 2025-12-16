@@ -1,7 +1,7 @@
 import { OpponentsBar } from '@/components/match/hud/OpponentsBar';
 import { GameTable } from '@/components/match/table/GameTable';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
-import { ActionDock } from '@/components/ui/ActionDock';
+import { ActionDock } from '@/components/ui/action-dock';
 import { Header } from '@/components/game/hud/Header';
 import { Coins, Trophy } from 'lucide-react';
 

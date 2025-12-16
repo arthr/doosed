@@ -41,9 +41,8 @@ export function PhasePanelHUD(props: PhasePanelHUDProps) {
                         className="flex flex-col md:col-span-5"
                     />
 
-                    <div className="flex flex-col gap-2 md:col-start-7 md:col-span-6">
+                    <div className="flex flex-col-reverse md:flex-col gap-2 md:col-start-7 md:col-span-6 px-2">
                         <div className={cn('flex min-h-0 flex-col')}>
-                            {/* <SectionHeader icon={<Joystick size={20} />} title="Actions" /> */}
                             <div className="flex h-full min-h-0 flex-col">{props.actions}</div>
                         </div>
                         <Chat
@@ -52,7 +51,7 @@ export function PhasePanelHUD(props: PhasePanelHUDProps) {
                             textClass="text-[10px] md:text-xs"
                             displayTime={false}
                             displayAuthor={false}
-                            className="h-40"
+                            className="h-auto md:h-40"
                         />
                     </div>
                 </div>

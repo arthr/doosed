@@ -1,10 +1,10 @@
 import '@/index.css';
 import { Chat } from '@/components/chat/Chat';
-import { NotificationBar } from '@/components/ui/NotificationBar';
+import { NotificationBar } from '@/components/ui/notification-bar';
 import { initChatSystemBridge } from '@/stores/initChatSystemBridge';
 import { DevScreen } from '@/screens/DevScreen';
 import HomeScreen from '@/screens/HomeScreen';
-import { PortalBackgroundAnimated } from './components/ui/decorations/PortalBackgroundAnimated';
+import { PortalBackgroundAnimated } from './components/ui/decorations/portal-background-animated';
 
 initChatSystemBridge();
 

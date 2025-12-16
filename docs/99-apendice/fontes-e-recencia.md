@@ -13,7 +13,7 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | Ultimo_commit_git | mtime_local | Autoridade | Contexto | Arquivo |
 |---|---|---|---|---|
 | 2025-12-15T07:24:35-03:00 | 2025-12-15T07:23:55 | Normativo | .cursor/rules | .cursor/rules/task-planning/RULE.md |
-| 2025-12-15T07:17:10-03:00 | 2025-12-15T07:19:09 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
+| 2025-12-15T07:17:10-03:00 | 2025-12-16T00:17:01 | Docs | docs | docs/06-frontend/stack-e-convencoes.md |
 | 2025-12-15T07:17:10-03:00 | 2025-12-15T07:19:09 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/tasks.md |
 | 2025-12-15T06:04:58-03:00 | 2025-12-15T05:30:12 | Requisito | tasks | tasks/task-refac-estrutura-screens-000/tasks.md |
 | 2025-12-15T05:56:09-03:00 | 2025-12-15T05:57:42 | Requisito | tasks | tasks/task-refac-decomposicao-screens-000/design.md |
@@ -53,12 +53,12 @@ Este arquivo registra as fontes .md usadas como insumo para a documentação ofi
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Docs | docs | docs/99-apendice/fontes-e-decisoes.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:20:28 | Normativo | steering | steering/structure.md |
 | 2025-12-14T19:23:25-03:00 | 2025-12-14T19:14:13 | Docs | docs | docs/00-start-here/estrutura-do-projeto.md |
+| 2025-12-14T19:12:28-03:00 | 2025-12-16T00:17:08 | Normativo | steering | steering/tech.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | .cursor/rules | .cursor/rules/core/RULE.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | .cursor/rules | .cursor/rules/game-architecture/RULE.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Legado | docs | docs/legacy/generated_docs/structure.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | steering | steering/game-balance.md |
 | 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | steering | steering/game-flow.md |
-| 2025-12-14T19:12:28-03:00 | 2025-12-14T19:11:07 | Normativo | steering | steering/tech.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T19:05:54 | Legado | docs | docs/legacy/NOTES.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T19:05:54 | Normativo | steering | steering/product.md |
 | 2025-12-14T19:04:53-03:00 | 2025-12-14T18:34:30 | Docs | docs | docs/05-backend-supabase/edge-functions.md |

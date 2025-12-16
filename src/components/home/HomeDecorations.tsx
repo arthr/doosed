@@ -1,5 +1,5 @@
-import { CromolumAnimated } from '@/components/ui/decorations/CromolumAnimated';
-import { PortalGunAnimated } from '@/components/ui/decorations/PortalGunAnimated';
+import { CromolumAnimated } from '@/components/ui/decorations/cromolum-animated';
+import { PortalGunAnimated } from '@/components/ui/decorations/portal-gun-animated';
 
 export function HomeDecorations() {
   return (

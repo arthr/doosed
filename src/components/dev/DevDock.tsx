@@ -100,7 +100,7 @@ export function DevDock({ children }: DevDockProps) {
           style={{ touchAction: 'none' }}
           className={cn(
             'w-[min(92vw,420px)]',
-            'rounded-lg border-2 border-neutral-700 bg-neutral-950/95 backdrop-blur',
+            'rounded border-2 border-neutral-700 bg-neutral-950/95 backdrop-blur',
             'shadow-[0_12px_40px_rgba(0,0,0,0.65)]',
           )}
         >

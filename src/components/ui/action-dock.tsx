@@ -1,6 +1,6 @@
 import { ClockAlert, LogOut, MessageSquare, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { GlowButton } from './GlowButton';
+import { GlowButton } from './glow-button';
 
 type ActionDockButtonConfig = {
   disabled?: boolean;

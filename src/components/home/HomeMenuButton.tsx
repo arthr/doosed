@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { GlowButton, type GlowButtonColor } from '@/components/ui/GlowButton';
+import { GlowButton, type GlowButtonColor } from '@/components/ui/glow-button';
 
 export interface HomeMenuButtonProps {
   title: string;

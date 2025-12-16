@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { useChatStore } from '@/stores/chatStore';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import type { ChatAuthor } from '@/types/chat';
 import { ChatMessageRow } from '@/components/chat/ChatMessageRow';
 
@@ -56,17 +57,21 @@ export function ChatPanel({
     >
       <div className={cn('bg-scanlines pointer-events-none absolute inset-0 opacity-20')} />
 
-      <div
-        role="log"
-        aria-label="Chat"
-        aria-live="polite"
-        className={cn('custom-scrollbar relative h-full grow space-y-1 overflow-y-auto p-3')}
+      <ScrollArea
+        className="relative h-full grow"
       >
-        {messages.map(message => (
-          <ChatMessageRow key={message.id} message={message} displayTime={displayTime} displayAuthor={displayAuthor} />
-        ))}
-        <div ref={endRef} />
-      </div>
+        <div
+          role="log"
+          aria-label="Chat"
+          aria-live="polite"
+          className="space-y-1 p-3"
+        >
+          {messages.map(message => (
+            <ChatMessageRow key={message.id} message={message} displayTime={displayTime} displayAuthor={displayAuthor} />
+          ))}
+          <div ref={endRef} />
+        </div>
+      </ScrollArea>
 
       <form
         className="relative flex items-center gap-2 border-t border-neutral-800 px-3 py-2"

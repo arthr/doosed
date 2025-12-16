@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { PortalBackgroundAnimated } from '../ui/decorations/PortalBackgroundAnimated';
+import { PortalBackgroundAnimated } from '../ui/decorations/portal-background-animated';
 
 export interface DevOverlayPreviewProps {
   preview: ReactNode | null;

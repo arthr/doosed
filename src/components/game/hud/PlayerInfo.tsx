@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/cn';
-import { PillIcon } from '@/components/ui/icons/PillIcon';
-import { PillScannerIcon } from '@/components/ui/icons/PillScannerIcon';
+import { PillIcon } from '@/components/ui/icons/pill-icon';
+import { PillScannerIcon } from '@/components/ui/icons/pill-scanner-icon';
 
 // --- Tipos ---
 
@@ -45,7 +45,7 @@ const sizeVariants = {
   md: {
     containerMax: "max-w-md",
     outerPadding: "p-[6px]",
-    innerPadding: "p-4 pb-0",
+    innerPadding: "p-3 pb-0",
     layoutGap: "gap-4",
     nameText: "text-xl",
     headerText: "text-xs mb-1",
@@ -57,7 +57,7 @@ const sizeVariants = {
   lg: {
     containerMax: "max-w-2xl",
     outerPadding: "p-[8px]",
-    innerPadding: "p-6 pb-0",
+    innerPadding: "p-3 pb-0",
     layoutGap: "gap-6",
     nameText: "text-3xl",
     headerText: "text-sm mb-2",
@@ -116,7 +116,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
         <div
           key={i}
           className={cn(
-            "aspect-square backdrop-blur-sm rounded-xl flex items-center justify-center overflow-hidden relative group transition-colors cursor-pointer",
+            "aspect-square backdrop-blur-sm rounded flex items-center justify-center overflow-hidden relative group transition-colors cursor-pointer",
             styles.borderWidth, // Borda dinâmica
             "border-green-500 bg-neutral-900/50"
           )}
@@ -141,7 +141,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
     // Container Principal
     <div className={cn(
       "w-full",
-      "rounded-none md:rounded-2xl shadow-[0_0_15px_#5eff5e] overflow-hidden font-mono text-white",
+      "rounded-none md:rounded-md shadow-[0_0_15px_#5eff5e] overflow-hidden",
       styles.containerMax,
       styles.outerPadding,
       className
@@ -149,7 +149,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
 
       {/* Container Superior Escuro */}
       <div className={cn(
-        "rounded-xl flex flex-col sm:flex-row relative z-10",
+        "flex flex-col sm:flex-row relative z-10",
         styles.innerPadding,
         styles.layoutGap
       )}>
@@ -160,7 +160,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
         {/* Lado Esquerdo - Avatar */}
         <div className="sm:w-1/3 flex flex-col z-30">
           <div className={cn(
-            "relative rounded-lg overflow-hidden border-rick-green shadow-[0_0_8px_inset_#5eff5e]",
+            "relative rounded overflow-hidden border-rick-green shadow-[0_0_8px_inset_#5eff5e]",
             styles.borderWidth
           )}>
             <img
