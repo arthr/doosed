@@ -6,6 +6,7 @@ import { PanelShell } from '@/components/game/hud/PanelShell';
 
 import type { PhasePanelHUDProps } from '@/types/hud';
 import PlayerInfo from './PlayerInfo';
+import { Chat } from '@/components/chat/Chat';
 
 
 export function PhasePanelHUD(props: PhasePanelHUDProps) {
@@ -29,23 +30,31 @@ export function PhasePanelHUD(props: PhasePanelHUDProps) {
         return (
             <PanelShell className={cn('w-full', props.className)}>
                 <div className="grid min-h-0 grid-cols-1 gap-3 md:grid-cols-12 md:gap-4">
-                <PlayerInfo
-                        size='sm'
+                    <PlayerInfo
+                        size='md'
                         characterName="Rick Sanchez"
                         avatarSrc="/images/avatar/rick_winner.png"
-                        currentHealth={100}
-                        currentResistance={100}
+                        currentHealth={2}
+                        currentResistance={3}
                         inventoryItems={[]}
                         totalInventorySlots={8}
-                        className="flex flex-col md:col-span-4"
-                    />
-                    <ChatSection
-                        threadId={props.chatThreadId}
-                        displayTime={false}
-                        displayAuthor={false}
                         className="flex flex-col md:col-span-5"
                     />
-                    <ActionsSection className="md:col-span-3">{props.actions}</ActionsSection>
+
+                    <div className="flex flex-col gap-2 md:col-start-7 md:col-span-6">
+                        <div className={cn('flex min-h-0 flex-col')}>
+                            {/* <SectionHeader icon={<Joystick size={20} />} title="Actions" /> */}
+                            <div className="flex h-full min-h-0 flex-col">{props.actions}</div>
+                        </div>
+                        <Chat
+                            mode="inline"
+                            threadId={props.chatThreadId}
+                            textClass="text-[10px] md:text-xs"
+                            displayTime={false}
+                            displayAuthor={false}
+                            className="h-40"
+                        />
+                    </div>
                 </div>
             </PanelShell>
         );

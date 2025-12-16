@@ -227,7 +227,6 @@ export const DraftScreen = () => {
               timeLeft: timeLeft,
               startIn: startIn,
             }}
-            layout="stack"
           />
         }
       />

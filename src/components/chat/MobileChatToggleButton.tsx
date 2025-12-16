@@ -19,7 +19,7 @@ export function MobileChatToggleButton({
       className={cn(
         'md:hidden',
         'flex w-full items-center justify-between',
-        'py-2 text-neutral-300',
+        'p-2 text-neutral-300',
       )}
     >
       <span className="flex items-center gap-2">

@@ -33,7 +33,7 @@ const sizeVariants = {
   sm: {
     containerMax: "max-w-sm",
     outerPadding: "p-[4px]",
-    innerPadding: "p-3",
+    innerPadding: "p-3 pb-0",
     layoutGap: "gap-3",
     nameText: "text-lg",
     headerText: "text-[10px] mb-0.5",
@@ -45,7 +45,7 @@ const sizeVariants = {
   md: {
     containerMax: "max-w-md",
     outerPadding: "p-[6px]",
-    innerPadding: "p-4",
+    innerPadding: "p-4 pb-0",
     layoutGap: "gap-4",
     nameText: "text-xl",
     headerText: "text-xs mb-1",
@@ -57,7 +57,7 @@ const sizeVariants = {
   lg: {
     containerMax: "max-w-2xl",
     outerPadding: "p-[8px]",
-    innerPadding: "p-6",
+    innerPadding: "p-6 pb-0",
     layoutGap: "gap-6",
     nameText: "text-3xl",
     headerText: "text-sm mb-2",
@@ -74,9 +74,9 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
   characterName,
   avatarSrc,
   currentHealth,
-  maxHealth = 4,
+  maxHealth = 3,
   currentResistance,
-  maxResistance = 4,
+  maxResistance = 6,
   inventoryItems,
   totalInventorySlots = 10,
   className,
@@ -116,9 +116,9 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
         <div
           key={i}
           className={cn(
-            "aspect-square backdrop-blur-sm rounded-md flex items-center justify-center overflow-hidden relative group transition-colors cursor-pointer",
+            "aspect-square backdrop-blur-sm rounded-xl flex items-center justify-center overflow-hidden relative group transition-colors cursor-pointer",
             styles.borderWidth, // Borda dinâmica
-            "border-green-500"
+            "border-green-500 bg-neutral-900/50"
           )}
           title={item ? item.name : "Empty Slot"}
         >
@@ -140,20 +140,20 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
   return (
     // Container Principal
     <div className={cn(
-      "mx-auto w-full",
-      "rounded-2xl shadow-[0_0_15px_#5eff5e] overflow-hidden font-mono text-white",
+      "w-full",
+      "rounded-none md:rounded-2xl shadow-[0_0_15px_#5eff5e] overflow-hidden font-mono text-white",
       styles.containerMax,
       styles.outerPadding,
       className
     )}>
-      
-      {/* Container Interno Escuro */}
+
+      {/* Container Superior Escuro */}
       <div className={cn(
         "rounded-xl flex flex-col sm:flex-row relative z-10",
         styles.innerPadding,
         styles.layoutGap
       )}>
-        
+
         {/* Efeito de scanline global */}
         <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,255,0,0.02)_50%)] bg-size-[100%_4px] pointer-events-none rounded-xl z-20"></div>
 
@@ -182,33 +182,34 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
           </h1>
 
           {/* Seção de Barras de Status */}
-          <div className="flex gap-6">
+          <div className="flex gap-1">
             <div>
-              <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Health Bar</h3>
+              <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Health</h3>
               <div className="flex">
                 {renderStatusIcons(currentHealth, maxHealth, <PillIcon primaryColor="var(--color-neon-green)" />)}
               </div>
             </div>
             <div>
-              <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Resistance Bar</h3>
+              <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Resistance</h3>
               <div className="flex">
                 {renderStatusIcons(currentResistance, maxResistance, <PillScannerIcon pillColor="var(--color-neon-cyan)" />)}
               </div>
             </div>
           </div>
 
-          {/* Seção de Inventário */}
-          <div>
-            <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Inventory Grid</h3>
-            <div className={cn(
-              "grid grid-cols-5 border-[#4a5f4a] rounded-lg bg-[#111311]",
-              styles.borderWidth,
-              styles.inventoryPadding,
-              styles.inventoryGap
-            )}>
-              {renderInventoryGrid()}
-            </div>
-          </div>
+        <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Inventory</h3>
+        </div>
+      </div>
+
+      {/* Seção de Inventário */}
+      <div>
+        <div className={cn(
+          "grid grid-cols-8 rounded-lg",
+          styles.borderWidth,
+          styles.inventoryPadding,
+          styles.inventoryGap
+        )}>
+          {renderInventoryGrid()}
         </div>
       </div>
     </div>

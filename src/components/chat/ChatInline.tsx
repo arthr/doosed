@@ -41,7 +41,7 @@ export function ChatInline({
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
-      <div className="hidden md:flex md:h-full">
+      <div className="hidden md:block md:h-full">
         <ChatPanel
           threadId={threadId}
           currentUser={currentUser}

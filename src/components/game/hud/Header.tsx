@@ -7,10 +7,7 @@ const headerContainerClassName = cn(
   'items-center',
   'md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]',
   'gap-2 md:gap-4',
-  'border-b-4 border-neutral-700',
-  'border-x-4 border-x-neutral-800 md:border-x-8',
   'pb-2 sm:pb-3 md:pb-4',
-  'bg-neutral-900/80',
   'p-2 sm:p-3 md:p-4',
 );
 

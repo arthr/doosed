@@ -1,4 +1,4 @@
-import { LogOut, MessageSquare, ShoppingCart } from 'lucide-react';
+import { ClockAlert, LogOut, MessageSquare, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { GlowButton } from './GlowButton';
 
@@ -84,41 +84,16 @@ export function ActionDock({
   return (
     <div
       className={cn(
-        isStack ? cn('grid h-full items-stretch gap-2 md:gap-4', stackRows) : 'flex gap-2',
+        isStack ? cn('grid h-full items-stretch px-2 md:px-0 gap-2 md:gap-4', stackRows) : 'flex gap-2',
         className,
       )}
     >
-      {loadout?.onPress
-        ? (() => {
-            const pressed = !!loadout.pressed;
-            const timeLeft = loadout.timeLeft;
-            const startIn = loadout.startIn ?? 0;
-            const hasTimeLeft = typeof timeLeft === 'number' && timeLeft > 0;
-
-            const label = getLoadoutLabel({ pressed, hasTimeLeft, timeLeft, startIn });
-
-            return (
-              <GlowButton
-                title={label.title}
-                subtitle={label.subtitle}
-                color={pressed ? 'red' : 'green'}
-                size="sm"
-                pressed={pressed}
-                disabled={!!loadout.disabled}
-                onClick={loadout.onPress}
-                fullWidth
-                textAlign="center"
-              />
-            );
-          })()
-        : null}
-
-      {shop?.onClick ? (
+            {shop?.onClick ? (
         <GlowButton
           title="SHOP"
-          icon={<ShoppingCart size={16} />}
+          icon={<ShoppingCart />}
           color="purple"
-          size="sm"
+          size="xs"
           disabled={!!shop.disabled}
           onClick={shop.onClick}
           fullWidth
@@ -129,9 +104,9 @@ export function ActionDock({
       {chat?.onClick ? (
         <GlowButton
           title="CHAT"
-          icon={<MessageSquare size={16} />}
+          icon={<MessageSquare />}
           color="purple"
-          size="sm"
+          size="xs"
           disabled={!!chat.disabled}
           onClick={chat.onClick}
           fullWidth
@@ -139,12 +114,39 @@ export function ActionDock({
         />
       ) : null}
 
+      {loadout?.onPress
+        ? (() => {
+            const pressed = !!loadout.pressed;
+            const timeLeft = loadout.timeLeft;
+            const startIn = loadout.startIn ?? 0;
+            const hasTimeLeft = typeof timeLeft === 'number' && timeLeft > 0;
+
+            const label = getLoadoutLabel({ pressed, hasTimeLeft, timeLeft, startIn });
+            const icon = hasTimeLeft || <ClockAlert />
+
+            return (
+              <GlowButton
+                title={label.title}
+                icon={icon}
+                subtitle={label.subtitle}
+                color={pressed ? 'red' : 'green'}
+                size="xs"
+                pressed={pressed}
+                disabled={!!loadout.disabled}
+                onClick={loadout.onPress}
+                fullWidth
+                textAlign="center"
+              />
+            );
+          })()
+        : null}
+
       {leave?.onClick ? (
         <GlowButton
           title="LEAVE MATCH"
-          icon={<LogOut size={16} />}
+          icon={<LogOut />}
           color="red"
-          size="sm"
+          size="xs"
           disabled={!!leave.disabled}
           onClick={leave.onClick}
           fullWidth
