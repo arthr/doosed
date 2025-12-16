@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type Vec2 = { x: number; y: number };
 
@@ -130,6 +131,7 @@ export function DevDock({ children }: DevDockProps) {
           'rounded border-2 border-neutral-700 bg-neutral-950/95 backdrop-blur',
           'shadow-[0_12px_40px_rgba(0,0,0,0.65)]',
           'overflow-hidden',
+          'flex flex-col',
           'transition-[width,max-height] ease-out',
           // Largura
           widthExpanded ? 'w-[min(92vw,420px)]' : 'w-[120px]',
@@ -172,12 +174,15 @@ export function DevDock({ children }: DevDockProps) {
         <div
           className={cn(
             'transition-opacity ease-out',
+            'min-h-0 flex-1',
             heightExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none',
           )}
           style={{ transitionDuration: `${ANIM_DURATION}ms` }}
         >
-          <div className="flex flex-col gap-3 p-3">
-            {children}
+          <div className="flex flex-col gap-3">
+            <ScrollArea className="h-[500px] ring-2">
+              {children}
+            </ScrollArea>
           </div>
         </div>
       </div>
