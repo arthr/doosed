@@ -50,17 +50,15 @@ export const MatchScreen = () => {
           subtitle: 'Round',
         }}
       />
+
+      {/* Section: Opponents */}
+      <OpponentsBar />
+
       {/* Section: Content (scroll) */}
-      <ScrollArea className="flex-1 min-h-0 p-2 font-mono text-xs md:p-0 md:text-sm">
-
-        {/* Section: Opponents */}
-        <OpponentsBar />
-
-        {/* Section: Table */}
-        <div className="flex-1 flex items-center justify-center w-full">
-          <GameTable />
-        </div>
-      </ScrollArea>
+      {/* Section: Table */}
+      <div className="flex-1 flex items-center justify-center w-full font-mono text-xs md:p-0 md:text-sm">
+        <GameTable />
+      </div>
 
       {/* Section: Footer */}
       <PhasePanelHUD

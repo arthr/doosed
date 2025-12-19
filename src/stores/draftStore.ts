@@ -20,6 +20,7 @@ interface DraftActions {
     tickTimer: () => void;
     tickStartIn: () => void;
     setCoins: (amount: number) => void;
+    setTimer: (seconds: number) => void;
     reset: () => void;
 }
 
@@ -37,6 +38,10 @@ export const useDraftStore = create<DraftState & DraftActions>((set, get) => ({
 
     initDraft: (coins = 150, time = 30) => {
         set({ ...INITIAL_STATE, pillCoins: coins, timeLeft: time });
+    },
+
+    setTimer: (seconds: number) => {
+        set({ timeLeft: seconds });
     },
 
     buyItem: (item) => {

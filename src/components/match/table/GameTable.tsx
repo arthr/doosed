@@ -18,7 +18,7 @@ export function GameTable() {
   const row2 = tablePills.slice(6, 12);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-3xl p-4 mb-4 bg-neutral-800 border-4 border-border-muted rounded-xl relative shadow-xl">
+    <div className="flex flex-1 flex-col max-w-2xl items-center justify-center p-2 mx-2 md:p-4 mb-4 bg-neutral-800/30 rounded-xl relative shadow-xl">
       {/* Header da Mesa */}
       <div className="absolute -top-5 bg-panel px-4 py-1 border-2 border-neon-green text-neon-green rounded shadow-[0_0_10px_var(--color-neon-green)] font-display tracking-wider z-20">
         THE TABLE
@@ -31,12 +31,12 @@ export function GameTable() {
       </div>
 
       {/* Esteira de Itens (Conveyor Belt) */}
-      <div className="relative w-full bg-neutral-900/50 border-2 border-border-muted rounded-lg p-4 min-h-[160px] flex flex-col justify-center gap-4 overflow-hidden">
+      <div className="relative w-full bg-neutral-900/50 border-2 border-border-muted rounded-lg p-2 md:p-4 min-h-[200px] flex flex-col justify-center gap-4 overflow-hidden">
         {/* Background Grid FX */}
         <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(45deg,#000_25%,transparent_25%,transparent_75%,#000_75%,#000),linear-gradient(45deg,#000_25%,transparent_25%,transparent_75%,#000_75%,#000)] bg-[length:20px_20px] bg-[position:0_0,10px_10px]" />
 
         {/* Linha 1 */}
-        <div className="flex justify-center gap-2 md:gap-4 z-10 min-h-[64px]">
+        <div className="flex justify-center gap-1 md:gap-4 z-10 min-h-[64px]">
           {row1.map(pill => (
             <Pill
               key={pill.id}
@@ -52,7 +52,7 @@ export function GameTable() {
 
         {/* Linha 2 */}
         {row2.length > 0 && (
-          <div className="flex justify-center gap-2 md:gap-4 z-10 border-t border-white/5 pt-4">
+          <div className="flex justify-center gap-1 md:gap-4 z-10 border-t border-white/5 pt-4">
             {row2.map(pill => (
               <Pill
                 key={pill.id}

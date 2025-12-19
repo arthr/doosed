@@ -5,9 +5,9 @@ import { useProgressionStore } from '@/stores/progressionStore';
 
 export function DevGameState() {
     // Draft
-    const { addCoins, initDraft } = useDraftStore(s => ({
+    const { addCoins, addTimer } = useDraftStore(s => ({
         addCoins: (amount: number) => s.setCoins(s.pillCoins + amount),
-        initDraft: s.initDraft
+        addTimer: (seconds: number) => s.setTimer(s.timeLeft + seconds),
     }));
 
     // Match
@@ -41,10 +41,10 @@ export function DevGameState() {
                         +100 Coins
                     </button>
                     <button
-                        onClick={() => initDraft(150, 5)}
+                        onClick={() => addTimer(5)}
                         className="bg-neutral-900 border border-neutral-700 text-xs px-2 py-1 text-white hover:bg-neutral-800"
                     >
-                        Set Timer 5s
+                        Add +5s Timer
                     </button>
                 </div>
             </div >
