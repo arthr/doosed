@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/cn';
 import { PillIcon } from '@/components/ui/icons/pill-icon';
 import { PillScannerIcon } from '@/components/ui/icons/pill-scanner-icon';
+import { Heart, Shield } from 'lucide-react';
 
 // --- Tipos ---
 
@@ -93,7 +94,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
     for (let i = 0; i < total; i++) {
       if (i < current) {
         icons.push(
-          <span key={i} className={cn("mr-1 filter drop-shadow-[0_0_2px_rgba(255,255,255,0.5)]", styles.iconSize)}>
+          <span key={i} className={cn("mr-1", styles.iconSize)}>
             {emojiStr}
           </span>
         );
@@ -193,13 +194,13 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
             <div>
               <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Health</h3>
               <div className="flex">
-                {renderStatusIcons(currentHealth, maxHealth, <PillIcon primaryColor="var(--color-neon-green)" />)}
+                {renderStatusIcons(currentHealth, maxHealth, <Heart fill="currentColor" className="fill-red-500" />)}
               </div>
             </div>
             <div>
               <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Resistance</h3>
               <div className="flex">
-                {renderStatusIcons(currentResistance, maxResistance, <PillScannerIcon pillColor="var(--color-neon-cyan)" />)}
+                {renderStatusIcons(currentResistance, maxResistance, <Shield fill="currentColor" className="fill-blue-500" />)}
               </div>
             </div>
           </div>
