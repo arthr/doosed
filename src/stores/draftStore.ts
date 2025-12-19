@@ -7,6 +7,7 @@ interface DraftState {
     pillCoins: number;
     inventory: DraftShopItem[];
     timeLeft: number;
+    startIn: number; // Countdown após confirmação
     isConfirmed: boolean;
     maxSlots: number;
 }
@@ -17,6 +18,7 @@ interface DraftActions {
     sellItem: (index: number) => void;
     toggleConfirm: () => void;
     tickTimer: () => void;
+    tickStartIn: () => void;
     reset: () => void;
 }
 
@@ -24,6 +26,7 @@ const INITIAL_STATE: DraftState = {
     pillCoins: 150,
     inventory: [],
     timeLeft: 30,
+    startIn: 5,
     isConfirmed: false,
     maxSlots: 8
 };
@@ -71,13 +74,29 @@ export const useDraftStore = create<DraftState & DraftActions>((set, get) => ({
     },
 
     toggleConfirm: () => {
-        set(state => ({ isConfirmed: !state.isConfirmed }));
+        const { isConfirmed } = get();
+        if (isConfirmed) {
+            // Cancelar
+            set({ isConfirmed: false, startIn: 5 });
+            postSystemMessage('draft', '> Loadout cancelado.');
+        } else {
+            // Confirmar
+            set({ isConfirmed: true });
+            postSystemMessage('draft', '> Loadout confirmado. Iniciando...');
+        }
     },
 
     tickTimer: () => {
         const { timeLeft, isConfirmed } = get();
         if (timeLeft > 0 && !isConfirmed) {
             set({ timeLeft: timeLeft - 1 });
+        }
+    },
+
+    tickStartIn: () => {
+        const { startIn, isConfirmed } = get();
+        if (isConfirmed && startIn > 0) {
+            set({ startIn: startIn - 1 });
         }
     },
 

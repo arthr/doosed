@@ -4,141 +4,54 @@ import { Header } from '@/components/game/hud/Header';
 import { ShopItem } from '@/components/draft/ShopItem';
 import { ActionDock } from '@/components/ui/action-dock';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useDraftShopMock } from '@/hooks/useDraftShopMock';
+import { useDraftStore } from '@/stores/draftStore';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
+import { postSystemMessage } from '@/lib/systemMessages';
 import {
-  Beer,
   Clock,
   Coins,
-  Lock,
-  Shuffle,
-  Trash,
-  Bomb,
 } from 'lucide-react';
 import type { DraftShopItem } from '@/types/draft';
 import { DRAFT_SHOP_CATEGORIES } from '@/types/draft';
-import { PillScannerIcon } from '@/components/ui/icons/pill-scanner-icon';
-import { PillIcon } from '@/components/ui/icons/pill-icon';
-import { PortalGunIcon } from '@/components/ui/icons/portal-gun-icon';
+import { SHOP_ITEMS } from '@/data/shopItems';
 
 // Types
-const SHOP_ITEMS: DraftShopItem[] = [
-  {
-    id: 1,
-    name: 'POCKET PILL',
-    desc: '- +4 resistance',
-    category: 'SUSTAIN',
-    price: 50,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      scale={3}
-      pill={() => <Beer size={48} strokeWidth={1.5} />}
-    />,
-  },
-  {
-    id: 2,
-    name: 'SHIELD',
-    desc: '- Immunity to damage for 1 round',
-    category: 'CONTROL',
-    price: 75,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      scale={3}
-      pill={() => <Lock size={48} strokeWidth={1.5} />}
-    />,
-  },
-  {
-    id: 3,
-    name: 'SHAPE SCANNER',
-    desc: '- Reveals all pills of shape',
-    category: 'INTEL',
-    price: 40,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      pill={() => <PillIcon primaryColor='var(--color-neon-red)' />}
-    />,
-  },
-  {
-    id: 4,
-    name: 'INVERTER',
-    desc: '- Inverts pill effect',
-    category: 'CHAOS',
-    price: 100,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      pill={() => <PortalGunIcon glowColor='var(--color-neon-green)' />}
-    />,
-  },
-  {
-    id: 5,
-    name: 'DOUBLE',
-    desc: '- Doubles pill effect',
-    category: 'CHAOS',
-    price: 60,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      pill={() => <PortalGunIcon glowColor='var(--color-neon-green)' />}
-    />,
-  },
-  {
-    id: 6,
-    name: 'SHUFFLE',
-    desc: '- Shuffles pill pool',
-    category: 'CHAOS',
-    price: 80,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      scale={3}
-      pill={() => <Shuffle size={48} strokeWidth={1.5} />}
-    />,
-  },
-  {
-    id: 7,
-    name: 'DISCARD',
-    desc: '- Removes pill from pool',
-    category: 'CHAOS',
-    price: 90,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      scale={3}
-      pill={() => <Trash size={48} strokeWidth={1.5} />}
-    />,
-  },
-  {
-    id: 8,
-    name: 'SHAPE BOMB',
-    desc: '- Removes all pills of shape',
-    category: 'CHAOS',
-    price: 100,
-    icon: <PillScannerIcon
-      pillColor='var(--color-neon-green)'
-      size={70}
-      scale={3}
-      pill={() => <Bomb size={48} strokeWidth={1.5} />}
-    />,
-  },
-];
+// Types
+
 
 export const DraftScreen = () => {
+  const settings = useDraftStore();
   const {
-    wallet,
+    pillCoins,
     timeLeft,
     startIn,
     inventory,
-    canBuy,
-    buy,
-    toggleLoadout,
-    loadoutConfirmed,
-    openShop,
+    isConfirmed: loadoutConfirmed,
     maxSlots,
-  } = useDraftShopMock();
+    buyItem,
+    toggleConfirm: toggleLoadout,
+    tickTimer,
+    tickStartIn
+  } = settings;
+
+  // Helpers de compatibilidade com UI
+  const wallet = pillCoins;
+  const canBuy = (item: DraftShopItem) => wallet >= item.price && inventory.length < maxSlots && timeLeft > 0;
+  const openShop = () => postSystemMessage('draft', '> Shop system ready.');
+
+  // Timer loop
+  useEffect(() => {
+    const timer = setInterval(() => {
+      tickTimer();
+      tickStartIn();
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [tickTimer, tickStartIn]);
+
+  // Reset store on mount (optional - maybe handle in flow transition)
+  useEffect(() => {
+    // reset(); // Se quisermos resetar sempre que entra
+  }, []);
 
   const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
 
@@ -200,7 +113,7 @@ export const DraftScreen = () => {
                       <div key={itemIndex} className="col-span-1 w-full">
                         <ShopItem
                           item={SHOP_ITEMS[itemIndex]}
-                          onBuy={buy}
+                          onBuy={buyItem}
                           canAfford={canBuy(SHOP_ITEMS[itemIndex])}
                           timeLeft={timeLeft}
                         />
