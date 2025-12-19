@@ -1,6 +1,7 @@
 import { RefreshCw, Home, AlertTriangle } from 'lucide-react';
 import { useFlowStore } from '@/stores/flowStore';
 import { useAppShellStore } from '@/stores/appShellStore';
+import { useDraftStore } from '@/stores/draftStore';
 import type { ResultsTheme } from './resultsTheme';
 
 export interface ResultsActionsProps {
@@ -11,13 +12,19 @@ export interface ResultsActionsProps {
 export function ResultsActions({ isVictory, currentTheme }: ResultsActionsProps) {
   const resetRun = useFlowStore(state => state.resetRun);
   const setAppScreen = useAppShellStore(state => state.setAppScreen);
+  const resetDraft = useDraftStore(state => state.reset);
+
+  const handlePlayAgain = () => {
+    resetDraft();
+    resetRun();
+  };
 
   return (
     <div className="w-full flex flex-col items-center gap-4 mt-2">
       <div className="flex gap-4 w-full md:w-auto">
         <button
           type="button"
-          onClick={() => resetRun()}
+          onClick={handlePlayAgain}
           className={
             `
             flex-1 md:w-64 py-4 rounded-xl border-b-8 font-pixel text-xl uppercase tracking-wider
