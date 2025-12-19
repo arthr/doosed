@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { Player } from '@/types/lobby';
+import { useFlowStore } from '@/stores/flowStore';
 import { LobbyPanel } from '@/components/lobby/LobbyPanel';
 import { PlayerGrid } from '@/components/lobby/PlayerGrid';
 import { ActionControls } from '@/components/lobby/ActionControls';
@@ -27,56 +28,65 @@ export const LobbyScreen = () => {
   const roomCode = 'X7Z-123';
   const lobbyStatus = 'AGUARDANDO...';
 
+  const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
+  const handleReady = () => {
+    setIsReady(true);
+    // Simulação Solo: Start imediato após ready
+    setTimeout(() => {
+      setPhaseGuarded('DRAFT');
+    }, 500);
+  };
+
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
-        {/* Section: Header */}
-        {/* TODO: Header do Lobby precisa de roomCode e Status de sala */}
-        <Header
-          left={{
-            icon: <KeyRound className="text-neon-yellow" size={18} />,
-            label: 'ROOM',
-            value: roomCode,
-          }}
-          right={{
-            // icon: <Activity className="text-neon-yellow" size={18} />,
-            label: 'STATUS',
-            value: lobbyStatus,
-          }}
-          center={{
-            title: 'Game',
-            artwork: (
-              <img
-                src="/images/avatar/rick_looser_md.png"
-                alt="Rick Winner"
-                className="-my-4 size-16 drop-shadow-xs select-none"
-                draggable={false}
-              />
-            ),
-            subtitle: 'Lobby',
-          }}
+      {/* Section: Header */}
+      {/* TODO: Header do Lobby precisa de roomCode e Status de sala */}
+      <Header
+        left={{
+          icon: <KeyRound className="text-neon-yellow" size={18} />,
+          label: 'ROOM',
+          value: roomCode,
+        }}
+        right={{
+          // icon: <Activity className="text-neon-yellow" size={18} />,
+          label: 'STATUS',
+          value: lobbyStatus,
+        }}
+        center={{
+          title: 'Game',
+          artwork: (
+            <img
+              src="/images/avatar/rick_looser_md.png"
+              alt="Rick Winner"
+              className="-my-4 size-16 drop-shadow-xs select-none"
+              draggable={false}
+            />
+          ),
+          subtitle: 'Lobby',
+        }}
+      />
+
+      {/* Section: Main */}
+      <main className="flex-1 min-h-0">
+        <LobbyPanel className="h-full p-2 md:p-4">
+          <div className="h-full overflow-y-auto">
+            <PlayerGrid players={players} />
+          </div>
+        </LobbyPanel>
+      </main>
+
+      {/* Section: Footer */}
+      <footer className="mt-auto">
+        <PhasePanelHUD
+          phase="lobby"
+          className="h-auto md:h-48"
+          chatThreadId="lobby"
+          actions={
+            <ActionControls isReady={isReady} onToggleReady={handleReady} />
+          }
         />
-
-        {/* Section: Main */}
-        <main className="flex-1 min-h-0">
-          <LobbyPanel className="h-full p-2 md:p-4">
-            <div className="h-full overflow-y-auto">
-              <PlayerGrid players={players} />
-            </div>
-          </LobbyPanel>
-        </main>
-
-        {/* Section: Footer */}
-        <footer className="mt-auto">
-          <PhasePanelHUD
-            phase="lobby"
-            className="h-auto md:h-48"
-            chatThreadId="lobby"
-            actions={
-            <ActionControls isReady={isReady} onToggleReady={() => setIsReady(prev => !prev)} />
-            }
-          />
-        </footer>
-      </div>
+      </footer>
+    </div>
   );
 };
 

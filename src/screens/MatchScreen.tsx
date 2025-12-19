@@ -5,7 +5,21 @@ import { ActionDock } from '@/components/ui/action-dock';
 import { Header } from '@/components/game/hud/Header';
 import { Coins, Trophy } from 'lucide-react';
 
+import { useFlowStore } from '@/stores/flowStore';
+import { useGameStore } from '@/stores/gameStore';
+import { useEffect } from 'react';
+
 export const MatchScreen = () => {
+  const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
+  const initMatch = useGameStore(state => state.initMatch);
+  const tablePills = useGameStore(state => state.tablePills);
+
+  useEffect(() => {
+    if (tablePills.length === 0) {
+      initMatch();
+    }
+  }, [initMatch, tablePills.length]);
+
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
       {/* Section: Header */}
@@ -53,7 +67,7 @@ export const MatchScreen = () => {
         actions={
           <ActionDock
             shop={{ disabled: false, onClick: () => { } }}
-            leave={{ disabled: false, onClick: () => { } }}
+            leave={{ disabled: false, onClick: () => setPhaseGuarded('RESULTS') }}
             layout="stack"
           />
         }

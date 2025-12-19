@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useFlowStore } from '@/stores/flowStore';
 import { Header } from '@/components/game/hud/Header';
 import { ShopItem } from '@/components/draft/ShopItem';
 import { ActionDock } from '@/components/ui/action-dock';
@@ -138,6 +140,15 @@ export const DraftScreen = () => {
     maxSlots,
   } = useDraftShopMock();
 
+  const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
+
+  // Monitora fim do draft (via timer ou confirmação)
+  useEffect(() => {
+    if (timeLeft === 0 || (loadoutConfirmed && startIn === 0)) {
+      setPhaseGuarded('MATCH');
+    }
+  }, [timeLeft, loadoutConfirmed, startIn, setPhaseGuarded]);
+
   const formattedDraftTime = `00:${timeLeft < 10 ? `0${timeLeft}` : timeLeft}`;
 
   return (
@@ -203,7 +214,7 @@ export const DraftScreen = () => {
 
         </div>
       </ScrollArea>
-      
+
       {/* Section: Footer (Inventory + Chat + Actions) */}
       <PhasePanelHUD
         phase="draft"

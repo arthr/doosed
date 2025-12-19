@@ -1,4 +1,6 @@
 import { RefreshCw, Home, AlertTriangle } from 'lucide-react';
+import { useFlowStore } from '@/stores/flowStore';
+import { useAppShellStore } from '@/stores/appShellStore';
 import type { ResultsTheme } from './resultsTheme';
 
 export interface ResultsActionsProps {
@@ -7,11 +9,15 @@ export interface ResultsActionsProps {
 }
 
 export function ResultsActions({ isVictory, currentTheme }: ResultsActionsProps) {
+  const resetRun = useFlowStore(state => state.resetRun);
+  const setAppScreen = useAppShellStore(state => state.setAppScreen);
+
   return (
     <div className="w-full flex flex-col items-center gap-4 mt-2">
       <div className="flex gap-4 w-full md:w-auto">
         <button
           type="button"
+          onClick={() => resetRun()}
           className={
             `
             flex-1 md:w-64 py-4 rounded-xl border-b-8 font-pixel text-xl uppercase tracking-wider
@@ -29,6 +35,7 @@ export function ResultsActions({ isVictory, currentTheme }: ResultsActionsProps)
 
       <button
         type="button"
+        onClick={() => setAppScreen('HOME')}
         className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors font-pixel text-sm uppercase"
       >
         <Home size={14} /> Return to Main Menu
