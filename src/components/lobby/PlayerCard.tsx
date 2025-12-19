@@ -12,7 +12,7 @@ const emptySlotContainerClassName = cn(
   'h-[90px] md:h-[200px] md:flex-col gap-4',
 );
 
-const occupiedContainerClassName = (isReady: boolean) =>
+const occupiedContainerClassName = () =>
   cn(
     'relative flex w-full flex-row items-center overflow-hidden transition-all',
     'bg-panel rounded-xl border-3 p-2 md:p-3',
@@ -42,7 +42,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
 
   // OCCUPIED SLOT STATE
   return (
-    <div className={occupiedContainerClassName(player.isReady)}>
+    <div className={occupiedContainerClassName()}>
 
       {/* Top/Right Controls (Chat) */}
       <div className="absolute bottom-2 md:top-2 right-2 z-20">

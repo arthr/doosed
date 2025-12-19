@@ -5,7 +5,7 @@ import { useNotification } from '@/stores/notificationStore';
 import { LobbyScreen } from '@/screens/LobbyScreen';
 import { DraftScreen } from '@/screens/DraftScreen';
 import { MatchScreen } from '@/screens/MatchScreen';
-import ResultScreen from '@/screens/ResultScreen';
+import { ResultScreen } from '@/screens/ResultScreen';
 import { DevOverlayPreview } from '@/components/dev/DevOverlayPreview';
 import { DevDock } from '@/components/dev/DevDock';
 import { DevMenu } from '@/components/dev/DevMenu';

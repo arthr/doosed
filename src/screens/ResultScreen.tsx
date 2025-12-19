@@ -10,7 +10,7 @@ type GameResult = 'VICTORY' | 'DEFEAT';
 
 // --- MAIN COMPONENT ---
 
-const ResultScreen = () => {
+export const ResultScreen = () => {
     // Toggle for development/preview purposes
     const [result, setResult] = useState<GameResult>('VICTORY');
     const isVictory = result === 'VICTORY';
@@ -63,15 +63,15 @@ const ResultScreen = () => {
 
                     <ResultsHero isVictory={isVictory} currentTheme={currentTheme} />
 
-                {/* 4. CONTENT GRID (Stats & Rewards) */}
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                    {/* 4. CONTENT GRID (Stats & Rewards) */}
+                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 
-                    <ResultsStats isVictory={isVictory} currentTheme={currentTheme} />
-                    <ResultsRewards isVictory={isVictory} />
+                        <ResultsStats isVictory={isVictory} currentTheme={currentTheme} />
+                        <ResultsRewards isVictory={isVictory} />
 
-                </div>
+                    </div>
 
-                {/* 5. FOOTER: ACTION BUTTONS */}
+                    {/* 5. FOOTER: ACTION BUTTONS */}
                     <ResultsActions isVictory={isVictory} currentTheme={currentTheme} />
 
                 </div>
@@ -80,4 +80,3 @@ const ResultScreen = () => {
     );
 };
 
-export default ResultScreen;

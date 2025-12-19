@@ -9,7 +9,7 @@ import { useFlowStore } from '@/stores/flowStore';
 
 // --- Main Page Component ---
 
-const HomeScreen = () => {
+export const HomeScreen = () => {
   const setAppScreen = useAppShellStore(state => state.setAppScreen);
   const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
 
@@ -79,7 +79,7 @@ const HomeScreen = () => {
             title="Pickle Rick"
             value="LEVEL 137"
             imageSrc="/images/avatar/pickle_rick_md.png"
-          // icon={<Zap size={20} />}
+            // icon={<Zap size={20} />}
             align="right"
           />
         </div>
@@ -92,4 +92,3 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;

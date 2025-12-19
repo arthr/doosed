@@ -8,7 +8,7 @@ import { Coins, Trophy } from 'lucide-react';
 import { useFlowStore } from '@/stores/flowStore';
 import { useGameStore } from '@/stores/gameStore';
 import { useEffect } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+
 
 export const MatchScreen = () => {
   const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);

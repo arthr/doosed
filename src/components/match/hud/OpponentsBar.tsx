@@ -1,7 +1,7 @@
 
 import { Shield, Heart, Skull } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+
 
 interface OpponentCardProps {
   name: string;

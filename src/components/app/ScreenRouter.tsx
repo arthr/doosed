@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import HomeScreen from '@/screens/HomeScreen';
-import LobbyScreen from '@/screens/LobbyScreen';
+import { HomeScreen } from '@/screens/HomeScreen';
+import { LobbyScreen } from '@/screens/LobbyScreen';
 import { DraftScreen } from '@/screens/DraftScreen';
 import { MatchScreen } from '@/screens/MatchScreen';
-import ResultScreen from '@/screens/ResultScreen';
+import { ResultScreen } from '@/screens/ResultScreen';
 import { useFlowStore } from '@/stores/flowStore';
 import { useAppShellStore, type AppScreen } from '@/stores/appShellStore';
 import type { Phase } from '@/core/state-machines/phase';
@@ -25,7 +25,6 @@ function resolveAppScreenWithDevOverride(
 function renderGameByPhase(phase: Phase) {
   switch (phase) {
     case 'LOBBY':
-      // Lobby tem export default e export nomeado; preferimos default por consistência com os outros.
       return <LobbyScreen />;
     case 'DRAFT':
       return <DraftScreen />;

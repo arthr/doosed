@@ -6,7 +6,7 @@ import { ActionDock } from '@/components/ui/action-dock';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useDraftStore } from '@/stores/draftStore';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
-import { postSystemMessage } from '@/lib/systemMessages';
+
 import {
   Clock,
   Coins,
@@ -37,7 +37,7 @@ export const DraftScreen = () => {
   // Helpers de compatibilidade com UI
   const wallet = pillCoins;
   const canBuy = (item: DraftShopItem) => wallet >= item.price && inventory.length < maxSlots && timeLeft > 0;
-  const openShop = () => postSystemMessage('draft', '> Shop system ready.');
+
 
   // Timer loop
   useEffect(() => {

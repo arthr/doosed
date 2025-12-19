@@ -1,5 +1,3 @@
-import { useState, useMemo } from 'react';
-import type { Player } from '@/types/lobby';
 import { useFlowStore } from '@/stores/flowStore';
 import { LobbyPanel } from '@/components/lobby/LobbyPanel';
 import { PlayerGrid } from '@/components/lobby/PlayerGrid';
@@ -7,26 +5,14 @@ import { ActionDock } from '@/components/ui/action-dock';
 import { Header } from '@/components/game/hud/Header';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
 import { Activity, KeyRound } from 'lucide-react';
-
-// --- Mock Data ---
-function createMockPlayers(): (Player | null)[] {
-  return [
-    { id: '1', name: 'RICK_C_137', avatar: '/images/avatar/rick_sanchez.png', isReady: true, isHost: true },
-    { id: '2', name: 'MORTY_C_137', avatar: '/images/avatar/morty.png', isReady: true, isHost: false },
-    { id: '3', name: 'BIRDPERSON', avatar: '/images/avatar/birdperson.png', isReady: true, isHost: false },
-    { id: '4', name: 'SQUANCHY', avatar: '/images/avatar/squanchy.png', isReady: false, isHost: false },
-    null,
-    null,
-  ];
-}
+import { useLobbyMock } from '@/hooks/useLobbyMock';
 
 import { useAppShellStore } from '@/stores/appShellStore';
 
 // --- Main Screen ---
 
 export const LobbyScreen = () => {
-  const [isReady, setIsReady] = useState(false);
-  const players = useMemo(() => createMockPlayers(), []);
+  const { players, currentUserReady, toggleReady } = useLobbyMock();
   const roomCode = 'X7Z-123';
   const lobbyStatus = 'AGUARDANDO...';
 
@@ -34,11 +20,13 @@ export const LobbyScreen = () => {
   const setAppScreen = useAppShellStore(state => state.setAppScreen);
 
   const handleReady = () => {
-    setIsReady(true);
-    // Simulação Solo: Start imediato após ready
-    setTimeout(() => {
-      setPhaseGuarded('DRAFT');
-    }, 500);
+    toggleReady();
+    // Simulação Solo: Start imediato após ready (se virar true)
+    if (!currentUserReady) {
+      setTimeout(() => {
+        setPhaseGuarded('DRAFT');
+      }, 1000);
+    }
   };
 
   return (
@@ -96,7 +84,7 @@ export const LobbyScreen = () => {
           <ActionDock
             ready={{
               onPress: handleReady,
-              pressed: isReady,
+              pressed: currentUserReady,
               disabled: false,
             }}
             leave={{
@@ -110,5 +98,3 @@ export const LobbyScreen = () => {
     </div>
   );
 };
-
-export default LobbyScreen;

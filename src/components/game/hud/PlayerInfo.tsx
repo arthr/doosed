@@ -1,7 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/cn';
-import { PillIcon } from '@/components/ui/icons/pill-icon';
-import { PillScannerIcon } from '@/components/ui/icons/pill-scanner-icon';
+
 import { Heart, Shield } from 'lucide-react';
 
 // --- Tipos ---
