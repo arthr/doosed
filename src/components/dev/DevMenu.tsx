@@ -3,6 +3,7 @@ import type { Phase } from '@/core/state-machines/phase';
 import type { NotificationVariant } from '@/stores/notificationStore';
 import type { AppScreen, DevOverride } from '@/stores/appShellStore';
 import { NotificationPlayground } from './NotificationPlayground';
+import { DevGameState } from './DevGameState';
 
 function getPreviousPhase(phase: Phase): Phase {
   if (phase === 'DRAFT') return 'LOBBY';
@@ -307,6 +308,11 @@ export function DevMenu({
             </div>
           </div>
         )}
+
+        {mode === 'real' && inGameScreen && (
+          <DevGameState />
+        )}
+
 
         <NotificationPlayground
           showNotification={showNotification}

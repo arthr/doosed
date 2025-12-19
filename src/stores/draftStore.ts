@@ -19,6 +19,7 @@ interface DraftActions {
     toggleConfirm: () => void;
     tickTimer: () => void;
     tickStartIn: () => void;
+    setCoins: (amount: number) => void;
     reset: () => void;
 }
 
@@ -99,6 +100,8 @@ export const useDraftStore = create<DraftState & DraftActions>((set, get) => ({
             set({ startIn: startIn - 1 });
         }
     },
+
+    setCoins: (amount) => set({ pillCoins: amount }),
 
     reset: () => set(INITIAL_STATE)
 }));
