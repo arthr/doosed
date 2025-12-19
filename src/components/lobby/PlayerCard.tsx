@@ -1,26 +1,23 @@
 import type { Player } from '@/types/lobby';
-import { Crown, MessageSquare, Plus } from 'lucide-react';
+import { Crown, Mic, Plus } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { LobbyPanel } from '@/components/lobby/LobbyPanel';
-import { LobbyButton } from '@/components/lobby/LobbyButton';
 
 interface PlayerCardProps {
   player: Player | null;
 }
 
 const emptySlotContainerClassName = cn(
-  'group relative flex h-24 flex-row items-center justify-center gap-4',
-  'border-border-muted bg-panel rounded-xl border-4 border-dashed',
-  'p-4 transition-colors hover:bg-void-black/20',
-  'md:h-auto md:flex-col md:justify-center',
+  'group relative flex w-full flex-row items-center justify-center p-3 transition-colors hover:bg-neon-green/5 overflow-hidden',
+  'border-neon-green/50 bg-panel/30 rounded-xl border-2 border-dashed',
+  'h-[90px] md:h-[200px] md:flex-col gap-4',
 );
 
 const occupiedContainerClassName = (isReady: boolean) =>
   cn(
-    'relative flex h-24 flex-row items-center gap-4 overflow-hidden',
-    'bg-panel rounded-xl border-4 p-3 transition-all',
-    'md:h-auto md:flex-col',
-    isReady ? 'border-neon-green shadow-neon-green' : 'border-border-muted',
+    'relative flex w-full flex-row items-center overflow-hidden transition-all',
+    'bg-panel rounded-xl border-3 p-2 md:p-3',
+    'border-neon-green shadow-neon-green',
+    'h-[90px] md:h-[200px] md:flex-col',
   );
 
 export function PlayerCard({ player }: PlayerCardProps) {
@@ -28,16 +25,17 @@ export function PlayerCard({ player }: PlayerCardProps) {
   if (!player) {
     return (
       <div className={emptySlotContainerClassName}>
-        <div className="pointer-events-none absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10" />
-        <div className="z-10 flex w-full flex-col items-center gap-2">
-          <span className="animate-pulse font-mono text-base tracking-widest text-text-muted uppercase md:text-lg">
-            SEARCHING...
-          </span>
-          <LobbyButton variant="primary" className="px-5 py-2 text-xs">
-            <Plus className="h-4 w-4" />
-            Invite
-          </LobbyButton>
+        <div className="z-10 flex w-full flex-col items-center justify-center gap-2">
+          {/* Invite Button (Mobile Position) */}
+          <button className={cn("flex items-center gap-1 rounded-sm border border-neon-green/40 bg-neon-green/10 px-2 py-0.5 text-[10px] text-neon-green hover:bg-neon-green/20 md:static")}
+            onClick={() => { }}
+          >
+            <Plus className="size-3" />
+            INVITE
+          </button>
         </div>
+
+
       </div>
     );
   }
@@ -45,54 +43,65 @@ export function PlayerCard({ player }: PlayerCardProps) {
   // OCCUPIED SLOT STATE
   return (
     <div className={occupiedContainerClassName(player.isReady)}>
-      {/* Background decoration */}
-      <div className="from-evil-purple/20 pointer-events-none absolute inset-0 bg-linear-to-br to-transparent" />
 
-      {/* Host Icon */}
+      {/* Top/Right Controls (Chat) */}
+      <div className="absolute bottom-2 md:top-2 right-2 z-20">
+        <div className="flex items-center justify-center p-1 rounded-sm bg-panel/80 border border-neon-green/30 md:p-1.5">
+          <Mic className="size-3 text-neon-green md:size-4" />
+        </div>
+      </div>
+
+      {/* Host/Crown Icon */}
       {player.isHost && (
-        <div className="text-neon-yellow absolute top-2 left-2 z-10 drop-shadow-md">
-          <Crown className="h-5 w-5 fill-current md:h-7 md:w-7" />
+        <div className="absolute top-2 right-2 z-20 md:left-2">
+          <div className="flex max-w-8 items-center justify-center p-1 rounded-sm bg-panel/80 border border-neon-green/30 md:p-1.5">
+            <Crown className="size-3 text-neon-yellow fill-current md:size-4" />
+          </div>
         </div>
       )}
 
-      {/* Chat Icon (Static for demo) */}
-      <div className="absolute top-2 right-2 z-10 text-text-muted">
-        <MessageSquare className="h-5 w-5" />
-      </div>
-
-      {/* Avatar */}
-      <LobbyPanel className="relative p-2">
-        <img
-          src={player.avatar}
-          className={cn(
-            'h-16 w-16 rounded border-2 bg-void-black object-cover',
-            'md:aspect-video md:h-40 md:w-56',
-            player.isReady ? 'border-neon-green' : 'border-border-muted',
-          )}
-          alt={player.name}
-        />
-      </LobbyPanel>
-
-      {/* Info */}
-      <div className="z-10 flex grow flex-col md:w-full md:items-center">
-        <h2 className="max-w-[150px] truncate text-base font-black tracking-wide uppercase md:max-w-full md:text-lg">
-          {player.name}
-        </h2>
-        <div
-          className={cn(
-            'flex items-center gap-2 text-xs uppercase md:text-sm',
-            player.isReady ? 'text-neon-green' : 'text-text-muted',
-          )}
-        >
-          <span
-            className={cn(
-              'h-3 w-3 rounded-full',
-              player.isReady ? 'bg-neon-green animate-pulse' : 'bg-text-muted',
-            )}
+      {/* Avatar Section */}
+      <div className="relative z-10 flex items-center justify-center shrink-0 md:flex-1 md:w-full md:py-4">
+        <div className="relative size-16 md:size-24 group">
+          {/* Glow behind avatar */}
+          <div className="absolute inset-0 rounded-full bg-neon-green/10 blur-xl animate-pulse" />
+          <img
+            src={player.avatar}
+            className="relative z-10 h-full w-full object-contain pixelated drop-shadow-[0_0_10px_rgba(94,255,94,0.4)]"
+            alt={player.name}
           />
-          {player.isReady ? 'READY' : 'NOT READY'}
         </div>
       </div>
+
+      {/* Info Section */}
+      <div className={cn(
+        "relative z-20 flex flex-col md:w-full",
+        "justify-center px-3 md:px-1",
+        "md:bg-panel/60 md:backdrop-blur-sm",
+        "md:rounded-lg md:border md:border-neon-green/20",
+      )}>
+        <h2 className="font-mono tracking-widest text-white uppercase text-xs md:text-center truncate">
+          {player.name}
+        </h2>
+
+        <div className="flex items-center gap-2 md:justify-center">
+          <span className={cn(
+            "h-2 w-2 rounded-full shadow-[0_0_8px_#5eff5e]",
+            player.isReady ? "bg-neon-green" : "bg-neutral-500 shadow-none"
+          )} />
+          <span className={cn(
+            "font-mono text-[9px] tracking-wider md:text-[10px]",
+            player.isReady ? "text-neon-green" : "text-neutral-500"
+          )}>
+            {player.isReady ? 'READY' : 'NOT READY'}
+          </span>
+        </div>
+      </div>
+
+      {/* Background/Vignette Effect (Desktop Only or Subtle) */}
+      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_60px_rgba(0,0,0,0.3)] md:shadow-[inset_0_0_100px_rgba(0,0,0,0.5)] z-0" />
     </div>
   );
 }
+
+

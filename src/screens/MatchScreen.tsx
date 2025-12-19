@@ -8,6 +8,7 @@ import { Coins, Trophy } from 'lucide-react';
 import { useFlowStore } from '@/stores/flowStore';
 import { useGameStore } from '@/stores/gameStore';
 import { useEffect } from 'react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const MatchScreen = () => {
   const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
@@ -19,6 +20,8 @@ export const MatchScreen = () => {
       initMatch();
     }
   }, [initMatch, tablePills.length]);
+
+  const localPlayer = useGameStore(state => state.players.find(p => p.id === 'player-1'));
 
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
@@ -48,7 +51,7 @@ export const MatchScreen = () => {
         }}
       />
       {/* Section: Content (scroll) */}
-      <div className="flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
+      <ScrollArea className="flex-1 min-h-0 p-2 font-mono text-xs md:p-0 md:text-sm">
 
         {/* Section: Opponents */}
         <OpponentsBar />
@@ -57,21 +60,29 @@ export const MatchScreen = () => {
         <div className="flex-1 flex items-center justify-center w-full">
           <GameTable />
         </div>
-      </div>
+      </ScrollArea>
 
       {/* Section: Footer */}
       <PhasePanelHUD
         phase="match"
+        player={{
+          name: localPlayer?.name ?? 'Rick Sanchez',
+          avatar: localPlayer?.avatarUrl ?? '/images/avatar/rick_sanchez.png',
+          health: localPlayer?.hp ?? 3,
+          maxHealth: localPlayer?.maxHp ?? 5,
+          resistance: localPlayer?.shields ?? 0,
+          maxResistance: 6,
+        }}
         inventory={{ items: [], maxSlots: 8 }}
         chatThreadId="match"
         actions={
           <ActionDock
             shop={{ disabled: false, onClick: () => { } }}
             leave={{ disabled: false, onClick: () => setPhaseGuarded('RESULTS') }}
-            layout="stack"
           />
         }
       />
     </div>
   );
 };
+

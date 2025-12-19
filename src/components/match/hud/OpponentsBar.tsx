@@ -16,8 +16,8 @@ function OpponentCard({ name, avatar, isDead, hp, maxHp, shields, isActive }: Op
   return (
     <div
       className={cn(
-        'relative p-2 border-2 rounded-xl flex-shrink-0 w-28 md:w-32 flex flex-col items-center transition-transform duration-300',
-        isActive ? 'border-neon-yellow translate-y-2 scale-105 z-10 bg-neutral-800' : 'border-neutral-700 bg-neutral-900/80 opacity-90',
+        'relative p-2 flex-shrink-0 w-28 md:w-32 flex flex-col items-center transition-transform duration-300',
+        isActive ? 'border-neon-yellow translate-y-2 scale-110 z-10' : 'border-neutral-700 opacity-90',
         isDead && 'opacity-50 grayscale border-red-900'
       )}
     >

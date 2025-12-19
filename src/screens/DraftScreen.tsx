@@ -15,11 +15,11 @@ import type { DraftShopItem } from '@/types/draft';
 import { DRAFT_SHOP_CATEGORIES } from '@/types/draft';
 import { SHOP_ITEMS } from '@/data/shopItems';
 
-// Types
-// Types
-
+import { useAppShellStore } from '@/stores/appShellStore';
 
 export const DraftScreen = () => {
+  const setAppScreen = useAppShellStore(state => state.setAppScreen);
+
   const settings = useDraftStore();
   const {
     pillCoins,
@@ -132,6 +132,14 @@ export const DraftScreen = () => {
       <PhasePanelHUD
         phase="draft"
         chatThreadId="draft"
+        player={{
+          name: 'Rick Sanchez',
+          avatar: '/images/avatar/rick_winner.png',
+          health: 2,
+          maxHealth: 3,
+          resistance: 3,
+          maxResistance: 6,
+        }}
         inventory={{
           items: inventory,
           maxSlots,
@@ -139,7 +147,10 @@ export const DraftScreen = () => {
         }}
         actions={
           <ActionDock
-            shop={{ onClick: openShop, disabled: false }}
+            leave={{
+              disabled: false,
+              onClick: () => setAppScreen('HOME')
+            }}
             loadout={{
               onPress: toggleLoadout,
               disabled: timeLeft === 0,
@@ -150,6 +161,7 @@ export const DraftScreen = () => {
           />
         }
       />
+
     </div>
   );
 };

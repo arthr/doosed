@@ -11,21 +11,19 @@ export type PhasePanelHUDInventory = {
     title?: string;
 };
 
-export type PhasePanelHUDProps =
-    | ({
-        phase: 'lobby';
-        chatThreadId: string;
-        actions: ReactNode;
-    } & BasePhasePanelHUDProps)
-    | ({
-        phase: 'draft';
-        chatThreadId: string;
-        inventory: PhasePanelHUDInventory;
-        actions: ReactNode;
-    } & BasePhasePanelHUDProps)
-    | ({
-        phase: 'match';
-        chatThreadId: string;
-        inventory: PhasePanelHUDInventory;
-        actions: ReactNode;
-    } & BasePhasePanelHUDProps);
+export type PlayerHUDStats = {
+    name: string;
+    avatar: string;
+    health: number;
+    maxHealth?: number;
+    resistance: number;
+    maxResistance?: number;
+};
+
+export type PhasePanelHUDProps = {
+    phase: 'lobby' | 'draft' | 'match' | 'results';
+    chatThreadId: string;
+    actions: ReactNode;
+    player: PlayerHUDStats;
+    inventory: PhasePanelHUDInventory;
+} & BasePhasePanelHUDProps;

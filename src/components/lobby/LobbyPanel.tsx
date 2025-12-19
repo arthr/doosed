@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
+import { ScrollArea } from '../ui/scroll-area';
 
 export type LobbyPanelProps = {
   children: ReactNode;
@@ -8,15 +9,14 @@ export type LobbyPanelProps = {
 
 export function LobbyPanel({ children, className }: LobbyPanelProps) {
   return (
-    <div
+    <ScrollArea
       className={cn(
-        'border-border-muted bg-panel rounded-xl border-4',
-        'shadow-pixel',
-        'p-3 sm:p-4',
+        'p-0',
         className,
       )}
+
     >
       {children}
-    </div>
+    </ScrollArea>
   );
 }

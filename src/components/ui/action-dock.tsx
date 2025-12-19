@@ -63,6 +63,20 @@ export function ActionDock({
         className,
       )}
     >
+
+      {leave?.onClick ? (
+        <GlowButton
+          title="LEAVE MATCH"
+          icon={<LogOut />}
+          color="red"
+          size="xs"
+          disabled={!!leave.disabled}
+          onClick={leave.onClick}
+          fullWidth
+          textAlign="center"
+        />
+      ) : null}
+
       {shop?.onClick ? (
         <GlowButton
           title="SHOP"
@@ -148,19 +162,6 @@ export function ActionDock({
             <GlowButtonTitle>{ready.pressed ? 'NOT READY' : 'READY UP'}</GlowButtonTitle>
           </GlowButtonText>
         </GlowButton>
-      ) : null}
-
-      {leave?.onClick ? (
-        <GlowButton
-          title="LEAVE MATCH"
-          icon={<LogOut />}
-          color="red"
-          size="xs"
-          disabled={!!leave.disabled}
-          onClick={leave.onClick}
-          fullWidth
-          textAlign="center"
-        />
       ) : null}
     </div>
   );

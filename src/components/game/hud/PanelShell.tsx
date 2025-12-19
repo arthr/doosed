@@ -6,6 +6,7 @@ export function PanelShell({ children, className = '' }: { children: ReactNode; 
         <div
             className={cn(
                 'bg-none backdrop-blur-xs rounded-xl',
+                'py-2',
                 'mb-2 md:mb-4',
                 'min-h-0',
                 className,

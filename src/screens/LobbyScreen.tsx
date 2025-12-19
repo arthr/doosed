@@ -6,7 +6,7 @@ import { PlayerGrid } from '@/components/lobby/PlayerGrid';
 import { ActionDock } from '@/components/ui/action-dock';
 import { Header } from '@/components/game/hud/Header';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
-import { KeyRound } from 'lucide-react';
+import { Activity, KeyRound } from 'lucide-react';
 
 // --- Mock Data ---
 function createMockPlayers(): (Player | null)[] {
@@ -51,7 +51,7 @@ export const LobbyScreen = () => {
           value: roomCode,
         }}
         right={{
-          // icon: <Activity className="text-neon-yellow" size={18} />,
+          icon: <Activity className="text-neon-yellow" size={18} />,
           label: 'STATUS',
           value: lobbyStatus,
         }}
@@ -71,10 +71,8 @@ export const LobbyScreen = () => {
 
       {/* Section: Main */}
       <main className="flex-1 min-h-0">
-        <LobbyPanel className="h-full p-2 md:p-4">
-          <div className="h-full overflow-y-auto">
-            <PlayerGrid players={players} />
-          </div>
+        <LobbyPanel className="h-full">
+          <PlayerGrid players={players} />
         </LobbyPanel>
       </main>
 
@@ -82,6 +80,18 @@ export const LobbyScreen = () => {
       <PhasePanelHUD
         phase="lobby"
         chatThreadId="lobby"
+        player={{
+          name: 'RICK_C_137',
+          avatar: '/images/avatar/rick_sanchez.png',
+          health: 3,
+          maxHealth: 3,
+          resistance: 6,
+          maxResistance: 6,
+        }}
+        inventory={{
+          items: [],
+          maxSlots: 8,
+        }}
         actions={
           <ActionDock
             ready={{
@@ -96,6 +106,7 @@ export const LobbyScreen = () => {
           />
         }
       />
+
     </div>
   );
 };

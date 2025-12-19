@@ -8,7 +8,8 @@ import { PillScannerIcon } from '@/components/ui/icons/pill-scanner-icon';
 export interface InventoryItem {
   id: string | number;
   name: string;
-  imageSrc: string;
+  imageSrc?: string;
+  icon?: React.ReactNode;
 }
 
 // Definição dos tamanhos disponíveis
@@ -123,11 +124,17 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
           title={item ? item.name : "Empty Slot"}
         >
           {item ? (
-            <img
-              src={item.imageSrc}
-              alt={item.name}
-              className="w-3/4 h-3/4 object-contain pixelated filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]"
-            />
+            item.icon ? (
+              <div className="w-full h-full flex items-center justify-center p-1">
+                {item.icon}
+              </div>
+            ) : item.imageSrc ? (
+              <img
+                src={item.imageSrc}
+                alt={item.name}
+                className="w-3/4 h-3/4 object-contain pixelated filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]"
+              />
+            ) : null
           ) : null}
           {/* Scanline do slot */}
           <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,255,0,0.05)_50%)] bg-size-[100%_4px] pointer-events-none"></div>
@@ -197,7 +204,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
             </div>
           </div>
 
-        <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Inventory</h3>
+          <h3 className={cn("text-rick-green uppercase tracking-widest", styles.headerText)}>Inventory</h3>
         </div>
       </div>
 
