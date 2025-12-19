@@ -1,6 +1,5 @@
 ---
 trigger: always_on
-glob:
 description: Always apply: executar tasks com fluxo de aprovação + revisão + rastreabilidade
 ---
 

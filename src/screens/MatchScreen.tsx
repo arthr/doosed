@@ -48,7 +48,7 @@ export const MatchScreen = () => {
         }}
       />
       {/* Section: Content (scroll) */}
-      <div className="bg-void-black text-text-primary border-border-muted flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
+      <div className="flex flex-1 min-h-0 flex-col overflow-y-auto p-2 font-mono text-xs md:p-0 md:text-sm">
 
         {/* Section: Opponents */}
         <OpponentsBar />

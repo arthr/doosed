@@ -1,6 +1,5 @@
 ---
 trigger: always_on
-glob:
 description: Always apply: diretrizes globais (Solo Dev) e fonte da verdade
 ---
 

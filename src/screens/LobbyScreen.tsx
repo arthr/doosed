@@ -3,7 +3,7 @@ import type { Player } from '@/types/lobby';
 import { useFlowStore } from '@/stores/flowStore';
 import { LobbyPanel } from '@/components/lobby/LobbyPanel';
 import { PlayerGrid } from '@/components/lobby/PlayerGrid';
-import { ActionControls } from '@/components/lobby/ActionControls';
+import { ActionDock } from '@/components/ui/action-dock';
 import { Header } from '@/components/game/hud/Header';
 import { PhasePanelHUD } from '@/components/game/hud/PhasePanelHUD';
 import { KeyRound } from 'lucide-react';
@@ -20,6 +20,8 @@ function createMockPlayers(): (Player | null)[] {
   ];
 }
 
+import { useAppShellStore } from '@/stores/appShellStore';
+
 // --- Main Screen ---
 
 export const LobbyScreen = () => {
@@ -29,6 +31,8 @@ export const LobbyScreen = () => {
   const lobbyStatus = 'AGUARDANDO...';
 
   const setPhaseGuarded = useFlowStore(state => state.setPhaseGuarded);
+  const setAppScreen = useAppShellStore(state => state.setAppScreen);
+
   const handleReady = () => {
     setIsReady(true);
     // Simulação Solo: Start imediato após ready
@@ -40,7 +44,6 @@ export const LobbyScreen = () => {
   return (
     <div className="mx-auto flex h-screen max-w-7xl flex-col">
       {/* Section: Header */}
-      {/* TODO: Header do Lobby precisa de roomCode e Status de sala */}
       <Header
         left={{
           icon: <KeyRound className="text-neon-yellow" size={18} />,
@@ -56,7 +59,7 @@ export const LobbyScreen = () => {
           title: 'Game',
           artwork: (
             <img
-              src="/images/avatar/rick_looser_md.png"
+              src="/images/avatar/rick_winner_md.png"
               alt="Rick Winner"
               className="-my-4 size-16 drop-shadow-xs select-none"
               draggable={false}
@@ -76,16 +79,23 @@ export const LobbyScreen = () => {
       </main>
 
       {/* Section: Footer */}
-      <footer className="mt-auto">
-        <PhasePanelHUD
-          phase="lobby"
-          className="h-auto md:h-48"
-          chatThreadId="lobby"
-          actions={
-            <ActionControls isReady={isReady} onToggleReady={handleReady} />
-          }
-        />
-      </footer>
+      <PhasePanelHUD
+        phase="lobby"
+        chatThreadId="lobby"
+        actions={
+          <ActionDock
+            ready={{
+              onPress: handleReady,
+              pressed: isReady,
+              disabled: false,
+            }}
+            leave={{
+              disabled: false,
+              onClick: () => setAppScreen('HOME')
+            }}
+          />
+        }
+      />
     </div>
   );
 };
