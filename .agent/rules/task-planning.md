@@ -1,4 +1,6 @@
 ---
+trigger: always_on
+glob:
 description: Always apply: Spec Driven Development + planning de tasks (Solo Dev)
 ---
 

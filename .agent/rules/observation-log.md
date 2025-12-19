@@ -1,4 +1,6 @@
 ---
+trigger: always_on
+glob:
 description: Always apply: anotações de aprendizado e observações rápidas sobre o projeto
 ---
 

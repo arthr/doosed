@@ -1,6 +1,9 @@
 ---
+trigger: always_on
+glob:
 description: Always apply: padrões de Code Style
 ---
+
 
 # Code Style (DOSED)
 

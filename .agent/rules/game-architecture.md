@@ -1,4 +1,6 @@
 ---
+trigger: always_on
+glob:
 description: Always apply: arquitetura do jogo (fases, eventos, determinismo, multiplayer)
 ---
 

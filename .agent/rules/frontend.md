@@ -1,4 +1,6 @@
 ---
+trigger: always_on
+glob:
 description: Always apply: frontend (React/TS/Tailwind/Zustand)
 ---
 
