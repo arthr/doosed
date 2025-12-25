@@ -41,10 +41,11 @@ Um jogador durante a partida completa Shape Quests (sequências de formas de pí
 
 **Acceptance Scenarios**:
 
-1. **Given** o jogador inicia uma Rodada, **When** Rodada começa, **Then** recebe 1 Shape Quest nova exibida na HUD
-2. **Given** o jogador tem uma Shape Quest ativa (ex.: Sphere -> Cube), **When** consome pílulas na sequência correta (vendo shapes visíveis), **Then** progresso da quest avança visualmente
+1. **Given** o jogador inicia uma Rodada, **When** Rodada começa, **Then** recebe 1 Shape Quest nova gerada baseada nas shapes do pool atual, exibida na HUD
+2. **Given** o jogador tem uma Shape Quest ativa (ex.: Capsule -> Triangle), **When** consome pílulas na sequência correta (vendo shapes visíveis), **Then** progresso da quest avança visualmente
 3. **Given** o jogador completa uma Shape Quest, **When** a sequência é finalizada, **Then** recebe 10 Pill Coins (base) × multiplicador progressivo com feedback visual/sonoro
 4. **Given** o jogador erra a sequência de uma Shape Quest, **When** consome shape incorreto, **Then** progresso da quest é resetado com indicação visual
+5. **Given** o jogador não completou Shape Quest na Rodada atual, **When** nova Rodada inicia, **Then** quest anterior é descartada e nova quest é gerada baseada no novo pool
 5. **Given** o jogador tem Pill Coins, **When** clica em "Shop" no seu turno, **Then** a Loja abre como overlay sobre a Match
 6. **Given** o jogador está na Loja, **When** seleciona um item e tem Pill Coins suficientes, **Then** pode comprar o item (vai para inventário se houver espaço)
 7. **Given** o jogador comprou um item, **When** usa o item no seu turno (antes de escolher pílula), **Then** o efeito do item é aplicado (Intel/Sustain/Control/Chaos) e o item é consumido
@@ -96,8 +97,9 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - Q: Valores iniciais de Vidas e Resistência? → A: 3 Vidas, 6 Resistência. MECÂNICA DE ÚLTIMA CHANCE: Quando jogador atinge 0 Vidas, ele NÃO é eliminado imediatamente. HUD mostra "0 Vidas" mas jogador continua com barra de Resistência ativa (resetada). Eliminação só ocorre quando Resistência zerar novamente JÁ estando em 0 Vidas. Isso permite 4 Colapsos totais (3 que reduzem Vidas 3→2→1→0, e 1 final que elimina).
 - Q: Currency e valor inicial no Draft? → A: Usar Pill Coins (moeda unificada Draft+Match). Jogador começa com 100 Pill Coins iniciais. Escolha estratégica: gastar no Draft (loadout) ou poupar para usar na Loja durante Match. Itens devem ter disponibilidade configurável (DRAFT/MATCH/AMBOS). Loja é a mesma, muda apenas disponibilidade dos itens.
 - Q: Ordem de Turnos após eliminação de jogador? → A: Manter ordem original (round-robin), simplesmente pular turnos de jogadores eliminados. Quando chega turno de eliminado, sistema avança automaticamente para próximo jogador vivo. Jogadores eliminados permanecem visíveis na UI mas inativos.
-- Q: Shapes das pills - como funcionam? → A: Shapes (Sphere/Cube/Pyramid/Capsule) são SEMPRE VISÍVEIS ao jogador antes de consumir a pill. Shapes NÃO afetam os efeitos das pills (SAFE/DMG/HEAL/etc) - são puramente visuais e servem APENAS para Shape Quests. Tipo da pill (efeito) só é revelado após consumo. Jogador vê o shape mas não sabe se é nociva ou não até consumir.
+- Q: Shapes das pills - como funcionam? → A: Shapes são SEMPRE VISÍVEIS ao jogador antes de consumir a pill. Shapes NÃO afetam os efeitos das pills (SAFE/DMG/HEAL/etc) - são puramente visuais e servem APENAS para Shape Quests. Tipo da pill (efeito) só é revelado após consumo. Jogador vê o shape mas não sabe se é nociva ou não até consumir. Sistema NÃO é limitado a 4 shapes - deve ser extensível, suportando catálogo expandido (16 shapes base + shapes sazonais futuras). Shapes têm progressão de unlock por Rodada (algumas shapes básicas desde Rodada 1, outras desbloqueiam em rodadas posteriores).
 - Q: Existe limite máximo de rodadas? Pode haver empate? → A: NÃO existe limite máximo de rodadas. Partida continua indefinidamente até restar apenas 1 sobrevivente. Empate é impossível pois em rodadas > 10 a fatalidade é alta devido à progressão de tipos nocivos. Sistema de contadores permite estratégia mesmo em rodadas longas.
+- Q: Shape Quests persistem entre rodadas? Como são geradas? → A: Shape Quests NÃO persistem entre rodadas. Cada Rodada gera nova quest para cada jogador BASEADA nas shapes disponíveis no pool daquela Rodada específica. Isso garante que quest é sempre possível de completar. Progresso de quest anterior é descartado ao iniciar nova Rodada. Quest usa apenas shapes que estão presentes no pool atual (respeitando unlock progressivo de shapes).
 
 ### Edge Cases
 
@@ -110,8 +112,9 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **Overflow negativo com cascata**: Se implementado, dano com overflow negativo pode causar múltiplos colapsos em sequência - deve ter animação clara para cada colapso
 - **Desconexão durante Draft/Match**: Para MVP solo, se processo do jogo trava, jogador deve poder reiniciar sem perder progresso de XP/Schmeckles já ganhos
 - **Resistência extra excedendo cap**: Sistema deve enforçar cap de Resistência extra (configurável, padrão igual ao máximo de Resistência base = 6) para manter balance
-- **Shape Quest impossível de completar**: Se pool não tem mais shapes necessários para completar quest ativa na Rodada atual, quest permanece ativa para próxima Rodada (progresso mantido)
+- **Shape Quest não completada na Rodada**: Se jogador não completa quest na Rodada atual (por não consumir shapes corretos), quest é descartada e nova quest é gerada na próxima Rodada baseada no novo pool
 - **Todas as pills do pool são do mesmo tipo**: Situação rara mas possível em rodadas avançadas. Sistema deve gerar pool normalmente seguindo distribuição configurada, mesmo que resulte em concentração extrema de um tipo
+- **Shapes desbloqueadas progressivamente**: Em rodadas iniciais, sistema só gera pills com shapes já desbloqueadas. Pool deve ter diversidade mínima de shapes (pelo menos 3 diferentes) para viabilizar Shape Quests
 
 ## Requirements *(mandatory)*
 
@@ -209,65 +212,74 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 #### Shape Quests & Pill Coins
 
 - **FR-058**: Jogador DEVE iniciar cada Partida com 100 Pill Coins (antes do Draft)
-- **FR-059**: Sistema DEVE atribuir 1 Shape Quest aleatória para cada jogador no início de cada Rodada
-- **FR-060**: Sistema DEVE exibir Shape Quest ativa na HUD do jogador mostrando sequência de shapes necessária e progresso
-- **FR-061**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes (visíveis) de pílulas consumidas
-- **FR-062**: Sistema DEVE conceder 10 Pill Coins (base configurável) × multiplicador progressivo quando Shape Quest é completada
-- **FR-063**: Sistema DEVE resetar progresso de Shape Quest quando jogador consome shape incorreto
-- **FR-064**: Shape Quests DEVEM ter dificuldade/recompensa progressiva baseada na Rodada:
+- **FR-059**: Sistema DEVE gerar 1 Shape Quest nova para cada jogador no início de cada Rodada, baseada APENAS nas shapes presentes no pool da Rodada atual
+- **FR-060**: Shape Quest DEVE ser gerada considerando apenas shapes desbloqueadas (progressão por Rodada) E presentes no pool atual
+- **FR-061**: Shape Quest gerada DEVE ser sempre possível de completar com as pills disponíveis no pool da Rodada (validação de viabilidade)
+- **FR-062**: Sistema DEVE descartar progresso de Shape Quest anterior ao iniciar nova Rodada (progresso NÃO persiste entre Rodadas)
+- **FR-063**: Sistema DEVE exibir Shape Quest ativa na HUD do jogador mostrando sequência de shapes necessária e progresso atual
+- **FR-064**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes (visíveis) de pílulas consumidas durante a Rodada
+- **FR-065**: Sistema DEVE conceder 10 Pill Coins (base configurável) × multiplicador progressivo quando Shape Quest é completada
+- **FR-066**: Sistema DEVE resetar progresso de Shape Quest quando jogador consome shape incorreto dentro da mesma Rodada
+- **FR-067**: Shape Quests DEVEM ter dificuldade/recompensa progressiva baseada na Rodada:
   - Rodadas 1-3: 2 shapes, multiplicador 1.0x (10 Pill Coins)
   - Rodadas 4-7: 3 shapes, multiplicador 1.5x (15 Pill Coins)
   - Rodadas 8+: 4-5 shapes, multiplicador 2.0x (20-25 Pill Coins)
-- **FR-065**: Sistema DEVE exibir saldo de Pill Coins do jogador na HUD (unificado entre Draft e Match)
-- **FR-066**: Pill Coins NÃO gastos no Draft DEVEM permanecer disponíveis para uso na Loja durante Match
-- **FR-067**: Pill Coins NÃO são persistidos entre Partidas - cada Partida inicia com 100 Pill Coins frescos
+- **FR-068**: Sistema DEVE exibir saldo de Pill Coins do jogador na HUD (unificado entre Draft e Match)
+- **FR-069**: Pill Coins NÃO gastos no Draft DEVEM permanecer disponíveis para uso na Loja durante Match
+- **FR-070**: Pill Coins NÃO são persistidos entre Partidas - cada Partida inicia com 100 Pill Coins frescos
 
 #### Loja (Draft e Match) - Sistema Unificado
 
-- **FR-068**: Cada item DEVE ter configuração de disponibilidade: DRAFT (apenas pré-Match), MATCH (apenas durante Match), ou AMBOS
-- **FR-069**: Sistema DEVE filtrar itens exibidos baseado no contexto: Draft mostra itens DRAFT ou AMBOS; Loja Match mostra itens MATCH ou AMBOS
-- **FR-070**: Sistema DEVE exibir Loja como overlay durante Draft (sempre visível) e durante Match (acionada por botão "Shop" no turno do jogador)
-- **FR-071**: Sistema DEVE exibir itens disponíveis com nome, descrição, custo em Pill Coins, categoria e indicação de disponibilidade
-- **FR-072**: Sistema DEVE permitir compra de item se jogador tem Pill Coins suficientes E espaço no inventário
-- **FR-073**: Sistema DEVE deduzir Pill Coins do saldo unificado e adicionar item ao inventário após compra (tanto no Draft quanto na Match)
-- **FR-074**: Sistema DEVE impedir compra se Pill Coins insuficientes OU inventário cheio (com feedback apropriado)
-- **FR-075**: Sistema DEVE fechar Loja da Match quando jogador clica em "Fechar" ou confirma compras (sem consumir turno)
-- **FR-076**: Inventário sempre inicia vazio a cada Partida - itens NÃO são persistidos entre Partidas
+- **FR-071**: Cada item DEVE ter configuração de disponibilidade: DRAFT (apenas pré-Match), MATCH (apenas durante Match), ou AMBOS
+- **FR-072**: Sistema DEVE filtrar itens exibidos baseado no contexto: Draft mostra itens DRAFT ou AMBOS; Loja Match mostra itens MATCH ou AMBOS
+- **FR-073**: Sistema DEVE exibir Loja como overlay durante Draft (sempre visível) e durante Match (acionada por botão "Shop" no turno do jogador)
+- **FR-074**: Sistema DEVE exibir itens disponíveis com nome, descrição, custo em Pill Coins, categoria e indicação de disponibilidade
+- **FR-075**: Sistema DEVE permitir compra de item se jogador tem Pill Coins suficientes E espaço no inventário
+- **FR-076**: Sistema DEVE deduzir Pill Coins do saldo unificado e adicionar item ao inventário após compra (tanto no Draft quanto na Match)
+- **FR-077**: Sistema DEVE impedir compra se Pill Coins insuficientes OU inventário cheio (com feedback apropriado)
+- **FR-078**: Sistema DEVE fechar Loja da Match quando jogador clica em "Fechar" ou confirma compras (sem consumir turno)
+- **FR-079**: Inventário sempre inicia vazio a cada Partida - itens NÃO são persistidos entre Partidas
 
 #### Results
 
-- **FR-077**: Sistema DEVE exibir tela Results ao fim da Partida mostrando vencedor
-- **FR-078**: Sistema DEVE exibir estatísticas da partida: pílulas consumidas por tipo (com shapes), dano causado, dano recebido, Colapsos sofridos, Shape Quests completadas, Pill Coins ganhos, Pill Coins gastos, Pill Coins restantes, total de Rodadas jogadas
-- **FR-079**: Sistema DEVE calcular e exibir XP ganho baseado em: sobrevivência (vitória/derrota), eliminações, Shape Quests completadas, Rodadas sobrevividas
-- **FR-080**: Sistema DEVE calcular e exibir Schmeckles ganhos baseado em performance geral (fórmula configurável)
-- **FR-081**: Sistema DEVE ter botão "Jogar Novamente" que retorna para Lobby
-- **FR-082**: Sistema DEVE ter botão "Menu Principal" que retorna para Home
+- **FR-080**: Sistema DEVE exibir tela Results ao fim da Partida mostrando vencedor
+- **FR-081**: Sistema DEVE exibir estatísticas da partida: pílulas consumidas por tipo (com shapes), dano causado, dano recebido, Colapsos sofridos, Shape Quests completadas, Pill Coins ganhos, Pill Coins gastos, Pill Coins restantes, total de Rodadas jogadas
+- **FR-082**: Sistema DEVE calcular e exibir XP ganho baseado em: sobrevivência (vitória/derrota), eliminações, Shape Quests completadas, Rodadas sobrevividas
+- **FR-083**: Sistema DEVE calcular e exibir Schmeckles ganhos baseado em performance geral (fórmula configurável)
+- **FR-084**: Sistema DEVE ter botão "Jogar Novamente" que retorna para Lobby
+- **FR-085**: Sistema DEVE ter botão "Menu Principal" que retorna para Home
 
 #### Progressão & Persistência
 
-- **FR-083**: Sistema DEVE persistir XP acumulado do jogador entre sessões
-- **FR-084**: Sistema DEVE persistir Schmeckles acumulados do jogador entre sessões
-- **FR-085**: Sistema DEVE persistir nível do jogador entre sessões
-- **FR-086**: Sistema DEVE calcular nível baseado em XP acumulado com curve de progressão definida (configurável)
-- **FR-087**: Sistema DEVE exibir feedback visual quando jogador sobe de nível
+- **FR-086**: Sistema DEVE persistir XP acumulado do jogador entre sessões
+- **FR-087**: Sistema DEVE persistir Schmeckles acumulados do jogador entre sessões
+- **FR-088**: Sistema DEVE persistir nível do jogador entre sessões
+- **FR-089**: Sistema DEVE calcular nível baseado em XP acumulado com curve de progressão definida (configurável)
+- **FR-090**: Sistema DEVE exibir feedback visual quando jogador sobe de nível
 
 #### Pool de Pílulas (Baralho por Rodada)
 
-- **FR-088**: Sistema DEVE implementar cada pool (1 por Rodada) como baralho (sampling sem reposição) - pílulas não voltam ao pool após consumidas dentro da mesma Rodada
-- **FR-089**: Sistema DEVE distribuir tipos de pílulas no pool baseado em progressão por Rodada (percentuais configuráveis):
+- **FR-091**: Sistema DEVE implementar cada pool (1 por Rodada) como baralho (sampling sem reposição) - pílulas não voltam ao pool após consumidas dentro da mesma Rodada
+- **FR-092**: Sistema DEVE distribuir tipos de pílulas no pool baseado em progressão por Rodada (percentuais configuráveis):
   - SAFE: unlock Rodada 1, começa 45% e termina 15%
   - DMG_LOW: unlock Rodada 1, começa 40% e termina 20%
   - DMG_HIGH: unlock Rodada 3, começa 15% e termina 25%
   - HEAL: unlock Rodada 2, começa 10% e termina 15%
   - FATAL: unlock Rodada 6, começa 5% e termina 18%
   - LIFE: unlock Rodada 5, começa 6% e termina 13%
-- **FR-090**: Sistema DEVE escalar tamanho do pool por Rodada: base 6 pílulas, +1 a cada 3 Rodadas, cap máximo 12 (valores configuráveis)
-- **FR-091**: Sistema DEVE atribuir shapes aleatórios (Sphere/Cube/Pyramid/Capsule/Etc) para cada pílula independente do tipo (distribuição uniforme)
-- **FR-092**: Sistema DEVE gerar novo pool ao iniciar cada nova Rodada (com distribuição e tamanho progressivos)
+- **FR-093**: Sistema DEVE escalar tamanho do pool por Rodada: base 6 pílulas, +1 a cada 3 Rodadas, cap máximo 12 (valores configuráveis)
+- **FR-094**: Sistema DEVE implementar catálogo extensível de Shapes com progressão de unlock por Rodada (configurável)
+- **FR-095**: Sistema DEVE suportar pelo menos 16 shapes base (ex.: capsule, round, triangle, oval, cross, heart, flower, star, pumpkin, coin, bear, gem, skull, domino, pineapple, fruit) com unlock progressivo
+- **FR-096**: Sistema DEVE desbloquear shapes progressivamente baseado na Rodada (ex.: shapes básicas na Rodada 1, shapes raras em rodadas posteriores)
+- **FR-097**: Sistema DEVE atribuir shapes aleatórios para cada pílula do pool, independente do tipo (SAFE/DMG/HEAL/etc), usando apenas shapes desbloqueadas até a Rodada atual
+- **FR-098**: Sistema DEVE garantir diversidade mínima de shapes no pool (pelo menos 3 shapes diferentes) para viabilizar Shape Quests
+- **FR-099**: Sistema DEVE suportar Shapes Sazonais (ex.: natal, halloween, páscoa) que podem ser ativadas/desativadas via configuração sem alterar lógica do jogo
+- **FR-100**: Shapes Sazonais ativas DEVEM ser incluídas no pool de shapes disponíveis respeitando mesma lógica de distribuição aleatória
+- **FR-101**: Sistema DEVE gerar novo pool ao iniciar cada nova Rodada (com distribuição de tipos, tamanho, e shapes progressivos)
 
 #### Configurações & Balance
 
-- **FR-093**: Sistema DEVE centralizar todas as configurações de balance e timers em estrutura de dados configurável (não hardcoded):
+- **FR-102**: Sistema DEVE centralizar todas as configurações de balance e timers em estrutura de dados configurável (não hardcoded):
   - **Timers:**
     - Timer de Turno (padrão: 30s)
     - Timer de Draft (padrão: 60s)
@@ -283,6 +295,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
     - Incremento (padrão: +1 a cada 3 Rodadas)
     - Cap máximo (padrão: 12)
     - Distribuição de tipos por Rodada (percentuais início/fim + unlock por Rodada)
+    - Diversidade mínima de shapes (padrão: 3 shapes diferentes)
   - **Saúde:**
     - Vidas iniciais (padrão: 3)
     - Resistência inicial/máxima (padrão: 6)
@@ -297,16 +310,23 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
   - **Shape Quests:**
     - Quantidade por Rodada (padrão: 1 por jogador)
     - Tamanho sequência por Rodada (rodadas 1-3: 2, 4-7: 3, 8+: 4-5)
+    - Geração baseada em pool atual (sempre enabled)
+  - **Shapes (Catálogo Extensível):**
+    - Lista de shapes base (16 shapes: capsule, round, triangle, oval, cross, heart, flower, star, pumpkin, coin, bear, gem, skull, domino, pineapple, fruit)
+    - Progressão de unlock por shape (ex.: capsule/round/triangle/oval/cross/heart/flower/star/coin/gem/fruit: Rodada 1; pumpkin/skull: Rodada 3; bear: Rodada 5; domino: Rodada 7; pineapple: Rodada 8)
+    - Shapes Sazonais ativas (array de IDs de shapes sazonais habilitadas, ex.: ["xmas_tree", "pumpkin_halloween", "easter_egg"])
+    - Distribuição de shapes (uniforme entre shapes desbloqueadas + sazonais ativas)
   - **XP & Progression:**
     - Fórmula XP por sobrevivência/vitória
     - Fórmula Schmeckles por performance
     - Curva de progressão de nível
-- **FR-094**: Configurações DEVEM ser facilmente editáveis por desenvolvedores/admin sem necessidade de recompilar código (arquivo JSON/YAML ou interface admin)
-- **FR-095**: Cada item DEVE ter configuração individual de custo (Pill Coins) e disponibilidade (DRAFT/MATCH/AMBOS)
+- **FR-103**: Configurações DEVEM ser facilmente editáveis por desenvolvedores/admin sem necessidade de recompilar código (arquivo JSON/YAML ou interface admin)
+- **FR-104**: Cada item DEVE ter configuração individual de custo (Pill Coins) e disponibilidade (DRAFT/MATCH/AMBOS)
+- **FR-105**: Cada shape DEVE ter configuração individual de ID, nome, arquivo de asset, unlock por Rodada, e flag de sazonal
 
 #### Dev Tools
 
-- **FR-096**: Sistema DEVE incluir DevTools overlay (apenas em DEV mode) com controles para:
+- **FR-106**: Sistema DEVE incluir DevTools overlay (apenas em DEV mode) com controles para:
   - Alternar entre Home/Game screens
   - Pular entre phases (Lobby/Draft/Match/Results)
   - Avançar/voltar Rodadas manualmente
@@ -316,21 +336,25 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
   - Simular Colapso e estado de "Última Chance"
   - Editar configurações de balance em tempo real
   - Alternar disponibilidade de itens (DRAFT/MATCH/AMBOS)
+  - Ativar/desativar Shapes Sazonais
+  - Forçar regeneração de pool com shapes específicas
+  - Visualizar shapes desbloqueadas na Rodada atual
   - Disparar notificações de teste
   - Override de estado para debugging
-  - Visualizar/editar estado da Partida (Rodada atual, turno, pool, inventários)
+  - Visualizar/editar estado da Partida (Rodada atual, turno, pool com shapes, inventários, Shape Quests ativas)
 
 ### Key Entities
 
-- **Jogador**: Representa participante (humano ou bot). Atributos: ID, nome, avatar, Vidas (inicial: 3), Resistência (inicial/máxima: 6), Resistência extra, inventário (8 slots), Pill Coins, Shape Quests ativas, status (vivo/última-chance/eliminado), é turno ativo (bool), total de Colapsos sofridos
-- **Pílula**: Representa uma pílula no pool. Atributos: tipo (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE), shape (Sphere/Cube/Pyramid/Capsule), estado (disponível/consumida)
-- **Pool (Rodada)**: Representa baralho de pílulas de uma Rodada específica. Atributos: número da Rodada, pílulas (array), contadores por tipo, tamanho total
-- **Rodada**: Representa uma Rodada da Partida (equivale a uma Poll completa). Atributos: número, pool (referência), Turnos (array de ações), estado (ativa/completada)
-- **Turno**: Representa turno de um jogador específico. Atributos: jogador (ID), timer restante, ação realizada (pill consumida/item usado/timeout), timestamp início, timestamp fim
+- **Jogador**: Representa participante (humano ou bot). Atributos: ID, nome, avatar, Vidas (inicial: 3), Resistência (inicial/máxima: 6), Resistência extra, inventário (8 slots), Pill Coins, Shape Quest ativa (1 por Rodada), status (vivo/última-chance/eliminado), é turno ativo (bool), total de Colapsos sofridos
+- **Pílula**: Representa uma pílula no pool. Atributos: tipo (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE), shape (ID da shape do catálogo), estado (disponível/consumida)
+- **Shape (Catálogo)**: Representa uma forma visual de pílula. Atributos: ID, nome, arquivo de asset, unlock por Rodada (número), é sazonal (bool), tema sazonal (string opcional, ex.: "christmas", "halloween")
+- **Pool (Rodada)**: Representa baralho de pílulas de uma Rodada específica. Atributos: número da Rodada, pílulas (array), contadores por tipo, tamanho total, shapes disponíveis (array de IDs de shapes desbloqueadas + sazonais ativas)
+- **Rodada**: Representa uma Rodada da Partida (equivale a uma Poll completa). Atributos: número, pool (referência), Turnos (array de ações), Shape Quests geradas (array, 1 por jogador), estado (ativa/completada)
+- **Turno**: Representa turno de um jogador específico. Atributos: jogador (ID), timer restante, ação realizada (pill consumida com shape/item usado/timeout), timestamp início, timestamp fim
 - **Ordem de Turnos**: Sequência fixa (array de IDs de jogadores) determinada aleatoriamente no início da Partida, mantida durante toda a Partida (eliminados são pulados mas índices preservados)
 - **Item**: Representa item consumível. Atributos: ID, nome, descrição, categoria (Intel/Sustain/Control/Chaos), custo em Pill Coins, efeito, disponibilidade (DRAFT/MATCH/AMBOS)
-- **Shape Quest**: Representa objetivo de sequência de shapes. Atributos: ID, sequência de shapes necessária, progresso atual, recompensa (Pill Coins), status (ativa/completada/falhada)
-- **Partida (Match)**: Representa instância completa de jogo. Atributos: ID, fase (Lobby/Draft/Match/Results), jogadores (array), Rodadas (array), Rodada atual (número), jogador do Turno atual (índice), vencedor(es), timestamp início, timestamp fim
+- **Shape Quest**: Representa objetivo de sequência de shapes **por Rodada** (NÃO persiste entre Rodadas). Atributos: ID, número da Rodada, jogador (ID), sequência de shapes necessária (IDs), progresso atual (contador), recompensa (Pill Coins base × multiplicador), status (ativa/completada/falhada/descartada)
+- **Partida (Match)**: Representa instância completa de jogo. Atributos: ID, fase (Lobby/Draft/Match/Results), jogadores (array), Rodadas (array), Rodada atual (número), jogador do Turno atual (índice), shapes sazonais ativas (array de IDs), vencedor(es), timestamp início, timestamp fim
 - **Perfil (Profile)**: Representa perfil persistente do jogador. Atributos: ID, nome, avatar, nível, XP total, Schmeckles total, partidas jogadas, vitórias, Rodadas totais sobrevividas, timestamp
 
 ## Success Criteria *(mandatory)*
@@ -353,6 +377,11 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **SC-014**: Nova Rodada é gerada automaticamente quando pool esgota E ainda há 2+ jogadores vivos em 100% dos casos
 - **SC-019**: Shapes de pílulas são claramente visíveis no pool antes da escolha em 100% dos casos
 - **SC-020**: Sistema continua gerando novas Rodadas indefinidamente até restar 1 sobrevivente (testado até Rodada 20+)
+- **SC-021**: Shape Quests geradas são sempre possíveis de completar com as shapes disponíveis no pool da Rodada em 100% dos casos
+- **SC-022**: Progresso de Shape Quest é corretamente resetado ao iniciar nova Rodada em 100% dos casos
+- **SC-023**: Pool contém pelo menos 3 shapes diferentes em 100% das Rodadas (diversidade mínima para quests)
+- **SC-024**: Shapes são corretamente desbloqueadas de acordo com progressão configurada (testado até Rodada 10+)
+- **SC-025**: Shapes Sazonais ativadas aparecem no pool juntamente com shapes base em 100% dos casos quando habilitadas
 - **SC-015**: Proporção estratégia vs sorte atinge 70/30 (estimado via análise de winrate de bots vs jogadores experientes)
 - **SC-016**: Nenhum tipo de pílula (SAFE/DMG/HEAL/FATAL/LIFE) tem taxa de spawn fora da range configurada (+/- 5% de margem) em 95% das Rodadas
 - **SC-017**: Jogadores retornam para jogar segunda partida em 70% dos casos após primeira partida completa
@@ -375,8 +404,13 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - Inventário e Pill Coins sempre resetam a cada Partida (sem persistência entre Partidas) - garante fairness e balance
 - Persistência local (localStorage ou similar) é suficiente para MVP (XP/Schmeckles), sem necessidade de backend completo
 - Sistema de contadores visíveis do pool (card counting) é pilar fundamental e deve estar sempre visível
-- Shapes visíveis (Sphere/Cube/Pyramid/Capsule) antes do consumo facilitam estratégia de Shape Quests sem revelar tipo da pill
+- Shapes visíveis antes do consumo facilitam estratégia de Shape Quests sem revelar tipo da pill
 - Shapes NÃO afetam efeitos - relação visual pura para quests, sem correlação com nocividade
+- Sistema extensível de shapes (16 base + sazonais) adiciona variedade visual sem complexidade mecânica
+- Shape Quests geradas por Rodada (baseadas no pool atual) garantem sempre quests viáveis e eliminam edge cases de impossibilidade
+- Progresso de Shape Quest não persistindo entre Rodadas mantém ritmo dinâmico e evita frustração com quests longas impossíveis de completar
+- Progressão de unlock de shapes adiciona senso de descoberta sem afetar balance do jogo
+- Shapes sazonais (ativáveis via config) permitem eventos temáticos sem alterar mecânicas core
 - Overflow positivo (Resistência extra) adiciona profundidade estratégica sem complicar demais o sistema de saúde
 - Partidas sem limite de rodadas + progressão de fatalidade garantem que empate é impossível (mesmo em rodadas 15+)
 - Ordem inicial randomizada de turnos garante fairness entre partidas
