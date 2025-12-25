@@ -195,34 +195,34 @@
 
 ### Minimal UI for User Story 1
 
-#### UI Kit Básico
+#### UI Kit Básico ✅
 
-- [ ] T064 [P] [US1] Create basic Button component in src/components/ui/button.tsx with Tailwind classes, accepting onClick, disabled, children props
-- [ ] T065 [P] [US1] Create PillDisplay component in src/components/ui/pill-display.tsx showing pill shape (emoji or text), revealed type (if revealed), modifiers (Inverted/Doubled icons)
-- [ ] T066 [P] [US1] Create PlayerCard component in src/components/ui/player-card.tsx showing player avatar, name, lives, resistance bar, active status icons per FR-068, FR-069
-- [ ] T067 [P] [US1] Create InventorySlot component in src/components/ui/inventory-slot.tsx showing item icon, name, quantity (if stackable), clickable for use per FR-102
-- [ ] T068 [P] [US1] Create TimerDisplay component in src/components/ui/timer-display.tsx showing countdown in seconds with visual warning when < 10s per FR-062
-- [ ] T069 [P] [US1] Create LogViewer component in src/components/ui/log-viewer.tsx rendering logs from logStore in user-friendly format per FR-103 and FR-186.16
+- [X] T064 [P] [US1] Create basic Button component in src/components/ui/button.tsx with Tailwind classes, accepting onClick, disabled, children props
+- [X] T065 [P] [US1] Create PillDisplay component in src/components/ui/pill-display.tsx showing pill shape (emoji or text), revealed type (if revealed), modifiers (Inverted/Doubled icons)
+- [X] T066 [P] [US1] Create PlayerCard component in src/components/ui/player-card.tsx showing player avatar, name, lives, resistance bar, active status icons per FR-068, FR-069
+- [X] T067 [P] [US1] Create InventorySlot component in src/components/ui/inventory-slot.tsx showing item icon, name, quantity (if stackable), clickable for use per FR-102
+- [X] T068 [P] [US1] Create TimerDisplay component in src/components/ui/timer-display.tsx showing countdown in seconds with visual warning when < 10s per FR-062
+- [X] T069 [P] [US1] Create LogViewer component in src/components/ui/log-viewer.tsx rendering logs from logStore in user-friendly format per FR-103 and FR-186.16
 
-#### Game Components
+#### Game Components ✅
 
-- [ ] T070 [P] [US1] Create PillPool component in src/components/game/PillPool.tsx rendering grid of pills using PillDisplay, handling click to consume (when not targeting), showing counters per FR-071, FR-072, FR-090
-- [ ] T071 [P] [US1] Create PlayerHUD component in src/components/game/PlayerHUD.tsx showing lives, resistance bar, pill coins, inventory (5 slots), active statuses, using PlayerCard and InventorySlot per FR-102
-- [ ] T072 [P] [US1] Create OpponentLine component in src/components/game/OpponentLine.tsx rendering horizontal line of opponent PlayerCards with compact view per FR-068
-- [ ] T073 [US1] Add turn indicator to PlayerHUD highlighting active player with border/glow per FR-064
+- [X] T070 [P] [US1] Create PillPool component in src/components/game/PillPool.tsx rendering grid of pills using PillDisplay, handling click to consume (when not targeting), showing counters per FR-071, FR-072, FR-090
+- [X] T071 [P] [US1] Create PlayerHUD component in src/components/game/PlayerHUD.tsx showing lives, resistance bar, pill coins, inventory (5 slots), active statuses, using PlayerCard and InventorySlot per FR-102
+- [X] T072 [P] [US1] Create OpponentLine component in src/components/game/OpponentLine.tsx rendering horizontal line of opponent PlayerCards with compact view per FR-068
+- [X] T073 [US1] Add turn indicator to PlayerHUD highlighting active player with border/glow per FR-064
 
-#### Screens
+#### Screens ✅
 
-- [ ] T074 [P] [US1] Create HomeScreen in src/screens/HomeScreen.tsx with "ENTER THE VOID" button, displaying profile info (level, xp, schmeckles from progressionStore) per FR-001, FR-003
-- [ ] T075 [P] [US1] Create LobbyScreen in src/screens/LobbyScreen.tsx with add bot controls (quantity 1-5, difficulty selector Easy/Normal/Hard/Insane), participants list, "Start" button per FR-004 to FR-006
-- [ ] T076 [P] [US1] Create DraftScreen in src/screens/DraftScreen.tsx with 60s timer, shop grid (items filtered by DRAFT/BOTH availability), inventory display (5 slots), pill coins counter, confirm button per FR-008 to FR-020
-- [ ] T077 [US1] Create MatchScreen in src/screens/MatchScreen.tsx composing PillPool, PlayerHUD, OpponentLine, LogViewer, showing round number, turn timer, action buttons (Shop Signal, Leave) per FR-101, FR-190 to FR-196
-- [ ] T078 [P] [US1] Create ResultsScreen in src/screens/ResultsScreen.tsx displaying winner, match stats (pills consumed by type, items used, damage dealt/received, collapses, quests completed, pill coins earned/spent, total rounds), XP/Schmeckles earned, "Jogar Novamente" and "Menu Principal" buttons per FR-159 to FR-164
+- [X] T074 [P] [US1] Create HomeScreen in src/screens/HomeScreen.tsx with "ENTER THE VOID" button, displaying profile info (level, xp, schmeckles from progressionStore) per FR-001, FR-003
+- [X] T075 [P] [US1] Create LobbyScreen in src/screens/LobbyScreen.tsx with add bot controls (quantity 1-5, difficulty selector Easy/Normal/Hard/Insane), participants list, "Start" button per FR-004 to FR-006
+- [X] T076 [P] [US1] Create DraftScreen in src/screens/DraftScreen.tsx with 60s timer, shop grid (items filtered by DRAFT/BOTH availability), inventory display (5 slots), pill coins counter, confirm button per FR-008 to FR-020
+- [X] T077 [US1] Create MatchScreen in src/screens/MatchScreen.tsx composing PillPool, PlayerHUD, OpponentLine, LogViewer, showing round number, turn timer, action buttons (Shop Signal, Leave) per FR-101, FR-190 to FR-196
+- [X] T078 [P] [US1] Create ResultsScreen in src/screens/ResultsScreen.tsx displaying winner, match stats (pills consumed by type, items used, damage dealt/received, collapses, quests completed, pill coins earned/spent, total rounds), XP/Schmeckles earned, "Jogar Novamente" and "Menu Principal" buttons per FR-159 to FR-164
 
 #### App Integration
 
-- [ ] T079 [US1] Implement App router in src/App.tsx using matchStore.phase to switch between screens (HOME → HomeScreen, LOBBY → LobbyScreen, DRAFT → DraftScreen, MATCH → MatchScreen, SHOPPING → ShoppingScreen, RESULTS → ResultsScreen) per FR-002
-- [ ] T080 [US1] Add Error Boundary to App.tsx wrapping all screens, implementing dual-mode error handling (DEV pause + debug, PROD retry + fallback) per FR-186.7 to FR-186.10 and research.md Decision 3
+- [X] T079 [US1] Implement App router in src/App.tsx using matchStore.phase to switch between screens (HOME → HomeScreen, LOBBY → LobbyScreen, DRAFT → DraftScreen, MATCH → MatchScreen, SHOPPING → ShoppingScreen, RESULTS → ResultsScreen) per FR-002
+- [X] T080 [US1] Add Error Boundary to App.tsx wrapping all screens, implementing dual-mode error handling (DEV pause + debug, PROD retry + fallback) per FR-186.7 to FR-186.10 and research.md Decision 3
 - [ ] T081 [US1] Create DevTools structure and toggle in src/DevTools.tsx (DEV mode only, triggered by VITE_DEV_MODE=true) with overlay UI and tabs: (a) Phase Controls, (b) State Manipulation, (c) Logs, (d) Performance per FR-187
 - [ ] T081a [US1] Implement Phase Controls tab in DevTools: buttons to skip phases (Lobby→Draft→Match→Shopping→Results), force round end, force turn end, trigger match end
 - [ ] T081b [US1] Implement State Manipulation tab in DevTools: controls to add/remove Pill Coins, add/remove Lives, set Resistance value, apply/remove Status (Shielded/Handcuffed), reveal specific pills, add modifiers to pills (Inverted/Doubled)
