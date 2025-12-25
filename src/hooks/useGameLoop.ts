@@ -85,13 +85,13 @@ export function useGameLoop() {
       const effect = resolvePillEffect(pill, player);
 
       // Aplica efeito baseado no type
-      if (effect.type === 'HEAL' && effect.value > 0) {
-        applyHeal(playerId, effect.value);
-      } else if (effect.type === 'DAMAGE' && effect.value > 0) {
-        applyDamage(playerId, effect.value);
-      } else if (effect.type === 'LIFE' && effect.value > 0) {
+      if (effect.type === 'HEAL') {
+        applyHeal(playerId, Math.abs(effect.value));
+      } else if (effect.type === 'DAMAGE') {
+        applyDamage(playerId, Math.abs(effect.value));
+      } else if (effect.type === 'LIFE') {
         updatePlayer(playerId, (p) => {
-          p.lives = Math.min(3, p.lives + effect.value);
+          p.lives = Math.min(3, p.lives + Math.abs(effect.value));
         });
       }
 
