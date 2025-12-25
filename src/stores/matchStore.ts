@@ -11,7 +11,7 @@
 
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import type { Match, MatchPhase, Player, Round } from '../types/game';
+import { Match, MatchPhase, Player, Round } from '../types/game';
 import { RoundState } from '../types/game';
 import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 import { initializeTurnOrder } from '../core/turn-manager';
@@ -49,7 +49,7 @@ export const useMatchStore = create<MatchState>()(
 
         state.match = {
           id: crypto.randomUUID(),
-          phase: 'LOBBY',
+          phase: MatchPhase.LOBBY,
           players,
           rounds: [],
           currentRound: null,
@@ -78,7 +78,7 @@ export const useMatchStore = create<MatchState>()(
         state.match = updatedMatch;
 
         // Se transicionou para MATCH e não tem round, gera primeiro
-        if (newPhase === 'MATCH' && !state.match.currentRound) {
+        if (newPhase === MatchPhase.MATCH && !state.match.currentRound) {
           const pool = generatePool(1, DEFAULT_GAME_CONFIG);
           const newRound: Round = {
             number: 1,
@@ -169,7 +169,7 @@ export const useMatchStore = create<MatchState>()(
         if (!state.match) return;
 
         state.match.winnerId = winnerId;
-        state.match.phase = 'RESULTS';
+        state.match.phase = MatchPhase.RESULTS;
         state.match.endedAt = Date.now();
       }),
 

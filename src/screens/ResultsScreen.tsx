@@ -47,14 +47,15 @@ export function ResultsScreen() {
   };
 
   const handlePlayAgain = () => {
+    // T089: Wire "Jogar Novamente" button
     resetMatch();
     transitionPhase(MatchPhase.LOBBY);
   };
 
   const handleMainMenu = () => {
+    // T090: Wire "Menu Principal" button
     resetMatch();
     transitionPhase(MatchPhase.LOBBY);
-    // Navigate to HOME seria implementado com router
   };
 
   return (

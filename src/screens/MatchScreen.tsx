@@ -2,6 +2,7 @@
  * MatchScreen - Tela principal da partida
  * 
  * T077: PillPool, PlayerHUD, OpponentLine, LogViewer, round number, turn timer, actions
+ * T085-T087: Wire gameplay mechanics (Integration)
  */
 
 import React from 'react';
@@ -9,6 +10,8 @@ import { useMatchStore } from '../stores/matchStore';
 import { usePlayerStore } from '../stores/playerStore';
 import { usePoolStore } from '../stores/poolStore';
 import { useProgressionStore } from '../stores/progressionStore';
+import { useGameLoop } from '../hooks/useGameLoop';
+import { useTurnTimer } from '../hooks/useTurnTimer';
 import { PillPool } from '../components/game/PillPool';
 import { PlayerHUD } from '../components/game/PlayerHUD';
 import { OpponentLine } from '../components/game/OpponentLine';
@@ -28,39 +31,31 @@ export function MatchScreen() {
   const currentRound = match?.currentRound;
   const activePlayer = players.find((p) => p.isActiveTurn);
 
-  const [turnTimer, setTurnTimer] = React.useState(30);
   const [isTargeting, setIsTargeting] = React.useState(false);
 
-  // Turn timer
-  React.useEffect(() => {
-    if (!activePlayer || !humanPlayer?.isActiveTurn) return;
-
-    const interval = setInterval(() => {
-      setTurnTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          // Auto-consume random pill
-          return 30;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [activePlayer, humanPlayer?.isActiveTurn]);
+  // Game loop hooks - T085-T087
+  const { handlePillConsume, handleItemUse, handleTurnTimeout } = useGameLoop();
 
   const handlePillClick = (pillId: string) => {
-    console.log('Pill clicked:', pillId);
-    // Será conectado ao event processor na fase de Integration
+    if (!humanPlayer || !humanPlayer.isActiveTurn) return;
+    if (isTargeting) return; // Item targeting mode
+    
+    handlePillConsume(pillId, humanPlayer.id);
   };
 
   const handleItemClick = (slotIndex: number) => {
-    console.log('Item clicked:', slotIndex);
-    setIsTargeting(true);
+    if (!humanPlayer || !humanPlayer.isActiveTurn) return;
+    
+    const slot = humanPlayer.inventory[slotIndex];
+    if (!slot || !slot.item) return;
+
+    // TODO: Implementar targeting system completo (US2)
+    // Por agora, apenas usa item diretamente
+    handleItemUse(humanPlayer.id, slot.item.id);
+    setIsTargeting(false);
   };
 
   const handleShopSignal = () => {
-    console.log('Shop signal toggled');
     // Será implementado na US2
   };
 
@@ -91,7 +86,13 @@ export function MatchScreen() {
           </div>
 
           <div className="flex items-center gap-4">
-            <TimerDisplay seconds={turnTimer} maxSeconds={30} label="Turno" size="md" />
+            {activePlayer && (
+              <TurnTimerWrapper
+                key={activePlayer.id}
+                onTimeout={handleTurnTimeout}
+                isActive={humanPlayer?.isActiveTurn || false}
+              />
+            )}
             <Button onClick={handleLeave} variant="danger" size="sm">
               Sair
             </Button>
@@ -134,6 +135,27 @@ export function MatchScreen() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * TurnTimerWrapper - Componente interno que usa key prop para reset automático
+ * T087: Turn timer com auto-reset via key prop (React best practice)
+ */
+function TurnTimerWrapper({ onTimeout, isActive }: { onTimeout: () => void; isActive: boolean }) {
+  const { timeRemaining } = useTurnTimer({
+    duration: 30,
+    onTimeout,
+    autoStart: true,
+  });
+
+  return (
+    <TimerDisplay
+      seconds={timeRemaining}
+      maxSeconds={30}
+      label={isActive ? 'Seu Turno' : 'Turno'}
+      size="md"
+    />
   );
 }
 

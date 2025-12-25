@@ -16,6 +16,7 @@ import type { Pool, Pill, PillModifier } from '../types/game';
 import { generatePool } from '../core/pool-generator';
 import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 import { shuffle } from '../core/utils/random';
+import { PillState } from '../types/pill';
 
 interface PoolState {
   // Pool atual
@@ -85,7 +86,7 @@ export const usePoolStore = create<PoolState>()(
         if (pillIndex === -1) return;
 
         const pill = state.pool.pills[pillIndex];
-        pill.state = 'CONSUMED';
+        pill.state = PillState.CONSUMED;
 
         // Remove do pool
         state.pool.pills.splice(pillIndex, 1);

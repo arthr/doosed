@@ -68,14 +68,23 @@ export function LobbyScreen() {
   }, [botCount, botDifficulty, profile]);
 
   const handleStart = () => {
+    // T083: Wire LobbyScreen → Match start
+    if (participants.length < 2) {
+      alert('É necessário pelo menos 1 bot para iniciar');
+      return;
+    }
+
+    // Inicializa match e players
     startMatch(participants);
     setPlayers(participants);
+    
+    // Transição para Draft
     transitionPhase(MatchPhase.DRAFT);
   };
 
   const handleBack = () => {
+    // Volta para LOBBY (não há fase HOME no MatchPhase)
     transitionPhase(MatchPhase.LOBBY);
-    // Navigate back seria implementado com router
   };
 
   return (

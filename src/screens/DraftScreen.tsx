@@ -2,12 +2,14 @@
  * DraftScreen - Tela de draft de itens
  * 
  * T076: 60s timer, shop grid (DRAFT/BOTH), inventory (5 slots), pill coins, confirm
+ * T084: Wire DraftScreen → Match (Integration)
  */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useMatchStore } from '../stores/matchStore';
 import { usePlayerStore } from '../stores/playerStore';
 import { useProgressionStore } from '../stores/progressionStore';
+import { useTurnTimer } from '../hooks/useTurnTimer';
 import { Button } from '../components/ui/button';
 import { TimerDisplay } from '../components/ui/timer-display';
 import { ShopGrid } from '../components/game/ShopGrid';
@@ -56,39 +58,37 @@ const MOCK_ITEMS: Item[] = [
 const DRAFT_TIME = 60;
 
 export function DraftScreen() {
-  const { transitionPhase } = useMatchStore();
-  const { players, addToInventory } = usePlayerStore();
+  const { transitionPhase, nextRound } = useMatchStore();
+  const { players, addToInventory, spendPillCoins } = usePlayerStore();
   const profile = useProgressionStore();
 
-  const [timeRemaining, setTimeRemaining] = useState(DRAFT_TIME);
-  const [playerCoins, setPlayerCoins] = useState(100);
-
   const humanPlayer = players.find((p) => p.id === profile.id);
+  const playerCoins = humanPlayer?.pillCoins || 100;
 
-  const handleConfirm = React.useCallback(() => {
+  // T084: Timer com auto-transição para MATCH
+  const handleDraftTimeout = React.useCallback(() => {
+    // Bots fazem compras automáticas (simplificado)
+    
+    // Inicia match
+    nextRound();
     transitionPhase(MatchPhase.MATCH);
-  }, [transitionPhase]);
+  }, [nextRound, transitionPhase]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          handleConfirm();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  const { timeRemaining } = useTurnTimer({
+    duration: DRAFT_TIME,
+    onTimeout: handleDraftTimeout,
+    autoStart: true,
+  });
 
-    return () => clearInterval(interval);
-  }, [handleConfirm]);
+  const handleConfirm = () => {
+    handleDraftTimeout();
+  };
 
   const handleItemPurchase = (item: Item) => {
-    if (playerCoins >= item.cost && humanPlayer) {
-      addToInventory(humanPlayer.id, item);
-      setPlayerCoins(playerCoins - item.cost);
-    }
+    if (!humanPlayer || playerCoins < item.cost) return;
+    
+    spendPillCoins(humanPlayer.id, item.cost);
+    addToInventory(humanPlayer.id, item);
   };
 
   // Preenche slots vazios até 5
