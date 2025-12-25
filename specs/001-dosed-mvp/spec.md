@@ -7,7 +7,7 @@
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Jogar Partida Solo Completa (Priority: P1) 🎯 MVP
+### User Story 1 - Jogar Partida Solo Completa (Priority: P1) - MVP
 
 Um jogador abre o jogo e consegue jogar uma partida completa do início ao fim contra um bot, experimentando todo o core loop do gameplay: selecionar loadout, consumir pílulas desconhecidas em turnos, usar itens estratégicos e ver o resultado final com estatísticas.
 
@@ -54,10 +54,6 @@ Um jogador durante a partida completa Shape Quests (sequências de formas de pí
 7. **Given** o jogador sinalizou "quero loja" com Pill Coins > 0, **When** pool da Rodada esgota, **Then** Shopping Phase abre antes da próxima Rodada
 8. **Given** o jogador está na Shopping Phase, **When** seleciona Power-up Scanner (15 coins) e confirma, **Then** Scanner é adicionado ao inventário (ou incrementa stack se já tem) e coins são deduzidos
 9. **Given** o jogador tem inventário com 5 slots cheios (não stackables), **When** tenta comprar novo item não-stackable, **Then** recebe feedback "Inventário cheio"
-5. **Given** o jogador tem Pill Coins, **When** clica em "Shop" no seu turno, **Then** a Loja abre como overlay sobre a Match
-6. **Given** o jogador está na Loja, **When** seleciona um item e tem Pill Coins suficientes, **Then** pode comprar o item (vai para inventário se houver espaço)
-7. **Given** o jogador comprou um item, **When** usa o item no seu turno (antes de escolher pílula), **Then** o efeito do item é aplicado (Intel/Sustain/Control/Chaos) e o item é consumido
-8. **Given** o inventário do jogador está cheio (8 slots), **When** tenta comprar novo item, **Then** recebe indicação de que precisa liberar espaço ou não pode comprar
 
 ---
 
@@ -79,7 +75,7 @@ Um jogador ao finalizar partidas acumula XP e ganha Schmeckles (meta-moeda), cri
 
 ---
 
-### User Story 4 - Expansões Multiplayer (Priority: P4) 📋 Futuro
+### User Story 4 - Expansões Multiplayer (Priority: P4) - Futuro
 
 Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir em partidas rankeadas com matchmaking automático baseado em nível, e ter experiência multiplayer em tempo real com validação server-authoritative.
 
@@ -163,7 +159,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-004**: Sistema DEVE permitir criar sala solo com configuração de 1 jogador humano + 1-5 bots
 - **FR-005**: Sistema DEVE exibir lista de participantes (humano + bots) com avatares e nomes
 - **FR-006**: Sistema DEVE ter botão "Start" que inicia a fase Draft quando clicado
-- **FR-007**: Bots DEVEM ter comportamento de IA básica que toma decisões razoáveis (não apenas aleatório) em Draft e Match. Critérios mensuráveis: taxa de ações inválidas = 0%, tomar decisão em 3-5 segundos, não travar por timeout >5s, não repetir mesma ação inválida 2x consecutivas
+- **FR-007**: Bots DEVEM ter comportamento de IA básica que toma decisões razoáveis (não apenas aleatório) em Draft e Match. Critérios mensuráveis obrigatórios: taxa de ações inválidas = 0%, tomar decisão em 3-5 segundos, não travar por timeout >5s, não repetir mesma ação inválida 2x consecutivas
 
 #### Draft (Pré-Match)
 
@@ -294,7 +290,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
   - FATAL: zera Resistência (força Colapso; não afetado por Inverted/Doubled)
   - LIFE: +1 Vida (não afetado por Inverted/Doubled; respeitando cap se houver)
 - **FR-094**: Sistema DEVE verificar Status "Shielded" antes de aplicar dano: se ativo, dano é bloqueado (jogador não perde Resistência)
-- **FR-095**: Sistema DEVE implementar mecânica de Colapso: quando Resistência chega a ≤0, jogador sofre Colapso (Vidas -1, Resistência restaurada para 6) com feedback visual claro
+- **FR-095**: Sistema DEVE implementar mecânica de Colapso: quando Resistência chega a ≤0, jogador sofre Colapso (Vidas -1, Resistência restaurada para 6) com feedback visual claro (animação shake/flash <500ms, texto "COLAPSO" visível, atualização imediata da HUD)
 - **FR-096**: Sistema DEVE implementar mecânica de "Última Chance": quando Vidas chegam a 0, jogador NÃO é eliminado imediatamente
 - **FR-097**: Quando jogador está em "Última Chance" (0 Vidas), HUD DEVE exibir claramente "0 Vidas" ou indicação visual de estado crítico
 - **FR-098**: Jogador em "Última Chance" (0 Vidas) DEVE ter Resistência ativa e funcional (resetada para 6 após último Colapso que zerou Vidas)
@@ -587,7 +583,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 ### Measurable Outcomes
 
 - **SC-001**: Jogadores conseguem completar uma partida solo do início ao fim em 8-15 minutos em média
-- **SC-002**: 90% das ações de gameplay (escolher pílula, usar item, comprar na loja) respondem em menos de 500ms
+- **SC-002**: 90% das ações de gameplay (escolher pílula, usar item, comprar na loja) respondem em menos de 500ms (testado em hardware médio: 8GB RAM, CPU dual-core, Chrome/Firefox latest, sem throttling de rede)
 - **SC-003**: Sistema de contadores do pool exibe informação correta 100% do tempo (sem dessincronização)
 - **SC-004**: Mecânica de Colapso e "Última Chance" (0 Vidas) é compreendida por 80% dos jogadores após 2-3 partidas (baseado em feedback visual claro e não eliminar prematuramente)
 - **SC-005**: Jogadores completam 60-80% das Shape Quests tentadas (alinhado com meta de balance e shapes visíveis)
@@ -624,6 +620,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **SC-040**: Em caso de erro fatal, sistema salva XP/Schmeckles parcial e oferece fallback graceful em 100% dos casos (produção)
 - **SC-041**: Game Log UI exibe todas as ações relevantes (turns, items, pills, status) com formatação clara em 100% dos casos
 - **SC-042**: Logs estruturados permitem replay/diagnóstico de bugs em 90%+ dos casos reportados
+- **SC-043**: Feedback visual de Colapso e Última Chance visível em <500ms com indicação clara de estado (shake/flash animation, texto "0 VIDAS" em vermelho, borda vermelha no avatar) em 95%+ dos casos testados
 - **SC-015**: Proporção estratégia vs sorte atinge 70/30 ou melhor (estimado via análise de winrate de bots vs jogadores experientes, considerando revelação + modificadores + combos)
 - **SC-016**: Nenhum tipo de pílula (SAFE/DMG/HEAL/FATAL/LIFE) tem taxa de spawn fora da range configurada (+/- 5% de margem) em 95% das Rodadas
 - **SC-017**: Jogadores retornam para jogar segunda partida em 70% dos casos após primeira partida completa
