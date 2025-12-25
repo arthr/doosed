@@ -129,22 +129,6 @@ dosed/
 └── steering/              # Normativo curto (reflete docs)
 ```
 
-## Desenvolvimento e Workflow
-
-### Spec Driven Development
-
-Features DEVEM seguir o fluxo:
-1. **Specification** (`spec.md`): User stories priorizadas, requisitos, casos de teste
-2. **Planning** (`plan.md`): Contexto técnico, constitution check, estrutura
-3. **Tasks** (`tasks.md`): Tasks organizadas por user story, independentes e testáveis
-
-### Priorização e MVP
-
-- User stories DEVEM ser priorizadas (P1, P2, P3)
-- Cada story DEVE ser independentemente testável
-- MVP = implementar apenas P1 (vertical slice)
-- Features DEVEM ser incrementais e entregáveis por partes
-
 ### Rules e Ferramentas
 
 - Rules normativas em `.cursor/rules/` (formato pasta com `RULE.md`)
