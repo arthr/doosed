@@ -1,7 +1,7 @@
-@plugin "tailwindcss-animate";
+@plugin 'tailwindcss-animate';
 
 /* Importando fonte pixel */
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');;
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
@@ -188,106 +188,105 @@
   /* 8-BIT RULE: ZERO RADIUS */
   --radius: 0.625rem;
 
- /* LIGHT MODE: "The Garage" (Concreto e Metais) */
- --background: oklch(0.96 0.01 200);
- --foreground: oklch(0.2 0.03 260);
+  /* LIGHT MODE: "The Garage" (Concreto e Metais) */
+  --background: oklch(0.96 0.01 200);
+  --foreground: oklch(0.2 0.03 260);
 
- --card: oklch(1 0 0);
- --card-foreground: oklch(0.2 0.03 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.03 260);
 
- --popover: oklch(1 0 0);
- --popover-foreground: oklch(0.2 0.03 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.03 260);
 
- /* Primary: Portal Green Escuro (para contraste no light mode) */
- --primary: oklch(0.6 0.2 145);
- --primary-foreground: oklch(0.98 0 0);
+  /* Primary: Portal Green Escuro (para contraste no light mode) */
+  --primary: oklch(0.6 0.2 145);
+  --primary-foreground: oklch(0.98 0 0);
 
- /* Secondary: Morty Yellow */
- --secondary: oklch(0.88 0.16 95);
- --secondary-foreground: oklch(0.2 0.03 260);
+  /* Secondary: Morty Yellow */
+  --secondary: oklch(0.88 0.16 95);
+  --secondary-foreground: oklch(0.2 0.03 260);
 
- --muted: oklch(0.9 0.02 200);
- --muted-foreground: oklch(0.45 0.05 260);
+  --muted: oklch(0.9 0.02 200);
+  --muted-foreground: oklch(0.45 0.05 260);
 
- /* Accent: Rick Hair Blue */
- --accent: oklch(0.8 0.12 230);
- --accent-foreground: oklch(0.2 0.03 260);
+  /* Accent: Rick Hair Blue */
+  --accent: oklch(0.8 0.12 230);
+  --accent-foreground: oklch(0.2 0.03 260);
 
- --destructive: oklch(0.6 0.23 25);
+  --destructive: oklch(0.6 0.23 25);
 
- --border: oklch(0.2 0.03 260 / 20%);
- --input: oklch(0.2 0.03 260 / 20%);
- --ring: oklch(0.6 0.2 145);
+  --border: oklch(0.2 0.03 260 / 20%);
+  --input: oklch(0.2 0.03 260 / 20%);
+  --ring: oklch(0.6 0.2 145);
 
- /* Charts mapping: Portal, Morty, Rick, Summer, Jerry */
- --chart-1: oklch(0.62 0.22 145);
- --chart-2: oklch(0.88 0.16 95);
- --chart-3: oklch(0.7 0.15 230);
- --chart-4: oklch(0.65 0.2 330);
- --chart-5: oklch(0.55 0.1 40);
+  /* Charts mapping: Portal, Morty, Rick, Summer, Jerry */
+  --chart-1: oklch(0.62 0.22 145);
+  --chart-2: oklch(0.88 0.16 95);
+  --chart-3: oklch(0.7 0.15 230);
+  --chart-4: oklch(0.65 0.2 330);
+  --chart-5: oklch(0.55 0.1 40);
 
- /* Sidebar Light */
- --sidebar: oklch(0.94 0.02 200);
- --sidebar-foreground: oklch(0.2 0.03 260);
- --sidebar-primary: oklch(0.6 0.2 145);
- --sidebar-primary-foreground: oklch(0.98 0 0);
- --sidebar-accent: oklch(0.88 0.16 95);
- --sidebar-accent-foreground: oklch(0.2 0.03 260);
- --sidebar-border: oklch(0.2 0.03 260 / 10%);
- --sidebar-ring: oklch(0.6 0.2 145);
+  /* Sidebar Light */
+  --sidebar: oklch(0.94 0.02 200);
+  --sidebar-foreground: oklch(0.2 0.03 260);
+  --sidebar-primary: oklch(0.6 0.2 145);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.88 0.16 95);
+  --sidebar-accent-foreground: oklch(0.2 0.03 260);
+  --sidebar-border: oklch(0.2 0.03 260 / 10%);
+  --sidebar-ring: oklch(0.6 0.2 145);
 }
 
 .dark {
- /* DARK MODE: "Dimension C-137 / Space" */
+  /* DARK MODE: "Dimension C-137 / Space" */
 
- --background: oklch(0.12 0.03 260); /* Deep Space Blue */
- --foreground: oklch(0.92 0.02 200); /* Ice White */
+  --background: oklch(0.12 0.03 260); /* Deep Space Blue */
+  --foreground: oklch(0.92 0.02 200); /* Ice White */
 
- --card: oklch(0.16 0.04 260);
- --card-foreground: oklch(0.92 0.02 200);
+  --card: oklch(0.16 0.04 260);
+  --card-foreground: oklch(0.92 0.02 200);
 
- --popover: oklch(0.16 0.04 260);
- --popover-foreground: oklch(0.92 0.02 200);
+  --popover: oklch(0.16 0.04 260);
+  --popover-foreground: oklch(0.92 0.02 200);
 
- /* Primary: Portal Neon Green (Brilha no escuro) */
- --primary: oklch(0.72 0.23 146);
- --primary-foreground: oklch(0.12 0.03 260);
+  /* Primary: Portal Neon Green (Brilha no escuro) */
+  --primary: oklch(0.72 0.23 146);
+  --primary-foreground: oklch(0.12 0.03 260);
 
- /* Secondary: Rick Hair Blue (Neon) */
- --secondary: oklch(0.72 0.13 232);
- --secondary-foreground: oklch(0.12 0.03 260);
+  /* Secondary: Rick Hair Blue (Neon) */
+  --secondary: oklch(0.72 0.13 232);
+  --secondary-foreground: oklch(0.12 0.03 260);
 
- --muted: oklch(0.25 0.04 260);
- --muted-foreground: oklch(0.7 0.05 230);
+  --muted: oklch(0.25 0.04 260);
+  --muted-foreground: oklch(0.7 0.05 230);
 
- /* Accent: Galatic Purple */
- --accent: oklch(0.45 0.18 300);
- --accent-foreground: oklch(0.98 0 0);
+  /* Accent: Galatic Purple */
+  --accent: oklch(0.45 0.18 300);
+  --accent-foreground: oklch(0.98 0 0);
 
- --destructive: oklch(0.63 0.24 30);
+  --destructive: oklch(0.63 0.24 30);
 
- --border: oklch(0.72 0.23 146 / 30%); /* Bordas verdes neon */
- --input: oklch(0.25 0.04 260);
- --ring: oklch(0.72 0.23 146);
+  --border: oklch(0.72 0.23 146 / 30%); /* Bordas verdes neon */
+  --input: oklch(0.25 0.04 260);
+  --ring: oklch(0.72 0.23 146);
 
- /* Charts Dark */
- --chart-1: oklch(0.72 0.23 146);
- --chart-2: oklch(0.72 0.13 232);
- --chart-3: oklch(0.85 0.18 90);
- --chart-4: oklch(0.6 0.25 340);
- --chart-5: oklch(0.6 0.15 180);
+  /* Charts Dark */
+  --chart-1: oklch(0.72 0.23 146);
+  --chart-2: oklch(0.72 0.13 232);
+  --chart-3: oklch(0.85 0.18 90);
+  --chart-4: oklch(0.6 0.25 340);
+  --chart-5: oklch(0.6 0.15 180);
 
- /* Sidebar Dark */
- --sidebar: oklch(0.14 0.04 260);
- --sidebar-foreground: oklch(0.92 0.02 200);
- --sidebar-primary: oklch(0.72 0.23 146);
- --sidebar-primary-foreground: oklch(0.12 0.03 260);
- --sidebar-accent: oklch(0.25 0.04 260);
- --sidebar-accent-foreground: oklch(0.92 0.02 200);
- --sidebar-border: oklch(0.72 0.23 146 / 20%);
- --sidebar-ring: oklch(0.72 0.23 146);
+  /* Sidebar Dark */
+  --sidebar: oklch(0.14 0.04 260);
+  --sidebar-foreground: oklch(0.92 0.02 200);
+  --sidebar-primary: oklch(0.72 0.23 146);
+  --sidebar-primary-foreground: oklch(0.12 0.03 260);
+  --sidebar-accent: oklch(0.25 0.04 260);
+  --sidebar-accent-foreground: oklch(0.92 0.02 200);
+  --sidebar-border: oklch(0.72 0.23 146 / 20%);
+  --sidebar-ring: oklch(0.72 0.23 146);
 }
-
 
 /* ===================================
    Base Styles
@@ -298,7 +297,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-void-black font-pixel overflow-hidden text-text-primary;
+    @apply bg-void-black font-pixel text-text-primary overflow-hidden;
     image-rendering: pixelated;
     position: relative;
   }
@@ -329,7 +328,12 @@
   ::-webkit-scrollbar-thumb {
     @apply bg-neon-green rounded-none;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     /* font-family: 'Press Start 2P', system-ui; */
     font-family: 'Barlow', sans-serif;
     font-weight: 600;
@@ -374,26 +378,22 @@
    =================================== */
 
 @keyframes glow-pulse-purple {
-  0%, 100% {
-    filter: 
-      drop-shadow(1px 0 0 rgba(0,0,0,0.6))
-      drop-shadow(-1px 0 0 rgba(0,0,0,0.6))
-      drop-shadow(0 1px 0 rgba(0,0,0,0.6))
-      drop-shadow(0 -1px 0 rgba(0,0,0,0.6))
+  0%,
+  100% {
+    filter: drop-shadow(1px 0 0 rgba(0, 0, 0, 0.6)) drop-shadow(-1px 0 0 rgba(0, 0, 0, 0.6))
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6)) drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.6))
       drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
   }
   50% {
-    filter: 
-      drop-shadow(1px 0 0 rgba(0,0,0,0.6))
-      drop-shadow(-1px 0 0 rgba(0,0,0,0.6))
-      drop-shadow(0 1px 0 rgba(0,0,0,0.6))
-      drop-shadow(0 -1px 0 rgba(0,0,0,0.6))
+    filter: drop-shadow(1px 0 0 rgba(0, 0, 0, 0.6)) drop-shadow(-1px 0 0 rgba(0, 0, 0, 0.6))
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6)) drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.6))
       drop-shadow(0 0 30px rgba(168, 85, 247, 0.8));
   }
 }
 
 @keyframes glow-pulse-green {
-  0%, 100% {
+  0%,
+  100% {
     filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.3));
   }
   50% {
@@ -411,7 +411,8 @@
 
 /* Floating in Space - Efeito de flutuacao suave */
 @keyframes float-space {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(var(--float-rotation, 0deg));
   }
   25% {
@@ -431,11 +432,8 @@
 
 /* PNG Outline - Borda sutil que segue o contorno alpha */
 @utility png-outline {
-  filter: 
-    drop-shadow(1px 0 0 rgba(0,0,0,0.9))
-    drop-shadow(-1px 0 0 rgba(0,0,0,0.9))
-    drop-shadow(0 1px 0 rgba(0,0,0,0.9))
-    drop-shadow(0 -1px 0 rgba(0,0,0,0.9));
+  filter: drop-shadow(1px 0 0 rgba(0, 0, 0, 0.9)) drop-shadow(-1px 0 0 rgba(0, 0, 0, 0.9))
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.9)) drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.9));
 }
 
 /* FINAL */

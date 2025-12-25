@@ -6,8 +6,17 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 export default [
   {
     ignores: [
-      'dist/**', 'node_modules/**', 'coverage/**', '.vite/**', 'src_bkp/**',
-      'docs/**', 'steering/**', '.cursor/**', '.specify/**', 'specs/**', 'tasks/**',
+      'dist/**',
+      'node_modules/**',
+      'coverage/**',
+      '.vite/**',
+      'src_bkp/**',
+      'docs/**',
+      'steering/**',
+      '.cursor/**',
+      '.specify/**',
+      'specs/**',
+      'tasks/**',
     ],
   },
   {

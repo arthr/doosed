@@ -27,16 +27,16 @@
 
 **Purpose**: Initialize project structure and dependencies
 
-- [ ] T001 Verify project dependencies installed (React 18+, TypeScript 5+, Vite, Zustand, Immer, Tailwind CSS) in package.json
-- [ ] T002 [P] Create TypeScript types structure in src/types/ (game.ts, pill.ts, item.ts, status.ts, events.ts, config.ts)
-- [ ] T003 [P] Create core logic structure in src/core/ (empty files for pool-generator, effect-resolver, collapse-handler, inventory-manager, quest-generator, state-machine, turn-manager, event-processor)
-- [ ] T004 [P] Create bot AI structure in src/core/bot/ (bot-interface.ts, bot-easy.ts, bot-normal.ts, bot-hard.ts, bot-insane.ts)
-- [ ] T005 [P] Create Zustand stores structure in src/stores/ (matchStore.ts, playerStore.ts, poolStore.ts, economyStore.ts, progressionStore.ts, logStore.ts)
-- [ ] T006 [P] Create UI components structure in src/components/ui/ (button.tsx, pill-display.tsx, player-card.tsx, inventory-slot.tsx, timer-display.tsx, log-viewer.tsx)
-- [ ] T007 [P] Create game components structure in src/components/game/ (PillPool.tsx, PlayerHUD.tsx, OpponentLine.tsx, ShopGrid.tsx, QuestTracker.tsx)
-- [ ] T008 [P] Create screens structure in src/screens/ (HomeScreen.tsx, LobbyScreen.tsx, DraftScreen.tsx, MatchScreen.tsx, ShoppingScreen.tsx, ResultsScreen.tsx)
-- [ ] T009 [P] Create hooks structure in src/hooks/ (useGameLoop.ts, useTurnTimer.ts, useEventLogger.ts)
-- [ ] T010 Create game configuration file in src/config/game-config.ts with all balance values (timers, health, economy, pool, shapes, items, boosts per FR-182 to FR-186)
+- [x] T001 Verify project dependencies installed (React 18+, TypeScript 5+, Vite, Zustand, Immer, Tailwind CSS) in package.json
+- [x] T002 [P] Create TypeScript types structure in src/types/ (game.ts, pill.ts, item.ts, status.ts, events.ts, config.ts)
+- [x] T003 [P] Create core logic structure in src/core/ (empty files for pool-generator, effect-resolver, collapse-handler, inventory-manager, quest-generator, state-machine, turn-manager, event-processor)
+- [x] T004 [P] Create bot AI structure in src/core/bot/ (bot-interface.ts, bot-easy.ts, bot-normal.ts, bot-hard.ts, bot-insane.ts)
+- [x] T005 [P] Create Zustand stores structure in src/stores/ (matchStore.ts, playerStore.ts, poolStore.ts, economyStore.ts, progressionStore.ts, logStore.ts)
+- [x] T006 [P] Create UI components structure in src/components/ui/ (button.tsx, pill-display.tsx, player-card.tsx, inventory-slot.tsx, timer-display.tsx, log-viewer.tsx)
+- [x] T007 [P] Create game components structure in src/components/game/ (PillPool.tsx, PlayerHUD.tsx, OpponentLine.tsx, ShopGrid.tsx, QuestTracker.tsx)
+- [x] T008 [P] Create screens structure in src/screens/ (HomeScreen.tsx, LobbyScreen.tsx, DraftScreen.tsx, MatchScreen.tsx, ShoppingScreen.tsx, ResultsScreen.tsx)
+- [x] T009 [P] Create hooks structure in src/hooks/ (useGameLoop.ts, useTurnTimer.ts, useEventLogger.ts)
+- [x] T010 Create game configuration file in src/config/game-config.ts with all balance values (timers, health, economy, pool, shapes, items, boosts per FR-182 to FR-186)
 
 ---
 
@@ -46,24 +46,24 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T011 [P] Define PillType, PillModifier, PillState enums in src/types/pill.ts
-- [ ] T012 [P] Define Pill interface with id, type, shape, modifiers, isRevealed, position, state in src/types/pill.ts
-- [ ] T013 [P] Define Shape interface with id, name, assetPath, unlockRound, isSeasonal, seasonalTheme in src/types/pill.ts
-- [ ] T014 [P] Define ItemCategory, Targeting, Availability enums in src/types/item.ts
-- [ ] T015 [P] Define Item interface with id, name, description, category, cost, targeting, isStackable, stackLimit, availability in src/types/item.ts
-- [ ] T016 [P] Define InventorySlot interface with slotIndex, item, quantity in src/types/item.ts
-- [ ] T017 [P] Define StatusType enum and Status interface with id, type, duration, appliedAt, playerId in src/types/status.ts
-- [ ] T018 [P] Define Player interface with all attributes (id, name, avatar, isBot, botLevel, lives, resistance, resistanceCap, extraResistance, inventory, pillCoins, activeStatuses, isEliminated, isLastChance, isActiveTurn, totalCollapses, shapeQuest, wantsShop) in src/types/game.ts
-- [ ] T019 [P] Define Pool interface with roundNumber, pills, size, counters, revealed, unlockedShapes in src/types/game.ts
-- [ ] T020 [P] Define ShapeQuest interface with id, roundNumber, playerId, sequence, progress, reward, status in src/types/game.ts
-- [ ] T021 [P] Define Turn interface with playerId, timerRemaining, itemsUsed, pillConsumed, statusesApplied, startedAt, endedAt, targetingActive in src/types/game.ts
-- [ ] T022 [P] Define Round interface with number, pool, turns, shapeQuests, boostsToApply, state, startedAt, endedAt in src/types/game.ts
-- [ ] T023 [P] Define MatchPhase enum and Match interface with id, phase, players, rounds, currentRound, turnOrder, activeTurnIndex, seasonalShapes, shopSignals, winnerId, startedAt, endedAt in src/types/game.ts
-- [ ] T024 [P] Define ShoppingPhase interface with qualifiedPlayers, timerRemaining, carts, confirmations, state in src/types/game.ts
-- [ ] T025 [P] Define Profile interface with id, name, avatar, level, xp, schmeckles, gamesPlayed, wins, totalRoundsSurvived, mostUsedItems, lastUpdated in src/types/game.ts
-- [ ] T026 [P] Define 8 core GameEvent types (PLAYER_JOINED, TURN_STARTED, ITEM_USED, PILL_CONSUMED, EFFECT_APPLIED, COLLAPSE_TRIGGERED, ROUND_COMPLETED, MATCH_ENDED) in src/types/events.ts with all required payload fields per research.md Decision 6
-- [ ] T027 [P] Define GameConfig interface in src/types/config.ts matching structure from data-model.md section "Configuration Schema" with timers, health, economy, pool, shapes, items, boosts, inventory, xp sections
-- [ ] T028 Implement DEFAULT_GAME_CONFIG in src/config/game-config.ts with all values from FR-182 specification (30s turn timer, 60s draft, 3 lives, 6 resistance, 100 initial coins, base pool size 6, 16 base shapes, etc.)
+- [x] T011 [P] Define PillType, PillModifier, PillState enums in src/types/pill.ts
+- [x] T012 [P] Define Pill interface with id, type, shape, modifiers, isRevealed, position, state in src/types/pill.ts
+- [x] T013 [P] Define Shape interface with id, name, assetPath, unlockRound, isSeasonal, seasonalTheme in src/types/pill.ts
+- [x] T014 [P] Define ItemCategory, Targeting, Availability enums in src/types/item.ts
+- [x] T015 [P] Define Item interface with id, name, description, category, cost, targeting, isStackable, stackLimit, availability in src/types/item.ts
+- [x] T016 [P] Define InventorySlot interface with slotIndex, item, quantity in src/types/item.ts
+- [x] T017 [P] Define StatusType enum and Status interface with id, type, duration, appliedAt, playerId in src/types/status.ts
+- [x] T018 [P] Define Player interface with all attributes (id, name, avatar, isBot, botLevel, lives, resistance, resistanceCap, extraResistance, inventory, pillCoins, activeStatuses, isEliminated, isLastChance, isActiveTurn, totalCollapses, shapeQuest, wantsShop) in src/types/game.ts
+- [x] T019 [P] Define Pool interface with roundNumber, pills, size, counters, revealed, unlockedShapes in src/types/game.ts
+- [x] T020 [P] Define ShapeQuest interface with id, roundNumber, playerId, sequence, progress, reward, status in src/types/game.ts
+- [x] T021 [P] Define Turn interface with playerId, timerRemaining, itemsUsed, pillConsumed, statusesApplied, startedAt, endedAt, targetingActive in src/types/game.ts
+- [x] T022 [P] Define Round interface with number, pool, turns, shapeQuests, boostsToApply, state, startedAt, endedAt in src/types/game.ts
+- [x] T023 [P] Define MatchPhase enum and Match interface with id, phase, players, rounds, currentRound, turnOrder, activeTurnIndex, seasonalShapes, shopSignals, winnerId, startedAt, endedAt in src/types/game.ts
+- [x] T024 [P] Define ShoppingPhase interface with qualifiedPlayers, timerRemaining, carts, confirmations, state in src/types/game.ts
+- [x] T025 [P] Define Profile interface with id, name, avatar, level, xp, schmeckles, gamesPlayed, wins, totalRoundsSurvived, mostUsedItems, lastUpdated in src/types/game.ts
+- [x] T026 [P] Define 8 core GameEvent types (PLAYER_JOINED, TURN_STARTED, ITEM_USED, PILL_CONSUMED, EFFECT_APPLIED, COLLAPSE_TRIGGERED, ROUND_COMPLETED, MATCH_ENDED) in src/types/events.ts with all required payload fields per research.md Decision 6
+- [x] T027 [P] Define GameConfig interface in src/types/config.ts matching structure from data-model.md section "Configuration Schema" with timers, health, economy, pool, shapes, items, boosts, inventory, xp sections
+- [x] T028 Implement DEFAULT_GAME_CONFIG in src/config/game-config.ts with all values from FR-182 specification (30s turn timer, 60s draft, 3 lives, 6 resistance, 100 initial coins, base pool size 6, 16 base shapes, etc.)
 
 **Checkpoint**: Foundation ready - core types and configuration complete.
 
