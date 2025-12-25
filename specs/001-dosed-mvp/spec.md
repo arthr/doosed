@@ -110,11 +110,12 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - Q: Shape Quests persistem entre rodadas? Como são geradas? → A: Shape Quests NÃO persistem entre rodadas. Cada Rodada gera nova quest para cada jogador BASEADA nas shapes disponíveis no pool daquela Rodada específica. Isso garante que quest é sempre possível de completar. Progresso de quest anterior é descartado ao iniciar nova Rodada. Quest usa apenas shapes que estão presentes no pool atual (respeitando unlock progressivo de shapes).
 - Q: Pill Coins persistem entre Rodadas? → A: SIM. Pill Coins acumulam durante toda a Partida (entre Rodadas). Jogador começa com 100 Pill Coins, ganha mais completando Shape Quests, e pode gastar na Pill Store. Apenas ao INICIAR uma nova Partida os Pill Coins resetam para 100. Isso cria economia progressiva: quanto mais sobrevive e completa quests, mais rico fica durante a Partida.
 - Q: Quando posso usar a Pill Store? → A: Pill Store NÃO abre durante turnos. Sistema de Sinalização: durante qualquer turno da Rodada, jogador pode SINALIZAR intenção de ir à loja (toggle "quero loja"). Ao FIM da Rodada, se algum jogador sinalizou E tem Pill Coins > 0, abre fase Shopping (30s) ANTES da próxima Rodada. Se ninguém sinalizou, próxima Rodada inicia direto. Isso evita quebrar fluxo de turnos.
-- Q: Posso usar múltiplos itens no meu turno? → A: SIM. Estrutura do Turno = Fase de Itens (ilimitada, opcional) → Fase de Consumo (obrigatória). Na Fase de Itens, jogador pode usar QUANTOS itens quiser do inventário, na ordem que preferir. Cada item tem targeting específico (self, opponent, pill). Depois usa todos os itens desejados, DEVE consumir 1 pílula (obrigatório). Permite combos estratégicos (Scanner → Inverter → consumir).
+- Q: Posso usar múltiplos itens no meu turno? → A: SIM. Durante turno, inventário e pool estão sempre acessíveis (fluxo fluido). Jogador pode: (1) Usar quantos itens quiser, na ordem que quiser (opcional), (2) Consumir 1 pílula (obrigatório, finaliza turno automaticamente). Não há botão "Confirm" entre usar itens e consumir pill - é um fluxo contínuo. Única restrição: enquanto seleciona alvo de item (targeting ativo), pool fica temporariamente não-clicável (evita consumo acidental). Permite combos estratégicos (Scanner → Inverter → consumir).
 - Q: Pílulas reveladas por Scanner ficam visíveis? → A: SIM. Sistema de Revelação: quando Scanner (ou Shape Scanner) revela tipo de pílula, essa informação PERSISTE visível para todos até a pílula ser consumida OU Shuffle ser usado (que embaralha e RESETA todas revelações). Isso transforma info em recurso estratégico: "revelar mais vs embaralhar tudo".
 - Q: Quantos slots tem o inventário? → A: 5 slots. Alguns itens são stackable (ex.: Scanner pode ter até 3 no mesmo slot). Isso força escolhas difíceis no Draft: "levo Scanner OU Shield?". 5 slots cria trade-offs mais interessantes que 8 slots.
 - Q: O que são Status/Efeitos Ativos? → A: Buffs/debuffs que persistem por duração (em Rodadas, não turnos). Exemplos: Shield (imune a dano por 1 Rodada completa), Handcuffed (perde próximo turno). Duração conta em Rodadas para ser clara e estratégica. Shield comprado na loja dura a Rodada inteira, permitindo múltiplos turnos protegidos.
 - Q: Como funciona IA/BOT? Tem níveis? → A: SIM. 4 níveis de dificuldade com personalidade: Easy (Paciente - previsível, evita riscos), Normal (Cobaia - balanceado), Hard (Sobrevivente - agressivo, usa itens bem), Insane (Hofmann - calculista, sem piedade). Comportamento adapta por fase do jogo (early conservador, late agressivo).
+- Q: A separação "Fase de Itens" e "Fase de Consumo" é visual/UX ou só conceitual? → A: **APENAS CONCEITUAL**. Visualmente/UX é um fluxo fluido sem barreiras. Jogador vê inventário + pool sempre acessíveis. Pode clicar em item (usa), clicar em outro item (usa), clicar em pill (consome e finaliza turno). SEM botão "Confirm" ou "Sair de Fase". A única separação é lógica: "você pode usar itens antes de consumir pill, mas consumir pill finaliza turno". Targeting de item temporariamente bloqueia consumo de pill (evita acidente), mas é natural da UX de seleção de alvo.
 
 ### Edge Cases
 
@@ -212,218 +213,222 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-048**: Ordem inicial dos Turnos DEVE ser determinada aleatoriamente no início da Partida para garantir fairness
 - **FR-049**: Dentro de cada Rodada, jogadores DEVEM alternar Turnos na ordem fixa determinada aleatoriamente
 
-##### Estrutura do Turno: Fase de Itens → Fase de Consumo
+##### Estrutura do Turno: Uso de Itens (opcional) → Consumo de Pill (obrigatório)
 
-- **FR-050**: Turno DEVE ter 2 fases sequenciais: Fase de Itens (opcional, ilimitada) → Fase de Consumo (obrigatória)
-- **FR-051**: Na Fase de Itens, jogador PODE usar quantos itens quiser do inventário, na ordem que preferir
-- **FR-052**: Cada item usado DEVE ser removido do inventário (ou decrementar stack se stackable)
-- **FR-053**: Itens com targeting DEVEM permitir jogador selecionar alvo válido (self, opponent específico, pill específica, ou none)
-- **FR-054**: Sistema DEVE aplicar efeito do item imediatamente após seleção de alvo (revelar pill, aplicar status, modificar pill, etc.)
-- **FR-055**: Jogador PODE finalizar Fase de Itens a qualquer momento (botão "Confirm" ou equivalente)
-- **FR-056**: Na Fase de Consumo, jogador DEVE consumir 1 pílula do pool (obrigatório, exceto se Force Feed ativo no jogador)
-- **FR-057**: Turno termina quando: (a) jogador consome pílula na Fase de Consumo, OU (b) timer do turno expira
-- **FR-058**: Sistema DEVE ter timer por Turno de 30 segundos visível para o jogador ativo com contagem regressiva (conta durante AMBAS as fases)
-- **FR-059**: Se timer de Turno expira sem ação, sistema DEVE automaticamente consumir pílula aleatória do pool para o jogador e passar turno
-- **FR-060**: Sistema DEVE indicar claramente qual jogador está no Turno ativo (destaque visual)
-- **FR-061**: Quando turno de jogador eliminado chega na ordem, sistema DEVE automaticamente pular para próximo jogador vivo
-- **FR-062**: Ordem de Turnos DEVE ser mantida mesmo após eliminações (não reordenar índices)
-- **FR-063**: Jogadores eliminados DEVEM permanecer visíveis na UI com indicação clara de "ELIMINATED" mas sem receber turnos
+- **FR-050**: Durante seu turno, jogador PODE usar itens do inventário (opcional, ilimitado, qualquer ordem) E DEVE consumir 1 pílula do pool (obrigatório)
+- **FR-051**: Inventário DEVE estar sempre acessível durante turno (jogador pode clicar em item a qualquer momento)
+- **FR-052**: Pool DEVE estar sempre clicável durante turno (exceto quando jogador está no meio de targeting de item)
+- **FR-053**: Jogador PODE usar quantos itens quiser, na ordem que preferir, antes de consumir pílula
+- **FR-054**: Cada item usado DEVE ser removido do inventário (ou decrementar stack se stackable)
+- **FR-055**: Itens com targeting DEVEM permitir jogador selecionar alvo válido (self, opponent específico, pill específica)
+- **FR-056**: Enquanto targeting de item está ativo (jogador selecionando alvo), pool DEVE estar temporariamente não-clicável (evita consumo acidental)
+- **FR-057**: Sistema DEVE aplicar efeito do item imediatamente após seleção de alvo (revelar pill, aplicar status, modificar pill, etc.)
+- **FR-058**: Após usar item, jogador DEVE automaticamente voltar para estado "pode usar outro item OU consumir pill" (fluxo contínuo, sem barreiras)
+- **FR-059**: Quando jogador clica em pill para consumir, sistema DEVE finalizar turno automaticamente (sem botão "Confirm" adicional)
+- **FR-060**: Consumo de pill DEVE ser bloqueado apenas se: (a) Force Feed ativo no jogador (substitui consumo), OU (b) targeting de item ativo
+- **FR-061**: Turno termina quando: (a) jogador consome pílula, OU (b) timer do turno expira (pill aleatória consumida automaticamente)
+- **FR-062**: Sistema DEVE ter timer por Turno de 30 segundos visível para o jogador ativo com contagem regressiva (conta durante uso de itens + consumo)
+- **FR-063**: Se timer de Turno expira sem ação, sistema DEVE automaticamente consumir pílula aleatória do pool para o jogador e passar turno
+- **FR-064**: Sistema DEVE indicar claramente qual jogador está no Turno ativo (destaque visual)
+- **FR-065**: Quando turno de jogador eliminado chega na ordem, sistema DEVE automaticamente pular para próximo jogador vivo
+- **FR-066**: Ordem de Turnos DEVE ser mantida mesmo após eliminações (não reordenar índices)
+- **FR-067**: Jogadores eliminados DEVEM permanecer visíveis na UI com indicação clara de "ELIMINATED" mas sem receber turnos
 
 ##### Display & Informações
 
-- **FR-064**: Sistema DEVE exibir linha de oponentes mostrando avatar, nome, Vidas, Resistência e Status Ativos de cada participante
-- **FR-065**: Sistema DEVE implementar sistema de saúde dupla (Vidas + Resistência) para todos os jogadores com valores iniciais: 3 Vidas, 6 Resistência
-- **FR-066**: Sistema DEVE implementar Resistência extra (Over-resistance) quando Overflow positivo estiver ativo
-- **FR-067**: Sistema DEVE exibir pool de pílulas disponíveis no centro da tela (máquina/garrafa/mesa)
-- **FR-068**: Sistema DEVE exibir contadores do pool mostrando quantidade de cada tipo de pílula (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE)
-- **FR-069**: Shapes das pílulas (Sphere/Cube/Pyramid/Capsule/Etc) DEVEM ser sempre visíveis ao jogador no pool antes da escolha
-- **FR-070**: Sistema DEVE exibir shape de cada pílula disponível claramente no pool (ícone/visual distintivo do shape)
-- **FR-071**: Shapes NÃO DEVEM afetar os efeitos das pílulas (tipo SAFE/DMG/HEAL/etc) - são puramente visuais para Shape Quests
-- **FR-072**: Pílulas reveladas por Scanner/Shape Scanner DEVEM ter indicação visual clara do tipo (cor, ícone ou label)
-- **FR-073**: Sistema DEVE exibir ícones de Status Ativos em cada jogador (ex.: Shield icon, Handcuffs icon) com duração restante (em Rodadas)
+- **FR-068**: Sistema DEVE exibir linha de oponentes mostrando avatar, nome, Vidas, Resistência e Status Ativos de cada participante
+- **FR-069**: Sistema DEVE implementar sistema de saúde dupla (Vidas + Resistência) para todos os jogadores com valores iniciais: 3 Vidas, 6 Resistência
+- **FR-070**: Sistema DEVE implementar Resistência extra (Over-resistance) quando Overflow positivo estiver ativo
+- **FR-071**: Sistema DEVE exibir pool de pílulas disponíveis no centro da tela (máquina/garrafa/mesa)
+- **FR-072**: Sistema DEVE exibir contadores do pool mostrando quantidade de cada tipo de pílula (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE)
+- **FR-073**: Shapes das pílulas (Sphere/Cube/Pyramid/Capsule/Etc) DEVEM ser sempre visíveis ao jogador no pool antes da escolha
+- **FR-074**: Sistema DEVE exibir shape de cada pílula disponível claramente no pool (ícone/visual distintivo do shape)
+- **FR-075**: Shapes NÃO DEVEM afetar os efeitos das pílulas (tipo SAFE/DMG/HEAL/etc) - são puramente visuais para Shape Quests
+- **FR-076**: Pílulas reveladas por Scanner/Shape Scanner DEVEM ter indicação visual clara do tipo (cor, ícone ou label)
+- **FR-077**: Sistema DEVE exibir ícones de Status Ativos em cada jogador (ex.: Shield icon, Handcuffs icon) com duração restante (em Rodadas)
 
 ##### Sistema de Revelação
 
-- **FR-074**: Sistema DEVE manter registro de quais pílulas foram reveladas durante a Rodada atual
-- **FR-075**: Pílulas reveladas DEVEM permanecer visíveis para TODOS os jogadores até serem consumidas OU Shuffle ser usado
-- **FR-076**: Quando Shuffle é usado, sistema DEVE resetar todas as revelações (pílulas voltam ao estado oculto)
-- **FR-077**: Sistema DEVE exibir contador de "Pílulas Reveladas" na HUD (ex.: "5/12 reveladas")
+- **FR-078**: Sistema DEVE manter registro de quais pílulas foram reveladas durante a Rodada atual
+- **FR-079**: Pílulas reveladas DEVEM permanecer visíveis para TODOS os jogadores até serem consumidas OU Shuffle ser usado
+- **FR-080**: Quando Shuffle é usado, sistema DEVE resetar todas as revelações (pílulas voltam ao estado oculto)
+- **FR-081**: Sistema DEVE exibir contador de "Pílulas Reveladas" na HUD (ex.: "5/12 reveladas")
 
 ##### Sistema de Status/Efeitos Ativos
 
-- **FR-078**: Sistema DEVE implementar sistema de Status com duração baseada em Rodadas (não turnos)
-- **FR-079**: Status "Shielded" DEVE bloquear TODO dano recebido por 1 Rodada completa (múltiplos turnos se jogador tem múltiplos turnos na mesma Rodada)
-- **FR-080**: Status "Shielded" NÃO DEVE bloquear cura (HEAL e Pocket Pill funcionam normalmente)
-- **FR-081**: Status "Handcuffed" DEVE fazer jogador pular próximo turno automaticamente (turno é skipado sem ação)
-- **FR-082**: Sistema DEVE decrementar duração de Status no INÍCIO de cada Rodada (não por turno)
-- **FR-083**: Sistema DEVE remover Status quando duração chega a 0
-- **FR-084**: Status DEVEM ser stackáveis: múltiplos Handcuffs aplicados = múltiplos turnos pulados
-- **FR-085**: Sistema DEVE exibir feedback visual quando Status é aplicado (animação, som)
+- **FR-082**: Sistema DEVE implementar sistema de Status com duração baseada em Rodadas (não turnos)
+- **FR-083**: Status "Shielded" DEVE bloquear TODO dano recebido por 1 Rodada completa (múltiplos turnos se jogador tem múltiplos turnos na mesma Rodada)
+- **FR-084**: Status "Shielded" NÃO DEVE bloquear cura (HEAL e Pocket Pill funcionam normalmente)
+- **FR-085**: Status "Handcuffed" DEVE fazer jogador pular próximo turno automaticamente (turno é skipado sem ação)
+- **FR-086**: Sistema DEVE decrementar duração de Status no INÍCIO de cada Rodada (não por turno)
+- **FR-087**: Sistema DEVE remover Status quando duração chega a 0
+- **FR-088**: Status DEVEM ser stackáveis: múltiplos Handcuffs aplicados = múltiplos turnos pulados
+- **FR-089**: Sistema DEVE exibir feedback visual quando Status é aplicado (animação, som)
 
 ##### Ações do Jogador
 
-- **FR-086**: Sistema DEVE permitir jogador escolher uma pílula do pool durante Fase de Consumo (antes do timer expirar)
-- **FR-087**: Ao consumir pílula, sistema DEVE revelar apenas o tipo (efeito) da pílula com animação, já que shape já era visível
-- **FR-088**: Sistema DEVE verificar se pílula tem modificadores ativos (Inverted, Doubled) antes de aplicar efeito
-- **FR-089**: Sistema DEVE aplicar efeitos da pílula (com modificadores se houver) imediatamente após revelação:
+- **FR-090**: Sistema DEVE permitir jogador escolher uma pílula do pool durante seu turno (antes do timer expirar)
+- **FR-091**: Ao consumir pílula, sistema DEVE revelar apenas o tipo (efeito) da pílula com animação, já que shape já era visível
+- **FR-092**: Sistema DEVE verificar se pílula tem modificadores ativos (Inverted, Doubled) antes de aplicar efeito
+- **FR-093**: Sistema DEVE aplicar efeitos da pílula (com modificadores se houver) imediatamente após revelação:
   - SAFE: sem efeito
   - DMG_LOW: -2 Resistência (ou +2 se Inverted; ou -4 se Doubled)
   - DMG_HIGH: -4 Resistência (ou +4 se Inverted; ou -8 se Doubled)
   - HEAL: +2 Resistência (ou -2 se Inverted; ou +4 se Doubled; com Overflow positivo, excedente vira Resistência extra)
   - FATAL: zera Resistência (força Colapso; não afetado por Inverted/Doubled)
   - LIFE: +1 Vida (não afetado por Inverted/Doubled; respeitando cap se houver)
-- **FR-090**: Sistema DEVE verificar Status "Shielded" antes de aplicar dano: se ativo, dano é bloqueado (jogador não perde Resistência)
-- **FR-091**: Sistema DEVE implementar mecânica de Colapso: quando Resistência chega a ≤0, jogador sofre Colapso (Vidas -1, Resistência restaurada para 6) com feedback visual claro
-- **FR-092**: Sistema DEVE implementar mecânica de "Última Chance": quando Vidas chegam a 0, jogador NÃO é eliminado imediatamente
-- **FR-093**: Quando jogador está em "Última Chance" (0 Vidas), HUD DEVE exibir claramente "0 Vidas" ou indicação visual de estado crítico
-- **FR-094**: Jogador em "Última Chance" (0 Vidas) DEVE ter Resistência ativa e funcional (resetada para 6 após último Colapso que zerou Vidas)
-- **FR-095**: Sistema DEVE eliminar jogador APENAS quando Resistência zera novamente JÁ estando em estado de "Última Chance" (0 Vidas)
-- **FR-096**: Sistema DEVE marcar jogadores eliminados visualmente (ex.: avatar cinza/opaco, marcação "ELIMINATED")
+- **FR-094**: Sistema DEVE verificar Status "Shielded" antes de aplicar dano: se ativo, dano é bloqueado (jogador não perde Resistência)
+- **FR-095**: Sistema DEVE implementar mecânica de Colapso: quando Resistência chega a ≤0, jogador sofre Colapso (Vidas -1, Resistência restaurada para 6) com feedback visual claro
+- **FR-096**: Sistema DEVE implementar mecânica de "Última Chance": quando Vidas chegam a 0, jogador NÃO é eliminado imediatamente
+- **FR-097**: Quando jogador está em "Última Chance" (0 Vidas), HUD DEVE exibir claramente "0 Vidas" ou indicação visual de estado crítico
+- **FR-098**: Jogador em "Última Chance" (0 Vidas) DEVE ter Resistência ativa e funcional (resetada para 6 após último Colapso que zerou Vidas)
+- **FR-099**: Sistema DEVE eliminar jogador APENAS quando Resistência zera novamente JÁ estando em estado de "Última Chance" (0 Vidas)
+- **FR-100**: Sistema DEVE marcar jogadores eliminados visualmente (ex.: avatar cinza/opaco, marcação "ELIMINATED")
 
 ##### UI & Controles
 
-- **FR-097**: Sistema DEVE exibir Action Dock com botões "Shop Signal" (toggle) e "Leave"
-- **FR-098**: Sistema DEVE exibir inventário do jogador (5 slots) com itens e quantidades (se stackable) sempre visível na HUD
-- **FR-099**: Sistema DEVE exibir Game Log mostrando histórico de ações da partida (quem consumiu qual pílula com shape, efeitos revelados, modificadores aplicados, itens usados, Status aplicados, Colapsos, eliminações, rodadas)
+- **FR-101**: Sistema DEVE exibir Action Dock com botões "Shop Signal" (toggle) e "Leave"
+- **FR-102**: Sistema DEVE exibir inventário do jogador (5 slots) com itens e quantidades (se stackable) sempre visível na HUD
+- **FR-103**: Sistema DEVE exibir Game Log mostrando histórico de ações da partida (quem consumiu qual pílula com shape, efeitos revelados, modificadores aplicados, itens usados, Status aplicados, Colapsos, eliminações, rodadas)
 
 ##### Sistema de Sinalização da Pill Store
 
-- **FR-100**: Durante qualquer turno da Rodada, jogador PODE clicar em botão "Shop Signal" para toggle flag "quero loja"
-- **FR-101**: Sistema DEVE validar se jogador tem Pill Coins > 0 para permitir sinalizar (se 0, exibir aviso "Sem Pill Coins")
-- **FR-102**: Jogador PODE mudar de ideia e desligar sinalização a qualquer momento durante a Rodada
-- **FR-103**: Sistema DEVE exibir indicação visual de quem sinalizou interesse na loja (ex.: ícone de loja aceso no painel do jogador)
-- **FR-104**: Ao FIM da Rodada (pool esgotado), sistema DEVE verificar quais jogadores sinalizaram E têm Pill Coins > 0
-- **FR-105**: Se pelo menos 1 jogador qualifica (sinalizou + tem coins), sistema DEVE ativar fase Shopping ANTES da próxima Rodada
-- **FR-106**: Se ninguém qualifica, sistema DEVE pular Shopping e iniciar próxima Rodada direto
+- **FR-104**: Durante qualquer turno da Rodada, jogador PODE clicar em botão "Shop Signal" para toggle flag "quero loja"
+- **FR-105**: Sistema DEVE validar se jogador tem Pill Coins > 0 para permitir sinalizar (se 0, exibir aviso "Sem Pill Coins")
+- **FR-106**: Jogador PODE mudar de ideia e desligar sinalização a qualquer momento durante a Rodada
+- **FR-107**: Sistema DEVE exibir indicação visual de quem sinalizou interesse na loja (ex.: ícone de loja aceso no painel do jogador)
+- **FR-108**: Ao FIM da Rodada (pool esgotado), sistema DEVE verificar quais jogadores sinalizaram E têm Pill Coins > 0
+- **FR-109**: Se pelo menos 1 jogador qualifica (sinalizou + tem coins), sistema DEVE ativar fase Shopping ANTES da próxima Rodada
+- **FR-110**: Se ninguém qualifica, sistema DEVE pular Shopping e iniciar próxima Rodada direto
 
 ##### Condições de Término
 
-- **FR-107**: Sistema DEVE terminar Partida imediatamente quando apenas 1 jogador sobrevive
-- **FR-108**: Sistema DEVE declarar o último sobrevivente como vencedor
-- **FR-109**: Partida NÃO tem limite máximo de rodadas - continua indefinidamente até restar 1 sobrevivente (empate impossível)
+- **FR-111**: Sistema DEVE terminar Partida imediatamente quando apenas 1 jogador sobrevive
+- **FR-112**: Sistema DEVE declarar o último sobrevivente como vencedor
+- **FR-113**: Partida NÃO tem limite máximo de rodadas - continua indefinidamente até restar 1 sobrevivente (empate impossível)
 
 #### BOT/IA (Oponentes Artificiais)
 
 ##### Níveis de Dificuldade
 
-- **FR-110**: Sistema DEVE implementar 4 níveis de dificuldade para BOT: Easy, Normal, Hard, Insane
-- **FR-111**: BOT nível **Easy (Paciente)** DEVE ter comportamento previsível: evita riscos, prefere pílulas reveladas seguras, usa itens defensivos (Pocket Pill, Shield)
-- **FR-112**: BOT nível **Normal (Cobaia)** DEVE ter comportamento balanceado: toma alguns riscos calculados, usa Scanner antes de consumir, mix de itens defensivos e ofensivos
-- **FR-113**: BOT nível **Hard (Sobrevivente)** DEVE ter comportamento agressivo: usa itens estrategicamente (Force Feed em pills nocivas, Handcuffs em momentos críticos), faz plays de alto risco/alto retorno
-- **FR-114**: BOT nível **Insane (Hofmann)** DEVE ter comportamento calculista: memoriza pool revelado, otimiza Shape Quests, usa combos avançados (Scanner + Inverter + Force Feed), sem piedade
+- **FR-114**: Sistema DEVE implementar 4 níveis de dificuldade para BOT: Easy, Normal, Hard, Insane
+- **FR-115**: BOT nível **Easy (Paciente)** DEVE ter comportamento previsível: evita riscos, prefere pílulas reveladas seguras, usa itens defensivos (Pocket Pill, Shield)
+- **FR-116**: BOT nível **Normal (Cobaia)** DEVE ter comportamento balanceado: toma alguns riscos calculados, usa Scanner antes de consumir, mix de itens defensivos e ofensivos
+- **FR-117**: BOT nível **Hard (Sobrevivente)** DEVE ter comportamento agressivo: usa itens estrategicamente (Force Feed em pills nocivas, Handcuffs em momentos críticos), faz plays de alto risco/alto retorno
+- **FR-118**: BOT nível **Insane (Hofmann)** DEVE ter comportamento calculista: memoriza pool revelado, otimiza Shape Quests, usa combos avançados (Scanner + Inverter + Force Feed), sem piedade
 
 ##### Adaptação por Fase do Jogo
 
-- **FR-115**: BOT DEVE adaptar agressividade baseado na fase do jogo: early game (rodadas 1-4) conservador, mid game (5-8) balanceado, late game (9+) máxima pressão
-- **FR-116**: BOT DEVE priorizar sobrevivência quando Vidas ≤ 1 (compra Pocket Pill/Shield, usa Scanner mais)
-- **FR-117**: BOT DEVE ser mais agressivo quando oponente está em "Última Chance" (0 Vidas) - usa Force Feed e Handcuffs
+- **FR-119**: BOT DEVE adaptar agressividade baseado na fase do jogo: early game (rodadas 1-4) conservador, mid game (5-8) balanceado, late game (9+) máxima pressão
+- **FR-120**: BOT DEVE priorizar sobrevivência quando Vidas ≤ 1 (compra Pocket Pill/Shield, usa Scanner mais)
+- **FR-121**: BOT DEVE ser mais agressivo quando oponente está em "Última Chance" (0 Vidas) - usa Force Feed e Handcuffs
 
 ##### Comportamento no Draft e Shopping
 
-- **FR-118**: BOT DEVE selecionar itens no Draft baseado em nível de dificuldade: Easy prefere Sustain, Hard/Insane balanceia todas categorias
-- **FR-119**: BOT DEVE sinalizar interesse na Pill Store se tem ≥2 Pill Coins E (Vidas < 3 OU precisa de itens estratégicos)
-- **FR-120**: BOT DEVE tomar decisões de compra na Pill Store em tempo razoável (configurável, padrão 3-5 segundos)
+- **FR-122**: BOT DEVE selecionar itens no Draft baseado em nível de dificuldade: Easy prefere Sustain, Hard/Insane balanceia todas categorias
+- **FR-123**: BOT DEVE sinalizar interesse na Pill Store se tem ≥2 Pill Coins E (Vidas < 3 OU precisa de itens estratégicos)
+- **FR-124**: BOT DEVE tomar decisões de compra na Pill Store em tempo razoável (configurável, padrão 3-5 segundos)
 
 #### Shape Quests & Pill Coins
 
-- **FR-121**: Jogador DEVE iniciar cada Partida com 100 Pill Coins (antes do Draft)
-- **FR-122**: Pill Coins DEVEM persistir e acumular durante toda a Partida (entre Rodadas): ganhos em Shape Quests somam ao saldo, gastos em Draft/Shopping reduzem
-- **FR-123**: Pill Coins NÃO são persistidos entre Partidas - cada nova Partida inicia com 100 Pill Coins frescos (reset completo)
-- **FR-124**: Sistema DEVE gerar 1 Shape Quest nova para cada jogador no início de cada Rodada, baseada APENAS nas shapes presentes no pool da Rodada atual
-- **FR-125**: Shape Quest DEVE ser gerada considerando apenas shapes desbloqueadas (progressão por Rodada) E presentes no pool atual
-- **FR-126**: Shape Quest gerada DEVE ser sempre possível de completar com as pills disponíveis no pool da Rodada (validação de viabilidade)
-- **FR-127**: Sistema DEVE descartar progresso de Shape Quest anterior ao iniciar nova Rodada (progresso NÃO persiste entre Rodadas)
-- **FR-128**: Sistema DEVE exibir Shape Quest ativa na HUD do jogador mostrando sequência de shapes necessária e progresso atual
-- **FR-129**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes (visíveis) de pílulas consumidas durante a Rodada
-- **FR-130**: Sistema DEVE conceder 10 Pill Coins (base configurável) × multiplicador progressivo quando Shape Quest é completada
-- **FR-131**: Sistema DEVE resetar progresso de Shape Quest quando jogador consome shape incorreto dentro da mesma Rodada
-- **FR-132**: Shape Quests DEVEM ter dificuldade/recompensa progressiva baseada na Rodada:
+- **FR-125**: Jogador DEVE iniciar cada Partida com 100 Pill Coins (antes do Draft)
+- **FR-126**: Pill Coins DEVEM persistir e acumular durante toda a Partida (entre Rodadas): ganhos em Shape Quests somam ao saldo, gastos em Draft/Shopping reduzem
+- **FR-127**: Pill Coins NÃO são persistidos entre Partidas - cada nova Partida inicia com 100 Pill Coins frescos (reset completo)
+- **FR-128**: Sistema DEVE gerar 1 Shape Quest nova para cada jogador no início de cada Rodada, baseada APENAS nas shapes presentes no pool da Rodada atual
+- **FR-129**: Shape Quest DEVE ser gerada considerando apenas shapes desbloqueadas (progressão por Rodada) E presentes no pool atual
+- **FR-130**: Shape Quest gerada DEVE ser sempre possível de completar com as pills disponíveis no pool da Rodada (validação de viabilidade)
+- **FR-131**: Sistema DEVE descartar progresso de Shape Quest anterior ao iniciar nova Rodada (progresso NÃO persiste entre Rodadas)
+- **FR-132**: Sistema DEVE exibir Shape Quest ativa na HUD do jogador mostrando sequência de shapes necessária e progresso atual
+- **FR-133**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes (visíveis) de pílulas consumidas durante a Rodada
+- **FR-134**: Sistema DEVE conceder 10 Pill Coins (base configurável) × multiplicador progressivo quando Shape Quest é completada
+- **FR-135**: Sistema DEVE resetar progresso de Shape Quest quando jogador consome shape incorreto dentro da mesma Rodada
+- **FR-136**: Shape Quests DEVEM ter dificuldade/recompensa progressiva baseada na Rodada:
   - Rodadas 1-3: 2 shapes, multiplicador 1.0x (10 Pill Coins)
   - Rodadas 4-7: 3 shapes, multiplicador 1.5x (15 Pill Coins)
   - Rodadas 8+: 4-5 shapes, multiplicador 2.0x (20-25 Pill Coins)
-- **FR-133**: Sistema DEVE exibir saldo de Pill Coins do jogador na HUD sempre visível (acumulado durante a Partida)
+- **FR-137**: Sistema DEVE exibir saldo de Pill Coins do jogador na HUD sempre visível (acumulado durante a Partida)
 
 #### Pill Store (Shopping Phase) - Fase Separada entre Rodadas
 
 ##### Ativação da Shopping Phase
 
-- **FR-134**: Shopping Phase DEVE ser ativada APENAS ao fim de Rodada (pool esgotado) se pelo menos 1 jogador qualificar (sinalizou + Pill Coins > 0)
-- **FR-135**: Shopping Phase DEVE ocorrer ANTES da geração da próxima Rodada (entre rodadas)
-- **FR-136**: Sistema DEVE exibir tela de Shopping Phase para jogadores que qualificaram (podem comprar)
-- **FR-137**: Sistema DEVE exibir tela "Aguardando outros jogadores..." para jogadores que NÃO qualificaram
+- **FR-138**: Shopping Phase DEVE ser ativada APENAS ao fim de Rodada (pool esgotado) se pelo menos 1 jogador qualificar (sinalizou + Pill Coins > 0)
+- **FR-139**: Shopping Phase DEVE ocorrer ANTES da geração da próxima Rodada (entre rodadas)
+- **FR-140**: Sistema DEVE exibir tela de Shopping Phase para jogadores que qualificaram (podem comprar)
+- **FR-141**: Sistema DEVE exibir tela "Aguardando outros jogadores..." para jogadores que NÃO qualificaram
 
 ##### Mecânicas de Timer
 
-- **FR-138**: Shopping Phase DEVE ter timer de 30 segundos por jogador
-- **FR-139**: Sistema DEVE implementar aceleração de timer: se um jogador confirma compras, timer dos outros reduz pela metade
-- **FR-140**: Timeout DEVE auto-confirmar compras atuais do carrinho do jogador
-- **FR-141**: Shopping Phase termina quando todos jogadores confirmaram OU timer expirou para todos
+- **FR-142**: Shopping Phase DEVE ter timer de 30 segundos por jogador
+- **FR-143**: Sistema DEVE implementar aceleração de timer: se um jogador confirma compras, timer dos outros reduz pela metade
+- **FR-144**: Timeout DEVE auto-confirmar compras atuais do carrinho do jogador
+- **FR-145**: Shopping Phase termina quando todos jogadores confirmaram OU timer expirou para todos
 
 ##### Catálogo da Pill Store
 
 **Boosts (Efeitos Imediatos aplicados na próxima Rodada)**:
 
-- **FR-142**: Sistema DEVE implementar Boost **1-Up** (custo: 20 Pill Coins): +1 Vida aplicada no início da próxima Rodada
-- **FR-143**: 1-Up DEVE estar disponível APENAS se jogador tem Vidas < máximo (3)
-- **FR-144**: Sistema DEVE implementar Boost **Reboot** (custo: 10 Pill Coins): Resistência restaurada para máximo no início da próxima Rodada
-- **FR-145**: Reboot DEVE estar disponível APENAS se jogador tem Resistência < máximo (6)
-- **FR-146**: Sistema DEVE implementar Boost **Scanner-2X** (custo: 10 Pill Coins): 2 pílulas reveladas automaticamente no início da próxima Rodada (escolhidas aleatoriamente)
+- **FR-146**: Sistema DEVE implementar Boost **1-Up** (custo: 20 Pill Coins): +1 Vida aplicada no início da próxima Rodada
+- **FR-147**: 1-Up DEVE estar disponível APENAS se jogador tem Vidas < máximo (3)
+- **FR-148**: Sistema DEVE implementar Boost **Reboot** (custo: 10 Pill Coins): Resistência restaurada para máximo no início da próxima Rodada
+- **FR-149**: Reboot DEVE estar disponível APENAS se jogador tem Resistência < máximo (6)
+- **FR-150**: Sistema DEVE implementar Boost **Scanner-2X** (custo: 10 Pill Coins): 2 pílulas reveladas automaticamente no início da próxima Rodada (escolhidas aleatoriamente)
 
 **Power-ups (Adicionados ao Inventário)**:
 
-- **FR-147**: Sistema DEVE permitir comprar Power-ups (Scanner, Shield, Pocket Pill, Shape Scanner, etc.) que são adicionados ao inventário
-- **FR-148**: Power-ups DEVEM respeitar limite de inventário (5 slots) e stackability
-- **FR-149**: Sistema DEVE impedir compra de Power-up se inventário cheio E item não é stackable OU stack já está no limite
+- **FR-151**: Sistema DEVE permitir comprar Power-ups (Scanner, Shield, Pocket Pill, Shape Scanner, etc.) que são adicionados ao inventário
+- **FR-152**: Power-ups DEVEM respeitar limite de inventário (5 slots) e stackability
+- **FR-153**: Sistema DEVE impedir compra de Power-up se inventário cheio E item não é stackable OU stack já está no limite
 
 ##### Regras de Compra
 
-- **FR-150**: Sistema DEVE permitir adicionar múltiplos itens ao carrinho antes de confirmar
-- **FR-151**: Sistema DEVE exibir preview do carrinho com custo total
-- **FR-152**: Sistema DEVE deduzir Pill Coins do saldo ao confirmar compras
-- **FR-153**: Boosts DEVEM ser aplicados automaticamente no início da próxima Rodada
-- **FR-154**: Power-ups DEVEM ser adicionados ao inventário imediatamente após confirmação
+- **FR-154**: Sistema DEVE permitir adicionar múltiplos itens ao carrinho antes de confirmar
+- **FR-155**: Sistema DEVE exibir preview do carrinho com custo total
+- **FR-156**: Sistema DEVE deduzir Pill Coins do saldo ao confirmar compras
+- **FR-157**: Boosts DEVEM ser aplicados automaticamente no início da próxima Rodada
+- **FR-158**: Power-ups DEVEM ser adicionados ao inventário imediatamente após confirmação
 
 #### Results
 
-- **FR-155**: Sistema DEVE exibir tela Results ao fim da Partida mostrando vencedor
-- **FR-156**: Sistema DEVE exibir estatísticas da partida: pílulas consumidas por tipo (com shapes), pílulas reveladas, modificadores aplicados, itens usados, dano causado, dano recebido, Colapsos sofridos, Shape Quests completadas, Pill Coins ganhos, Pill Coins gastos, Pill Coins restantes, total de Rodadas jogadas
-- **FR-157**: Sistema DEVE calcular e exibir XP ganho baseado em: sobrevivência (vitória/derrota), eliminações, Shape Quests completadas, Rodadas sobrevividas, uso estratégico de itens
-- **FR-158**: Sistema DEVE calcular e exibir Schmeckles ganhos baseado em performance geral (fórmula configurável)
-- **FR-159**: Sistema DEVE ter botão "Jogar Novamente" que retorna para Lobby
-- **FR-160**: Sistema DEVE ter botão "Menu Principal" que retorna para Home
+- **FR-159**: Sistema DEVE exibir tela Results ao fim da Partida mostrando vencedor
+- **FR-160**: Sistema DEVE exibir estatísticas da partida: pílulas consumidas por tipo (com shapes), pílulas reveladas, modificadores aplicados, itens usados, dano causado, dano recebido, Colapsos sofridos, Shape Quests completadas, Pill Coins ganhos, Pill Coins gastos, Pill Coins restantes, total de Rodadas jogadas
+- **FR-161**: Sistema DEVE calcular e exibir XP ganho baseado em: sobrevivência (vitória/derrota), eliminações, Shape Quests completadas, Rodadas sobrevividas, uso estratégico de itens
+- **FR-162**: Sistema DEVE calcular e exibir Schmeckles ganhos baseado em performance geral (fórmula configurável)
+- **FR-163**: Sistema DEVE ter botão "Jogar Novamente" que retorna para Lobby
+- **FR-164**: Sistema DEVE ter botão "Menu Principal" que retorna para Home
 
 #### Progressão & Persistência
 
-- **FR-161**: Sistema DEVE persistir XP acumulado do jogador entre sessões
-- **FR-162**: Sistema DEVE persistir Schmeckles acumulados do jogador entre sessões
-- **FR-163**: Sistema DEVE persistir nível do jogador entre sessões
-- **FR-164**: Sistema DEVE calcular nível baseado em XP acumulado com curve de progressão definida (configurável)
-- **FR-165**: Sistema DEVE exibir feedback visual quando jogador sobe de nível
+- **FR-165**: Sistema DEVE persistir XP acumulado do jogador entre sessões
+- **FR-166**: Sistema DEVE persistir Schmeckles acumulados do jogador entre sessões
+- **FR-167**: Sistema DEVE persistir nível do jogador entre sessões
+- **FR-168**: Sistema DEVE calcular nível baseado em XP acumulado com curve de progressão definida (configurável)
+- **FR-169**: Sistema DEVE exibir feedback visual quando jogador sobe de nível
 
 #### Pool de Pílulas (Baralho por Rodada)
 
-- **FR-166**: Sistema DEVE implementar cada pool (1 por Rodada) como baralho (sampling sem reposição) - pílulas não voltam ao pool após consumidas dentro da mesma Rodada
-- **FR-167**: Sistema DEVE distribuir tipos de pílulas no pool baseado em progressão por Rodada (percentuais configuráveis):
+- **FR-170**: Sistema DEVE implementar cada pool (1 por Rodada) como baralho (sampling sem reposição) - pílulas não voltam ao pool após consumidas dentro da mesma Rodada
+- **FR-171**: Sistema DEVE distribuir tipos de pílulas no pool baseado em progressão por Rodada (percentuais configuráveis):
   - SAFE: unlock Rodada 1, começa 45% e termina 15%
   - DMG_LOW: unlock Rodada 1, começa 40% e termina 20%
   - DMG_HIGH: unlock Rodada 3, começa 15% e termina 25%
   - HEAL: unlock Rodada 2, começa 10% e termina 15%
   - FATAL: unlock Rodada 6, começa 5% e termina 18%
   - LIFE: unlock Rodada 5, começa 6% e termina 13%
-- **FR-168**: Sistema DEVE escalar tamanho do pool por Rodada: base 6 pílulas, +1 a cada 3 Rodadas, cap máximo 12 (valores configuráveis)
-- **FR-169**: Sistema DEVE implementar catálogo extensível de Shapes com progressão de unlock por Rodada (configurável)
-- **FR-170**: Sistema DEVE suportar pelo menos 16 shapes base (ex.: capsule, round, triangle, oval, cross, heart, flower, star, pumpkin, coin, bear, gem, skull, domino, pineapple, fruit) com unlock progressivo
-- **FR-171**: Sistema DEVE desbloquear shapes progressivamente baseado na Rodada (ex.: shapes básicas na Rodada 1, shapes raras em rodadas posteriores)
-- **FR-172**: Sistema DEVE atribuir shapes aleatórios para cada pílula do pool, independente do tipo (SAFE/DMG/HEAL/etc), usando apenas shapes desbloqueadas até a Rodada atual
-- **FR-173**: Sistema DEVE garantir diversidade mínima de shapes no pool (pelo menos 3 shapes diferentes) para viabilizar Shape Quests
-- **FR-174**: Sistema DEVE suportar Shapes Sazonais (ex.: natal, halloween, páscoa) que podem ser ativadas/desativadas via configuração sem alterar lógica do jogo
-- **FR-175**: Shapes Sazonais ativas DEVEM ser incluídas no pool de shapes disponíveis respeitando mesma lógica de distribuição aleatória
-- **FR-176**: Sistema DEVE gerar novo pool ao iniciar cada nova Rodada (com distribuição de tipos, tamanho, e shapes progressivos)
-- **FR-177**: Cada pílula no pool DEVE ter registro de modificadores ativos (Inverted, Doubled, nenhum) e estado de revelação (oculta ou revelada com tipo)
+- **FR-172**: Sistema DEVE escalar tamanho do pool por Rodada: base 6 pílulas, +1 a cada 3 Rodadas, cap máximo 12 (valores configuráveis)
+- **FR-173**: Sistema DEVE implementar catálogo extensível de Shapes com progressão de unlock por Rodada (configurável)
+- **FR-174**: Sistema DEVE suportar pelo menos 16 shapes base (ex.: capsule, round, triangle, oval, cross, heart, flower, star, pumpkin, coin, bear, gem, skull, domino, pineapple, fruit) com unlock progressivo
+- **FR-175**: Sistema DEVE desbloquear shapes progressivamente baseado na Rodada (ex.: shapes básicas na Rodada 1, shapes raras em rodadas posteriores)
+- **FR-176**: Sistema DEVE atribuir shapes aleatórios para cada pílula do pool, independente do tipo (SAFE/DMG/HEAL/etc), usando apenas shapes desbloqueadas até a Rodada atual
+- **FR-177**: Sistema DEVE garantir diversidade mínima de shapes no pool (pelo menos 3 shapes diferentes) para viabilizar Shape Quests
+- **FR-178**: Sistema DEVE suportar Shapes Sazonais (ex.: natal, halloween, páscoa) que podem ser ativadas/desativadas via configuração sem alterar lógica do jogo
+- **FR-179**: Shapes Sazonais ativas DEVEM ser incluídas no pool de shapes disponíveis respeitando mesma lógica de distribuição aleatória
+- **FR-180**: Sistema DEVE gerar novo pool ao iniciar cada nova Rodada (com distribuição de tipos, tamanho, e shapes progressivos)
+- **FR-181**: Cada pílula no pool DEVE ter registro de modificadores ativos (Inverted, Doubled, nenhum) e estado de revelação (oculta ou revelada com tipo)
 
 #### Configurações & Balance
 
-- **FR-178**: Sistema DEVE centralizar todas as configurações de balance e timers em estrutura de dados configurável (não hardcoded):
+- **FR-182**: Sistema DEVE centralizar todas as configurações de balance e timers em estrutura de dados configurável (não hardcoded):
   - **Timers:**
     - Timer de Turno (padrão: 30s)
     - Timer de Draft (padrão: 60s)
@@ -489,14 +494,14 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
     - Fórmula XP por sobrevivência/vitória
     - Fórmula Schmeckles por performance
     - Curva de progressão de nível
-- **FR-179**: Configurações DEVEM ser facilmente editáveis por desenvolvedores/admin sem necessidade de recompilar código (arquivo JSON/YAML ou interface admin)
-- **FR-180**: Cada item DEVE ter configuração individual de custo (Pill Coins), targeting, stackability, e disponibilidade (DRAFT/MATCH/AMBOS)
-- **FR-181**: Cada shape DEVE ter configuração individual de ID, nome, arquivo de asset, unlock por Rodada, e flag de sazonal
-- **FR-182**: Cada boost DEVE ter configuração individual de custo (Pill Coins), efeito, e requisitos de disponibilidade
+- **FR-183**: Configurações DEVEM ser facilmente editáveis por desenvolvedores/admin sem necessidade de recompilar código (arquivo JSON/YAML ou interface admin)
+- **FR-184**: Cada item DEVE ter configuração individual de custo (Pill Coins), targeting, stackability, e disponibilidade (DRAFT/MATCH/AMBOS)
+- **FR-185**: Cada shape DEVE ter configuração individual de ID, nome, arquivo de asset, unlock por Rodada, e flag de sazonal
+- **FR-186**: Cada boost DEVE ter configuração individual de custo (Pill Coins), efeito, e requisitos de disponibilidade
 
 #### Dev Tools
 
-- **FR-183**: Sistema DEVE incluir DevTools overlay (apenas em DEV mode) com controles para:
+- **FR-187**: Sistema DEVE incluir DevTools overlay (apenas em DEV mode) com controles para:
   - Alternar entre Home/Game screens
   - Pular entre phases (Lobby/Draft/Match/Results/Shopping)
   - Avançar/voltar Rodadas manualmente
@@ -529,9 +534,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **Boost**: Representa buff temporário comprado na Pill Store. Atributos: tipo (1-Up/Reboot/Scanner-2X), custo em Pill Coins, efeito aplicado, requisito de disponibilidade
 - **Pool (Rodada)**: Representa baralho de pílulas de uma Rodada específica. Atributos: número da Rodada, pílulas (array de Pílula), contadores por tipo, contadores de reveladas, tamanho total, shapes disponíveis (array de IDs de shapes desbloqueadas + sazonais ativas)
 - **Rodada**: Representa uma Rodada da Partida (equivale a uma Poll completa). Atributos: número, pool (referência), Turnos (array de ações), Shape Quests geradas (array, 1 por jogador), Boosts a aplicar (array), estado (ativa/completada)
-- **Turno**: Representa turno de um jogador específico. Atributos: jogador (ID), timer restante, Fase (itens/consumo), itens usados (array), pill consumida (referência), modificadores aplicados (array), Status aplicados (array), timestamp início, timestamp fim
-- **Fase de Itens**: Sub-fase do Turno onde jogador usa itens. Atributos: jogador (ID), itens disponíveis no inventário, alvos válidos (array), ações realizadas (array)
-- **Fase de Consumo**: Sub-fase obrigatória do Turno onde jogador consome pill. Atributos: jogador (ID), pills disponíveis no pool, pill escolhida, efeito aplicado
+- **Turno**: Representa turno de um jogador específico. Atributos: jogador (ID), timer restante, itens usados (array), pill consumida (referência), modificadores aplicados na pill (array), Status aplicados em alvos (array), timestamp início, timestamp fim, estado targeting (ativo/inativo com alvo sendo selecionado)
 - **Ordem de Turnos**: Sequência fixa (array de IDs de jogadores) determinada aleatoriamente no início da Partida, mantida durante toda a Partida (eliminados são pulados mas índices preservados)
 - **Shape Quest**: Representa objetivo de sequência de shapes **por Rodada** (NÃO persiste entre Rodadas). Atributos: ID, número da Rodada, jogador (ID), sequência de shapes necessária (IDs), progresso atual (contador), recompensa (Pill Coins base × multiplicador), status (ativa/completada/falhada/descartada)
 - **Shopping Phase**: Representa fase de compras entre Rodadas. Atributos: jogadores qualificados (array de IDs), timer restante, carrinhos (map de jogador -> itens), confirmações (array de IDs de jogadores que confirmaram), estado (ativa/completada)
