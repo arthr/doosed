@@ -15,7 +15,7 @@ import { BotEasy } from '../core/bot/bot-easy';
 import type { Player } from '../types/game';
 
 export function useGameLoop() {
-  const { match, nextTurn, endMatch, updateMatch } = useMatchStore();
+  const { match, nextTurn, nextRound, endMatch, updateMatch } = useMatchStore();
   const { players, updatePlayer, applyDamage, applyHeal, setActiveTurn, clearActiveTurns } = usePlayerStore();
   const { addXP, incrementGamesPlayed, incrementWins, addRoundsSurvived } = useProgressionStore();
   const { logPill, logTurn, logItem, logMatch, logBotDecision } = useEventLogger();
@@ -103,19 +103,35 @@ export function useGameLoop() {
         effect,
       });
 
-      // Checa eliminação e fim de jogo, depois avança turno
+      // Checa eliminação e fim de jogo, depois avança turno ou rodada
       setTimeout(() => {
         checkMatchEnd();
         
-        // Limpa turno ativo atual ANTES de incrementar
-        clearActiveTurns();
+        // ✅ Ler estado ATUALIZADO diretamente do store (evita closure stale)
+        const { match: currentMatch } = useMatchStore.getState();
+        const { players: currentPlayers } = usePlayerStore.getState();
         
-        // Incrementa índice
-        nextTurn();
+        const currentPool = currentMatch?.currentRound?.pool;
+        const alivePlayers = currentPlayers.filter((p) => !p.isEliminated);
+        
+        // Jogo terminou? Não avança (checkMatchEnd já lidou com transição)
+        if (alivePlayers.length <= 1) return;
+        
+        // Pool esgotou? Nova rodada (FR-045)
+        if (currentPool && currentPool.pills.length === 0) {
+          nextRound();  // Gera novo pool + reseta activeTurnIndex = 0
+          // NÃO chamar nextTurn() - nextRound() já resetou índice
+        } else {
+          // Pool tem pills → próximo turno normal
+          nextTurn();  // Incrementa activeTurnIndex
+        }
+        
+        // Limpa turno ativo para triggar useEffect
+        clearActiveTurns();
         // Note: useEffect detectará !activePlayer e chamará startNextTurn()
       }, 500);
     },
-    [pool, players, updateMatch, applyDamage, applyHeal, updatePlayer, logPill, clearActiveTurns, nextTurn, checkMatchEnd]
+    [pool, updateMatch, applyDamage, applyHeal, updatePlayer, logPill, clearActiveTurns, nextTurn, nextRound, checkMatchEnd]
   );
 
   /**

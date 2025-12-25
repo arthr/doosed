@@ -150,8 +150,9 @@ React.useEffect(() => {
 - [X] Implementar T091a (effect application)
 - [X] Fix adicional: Corrigir lógica de Colapso em playerStore.ts
 - [ ] Testar manualmente: consumir DMG_LOW e validar Colapso
-- [ ] Implementar T091b (pool exhaustion)
-- [ ] Testar manualmente: esgotar pool
+- [X] Implementar T091b (pool exhaustion)
+- [X] Fix adicional: Corrigir closure stale (usar getState() direto)
+- [ ] Testar manualmente: esgotar pool e validar Round 2
 - [ ] Implementar T091c (turn cycle - useGameLoop)
 - [ ] Implementar T091d (turn cycle - MatchScreen)
 - [ ] Testar manualmente: alternância de turnos
