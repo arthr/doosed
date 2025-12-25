@@ -107,8 +107,8 @@
 
 ### Test Configuration & Utilities
 
-- [ ] T028a [P] Setup Vitest config in vitest.config.ts with coverage thresholds: statements 70%, branches 60%, functions 70%
-- [ ] T028b [P] Setup fast-check integration in src/core/__tests__/setup.ts for property-based testing
+- [x] T028a [P] Setup Vitest config in vitest.config.ts with coverage thresholds: statements 70%, branches 60%, functions 70%
+- [x] T028b [P] Setup fast-check integration in src/core/__tests__/setup.ts for property-based testing
 - [ ] T057a [P] Implement seeded RNG utility in src/core/utils/random.ts (mersenne twister or similar) ensuring deterministic output for testing
 
 **Checkpoint**: Testing infrastructure complete. Core logic can be implemented with TDD approach.
