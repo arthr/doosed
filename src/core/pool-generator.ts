@@ -212,7 +212,7 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
     pills: shuffledPills,
     size,
     counters,
-    revealed: 0,
+    revealed: [],
     unlockedShapes: unlockedShapes.map((s) => s.id),
   };
 

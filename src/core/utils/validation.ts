@@ -69,9 +69,9 @@ export function validatePoolInvariants(pool: Pool): boolean {
     return false;
   }
 
-  // revealed <= size
-  if (pool.revealed > pool.size) {
-    console.error(`[INVARIANT] Pool revealed count too high: ${pool.revealed} > ${pool.size}`);
+  // revealed.length <= size
+  if (pool.revealed.length > pool.size) {
+    console.error(`[INVARIANT] Pool revealed count too high: ${pool.revealed.length} > ${pool.size}`);
     return false;
   }
 
@@ -118,14 +118,15 @@ export function validateMatchInvariants(match: Match): boolean {
     return false;
   }
 
-  // currentRound === rounds.length (se não está em LOBBY/DRAFT)
+  // currentRound deve estar nos rounds se não está em LOBBY/DRAFT
   if (
     match.phase !== 'LOBBY' &&
     match.phase !== 'DRAFT' &&
-    match.currentRound !== match.rounds.length
+    match.currentRound &&
+    !match.rounds.find((r) => r.number === match.currentRound?.number)
   ) {
     console.error(
-      `[INVARIANT] Current round mismatch: ${match.currentRound} !== ${match.rounds.length}`
+      `[INVARIANT] Current round not found in rounds array: ${match.currentRound.number}`
     );
     return false;
   }

@@ -183,13 +183,13 @@
 
 ---
 
-### Zustand Stores for User Story 1
+### Zustand Stores for User Story 1 ✅
 
-- [ ] T059 [P] [US1] Implement matchStore in src/stores/matchStore.ts managing phase, players, rounds, currentRound, turnOrder, activeTurnIndex, shopSignals, winnerId with actions: startMatch, nextRound, nextTurn, endMatch
-- [ ] T060 [P] [US1] Implement playerStore in src/stores/playerStore.ts managing players array with lives, resistance, inventory, activeStatuses, pillCoins, shapeQuest, isEliminated, isLastChance with actions: updatePlayer, applyDamage, applyStatus, addToInventory, removeFromInventory
-- [ ] T061 [P] [US1] Implement poolStore in src/stores/poolStore.ts managing current pool (pills, counters, revealed) with actions: generateNewPool, revealPill, consumePill, applyModifierToPill, shufflePool
-- [ ] T062 [P] [US1] Implement logStore in src/stores/logStore.ts managing event log array with structured logs (timestamp, category, severity, message, context) with actions: addLog, filterLogs, exportLogs per FR-186.14 to FR-186.17
-- [ ] T063 [US1] Implement progressionStore in src/stores/progressionStore.ts managing level, xp, schmeckles, gamesPlayed, wins with Zustand persist middleware to localStorage namespace "dosed:profile" per research.md Decision 2 and FR-165 to FR-169
+- [X] T059 [P] [US1] Implement matchStore in src/stores/matchStore.ts managing phase, players, rounds, currentRound, turnOrder, activeTurnIndex, shopSignals, winnerId with actions: startMatch, nextRound, nextTurn, endMatch
+- [X] T060 [P] [US1] Implement playerStore in src/stores/playerStore.ts managing players array with lives, resistance, inventory, activeStatuses, pillCoins, shapeQuest, isEliminated, isLastChance with actions: updatePlayer, applyDamage, applyStatus, addToInventory, removeFromInventory
+- [X] T061 [P] [US1] Implement poolStore in src/stores/poolStore.ts managing current pool (pills, counters, revealed) with actions: generateNewPool, revealPill, consumePill, applyModifierToPill, shufflePool
+- [X] T062 [P] [US1] Implement logStore in src/stores/logStore.ts managing event log array with structured logs (timestamp, category, severity, message, context) with actions: addLog, filterLogs, exportLogs per FR-186.14 to FR-186.17
+- [X] T063 [US1] Implement progressionStore in src/stores/progressionStore.ts managing level, xp, schmeckles, gamesPlayed, wins with Zustand persist middleware to localStorage namespace "dosed:profile" per research.md Decision 2 and FR-165 to FR-169
 
 ---
 

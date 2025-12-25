@@ -110,7 +110,7 @@ export function transitionToPhase(match: Match, newPhase: MatchPhase): Match {
       updatedMatch = {
         ...updatedMatch,
         rounds: [],
-        currentRound: 0,
+        currentRound: null,
         activeTurnIndex: 0,
         winnerId: null,
       };
@@ -126,12 +126,7 @@ export function transitionToPhase(match: Match, newPhase: MatchPhase): Match {
 
     case MatchPhase.MATCH:
       // Pool primeira rodada e turnos gerenciados externamente (stores)
-      if (updatedMatch.rounds.length === 0) {
-        updatedMatch = {
-          ...updatedMatch,
-          currentRound: 1,
-        };
-      }
+      // currentRound será definido quando round for criado
       break;
 
     case MatchPhase.SHOPPING:

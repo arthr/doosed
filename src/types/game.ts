@@ -4,9 +4,12 @@
  * Baseado em data-model.md (Player, Pool, ShapeQuest, Turn, Round, Match, ShoppingPhase, Profile)
  */
 
-import type { Pill } from './pill';
+import type { Pill, PillModifier } from './pill';
 import type { Item, InventorySlot } from './item';
 import type { Status } from './status';
+
+// Re-export tipos usados em stores
+export type { Pill, Item, InventorySlot, Status, PillModifier };
 
 // ============================================================================
 // Enums
@@ -92,7 +95,7 @@ export interface Pool {
   pills: Pill[]; // Array de pílulas
   size: number; // Tamanho total (≥ 6, ≤ 12)
   counters: Record<string, number>; // Contadores por tipo (PillType string keys)
-  revealed: number; // Quantidade revelada (≥ 0, ≤ size)
+  revealed: Pill[]; // Pills reveladas
   unlockedShapes: string[]; // Shapes disponíveis (ShapeIds)
 }
 
@@ -140,7 +143,7 @@ export interface Match {
   phase: MatchPhase; // Fase atual
   players: Player[]; // Jogadores (length 2-6)
   rounds: Round[]; // Rodadas jogadas
-  currentRound: number; // Rodada atual (≥ 0)
+  currentRound: Round | null; // Rodada atual (null se nenhuma rodada iniciada)
   turnOrder: string[]; // Ordem de turnos (PlayerIds, fixa)
   activeTurnIndex: number; // Índice do turno ativo (≥ 0)
   seasonalShapes: string[]; // Shapes sazonais ativas (ShapeIds)
@@ -174,7 +177,7 @@ export interface Profile {
   wins: number; // Total de vitórias (≥ 0)
   totalRoundsSurvived: number; // Total de rodadas sobrevividas (≥ 0)
   mostUsedItems: Record<string, number>; // Contadores de uso de itens (ItemId → count)
-  lastUpdated: string; // Timestamp da última atualização (ISO8601)
+  lastUpdated: number; // Timestamp da última atualização (unix timestamp)
 }
 
 // ============================================================================
