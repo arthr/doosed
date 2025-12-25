@@ -1,13 +1,14 @@
 <!--
 Sync Impact Report:
-- Version: 1.0.0 (initial constitution)
-- Ratification: 2025-12-25
-- Principles established: 7 core principles
-- Templates requiring updates:
-  ✅ plan-template.md - constitution check section aligns
-  ✅ spec-template.md - requirements structure aligns
-  ✅ tasks-template.md - task categorization aligns
-- Follow-up: None (initial version)
+- Version: 1.1.0 (pragmatic event limit)
+- Last Amended: 2025-12-25
+- Changes: Principle III event limit relaxed from "máximo 8" to "8-12 principais"
+- Rationale: Maintains simplicity while allowing organic expansion (Quest, Shop, Status events)
+- Impact: No immediate changes (MVP already has 8 events) - allows future flexibility
+- Templates requiring updates: None (guideline change only)
+- Follow-up: Update spec/plan references to reflect 8-12 range
+- Previous versions:
+  * 1.0.0 (2025-12-25): Initial constitution with rigid 8-event limit
 -->
 
 # DOSED Constitution
@@ -38,12 +39,17 @@ Preferir soluções simples, testáveis e fáceis de manter por um desenvolvedor
 
 ### III. Event-Driven & Determinístico (NON-NEGOTIABLE)
 
-Arquitetura baseada em eventos com processamento determinístico. Máximo de 8 tipos de eventos no sistema. Estado imutável com transições previsíveis.
+Arquitetura baseada em eventos com processamento determinístico. 
+Sistema DEVE usar aproximadamente 8-12 tipos de eventos principais. 
+Estado imutável com transições previsíveis.
 
-**Rationale**: Determinismo é essencial para multiplayer justo, replays auditáveis e debugging confiável. Limite de eventos força design focado e evita explosão de complexidade.
+**Rationale**: Determinismo é essencial para multiplayer justo, replays 
+auditáveis e debugging confiável. Limite pragmático de eventos força 
+design focado sem ser restritivo demais para expansões naturais.
 
 **Enforcement**:
-- DEVE usar no máximo 8 tipos de eventos no sistema de jogo
+- DEVE usar entre 8-12 tipos de eventos principais no sistema de jogo
+- Eventos adicionais além de 8 DEVEM ser justificados com rationale claro (não micro-eventos triviais)
 - Estado DEVE ser imutável (operações produzem novo estado)
 - Processador de eventos DEVE ser testado para garantir determinismo
 - Eventos DEVEM ser auditáveis e reproduzíveis
@@ -169,4 +175,4 @@ Para orientações operacionais durante desenvolvimento, consultar:
 - `.cursor/rules/` para rules específicas por domínio
 - `docs/00-start-here/dev-workflow.md` para workflow de desenvolvimento
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-25 | **Last Amended**: 2025-12-25
+**Version**: 1.1.0 | **Ratified**: 2025-12-25 | **Last Amended**: 2025-12-25
