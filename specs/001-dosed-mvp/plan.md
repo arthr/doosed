@@ -177,6 +177,14 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
 - `PlayerHUD.tsx` - HUD do jogador (vidas, resistência, inventário, coins)
 - `OpponentLine.tsx` - Linha de oponentes
 - `ShopGrid.tsx` - Grade de itens da loja
+
+**Nota sobre Feedback Visual de Colapso/Última Chance (FR-095, FR-097)**:
+"Feedback visual claro" para eventos críticos no MVP significa:
+- Animação de shake/flash quando Colapso ocorre (duração <500ms, CSS transition simples)
+- HUD exibe "0 VIDAS" em vermelho piscante quando jogador entra em Última Chance
+- Avatar/card do jogador com borda vermelha espessa quando em Última Chance
+- NÃO requer ilustração complexa - texto + cor + animação CSS é suficiente para MVP
+- Prioridade: funcionalidade > estética (polish visual vem depois de 100% mecânicas funcionando)
 - `QuestTracker.tsx` - Tracker de Shape Quest
 
 #### 2.3 Screens (`src/screens/`)

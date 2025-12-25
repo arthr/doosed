@@ -126,6 +126,11 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - Q: Como garantir viabilidade de Shape Quest (FR-130) - validar com retry ou simplificar geração? → A: **Gerar quests DEPOIS do pool** (não antes). Sistema gera pool primeiro, depois gera Shape Quest usando apenas shapes que existem no pool gerado. Isso garante viabilidade por construção sem necessidade de retry logic. Ordem: gerar pool → extrair shapes disponíveis → gerar quest com essas shapes.
 - Q: Qual o limite inferior de Resistência? Pode ser negativo indefinidamente ou tem floor? → A: **Sem limite inferior**. Resistência pode ser negativa indefinidamente (-50, -100, etc) representando overflow negativo acumulado. Ao resetar em Colapso (FR-095), sempre restaura para valor configurável (padrão 6) independente de quão negativo estava. Simplifica implementação sem afetar gameplay.
 - Q: Há conflito entre FR-056 (targeting bloqueia pool) e FR-058 (fluxo contínuo sem barreiras)? → A: **Não há conflito**. "Fluxo contínuo" (FR-058) significa sem botões de confirmação entre ações. Bloqueio temporário do pool durante targeting (FR-056) é preventivo para evitar consumo acidental de pill enquanto jogador seleciona alvo do item. Pool volta a ser clicável imediatamente após seleção de alvo ou cancelamento de targeting. Não é uma "barreira de UX", é uma feature de segurança.
+- Q: O que fazer se BOT falhar 3+ vezes consecutivas (timeout/ação inválida)? → A: **Recovery progressivo com eliminação como último recurso**. (1) Logar erro com contexto completo, (2) tentar recovery: forçar ação aleatória válida (consumir pill aleatória), (3) se recovery falha 2+ tentativas, eliminar BOT da partida com log crítico, (4) DEV mode: pausar e exibir debug overlay. Prioriza robustez do jogo - BOT bugado não deve travar partida.
+- Q: Como sistema se comporta em desconexão/crash durante Match? → A: **Para MVP solo**: Salvar XP/Schmeckles parciais em localStorage, aceitar loss da partida, exibir mensagem ao reabrir oferecendo iniciar nova partida. NÃO tentar recuperar estado da partida (complexidade desnecessária para MVP). XP/Schmeckles salvos são adicionados ao perfil persistente.
+- Q: Como detectar e corrigir state corruption (vidas negativas, pool vazio mid-rodada)? → A: **Validação contínua + recovery dual-mode**. Validar invariantes após cada evento (lives ≥ 0, resistance válido, inventory ≤ 5, etc). DEV: pausar e exibir debug overlay. PROD: tentar recovery com último estado válido OU fallback para Home salvando progressão parcial. Logar tudo para análise.
+- Q: Se Discard remove pill de shape necessário para Shape Quest, quest fica impossível? → A: **SIM, edge case aceito**. Quest permanece ativa mas pode ficar impossível de completar. Sistema NÃO valida viabilidade mid-rodada. Jogador perde oportunidade (quest descartada na próxima rodada). Edge case aceito para MVP - adiciona camada de estratégia avançada (cuidado ao usar Discard).
+- Q: Feedback visual "claro" de Colapso/Última Chance (FR-095, FR-097) significa o quê para MVP? → A: **Simples e funcional, não requer polish visual**. Animação CSS de shake/flash (<500ms), texto "0 VIDAS" em vermelho piscante, borda vermelha no avatar do jogador. Texto + cor + animação CSS básica é suficiente. Prioridade: funcionalidade > estética (polish visual vem depois).
 
 ### Edge Cases
 
@@ -339,6 +344,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-122**: BOT DEVE selecionar itens no Draft baseado em nível de dificuldade: Easy prefere Sustain, Hard/Insane balanceia todas categorias
 - **FR-123**: BOT DEVE sinalizar interesse na Pill Store se tem ≥2 Pill Coins E (Vidas < 3 OU precisa de itens estratégicos)
 - **FR-124**: BOT DEVE tomar decisões de compra na Pill Store em tempo razoável (configurável, padrão 3-5 segundos)
+- **FR-124a**: Se BOT falhar 3+ vezes consecutivas (timeout OU ação inválida), sistema DEVE: (1) logar erro com nível de dificuldade e estado do jogo (logs estruturados, categoria bot_error), (2) tentar recovery: forçar ação aleatória válida (consumir pill aleatória do pool), (3) se recovery falha em 2+ tentativas, eliminar BOT da partida com log de erro crítico, (4) em DEV mode: pausar e exibir debug overlay com estado completo do BOT para diagnóstico
 
 #### Shape Quests & Pill Coins
 
@@ -353,6 +359,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-133**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes (visíveis) de pílulas consumidas durante a Rodada
 - **FR-134**: Sistema DEVE conceder 10 Pill Coins (base configurável) × multiplicador progressivo quando Shape Quest é completada
 - **FR-135**: Sistema DEVE resetar progresso de Shape Quest quando jogador consome shape incorreto dentro da mesma Rodada
+- **FR-135a**: Se durante a Rodada uso de Discard (FR-042) remove pill de shape necessário para completar quest ativa, quest permanece ativa mas PODE ficar impossível de completar. Sistema NÃO valida viabilidade mid-rodada. Jogador perde oportunidade de completar aquela quest (será descartada no início da próxima rodada). Edge case aceito para MVP - estratégia avançada permite sabotagem de próprias quests se Discard for usado descuidadamente
 - **FR-136**: Shape Quests DEVEM ter dificuldade/recompensa progressiva baseada na Rodada:
   - Rodadas 1-3: 2 shapes, multiplicador 1.0x (10 Pill Coins)
   - Rodadas 4-7: 3 shapes, multiplicador 1.5x (15 Pill Coins)
@@ -415,6 +422,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-167**: Sistema DEVE persistir nível do jogador entre sessões
 - **FR-168**: Sistema DEVE calcular nível baseado em XP acumulado com curve de progressão definida (configurável)
 - **FR-169**: Sistema DEVE exibir feedback visual quando jogador sobe de nível
+- **FR-169a**: Para MVP solo, se processo trava ou crash detectado: (1) salvar XP/Schmeckles acumulados até momento do crash em localStorage, (2) ao reabrir, exibir mensagem "Partida anterior foi interrompida. XP/Schmeckles parciais foram salvos. Iniciar nova partida?", (3) NÃO tentar recuperar estado da partida (aceitar loss da partida em progresso), (4) XP/Schmeckles salvos DEVEM ser adicionados ao perfil persistente
 
 #### Pool de Pílulas (Baralho por Rodada)
 
@@ -530,6 +538,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-186.16**: Sistema DEVE popular Game Log UI (FR-103) automaticamente a partir dos logs de categorias turn, item, pill, status (formato user-friendly)
 - **FR-186.17**: Em DEV MODE, sistema DEVE permitir filtrar logs por categoria, exportar logs como JSON, e limpar logs
 - **FR-186.18**: Sistema DEVE logar decisões de BOT (nível de dificuldade, reasoning simplificado, ação escolhida) para análise de comportamento de IA
+- **FR-186.19**: Sistema DEVE validar state integrity após cada evento processado. Invariantes validados: lives ≥ 0, resistance sem NaN/undefined, inventory.length ≤ 5, pillCoins ≥ 0, roundNumber válido, pool não vazio em meio de rodada. Se inconsistência detectada: (a) em DEV: pausar e exibir debug overlay com estado corrompido + evento que causou corrupção, (b) em PROD: tentar recovery resetando para último estado válido conhecido (se event log disponível) OU fallback para Home salvando XP/Schmeckles parcial. Logar erro com estado corrompido + stack trace para análise
 
 #### Dev Tools
 
