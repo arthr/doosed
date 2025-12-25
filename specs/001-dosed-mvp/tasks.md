@@ -233,16 +233,16 @@
 
 ### Integration & Validation for User Story 1
 
-- [ ] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to matchStore.transitionToPhase('LOBBY')
-- [ ] T083 [US1] Wire LobbyScreen "Start" button to matchStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
-- [ ] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to matchStore.transitionToPhase('MATCH'), generating first round pool, initializing turn 1
-- [ ] T085 [US1] Wire MatchScreen pill clicks to poolStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
-- [ ] T086 [US1] Wire MatchScreen item usage to playerStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
-- [ ] T087 [US1] Wire turn timer expiration in MatchScreen to auto-consume random pill per FR-063
-- [ ] T088 [US1] Wire match end detection (1 survivor) to matchStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
-- [ ] T089 [US1] Wire ResultsScreen "Jogar Novamente" to reset matchStore and transition to LOBBY
-- [ ] T090 [US1] Wire ResultsScreen "Menu Principal" to reset matchStore and transition to HOME
-- [ ] T091 [US1] Add all event logging throughout match flow: PLAYER_JOINED on lobby, TURN_STARTED on turn start, ITEM_USED on item use, PILL_CONSUMED on pill consume, EFFECT_APPLIED on damage/heal, COLLAPSE_TRIGGERED on collapse, ROUND_COMPLETED on round end, MATCH_ENDED on match end per FR-186.14 to FR-186.18
+- [x] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to matchStore.transitionToPhase('LOBBY')
+- [x] T083 [US1] Wire LobbyScreen "Start" button to matchStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
+- [x] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to matchStore.transitionToPhase('MATCH'), generating first round pool, initializing turn 1
+- [x] T085 [US1] Wire MatchScreen pill clicks to poolStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
+- [x] T086 [US1] Wire MatchScreen item usage to playerStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
+- [x] T087 [US1] Wire turn timer expiration in MatchScreen to auto-consume random pill per FR-063
+- [x] T088 [US1] Wire match end detection (1 survivor) to matchStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
+- [x] T089 [US1] Wire ResultsScreen "Jogar Novamente" to reset matchStore and transition to LOBBY
+- [x] T090 [US1] Wire ResultsScreen "Menu Principal" to reset matchStore and transition to HOME
+- [x] T091 [US1] Add all event logging throughout match flow: PLAYER_JOINED on lobby, TURN_STARTED on turn start, ITEM_USED on item use, PILL_CONSUMED on pill consume, EFFECT_APPLIED on damage/heal, COLLAPSE_TRIGGERED on collapse, ROUND_COMPLETED on round end, MATCH_ENDED on match end per FR-186.14 to FR-186.18
 - [ ] T092 [US1] Validate complete flow manually per quickstart.md checklist (lines 463-481): (a) Home→Lobby→Draft flow (items 1-4), (b) Match core mechanics (items 5-11: Scanner, pills, collapse, última chance, elimination), (c) Results and persistence (items 12-15). All 15 checklist items MUST pass before US1 considered complete
 
 **Checkpoint**: User Story 1 (P1) MVP is complete and independently testable. Can deploy/demo vertical slice.
