@@ -116,6 +116,11 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - Q: O que são Status/Efeitos Ativos? → A: Buffs/debuffs que persistem por duração (em Rodadas, não turnos). Exemplos: Shield (imune a dano por 1 Rodada completa), Handcuffed (perde próximo turno). Duração conta em Rodadas para ser clara e estratégica. Shield comprado na loja dura a Rodada inteira, permitindo múltiplos turnos protegidos.
 - Q: Como funciona IA/BOT? Tem níveis? → A: SIM. 4 níveis de dificuldade com personalidade: Easy (Paciente - previsível, evita riscos), Normal (Cobaia - balanceado), Hard (Sobrevivente - agressivo, usa itens bem), Insane (Hofmann - calculista, sem piedade). Comportamento adapta por fase do jogo (early conservador, late agressivo).
 - Q: A separação "Fase de Itens" e "Fase de Consumo" é visual/UX ou só conceitual? → A: **APENAS CONCEITUAL**. Visualmente/UX é um fluxo fluido sem barreiras. Jogador vê inventário + pool sempre acessíveis. Pode clicar em item (usa), clicar em outro item (usa), clicar em pill (consome e finaliza turno). SEM botão "Confirm" ou "Sair de Fase". A única separação é lógica: "você pode usar itens antes de consumir pill, mas consumir pill finaliza turno". Targeting de item temporariamente bloqueia consumo de pill (evita acidente), mas é natural da UX de seleção de alvo.
+- Q: Qual biblioteca de gerenciamento de estado para o core do jogo (Match state machine, inventários, turnos, rodadas)? → A: **Zustand**. Leve (~1KB), mínimo boilerplate, adequado para state machines de jogos, boa integração com DevTools, já tem precedente no projeto (stores em src_bkp/).
+- Q: Estratégia de persistência para XP, Schmeckles e nível entre sessões? → A: **localStorage**. API síncrona nativa, simples, limite ~5-10MB suficiente para dados de perfil e progressão do MVP. Fácil de migrar para backend real quando implementar multiplayer. Sem dependências extras, funciona offline.
+- Q: Como sistema deve se comportar em erros fatais que impedem partida de continuar (bot timeout, state corruption)? → A: **Dual-mode**: Produção usa retry automático (1-2 tentativas) + fallback graceful para Home salvando XP/Schmeckles parcial acumulado. Ambiente Dev TAMBÉM ativa Pause + Debug Mode (congela jogo, exibe DevTools overlay com estado completo, permite inspeção e reload manual do state) para diagnóstico e correção de erros até eliminá-los.
+- Q: Target de performance para animações e rendering do jogo (consumo pills, colapsos, transições de turno)? → A: **30 FPS consistente (33ms/frame) + transições <100ms**. Smooth suficiente para turn-based game, mais fácil manter consistência cross-device, feedback imediato sem parecer rushed. Realista para web sem exigir GPU potente.
+- Q: Nível de logging/observabilidade para debugging do MVP (especialmente IA bot, state machines, edge cases)? → A: **Structured logs + Game Log UI**. Logs estruturados (JSON format) por categoria (turn, item, pill, status, bot_decision, state_transition, error) para debugging técnico. Game Log visível in-game (já especificado FR-103) mostra histórico de ações para jogadores e permite replay/diagnóstico. Logs podem ser filtrados por categoria e exportados para análise. Balance ideal entre usabilidade e poder de debugging sem overhead de telemetry completa.
 
 ### Edge Cases
 
@@ -123,7 +128,8 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **Jogador em "Última Chance" (0 Vidas)**: Sistema DEVE exibir feedback visual dramático quando jogador atinge 0 Vidas mas ainda está vivo. HUD deve mostrar claramente "0 Vidas" + barra de Resistência ativa. Eliminação só ocorre no próximo Colapso
 - **Todos os jogadores eliminados exceto 1**: Quando resta apenas 1 jogador vivo, sistema deve terminar Partida imediatamente declarando-o vencedor (sem necessidade de esgotar pool)
 - **Skip de turnos de eliminados**: Sistema deve automaticamente pular turnos de jogadores eliminados sem delay perceptível. Se todos os jogadores exceto 1 estão eliminados, sistema finaliza partida declarando sobrevivente como vencedor
-- **Bot timeout**: Se bot não tomar ação em tempo razoável (configurável, padrão 5s), sistema deve forçar ação automática para não travar o jogo
+- **Bot timeout**: Se bot não tomar ação em tempo razoável (configurável, padrão 5s), sistema deve forçar ação automática (consumir pill aleatória) para não travar o jogo. Se bot falhar repetidamente (3+ timeouts consecutivos), sistema deve logar erro e tentar recovery ou fallback graceful
+- **State corruption detectado**: Se validação de estado detectar inconsistência crítica (ex: jogador com Vidas negativas, pool vazio em meio de rodada, inventário com slots > limite), sistema deve tentar recovery automático (recomputar estado a partir de log de ações) ou fallback graceful para Home salvando progressão parcial
 - **Pool esgotado com múltiplos jogadores vivos**: Sistema gera nova Rodada automaticamente. Partida continua indefinidamente até restar 1 sobrevivente (empate impossível devido à progressão de fatalidade)
 - **Overflow negativo com cascata**: Se implementado, dano com overflow negativo pode causar múltiplos colapsos em sequência - deve ter animação clara para cada colapso
 - **Desconexão durante Draft/Match**: Para MVP solo, se processo do jogo trava, jogador deve poder reiniciar sem perder progresso de XP/Schmeckles já ganhos
@@ -499,6 +505,27 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-185**: Cada shape DEVE ter configuração individual de ID, nome, arquivo de asset, unlock por Rodada, e flag de sazonal
 - **FR-186**: Cada boost DEVE ter configuração individual de custo (Pill Coins), efeito, e requisitos de disponibilidade
 
+#### Tech Stack & Architecture
+
+- **FR-186.1**: Frontend DEVE ser implementado com React + TypeScript + Vite (stack atual confirmada)
+- **FR-186.2**: State management DEVE usar Zustand para gerenciar estado do jogo (Match state machine, inventários, turnos, rodadas, pools, jogadores)
+- **FR-186.3**: Zustand stores DEVEM ser organizados por domínio: matchStore (partida/rodadas/turnos), playerStore (jogadores/inventários/status), poolStore (pills/revelações/modificadores), economyStore (Pill Coins/Shape Quests/Shopping), progressionStore (XP/Schmeckles/nível)
+- **FR-186.4**: State machines de fase (Home/Lobby/Draft/Match/Shopping/Results) DEVEM ser implementados com Zustand com transições explícitas e validadas
+- **FR-186.5**: Persistência de progressão (XP, Schmeckles, nível) DEVE usar localStorage com chave namespace "dosed:profile"
+- **FR-186.6**: Dados em localStorage DEVEM ser serializados como JSON com validação de schema ao carregar (fallback para valores default se corrompido)
+- **FR-186.7**: Sistema DEVE implementar Error Boundary (React) para capturar erros fatais e prevenir crash completo da aplicação
+- **FR-186.8**: Em PRODUÇÃO, erros fatais durante partida DEVEM tentar recovery automático (1-2 tentativas), salvar XP/Schmeckles parcial acumulado, e oferecer fallback graceful para Home com mensagem explicativa
+- **FR-186.9**: Em DEV MODE, erros fatais DEVEM ativar Pause + Debug Mode: congelar jogo, exibir DevTools overlay com estado completo serializado (JSON), stack trace, e controles para reload manual do state ou reset
+- **FR-186.10**: Sistema DEVE logar todos os erros (produção e dev) com timestamp, fase do jogo, estado relevante e stack trace para análise posterior
+- **FR-186.11**: Animações e rendering DEVEM manter 30 FPS consistente (33ms/frame) em 90% do tempo de jogo
+- **FR-186.12**: Transições críticas (consumo de pill, aplicação de efeito, colapso, mudança de turno) DEVEM completar em <100ms
+- **FR-186.13**: Sistema DEVE usar CSS transitions/animations ou biblioteca leve (ex: react-spring, framer-motion) para animações, evitando JavaScript animation loops que bloqueiam thread principal
+- **FR-186.14**: Sistema DEVE implementar logging estruturado (JSON format) com categorias: turn, item, pill, status, bot_decision, state_transition, error, performance
+- **FR-186.15**: Cada log entry DEVE conter: timestamp ISO8601, categoria, severity (debug/info/warn/error), mensagem, contexto relevante (playerId, roundNumber, turnIndex, etc)
+- **FR-186.16**: Sistema DEVE popular Game Log UI (FR-103) automaticamente a partir dos logs de categorias turn, item, pill, status (formato user-friendly)
+- **FR-186.17**: Em DEV MODE, sistema DEVE permitir filtrar logs por categoria, exportar logs como JSON, e limpar logs
+- **FR-186.18**: Sistema DEVE logar decisões de BOT (nível de dificuldade, reasoning simplificado, ação escolhida) para análise de comportamento de IA
+
 #### Dev Tools
 
 - **FR-187**: Sistema DEVE incluir DevTools overlay (apenas em DEV mode) com controles para:
@@ -578,6 +605,11 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **SC-035**: BOT nível Hard/Insane usa itens estrategicamente (combos, timing) em pelo menos 70% das situações ótimas identificadas
 - **SC-036**: BOT adapta agressividade baseado em fase do jogo (early/mid/late) de forma observável em 80% das partidas
 - **SC-037**: Sistema de targeting permite selecionar alvos válidos (self/opponent/pill) em 100% dos usos de itens
+- **SC-038**: Sistema mantém 30 FPS consistente em 90%+ do tempo de jogo em hardware médio (testes em devices representativos)
+- **SC-039**: Transições críticas (consumo pill, colapso, mudança turno) completam em <100ms em 95% dos casos
+- **SC-040**: Em caso de erro fatal, sistema salva XP/Schmeckles parcial e oferece fallback graceful em 100% dos casos (produção)
+- **SC-041**: Game Log UI exibe todas as ações relevantes (turns, items, pills, status) com formatação clara em 100% dos casos
+- **SC-042**: Logs estruturados permitem replay/diagnóstico de bugs em 90%+ dos casos reportados
 - **SC-015**: Proporção estratégia vs sorte atinge 70/30 ou melhor (estimado via análise de winrate de bots vs jogadores experientes, considerando revelação + modificadores + combos)
 - **SC-016**: Nenhum tipo de pílula (SAFE/DMG/HEAL/FATAL/LIFE) tem taxa de spawn fora da range configurada (+/- 5% de margem) em 95% das Rodadas
 - **SC-017**: Jogadores retornam para jogar segunda partida em 70% dos casos após primeira partida completa
@@ -624,3 +656,10 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **Proporção estratégia 70/30** (vs sorte) é atingível com Revelação + Modificadores + Status + Combos de itens + BOT inteligente
 - Multiplayer real e matchmaking são expansões futuras e não bloqueiam validação do MVP
 - Meta-moeda Schmeckles em "mock" (sem funcionalidade de gasto) é aceitável para MVP
+- **Zustand** é adequado para gerenciar state complexo de jogo (Match state machine, turnos, inventários) com boa DevTools integration
+- **localStorage** com ~5-10MB é suficiente para persistir progressão do MVP (perfil, XP, Schmeckles, nível) sem necessidade de backend
+- **30 FPS target** é realista e suficiente para turn-based game web, mantendo smooth UX em hardware médio sem otimizações agressivas
+- **Structured logging + Game Log UI** permite debugging eficiente de edge cases (bot decisions, state transitions) sem overhead de analytics completo
+- **Error recovery dual-mode** (retry + fallback produção / pause + debug dev) permite UX graceful e debugging eficiente simultaneamente
+- Animações via CSS/bibliotecas leves (react-spring/framer-motion) evitam jank sem bloquear thread principal
+- Logs estruturados em JSON com categorias permitem filtrar, exportar e replay para diagnóstico de bugs complexos
