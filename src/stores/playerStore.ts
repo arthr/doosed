@@ -13,7 +13,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import type { Player, Status, Item } from '../types/game';
 import { addItemToInventory, removeItemFromInventory } from '../core/inventory-manager';
-import { handleCollapse } from '../core/collapse-handler';
+import { processCollapseOrElimination } from '../core/collapse-handler';
 
 interface PlayerState {
   // Estado dos jogadores (sincronizado com matchStore.match.players)
@@ -70,10 +70,22 @@ export const usePlayerStore = create<PlayerState>()(
 
         player.resistance -= damage;
 
-        // Checa collapse
-        if (player.resistance <= 0) {
-          const updatedPlayer = handleCollapse(player);
-          Object.assign(player, updatedPlayer);
+        // Checa collapse ou eliminação (resistance <= 0)
+        const collapseResult = processCollapseOrElimination(player);
+        
+        if (collapseResult && collapseResult.collapsed) {
+          // Aplica resultado do colapso aos campos do player
+          player.lives = collapseResult.newLives;
+          player.resistance = collapseResult.newResistance;
+          player.extraResistance = 0; // Reset extra resistance
+          player.isLastChance = collapseResult.isLastChance;
+          player.isEliminated = collapseResult.isEliminated;
+          player.totalCollapses = collapseResult.totalCollapses;
+          
+          // Eliminados não podem ter turno ativo
+          if (collapseResult.isEliminated) {
+            player.isActiveTurn = false;
+          }
         }
       }),
 
