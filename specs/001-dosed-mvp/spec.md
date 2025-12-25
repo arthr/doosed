@@ -121,6 +121,11 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - Q: Como sistema deve se comportar em erros fatais que impedem partida de continuar (bot timeout, state corruption)? → A: **Dual-mode**: Produção usa retry automático (1-2 tentativas) + fallback graceful para Home salvando XP/Schmeckles parcial acumulado. Ambiente Dev TAMBÉM ativa Pause + Debug Mode (congela jogo, exibe DevTools overlay com estado completo, permite inspeção e reload manual do state) para diagnóstico e correção de erros até eliminá-los.
 - Q: Target de performance para animações e rendering do jogo (consumo pills, colapsos, transições de turno)? → A: **30 FPS consistente (33ms/frame) + transições <100ms**. Smooth suficiente para turn-based game, mais fácil manter consistência cross-device, feedback imediato sem parecer rushed. Realista para web sem exigir GPU potente.
 - Q: Nível de logging/observabilidade para debugging do MVP (especialmente IA bot, state machines, edge cases)? → A: **Structured logs + Game Log UI**. Logs estruturados (JSON format) por categoria (turn, item, pill, status, bot_decision, state_transition, error) para debugging técnico. Game Log visível in-game (já especificado FR-103) mostra histórico de ações para jogadores e permite replay/diagnóstico. Logs podem ser filtrados por categoria e exportados para análise. Balance ideal entre usabilidade e poder de debugging sem overhead de telemetry completa.
+- Q: Como quantificar "comportamento razoável" e termos subjetivos (previsível, calculista) dos BOTs para testes objetivos? → A: **Critérios Técnicos + Comportamentais por Nível**. Base técnica comum: taxa ações inválidas = 0%, decisão em 3-5s, sem travar >5s. Critérios observáveis por nível: Easy (80% escolhe pills reveladas SAFE quando disponível), Normal (usa Scanner em 60% dos turnos antes de consumir), Hard (memoriza 100% pills reveladas e usa info em decisões), Insane (usa Force Feed em oponente com 0 Vidas em 90% das oportunidades). Permite testes automatizados sem ML complexo.
+- Q: Qual critério de seleção de "pill aleatória" quando timer de turno expira (FR-063)? → A: **Distribuição uniforme entre TODAS as pills disponíveis no pool** (incluindo pills reveladas). RNG usa seed baseado em timestamp do timeout para garantir determinismo em testes e replays.
+- Q: Como garantir viabilidade de Shape Quest (FR-130) - validar com retry ou simplificar geração? → A: **Gerar quests DEPOIS do pool** (não antes). Sistema gera pool primeiro, depois gera Shape Quest usando apenas shapes que existem no pool gerado. Isso garante viabilidade por construção sem necessidade de retry logic. Ordem: gerar pool → extrair shapes disponíveis → gerar quest com essas shapes.
+- Q: Qual o limite inferior de Resistência? Pode ser negativo indefinidamente ou tem floor? → A: **Sem limite inferior**. Resistência pode ser negativa indefinidamente (-50, -100, etc) representando overflow negativo acumulado. Ao resetar em Colapso (FR-095), sempre restaura para valor configurável (padrão 6) independente de quão negativo estava. Simplifica implementação sem afetar gameplay.
+- Q: Há conflito entre FR-056 (targeting bloqueia pool) e FR-058 (fluxo contínuo sem barreiras)? → A: **Não há conflito**. "Fluxo contínuo" (FR-058) significa sem botões de confirmação entre ações. Bloqueio temporário do pool durante targeting (FR-056) é preventivo para evitar consumo acidental de pill enquanto jogador seleciona alvo do item. Pool volta a ser clicável imediatamente após seleção de alvo ou cancelamento de targeting. Não é uma "barreira de UX", é uma feature de segurança.
 
 ### Edge Cases
 
@@ -153,7 +158,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-004**: Sistema DEVE permitir criar sala solo com configuração de 1 jogador humano + 1-5 bots
 - **FR-005**: Sistema DEVE exibir lista de participantes (humano + bots) com avatares e nomes
 - **FR-006**: Sistema DEVE ter botão "Start" que inicia a fase Draft quando clicado
-- **FR-007**: Bots DEVEM ter comportamento de IA básica que toma decisões razoáveis (não apenas aleatório) em Draft e Match
+- **FR-007**: Bots DEVEM ter comportamento de IA básica que toma decisões razoáveis (não apenas aleatório) em Draft e Match. Critérios mensuráveis: taxa de ações inválidas = 0%, tomar decisão em 3-5 segundos, não travar por timeout >5s, não repetir mesma ação inválida 2x consecutivas
 
 #### Draft (Pré-Match)
 
@@ -227,14 +232,14 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-053**: Jogador PODE usar quantos itens quiser, na ordem que preferir, antes de consumir pílula
 - **FR-054**: Cada item usado DEVE ser removido do inventário (ou decrementar stack se stackable)
 - **FR-055**: Itens com targeting DEVEM permitir jogador selecionar alvo válido (self, opponent específico, pill específica)
-- **FR-056**: Enquanto targeting de item está ativo (jogador selecionando alvo), pool DEVE estar temporariamente não-clicável (evita consumo acidental)
+- **FR-056**: Enquanto targeting de item está ativo (jogador selecionando alvo), pool DEVE estar temporariamente não-clicável (evita consumo acidental). Pool volta a ser clicável imediatamente após seleção de alvo ou cancelamento
 - **FR-057**: Sistema DEVE aplicar efeito do item imediatamente após seleção de alvo (revelar pill, aplicar status, modificar pill, etc.)
-- **FR-058**: Após usar item, jogador DEVE automaticamente voltar para estado "pode usar outro item OU consumir pill" (fluxo contínuo, sem barreiras)
+- **FR-058**: Após usar item, jogador DEVE automaticamente voltar para estado "pode usar outro item OU consumir pill" (fluxo contínuo, sem barreiras). "Fluxo contínuo" significa sem botões de confirmação entre ações, não ausência de bloqueio preventivo durante targeting
 - **FR-059**: Quando jogador clica em pill para consumir, sistema DEVE finalizar turno automaticamente (sem botão "Confirm" adicional)
 - **FR-060**: Consumo de pill DEVE ser bloqueado apenas se: (a) Force Feed ativo no jogador (substitui consumo), OU (b) targeting de item ativo
 - **FR-061**: Turno termina quando: (a) jogador consome pílula, OU (b) timer do turno expira (pill aleatória consumida automaticamente)
 - **FR-062**: Sistema DEVE ter timer por Turno de 30 segundos visível para o jogador ativo com contagem regressiva (conta durante uso de itens + consumo)
-- **FR-063**: Se timer de Turno expira sem ação, sistema DEVE automaticamente consumir pílula aleatória do pool para o jogador e passar turno
+- **FR-063**: Se timer de Turno expira sem ação, sistema DEVE automaticamente consumir pílula aleatória do pool para o jogador e passar turno. Pílula aleatória é selecionada com distribuição uniforme entre TODAS as pills disponíveis (incluindo reveladas). RNG usa seed baseado em timestamp do timeout para determinismo
 - **FR-064**: Sistema DEVE indicar claramente qual jogador está no Turno ativo (destaque visual)
 - **FR-065**: Quando turno de jogador eliminado chega na ordem, sistema DEVE automaticamente pular para próximo jogador vivo
 - **FR-066**: Ordem de Turnos DEVE ser mantida mesmo após eliminações (não reordenar índices)
@@ -243,7 +248,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 ##### Display & Informações
 
 - **FR-068**: Sistema DEVE exibir linha de oponentes mostrando avatar, nome, Vidas, Resistência e Status Ativos de cada participante
-- **FR-069**: Sistema DEVE implementar sistema de saúde dupla (Vidas + Resistência) para todos os jogadores com valores iniciais: 3 Vidas, 6 Resistência
+- **FR-069**: Sistema DEVE implementar sistema de saúde dupla (Vidas + Resistência) para todos os jogadores com valores iniciais: 3 Vidas, 6 Resistência. Resistência pode ser negativa sem limite inferior (overflow negativo acumulado). Vidas tem bounds: 0 ≤ Vidas ≤ 3
 - **FR-070**: Sistema DEVE implementar Resistência extra (Over-resistance) quando Overflow positivo estiver ativo
 - **FR-071**: Sistema DEVE exibir pool de pílulas disponíveis no centro da tela (máquina/garrafa/mesa)
 - **FR-072**: Sistema DEVE exibir contadores do pool mostrando quantidade de cada tipo de pílula (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE)
@@ -318,10 +323,10 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 ##### Níveis de Dificuldade
 
 - **FR-114**: Sistema DEVE implementar 4 níveis de dificuldade para BOT: Easy, Normal, Hard, Insane
-- **FR-115**: BOT nível **Easy (Paciente)** DEVE ter comportamento previsível: evita riscos, prefere pílulas reveladas seguras, usa itens defensivos (Pocket Pill, Shield)
-- **FR-116**: BOT nível **Normal (Cobaia)** DEVE ter comportamento balanceado: toma alguns riscos calculados, usa Scanner antes de consumir, mix de itens defensivos e ofensivos
-- **FR-117**: BOT nível **Hard (Sobrevivente)** DEVE ter comportamento agressivo: usa itens estrategicamente (Force Feed em pills nocivas, Handcuffs em momentos críticos), faz plays de alto risco/alto retorno
-- **FR-118**: BOT nível **Insane (Hofmann)** DEVE ter comportamento calculista: memoriza pool revelado, otimiza Shape Quests, usa combos avançados (Scanner + Inverter + Force Feed), sem piedade
+- **FR-115**: BOT nível **Easy (Paciente)** DEVE ter comportamento previsível: evita riscos, prefere pílulas reveladas seguras, usa itens defensivos (Pocket Pill, Shield). Critério mensurável: em 80% das vezes escolhe pill revelada SAFE quando disponível
+- **FR-116**: BOT nível **Normal (Cobaia)** DEVE ter comportamento balanceado: toma alguns riscos calculados, usa Scanner antes de consumir, mix de itens defensivos e ofensivos. Critério mensurável: usa Scanner em 60% dos turnos antes de consumir pill
+- **FR-117**: BOT nível **Hard (Sobrevivente)** DEVE ter comportamento agressivo: usa itens estrategicamente (Force Feed em pills nocivas, Handcuffs em momentos críticos), faz plays de alto risco/alto retorno. Critério mensurável: memoriza 100% das pills reveladas e usa essa informação em decisões subsequentes
+- **FR-118**: BOT nível **Insane (Hofmann)** DEVE ter comportamento calculista: memoriza pool revelado, otimiza Shape Quests, usa combos avançados (Scanner + Inverter + Force Feed), sem piedade. Critério mensurável: usa Force Feed em oponente com 0 Vidas em 90% das oportunidades detectadas
 
 ##### Adaptação por Fase do Jogo
 
@@ -340,9 +345,9 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-125**: Jogador DEVE iniciar cada Partida com 100 Pill Coins (antes do Draft)
 - **FR-126**: Pill Coins DEVEM persistir e acumular durante toda a Partida (entre Rodadas): ganhos em Shape Quests somam ao saldo, gastos em Draft/Shopping reduzem
 - **FR-127**: Pill Coins NÃO são persistidos entre Partidas - cada nova Partida inicia com 100 Pill Coins frescos (reset completo)
-- **FR-128**: Sistema DEVE gerar 1 Shape Quest nova para cada jogador no início de cada Rodada, baseada APENAS nas shapes presentes no pool da Rodada atual
-- **FR-129**: Shape Quest DEVE ser gerada considerando apenas shapes desbloqueadas (progressão por Rodada) E presentes no pool atual
-- **FR-130**: Shape Quest gerada DEVE ser sempre possível de completar com as pills disponíveis no pool da Rodada (validação de viabilidade)
+- **FR-128**: Sistema DEVE gerar 1 Shape Quest nova para cada jogador no início de cada Rodada. Ordem de geração: (1) gerar pool de pills primeiro, (2) extrair shapes únicas presentes no pool gerado, (3) gerar quest usando APENAS essas shapes disponíveis
+- **FR-129**: Shape Quest DEVE ser gerada usando apenas shapes que existem no pool atual (garantindo viabilidade por construção, sem necessidade de validação ou retry)
+- **FR-130**: Quest gerada usando shapes do pool é sempre possível de completar pois todas as shapes da sequência têm pelo menos 1 pill representante no pool
 - **FR-131**: Sistema DEVE descartar progresso de Shape Quest anterior ao iniciar nova Rodada (progresso NÃO persiste entre Rodadas)
 - **FR-132**: Sistema DEVE exibir Shape Quest ativa na HUD do jogador mostrando sequência de shapes necessária e progresso atual
 - **FR-133**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes (visíveis) de pílulas consumidas durante a Rodada
