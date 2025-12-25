@@ -103,20 +103,17 @@ export function useGameLoop() {
         effect,
       });
 
-      // Checa fim do turno
-      clearActiveTurns();
-      
-      // Checa eliminação e fim de jogo
-      const checkAndContinue = () => {
+      // Checa eliminação e fim de jogo, depois avança turno
+      setTimeout(() => {
         checkMatchEnd();
         
-        // Próximo turno - incrementa índice
-        setTimeout(() => {
-          nextTurn();
-        }, 500);
-      };
-      
-      setTimeout(checkAndContinue, 500);
+        // Limpa turno ativo atual ANTES de incrementar
+        clearActiveTurns();
+        
+        // Incrementa índice
+        nextTurn();
+        // Note: useEffect detectará !activePlayer e chamará startNextTurn()
+      }, 500);
     },
     [pool, players, updateMatch, applyDamage, applyHeal, updatePlayer, logPill, clearActiveTurns, nextTurn, checkMatchEnd]
   );
