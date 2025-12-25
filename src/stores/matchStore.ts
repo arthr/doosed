@@ -23,6 +23,7 @@ interface MatchState {
   match: Match | null;
   
   // Actions
+  navigateToLobby: () => void; // HOME → LOBBY (cria match inicial)
   startMatch: (players: Player[]) => void;
   transitionPhase: (newPhase: MatchPhase) => void;
   nextRound: () => void;
@@ -35,6 +36,31 @@ interface MatchState {
 export const useMatchStore = create<MatchState>()(
   immer((set) => ({
     match: null,
+
+    /**
+     * Navega do HOME para LOBBY
+     * - Cria um match vazio na fase LOBBY
+     * - Usado apenas para navegação inicial HOME → LOBBY
+     */
+    navigateToLobby: () =>
+      set((state) => {
+        const now = Date.now();
+
+        state.match = {
+          id: `match_${now}`,
+          phase: MatchPhase.LOBBY,
+          players: [],
+          rounds: [],
+          currentRound: null,
+          turnOrder: [],
+          activeTurnIndex: 0,
+          shopSignals: [],
+          winnerId: null,
+          startedAt: now,
+          endedAt: null,
+          seasonalShapes: [], // Temporadas não aplicáveis no LOBBY
+        };
+      }),
 
     /**
      * Inicia uma nova partida

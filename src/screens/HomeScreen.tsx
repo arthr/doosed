@@ -9,15 +9,15 @@ import React from 'react';
 import { useMatchStore } from '../stores/matchStore';
 import { useProgressionStore, useProgressionInfo } from '../stores/progressionStore';
 import { Button } from '../components/ui/button';
-import { MatchPhase } from '../types/game';
 
 export function HomeScreen() {
-  const { transitionPhase } = useMatchStore();
+  const { navigateToLobby } = useMatchStore();
   const profile = useProgressionStore();
   const progressionInfo = useProgressionInfo();
 
   const handleEnterGame = () => {
-    transitionPhase(MatchPhase.LOBBY);
+    // T082: HOME → LOBBY navigation
+    navigateToLobby();
   };
 
   return (
