@@ -1,16 +1,11 @@
 import '@/index.css';
-import { initChatSystemBridge } from '@/stores/initChatSystemBridge';
-import { ScreenShell } from '@/components/app/ScreenShell';
-import { DevToolsOverlay } from '@/components/dev/DevToolsOverlay';
-import { ScreenRouter } from '@/components/app/ScreenRouter';
 
-initChatSystemBridge();
 
 function App() {
   return (
-    <ScreenShell devTools={import.meta.env.DEV ? <DevToolsOverlay /> : null}>
-      <ScreenRouter />
-    </ScreenShell>
+    <div className="flex items-center justify-center h-screen">
+      <h1 className="text-4xl font-bold">Welcome to the Dosed Game</h1>
+    </div>
   );
 }
 export default App;

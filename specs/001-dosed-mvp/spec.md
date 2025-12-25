@@ -51,7 +51,7 @@ Um jogador durante a partida completa Shape Quests (sequências de formas de pí
 
 ---
 
-### User Story 3 - Progressão Persistente (XP + Schmeckles Mock) (Priority: P3)
+### User Story 3 - Progressão Persistente (XP + Schmeckles) (Priority: P3)
 
 Um jogador ao finalizar partidas acumula XP e ganha Schmeckles (meta-moeda), criando senso de progressão e recompensa ao longo de múltiplas sessões de jogo.
 
@@ -86,9 +86,16 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 
 ---
 
+## Clarifications
+
+### Session 2025-12-25
+
+- Q: Estrutura de Partida/Rodadas/Turnos - como funcionam? → A: Partida é composta por múltiplas Rodadas. Cada Rodada equivale a uma Poll completa. Quando a poll esgota e ainda há jogadores vivos, nova Rodada inicia com nova poll gerada. Dentro de cada Rodada, jogadores alternam Turnos. Cada Turno termina quando jogador consome uma pill OU timer do turno expira (pill aleatória é consumida automaticamente).
+
 ### Edge Cases
 
-- **Empate**: O que acontece se o pool acaba e múltiplos jogadores ainda estão vivos? Sistema deve declarar vitória baseada em maior saúde (Vidas > Resistência > Resistência extra) ou empate múltiplo
+- **Empate ao fim da Partida**: Se a última Rodada termina (pool esgota) e múltiplos jogadores ainda estão vivos, sistema deve declarar vencedor baseado em maior saúde (Vidas > Resistência > Resistência extra) ou empate múltiplo
+- **Timer de Turno expirado**: Se timer do turno do jogador expira e ele não selecionou pill, sistema DEVE automaticamente consumir uma pill aleatória do pool e passar para próximo jogador
 - **Bot timeout**: Se o bot não tomar ação em tempo razoável (ex.: >5s), sistema deve forçar ação automática para não travar o jogo
 - **Pool esgotado antes de eliminações**: Se o pool acaba antes de ter um único vencedor, o jogo deve terminar e declarar vencedor(es) baseado em critério de saúde
 - **Overflow negativo com cascata**: Se implementado, dano com overflow negativo pode causar múltiplos colapsos em sequência - deve ter animação clara para cada colapso
@@ -126,100 +133,128 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 
 #### Match (Core Gameplay)
 
-- **FR-015**: Sistema DEVE implementar turno por turnos com indicação clara de quem é o jogador ativo
-- **FR-016**: Sistema DEVE exibir linha de oponentes mostrando avatar, nome, Vidas e Resistência de cada participante
-- **FR-017**: Sistema DEVE implementar sistema de saúde dupla (Vidas + Resistência) para todos os jogadores
-- **FR-018**: Sistema DEVE implementar Resistência extra (Over-resistance) quando Overflow positivo estiver ativo
-- **FR-019**: Sistema DEVE exibir pool de pílulas disponíveis no centro da tela (máquina/garrafa)
-- **FR-020**: Sistema DEVE exibir contadores do pool mostrando quantidade de cada tipo de pílula (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE)
-- **FR-021**: Sistema DEVE permitir jogador escolher uma pílula do pool durante seu turno
-- **FR-022**: Sistema DEVE revelar tipo e shape da pílula escolhida com animação
-- **FR-023**: Sistema DEVE aplicar efeitos da pílula imediatamente após revelação:
+##### Estrutura: Partida → Rodadas → Turnos
+
+- **FR-015**: Partida (Match) DEVE ser composta por múltiplas Rodadas, com número de rodadas não pré-definido (depende de eliminações)
+- **FR-016**: Cada Rodada DEVE corresponder a uma Poll completa de pílulas (baralho sem reposição)
+- **FR-017**: Sistema DEVE avançar para nova Rodada automaticamente quando pool atual esgota E ainda há 2+ jogadores vivos
+- **FR-018**: Sistema DEVE gerar nova Poll (com tamanho e distribuição progressiva) ao iniciar cada nova Rodada
+- **FR-019**: Sistema DEVE exibir número da Rodada atual na HUD (ex.: "Rodada 3/12")
+- **FR-020**: Dentro de cada Rodada, jogadores DEVEM alternar Turnos em ordem fixa (round-robin)
+- **FR-021**: Turno de um jogador DEVE terminar quando: (a) jogador consome uma pílula, OU (b) timer do turno expira
+- **FR-022**: Sistema DEVE ter timer por Turno (ex.: 15-30 segundos) visível para o jogador ativo
+- **FR-023**: Se timer de Turno expira sem ação, sistema DEVE automaticamente consumir pílula aleatória do pool para o jogador e passar turno
+- **FR-024**: Sistema DEVE indicar claramente qual jogador está no Turno ativo (destaque visual)
+
+##### Display & Informações
+
+- **FR-025**: Sistema DEVE exibir linha de oponentes mostrando avatar, nome, Vidas e Resistência de cada participante
+- **FR-026**: Sistema DEVE implementar sistema de saúde dupla (Vidas + Resistência) para todos os jogadores
+- **FR-027**: Sistema DEVE implementar Resistência extra (Over-resistance) quando Overflow positivo estiver ativo
+- **FR-028**: Sistema DEVE exibir pool de pílulas disponíveis no centro da tela (máquina/garrafa)
+- **FR-029**: Sistema DEVE exibir contadores do pool mostrando quantidade de cada tipo de pílula (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE)
+
+##### Ações do Jogador
+
+- **FR-030**: Sistema DEVE permitir jogador escolher uma pílula do pool durante seu turno (antes do timer expirar)
+- **FR-031**: Sistema DEVE revelar tipo e shape da pílula escolhida com animação
+- **FR-032**: Sistema DEVE aplicar efeitos da pílula imediatamente após revelação:
   - SAFE: sem efeito
   - DMG_LOW: -2 Resistência
   - DMG_HIGH: -4 Resistência
   - HEAL: +2 Resistência (com Overflow positivo, excedente vira Resistência extra)
   - FATAL: zera Resistência (força Colapso)
   - LIFE: +1 Vida (respeitando cap se houver)
-- **FR-024**: Sistema DEVE implementar mecânica de Colapso: quando Resistência chega a 0, jogador perde 1 Vida e Resistência é restaurada ao máximo automaticamente
-- **FR-025**: Sistema DEVE eliminar jogador quando Vidas chegam a 0
-- **FR-026**: Sistema DEVE marcar jogadores eliminados visualmente (ex.: avatar cinza/opaco)
-- **FR-027**: Sistema DEVE permitir jogador usar item do inventário durante seu turno (antes de escolher pílula)
-- **FR-028**: Sistema DEVE consumir item após uso (remover do inventário)
-- **FR-029**: Sistema DEVE exibir Action Dock com botões "Shop" e "Leave"
-- **FR-030**: Sistema DEVE abrir Loja como overlay quando "Shop" é clicado durante turno do jogador
-- **FR-031**: Sistema DEVE exibir Game Log mostrando histórico de ações da partida (quem consumiu qual pílula, efeitos, eliminações)
-- **FR-032**: Sistema DEVE terminar partida quando apenas 1 jogador sobrevive OU pool esgota
-- **FR-033**: Sistema DEVE declarar vencedor baseado em sobrevivência ou maior saúde se pool esgota
+- **FR-033**: Sistema DEVE implementar mecânica de Colapso: quando Resistência chega a 0, jogador perde 1 Vida e Resistência é restaurada ao máximo automaticamente
+- **FR-034**: Sistema DEVE eliminar jogador quando Vidas chegam a 0
+- **FR-035**: Sistema DEVE marcar jogadores eliminados visualmente (ex.: avatar cinza/opaco)
+- **FR-036**: Sistema DEVE permitir jogador usar item do inventário durante seu turno (antes de escolher pílula)
+- **FR-037**: Sistema DEVE consumir item após uso (remover do inventário)
+
+##### UI & Controles
+
+- **FR-038**: Sistema DEVE exibir Action Dock com botões "Shop" e "Leave"
+- **FR-039**: Sistema DEVE abrir Loja como overlay quando "Shop" é clicado durante turno do jogador
+- **FR-040**: Sistema DEVE exibir Game Log mostrando histórico de ações da partida (quem consumiu qual pílula, efeitos, eliminações, rodadas)
+
+##### Condições de Término
+
+- **FR-041**: Sistema DEVE terminar Partida quando apenas 1 jogador sobrevive (independente da rodada)
+- **FR-042**: Sistema DEVE terminar Partida quando número máximo de rodadas é atingido (ex.: 12 rodadas) E ainda há jogadores vivos
+- **FR-043**: Sistema DEVE declarar vencedor baseado em sobrevivência (se 1 sobrevivente) ou maior saúde (se múltiplos ao fim)
 
 #### Shape Quests & Pill Coins
 
-- **FR-034**: Sistema DEVE atribuir 1-2 Shape Quests aleatórias para cada jogador no início da Match
-- **FR-035**: Sistema DEVE exibir Shape Quests ativas na HUD do jogador mostrando sequência necessária e progresso
-- **FR-036**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes de pílulas consumidas
-- **FR-037**: Sistema DEVE conceder 1 Pill Coin quando Shape Quest é completada
-- **FR-038**: Sistema DEVE resetar progresso de Shape Quest quando jogador consome shape incorreto
-- **FR-039**: Shape Quests DEVEM ter dificuldade progressiva: rodadas iniciais (2 shapes), mid-game (3 shapes), late-game (4-5 shapes)
-- **FR-040**: Sistema DEVE exibir saldo de Pill Coins do jogador na HUD
+- **FR-044**: Sistema DEVE atribuir 1-2 Shape Quests aleatórias para cada jogador no início da Partida (Rodada 1)
+- **FR-045**: Sistema DEVE exibir Shape Quests ativas na HUD do jogador mostrando sequência necessária e progresso
+- **FR-046**: Sistema DEVE rastrear progresso de Shape Quest baseado em shapes de pílulas consumidas (persistente entre Rodadas)
+- **FR-047**: Sistema DEVE conceder 1 Pill Coin quando Shape Quest é completada
+- **FR-048**: Sistema DEVE resetar progresso de Shape Quest quando jogador consome shape incorreto
+- **FR-049**: Shape Quests DEVEM ter dificuldade progressiva: rodadas iniciais (2 shapes), mid-game (3 shapes), late-game (4-5 shapes)
+- **FR-050**: Sistema DEVE exibir saldo de Pill Coins do jogador na HUD
 
 #### Loja (Match)
 
-- **FR-041**: Sistema DEVE exibir Loja como overlay sobre Match quando acionada
-- **FR-042**: Sistema DEVE exibir itens disponíveis para compra com nome, descrição, custo em Pill Coins e categoria
-- **FR-043**: Sistema DEVE permitir compra de item se jogador tem Pill Coins suficientes E espaço no inventário
-- **FR-044**: Sistema DEVE deduzir Pill Coins e adicionar item ao inventário após compra
-- **FR-045**: Sistema DEVE impedir compra se Pill Coins insuficientes OU inventário cheio (com feedback apropriado)
-- **FR-046**: Sistema DEVE fechar Loja quando jogador clica em "Fechar" ou confirma compras
+- **FR-051**: Sistema DEVE exibir Loja como overlay sobre Match quando acionada (apenas durante turno do jogador)
+- **FR-052**: Sistema DEVE exibir itens disponíveis para compra com nome, descrição, custo em Pill Coins e categoria
+- **FR-053**: Sistema DEVE permitir compra de item se jogador tem Pill Coins suficientes E espaço no inventário
+- **FR-054**: Sistema DEVE deduzir Pill Coins e adicionar item ao inventário após compra
+- **FR-055**: Sistema DEVE impedir compra se Pill Coins insuficientes OU inventário cheio (com feedback apropriado)
+- **FR-056**: Sistema DEVE fechar Loja quando jogador clica em "Fechar" ou confirma compras (sem consumir turno)
 
 #### Results
 
-- **FR-047**: Sistema DEVE exibir tela Results ao fim da partida mostrando vencedor(es)
-- **FR-048**: Sistema DEVE exibir estatísticas da partida: pílulas consumidas por tipo, dano causado, dano recebido, Shape Quests completadas, Pill Coins gastos
-- **FR-049**: Sistema DEVE calcular e exibir XP ganho baseado em: sobrevivência, eliminações, Shape Quests completadas, rodadas sobrevividas
-- **FR-050**: Sistema DEVE calcular e exibir Schmeckles ganhos (mock) baseado em performance geral
-- **FR-051**: Sistema DEVE ter botão "Jogar Novamente" que retorna para Lobby
-- **FR-052**: Sistema DEVE ter botão "Menu Principal" que retorna para Home
+- **FR-057**: Sistema DEVE exibir tela Results ao fim da Partida mostrando vencedor(es)
+- **FR-058**: Sistema DEVE exibir estatísticas da partida: pílulas consumidas por tipo, dano causado, dano recebido, Shape Quests completadas, Pill Coins gastos, total de Rodadas jogadas
+- **FR-059**: Sistema DEVE calcular e exibir XP ganho baseado em: sobrevivência, eliminações, Shape Quests completadas, Rodadas sobrevividas
+- **FR-060**: Sistema DEVE calcular e exibir Schmeckles ganhos baseado em performance geral
+- **FR-061**: Sistema DEVE ter botão "Jogar Novamente" que retorna para Lobby
+- **FR-062**: Sistema DEVE ter botão "Menu Principal" que retorna para Home
 
 #### Progressão & Persistência
 
-- **FR-053**: Sistema DEVE persistir XP acumulado do jogador entre sessões
-- **FR-054**: Sistema DEVE persistir Schmeckles acumulados do jogador entre sessões
-- **FR-055**: Sistema DEVE persistir nível do jogador entre sessões
-- **FR-056**: Sistema DEVE calcular nível baseado em XP acumulado com curve de progressão definida
-- **FR-057**: Sistema DEVE exibir feedback visual quando jogador sobe de nível
+- **FR-063**: Sistema DEVE persistir XP acumulado do jogador entre sessões
+- **FR-064**: Sistema DEVE persistir Schmeckles acumulados do jogador entre sessões
+- **FR-065**: Sistema DEVE persistir nível do jogador entre sessões
+- **FR-066**: Sistema DEVE calcular nível baseado em XP acumulado com curve de progressão definida
+- **FR-067**: Sistema DEVE exibir feedback visual quando jogador sobe de nível
 
-#### Pool de Pílulas (Baralho)
+#### Pool de Pílulas (Baralho por Rodada)
 
-- **FR-058**: Sistema DEVE implementar pool como baralho (sampling sem reposição) - pílulas não voltam ao pool após consumidas
-- **FR-059**: Sistema DEVE distribuir tipos de pílulas no pool baseado em progressão por rodada:
-  - SAFE: unlock rodada 1, começa 45% e termina 15%
-  - DMG_LOW: unlock rodada 1, começa 40% e termina 20%
-  - DMG_HIGH: unlock rodada 3, começa 15% e termina 25%
-  - HEAL: unlock rodada 2, começa 10% e termina 15%
-  - FATAL: unlock rodada 6, começa 5% e termina 18%
-  - LIFE: unlock rodada 5, começa 6% e termina 13%
-- **FR-060**: Sistema DEVE escalar tamanho do pool por rodada: base 6 pílulas, +1 a cada 3 rodadas, cap máximo 12
-- **FR-061**: Sistema DEVE atribuir shapes aleatórios (Sphere/Cube/Pyramid/Capsule) para cada pílula independente do tipo
-- **FR-062**: Sistema DEVE avançar rodada quando pool atual esgota
-- **FR-063**: Sistema DEVE gerar novo pool ao iniciar nova rodada
+- **FR-068**: Sistema DEVE implementar cada pool (1 por Rodada) como baralho (sampling sem reposição) - pílulas não voltam ao pool após consumidas dentro da mesma Rodada
+- **FR-069**: Sistema DEVE distribuir tipos de pílulas no pool baseado em progressão por Rodada:
+  - SAFE: unlock Rodada 1, começa 45% e termina 15%
+  - DMG_LOW: unlock Rodada 1, começa 40% e termina 20%
+  - DMG_HIGH: unlock Rodada 3, começa 15% e termina 25%
+  - HEAL: unlock Rodada 2, começa 10% e termina 15%
+  - FATAL: unlock Rodada 6, começa 5% e termina 18%
+  - LIFE: unlock Rodada 5, começa 6% e termina 13%
+- **FR-070**: Sistema DEVE escalar tamanho do pool por Rodada: base 6 pílulas, +1 a cada 3 Rodadas, cap máximo 12
+- **FR-071**: Sistema DEVE atribuir shapes aleatórios (Sphere/Cube/Pyramid/Capsule) para cada pílula independente do tipo
+- **FR-072**: Sistema DEVE gerar novo pool ao iniciar cada nova Rodada (com distribuição e tamanho progressivos)
+- **FR-073**: Sistema DEVE ter limite máximo de Rodadas (ex.: 12) para evitar partidas infinitas
 
 #### Dev Tools
 
-- **FR-064**: Sistema DEVE incluir DevTools overlay (apenas em DEV mode) com controles para:
+- **FR-074**: Sistema DEVE incluir DevTools overlay (apenas em DEV mode) com controles para:
   - Alternar entre Home/Game screens
   - Pular entre phases (Lobby/Draft/Match/Results)
+  - Avançar/voltar Rodadas manualmente
+  - Forçar fim de Turno
   - Disparar notificações de teste
   - Override de estado para debugging
 
 ### Key Entities
 
-- **Jogador**: Representa participante (humano ou bot). Atributos: ID, nome, avatar, Vidas, Resistência, Resistência extra, inventário (8 slots), Pill Coins, Shape Quests ativas, status (vivo/eliminado), turno ativo (bool)
+- **Jogador**: Representa participante (humano ou bot). Atributos: ID, nome, avatar, Vidas, Resistência, Resistência extra, inventário (8 slots), Pill Coins, Shape Quests ativas, status (vivo/eliminado), é turno ativo (bool)
 - **Pílula**: Representa uma pílula no pool. Atributos: tipo (SAFE/DMG_LOW/DMG_HIGH/HEAL/FATAL/LIFE), shape (Sphere/Cube/Pyramid/Capsule), estado (disponível/consumida)
-- **Pool**: Representa baralho de pílulas da rodada. Atributos: rodada número, pílulas (array), contadores por tipo
+- **Pool (Rodada)**: Representa baralho de pílulas de uma Rodada específica. Atributos: número da Rodada, pílulas (array), contadores por tipo, tamanho total
+- **Rodada**: Representa uma Rodada da Partida (equivale a uma Poll completa). Atributos: número, pool (referência), Turnos (array de ações), estado (ativa/completada)
+- **Turno**: Representa turno de um jogador específico. Atributos: jogador (ID), timer restante, ação realizada (pill consumida/item usado/timeout), timestamp início, timestamp fim
 - **Item**: Representa item consumível. Atributos: ID, nome, descrição, categoria (Intel/Sustain/Control/Chaos), custo em Pill Coins, efeito
 - **Shape Quest**: Representa objetivo de sequência de shapes. Atributos: ID, sequência de shapes necessária, progresso atual, recompensa (Pill Coins), status (ativa/completada/falhada)
-- **Partida (Match)**: Representa instância de jogo. Atributos: ID, fase (Lobby/Draft/Match/Results), jogadores (array), pool atual, rodada número, turno do jogador (índice), vencedor(es), timestamp
-- **Perfil (Profile)**: Representa perfil persistente do jogador. Atributos: ID, nome, avatar, nível, XP total, Schmeckles total, partidas jogadas, vitórias, timestamp
+- **Partida (Match)**: Representa instância completa de jogo. Atributos: ID, fase (Lobby/Draft/Match/Results), jogadores (array), Rodadas (array), Rodada atual (número), jogador do Turno atual (índice), vencedor(es), timestamp início, timestamp fim
+- **Perfil (Profile)**: Representa perfil persistente do jogador. Atributos: ID, nome, avatar, nível, XP total, Schmeckles total, partidas jogadas, vitórias, Rodadas totais sobrevividas, timestamp
 
 ## Success Criteria *(mandatory)*
 
@@ -230,16 +265,19 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **SC-003**: Sistema de contadores do pool exibe informação correta 100% do tempo (sem dessincronização)
 - **SC-004**: Mecânica de Colapso é compreendida por 80% dos jogadores após 2-3 partidas (baseado em não morrer por confusão)
 - **SC-005**: Jogadores completam 60-80% das Shape Quests tentadas (alinhado com meta de balance)
-- **SC-006**: Partidas duram 8-12 rodadas em média (alinhado com meta de duração)
-- **SC-007**: Bots tomam decisões válidas (sem travamentos ou ações inválidas) em 100% dos turnos
-- **SC-008**: Progressão de XP e Schmeckles é persistida com 100% de confiabilidade entre sessões
-- **SC-009**: Interface exibe todas as informações críticas (Vidas, Resistência, contadores do pool, turno atual) de forma clara e sem sobreposição
-- **SC-010**: Jogadores identificam quando é seu turno em menos de 2 segundos em média
-- **SC-011**: Draft é completado (manual ou auto) em 100% dos casos sem travar ou gerar inventário inválido
-- **SC-012**: Sistema escala pool de pílulas corretamente seguindo fórmula (base 6, +1 a cada 3 rodadas, cap 12) em 100% das rodadas
-- **SC-013**: Proporção estratégia vs sorte atinge 70/30 (estimado via análise de winrate de bots vs jogadores experientes)
-- **SC-014**: Nenhum tipo de pílula (SAFE/DMG/HEAL/FATAL/LIFE) tem taxa de spawn fora da range configurada (+/- 5% de margem) em 95% das partidas
-- **SC-015**: Jogadores retornam para jogar segunda partida em 70% dos casos após primeira partida completa
+- **SC-006**: Partidas duram 8-12 Rodadas em média (alinhado com meta de duração)
+- **SC-007**: Bots tomam decisões válidas (sem travamentos ou ações inválidas) em 100% dos Turnos
+- **SC-008**: Timer de Turno funciona corretamente e força ação automática (pill aleatória) em 100% dos timeouts
+- **SC-009**: Progressão de XP e Schmeckles é persistida com 100% de confiabilidade entre sessões
+- **SC-010**: Interface exibe todas as informações críticas (Vidas, Resistência, contadores do pool, Turno atual, Rodada atual) de forma clara e sem sobreposição
+- **SC-011**: Jogadores identificam quando é seu Turno em menos de 2 segundos em média
+- **SC-012**: Draft é completado (manual ou auto) em 100% dos casos sem travar ou gerar inventário inválido
+- **SC-013**: Sistema escala pool de pílulas corretamente seguindo fórmula (base 6, +1 a cada 3 Rodadas, cap 12) em 100% das Rodadas
+- **SC-014**: Nova Rodada é gerada automaticamente quando pool esgota E ainda há 2+ jogadores vivos em 100% dos casos
+- **SC-015**: Proporção estratégia vs sorte atinge 70/30 (estimado via análise de winrate de bots vs jogadores experientes)
+- **SC-016**: Nenhum tipo de pílula (SAFE/DMG/HEAL/FATAL/LIFE) tem taxa de spawn fora da range configurada (+/- 5% de margem) em 95% das Rodadas
+- **SC-017**: Jogadores retornam para jogar segunda partida em 70% dos casos após primeira partida completa
+- **SC-018**: Transições entre Turnos (jogador ativo muda) acontecem em menos de 1 segundo em 95% dos casos
 
 ### Assumptions
 

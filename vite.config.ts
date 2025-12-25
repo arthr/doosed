@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   server: {
-    allowedHosts: ['7c70a1d2860f.ngrok-free.app'],
+    allowedHosts: [],
   },
   plugins: [react(), tailwind()],
   resolve: {
