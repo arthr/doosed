@@ -37,13 +37,16 @@ export function MatchScreen() {
   // Game loop hooks - T085-T087
   const { handlePillConsume, handleItemUse, handleTurnTimeout, startNextTurn } = useGameLoop();
 
-  // Inicia primeiro turno quando entra no MATCH
+  // Gerencia ciclo de turnos
   React.useEffect(() => {
-    if (match?.phase === MatchPhase.MATCH && currentRound && !activePlayer) {
-      // Delay para garantir que stores estão sincronizados
-      setTimeout(() => {
+    if (match?.phase !== MatchPhase.MATCH || !currentRound) return;
+
+    // Se não há activePlayer, inicia o próximo turno
+    if (!activePlayer) {
+      const timer = setTimeout(() => {
         startNextTurn();
       }, 100);
+      return () => clearTimeout(timer);
     }
   }, [match?.phase, currentRound, activePlayer, startNextTurn]);
 

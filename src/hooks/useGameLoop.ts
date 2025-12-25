@@ -107,14 +107,16 @@ export function useGameLoop() {
       clearActiveTurns();
       
       // Checa eliminação e fim de jogo
-      setTimeout(() => {
+      const checkAndContinue = () => {
         checkMatchEnd();
-      }, 500);
-
-      // Próximo turno
-      setTimeout(() => {
-        nextTurn();
-      }, 1000);
+        
+        // Próximo turno - incrementa índice
+        setTimeout(() => {
+          nextTurn();
+        }, 500);
+      };
+      
+      setTimeout(checkAndContinue, 500);
     },
     [pool, players, updateMatch, applyDamage, applyHeal, updatePlayer, logPill, clearActiveTurns, nextTurn, checkMatchEnd]
   );
@@ -162,7 +164,7 @@ export function useGameLoop() {
     if (!currentPlayer || currentPlayer.isEliminated) {
       nextTurn();
       setTimeout(() => {
-        // Recursivo - tentar próximo jogador
+        startNextTurn(); // Recursivo - tentar próximo jogador
       }, 100);
       return;
     }
