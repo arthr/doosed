@@ -30,10 +30,7 @@ export function createTestSeed(testName: string): number {
  * Helper para validar determinismo
  * Executa função N vezes com mesmo input, valida output idêntico
  */
-export function assertDeterministic<T>(
-  fn: () => T,
-  iterations: number = 3,
-): void {
+export function assertDeterministic<T>(fn: () => T, iterations: number = 3): void {
   const results: T[] = [];
 
   for (let i = 0; i < iterations; i++) {
@@ -94,4 +91,3 @@ export function advanceTime(ms: number): void {
 
 // Timeout configurado via vitest.config.ts
 // Constitution: testes devem ser rápidos (<3s)
-
