@@ -8,7 +8,6 @@
 import React from 'react';
 import { useMatchStore } from '../stores/matchStore';
 import { usePlayerStore } from '../stores/playerStore';
-import { usePoolStore } from '../stores/poolStore';
 import { useProgressionStore } from '../stores/progressionStore';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useTurnTimer } from '../hooks/useTurnTimer';
@@ -23,8 +22,10 @@ import { MatchPhase } from '../types/game';
 export function MatchScreen() {
   const { match, transitionPhase } = useMatchStore();
   const { players } = usePlayerStore();
-  const { pool } = usePoolStore();
   const profile = useProgressionStore();
+  
+  // Pool vem do currentRound (fonte única da verdade)
+  const pool = match?.currentRound?.pool || null;
 
   const humanPlayer = players.find((p) => p.id === profile.id);
   const opponents = players.filter((p) => p.id !== profile.id);

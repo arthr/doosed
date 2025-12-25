@@ -8,7 +8,6 @@
 import { useCallback, useMemo } from 'react';
 import { useMatchStore } from '../stores/matchStore';
 import { usePlayerStore } from '../stores/playerStore';
-import { usePoolStore } from '../stores/poolStore';
 import { useProgressionStore } from '../stores/progressionStore';
 import { useEventLogger } from './useEventLogger';
 import { resolvePillEffect } from '../core/effect-resolver';
@@ -16,11 +15,13 @@ import { BotEasy } from '../core/bot/bot-easy';
 import type { Player } from '../types/game';
 
 export function useGameLoop() {
-  const { match, nextTurn, endMatch } = useMatchStore();
+  const { match, nextTurn, endMatch, updateMatch } = useMatchStore();
   const { players, updatePlayer, applyDamage, applyHeal, setActiveTurn, clearActiveTurns } = usePlayerStore();
-  const { pool, consumePill } = usePoolStore();
   const { addXP, incrementGamesPlayed, incrementWins, addRoundsSurvived } = useProgressionStore();
   const { logPill, logTurn, logItem, logMatch, logBotDecision } = useEventLogger();
+
+  // Pool vem do currentRound (fonte única da verdade)
+  const pool = match?.currentRound?.pool || null;
 
   // Instância do bot Easy
   const botEasy = useMemo(() => new BotEasy(), []);
@@ -70,8 +71,15 @@ export function useGameLoop() {
 
       if (!pill || !player) return;
 
-      // Consume pill
-      consumePill(pillId);
+      // Consume pill - atualiza no matchStore
+      updateMatch((m) => {
+        if (!m.currentRound) return;
+        const pillIndex = m.currentRound.pool.pills.findIndex((p) => p.id === pillId);
+        if (pillIndex !== -1) {
+          m.currentRound.pool.pills.splice(pillIndex, 1);
+          m.currentRound.pool.size = m.currentRound.pool.pills.length;
+        }
+      });
 
       // Resolve efeito
       const effect = resolvePillEffect(pill, player);
@@ -108,7 +116,7 @@ export function useGameLoop() {
         nextTurn();
       }, 1000);
     },
-    [pool, players, consumePill, applyDamage, applyHeal, updatePlayer, logPill, clearActiveTurns, nextTurn, checkMatchEnd]
+    [pool, players, updateMatch, applyDamage, applyHeal, updatePlayer, logPill, clearActiveTurns, nextTurn, checkMatchEnd]
   );
 
   /**
