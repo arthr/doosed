@@ -35,7 +35,17 @@ export function MatchScreen() {
   const [isTargeting, setIsTargeting] = React.useState(false);
 
   // Game loop hooks - T085-T087
-  const { handlePillConsume, handleItemUse, handleTurnTimeout } = useGameLoop();
+  const { handlePillConsume, handleItemUse, handleTurnTimeout, startNextTurn } = useGameLoop();
+
+  // Inicia primeiro turno quando entra no MATCH
+  React.useEffect(() => {
+    if (match?.phase === MatchPhase.MATCH && currentRound && !activePlayer) {
+      // Delay para garantir que stores estão sincronizados
+      setTimeout(() => {
+        startNextTurn();
+      }, 100);
+    }
+  }, [match?.phase, currentRound, activePlayer, startNextTurn]);
 
   const handlePillClick = (pillId: string) => {
     if (!humanPlayer || !humanPlayer.isActiveTurn) return;
