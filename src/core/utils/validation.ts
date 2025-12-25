@@ -1,0 +1,170 @@
+/**
+ * Validation Utilities
+ *
+ * Validações de invariantes do jogo
+ * Constitution Principle VI: Testing Estratégico - validar invariantes críticos
+ */
+
+import type { Player, Pool, Match } from '../../types/game';
+import type { Pill } from '../../types/pill';
+
+// ============================================================================
+// Player Invariants
+// ============================================================================
+
+export function validatePlayerInvariants(player: Player): boolean {
+  // lives >= 0 (sempre)
+  if (player.lives < 0) {
+    console.error(`[INVARIANT] Player ${player.id} has negative lives: ${player.lives}`);
+    return false;
+  }
+
+  // extraResistance >= 0 && <= resistanceCap
+  if (player.extraResistance < 0 || player.extraResistance > player.resistanceCap) {
+    console.error(
+      `[INVARIANT] Player ${player.id} extraResistance out of bounds: ${player.extraResistance}`
+    );
+    return false;
+  }
+
+  // inventory <= 5 slots
+  if (player.inventory.length > 5) {
+    console.error(
+      `[INVARIANT] Player ${player.id} has too many inventory slots: ${player.inventory.length}`
+    );
+    return false;
+  }
+
+  // Se eliminado, não pode ter turno ativo
+  if (player.isEliminated && player.isActiveTurn) {
+    console.error(`[INVARIANT] Player ${player.id} is eliminated but has active turn`);
+    return false;
+  }
+
+  // Se lives === 0, deve estar em última chance
+  if (player.lives === 0 && !player.isLastChance && !player.isEliminated) {
+    console.error(`[INVARIANT] Player ${player.id} has 0 lives but not in last chance`);
+    return false;
+  }
+
+  return true;
+}
+
+// ============================================================================
+// Pool Invariants
+// ============================================================================
+
+export function validatePoolInvariants(pool: Pool): boolean {
+  // size >= 6 && <= 12
+  if (pool.size < 6 || pool.size > 12) {
+    console.error(`[INVARIANT] Pool size out of bounds: ${pool.size}`);
+    return false;
+  }
+
+  // pills.length === size
+  if (pool.pills.length !== pool.size) {
+    console.error(
+      `[INVARIANT] Pool pills length mismatch: ${pool.pills.length} !== ${pool.size}`
+    );
+    return false;
+  }
+
+  // revealed <= size
+  if (pool.revealed > pool.size) {
+    console.error(`[INVARIANT] Pool revealed count too high: ${pool.revealed} > ${pool.size}`);
+    return false;
+  }
+
+  // Diversidade mínima de shapes (mínimo 3)
+  const uniqueShapes = new Set(pool.pills.map((p) => p.shape));
+  if (uniqueShapes.size < 3) {
+    console.error(`[INVARIANT] Pool has insufficient shape diversity: ${uniqueShapes.size}`);
+    return false;
+  }
+
+  return true;
+}
+
+// ============================================================================
+// Match Invariants
+// ============================================================================
+
+export function validateMatchInvariants(match: Match): boolean {
+  // players.length >= 2 && <= 6
+  if (match.players.length < 2 || match.players.length > 6) {
+    console.error(`[INVARIANT] Match has invalid player count: ${match.players.length}`);
+    return false;
+  }
+
+  // turnOrder.length === players.length
+  if (match.turnOrder.length !== match.players.length) {
+    console.error(
+      `[INVARIANT] TurnOrder length mismatch: ${match.turnOrder.length} !== ${match.players.length}`
+    );
+    return false;
+  }
+
+  // activeTurnIndex < turnOrder.length
+  if (match.activeTurnIndex >= match.turnOrder.length) {
+    console.error(
+      `[INVARIANT] Active turn index out of bounds: ${match.activeTurnIndex} >= ${match.turnOrder.length}`
+    );
+    return false;
+  }
+
+  // Se phase === RESULTS, winnerId deve estar definido
+  if (match.phase === 'RESULTS' && !match.winnerId) {
+    console.error(`[INVARIANT] Match in RESULTS phase but no winner defined`);
+    return false;
+  }
+
+  // currentRound === rounds.length (se não está em LOBBY/DRAFT)
+  if (
+    match.phase !== 'LOBBY' &&
+    match.phase !== 'DRAFT' &&
+    match.currentRound !== match.rounds.length
+  ) {
+    console.error(
+      `[INVARIANT] Current round mismatch: ${match.currentRound} !== ${match.rounds.length}`
+    );
+    return false;
+  }
+
+  return true;
+}
+
+// ============================================================================
+// Type-specific validations
+// ============================================================================
+
+export function validatePillDistribution(
+  pills: Pill[],
+  expectedDistribution: Record<string, number>,
+  tolerance: number = 0.05
+): boolean {
+  const total = pills.length;
+  const counters: Record<string, number> = {};
+
+  // Contar tipos
+  for (const pill of pills) {
+    counters[pill.type] = (counters[pill.type] || 0) + 1;
+  }
+
+  // Verificar cada tipo contra distribuição esperada
+  for (const [type, expectedCount] of Object.entries(expectedDistribution)) {
+    const actualCount = counters[type] || 0;
+    const actualPercentage = actualCount / total;
+    const expectedPercentage = expectedCount / total;
+    const diff = Math.abs(actualPercentage - expectedPercentage);
+
+    if (diff > tolerance) {
+      console.error(
+        `[INVARIANT] Pill type ${type} distribution out of tolerance: ${actualPercentage.toFixed(2)} vs ${expectedPercentage.toFixed(2)}`
+      );
+      return false;
+    }
+  }
+
+  return true;
+}
+

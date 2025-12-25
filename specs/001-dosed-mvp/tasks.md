@@ -23,47 +23,47 @@
 
 ---
 
-## Phase 1: Setup (Project Initialization)
+## Phase 1: Setup (Project Initialization) ✅ COMPLETO
 
 **Purpose**: Initialize project structure and dependencies
 
-- [x] T001 Verify project dependencies installed (React 18+, TypeScript 5+, Vite, Zustand, Immer, Tailwind CSS) in package.json
-- [x] T002 [P] Create TypeScript types structure in src/types/ (game.ts, pill.ts, item.ts, status.ts, events.ts, config.ts)
-- [x] T003 [P] Create core logic structure in src/core/ (empty files for pool-generator, effect-resolver, collapse-handler, inventory-manager, quest-generator, state-machine, turn-manager, event-processor)
-- [x] T004 [P] Create bot AI structure in src/core/bot/ (bot-interface.ts, bot-easy.ts, bot-normal.ts, bot-hard.ts, bot-insane.ts)
-- [x] T005 [P] Create Zustand stores structure in src/stores/ (matchStore.ts, playerStore.ts, poolStore.ts, economyStore.ts, progressionStore.ts, logStore.ts)
-- [x] T006 [P] Create UI components structure in src/components/ui/ (button.tsx, pill-display.tsx, player-card.tsx, inventory-slot.tsx, timer-display.tsx, log-viewer.tsx)
-- [x] T007 [P] Create game components structure in src/components/game/ (PillPool.tsx, PlayerHUD.tsx, OpponentLine.tsx, ShopGrid.tsx, QuestTracker.tsx)
-- [x] T008 [P] Create screens structure in src/screens/ (HomeScreen.tsx, LobbyScreen.tsx, DraftScreen.tsx, MatchScreen.tsx, ShoppingScreen.tsx, ResultsScreen.tsx)
-- [x] T009 [P] Create hooks structure in src/hooks/ (useGameLoop.ts, useTurnTimer.ts, useEventLogger.ts)
-- [x] T010 Create game configuration file in src/config/game-config.ts with all balance values (timers, health, economy, pool, shapes, items, boosts per FR-182 to FR-186)
+- [X] T001 Verify project dependencies installed (React 18+, TypeScript 5+, Vite, Zustand, Immer, Tailwind CSS) in package.json
+- [X] T002 [P] Create TypeScript types structure in src/types/ (game.ts, pill.ts, item.ts, status.ts, events.ts, config.ts)
+- [X] T003 [P] Create core logic structure in src/core/ (empty files for pool-generator, effect-resolver, collapse-handler, inventory-manager, quest-generator, state-machine, turn-manager, event-processor)
+- [X] T004 [P] Create bot AI structure in src/core/bot/ (bot-interface.ts, bot-easy.ts, bot-normal.ts, bot-hard.ts, bot-insane.ts)
+- [X] T005 [P] Create Zustand stores structure in src/stores/ (matchStore.ts, playerStore.ts, poolStore.ts, economyStore.ts, progressionStore.ts, logStore.ts)
+- [X] T006 [P] Create UI components structure in src/components/ui/ (button.tsx, pill-display.tsx, player-card.tsx, inventory-slot.tsx, timer-display.tsx, log-viewer.tsx)
+- [X] T007 [P] Create game components structure in src/components/game/ (PillPool.tsx, PlayerHUD.tsx, OpponentLine.tsx, ShopGrid.tsx, QuestTracker.tsx)
+- [X] T008 [P] Create screens structure in src/screens/ (HomeScreen.tsx, LobbyScreen.tsx, DraftScreen.tsx, MatchScreen.tsx, ShoppingScreen.tsx, ResultsScreen.tsx)
+- [X] T009 [P] Create hooks structure in src/hooks/ (useGameLoop.ts, useTurnTimer.ts, useEventLogger.ts)
+- [X] T010 Create game configuration file in src/config/game-config.ts with all balance values (timers, health, economy, pool, shapes, items, boosts per FR-182 to FR-186)
 
 ---
 
-## Phase 2: Foundational (Core Types & Configuration)
+## Phase 2: Foundational (Core Types & Configuration) ✅ COMPLETO
 
 **Purpose**: Core data structures that ALL user stories depend on
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [x] T011 [P] Define PillType, PillModifier, PillState enums in src/types/pill.ts
-- [x] T012 [P] Define Pill interface with id, type, shape, modifiers, isRevealed, position, state in src/types/pill.ts
-- [x] T013 [P] Define Shape interface with id, name, assetPath, unlockRound, isSeasonal, seasonalTheme in src/types/pill.ts
-- [x] T014 [P] Define ItemCategory, Targeting, Availability enums in src/types/item.ts
-- [x] T015 [P] Define Item interface with id, name, description, category, cost, targeting, isStackable, stackLimit, availability in src/types/item.ts
-- [x] T016 [P] Define InventorySlot interface with slotIndex, item, quantity in src/types/item.ts
-- [x] T017 [P] Define StatusType enum and Status interface with id, type, duration, appliedAt, playerId in src/types/status.ts
-- [x] T018 [P] Define Player interface with all attributes (id, name, avatar, isBot, botLevel, lives, resistance, resistanceCap, extraResistance, inventory, pillCoins, activeStatuses, isEliminated, isLastChance, isActiveTurn, totalCollapses, shapeQuest, wantsShop) in src/types/game.ts
-- [x] T019 [P] Define Pool interface with roundNumber, pills, size, counters, revealed, unlockedShapes in src/types/game.ts
-- [x] T020 [P] Define ShapeQuest interface with id, roundNumber, playerId, sequence, progress, reward, status in src/types/game.ts
-- [x] T021 [P] Define Turn interface with playerId, timerRemaining, itemsUsed, pillConsumed, statusesApplied, startedAt, endedAt, targetingActive in src/types/game.ts
-- [x] T022 [P] Define Round interface with number, pool, turns, shapeQuests, boostsToApply, state, startedAt, endedAt in src/types/game.ts
-- [x] T023 [P] Define MatchPhase enum and Match interface with id, phase, players, rounds, currentRound, turnOrder, activeTurnIndex, seasonalShapes, shopSignals, winnerId, startedAt, endedAt in src/types/game.ts
-- [x] T024 [P] Define ShoppingPhase interface with qualifiedPlayers, timerRemaining, carts, confirmations, state in src/types/game.ts
-- [x] T025 [P] Define Profile interface with id, name, avatar, level, xp, schmeckles, gamesPlayed, wins, totalRoundsSurvived, mostUsedItems, lastUpdated in src/types/game.ts
-- [x] T026 [P] Define 8 core GameEvent types (PLAYER_JOINED, TURN_STARTED, ITEM_USED, PILL_CONSUMED, EFFECT_APPLIED, COLLAPSE_TRIGGERED, ROUND_COMPLETED, MATCH_ENDED) in src/types/events.ts with all required payload fields per research.md Decision 6
-- [x] T027 [P] Define GameConfig interface in src/types/config.ts matching structure from data-model.md section "Configuration Schema" with timers, health, economy, pool, shapes, items, boosts, inventory, xp sections
-- [x] T028 Implement DEFAULT_GAME_CONFIG in src/config/game-config.ts with all values from FR-182 specification (30s turn timer, 60s draft, 3 lives, 6 resistance, 100 initial coins, base pool size 6, 16 base shapes, etc.)
+- [X] T011 [P] Define PillType, PillModifier, PillState enums in src/types/pill.ts
+- [X] T012 [P] Define Pill interface with id, type, shape, modifiers, isRevealed, position, state in src/types/pill.ts
+- [X] T013 [P] Define Shape interface with id, name, assetPath, unlockRound, isSeasonal, seasonalTheme in src/types/pill.ts
+- [X] T014 [P] Define ItemCategory, Targeting, Availability enums in src/types/item.ts
+- [X] T015 [P] Define Item interface with id, name, description, category, cost, targeting, isStackable, stackLimit, availability in src/types/item.ts
+- [X] T016 [P] Define InventorySlot interface with slotIndex, item, quantity in src/types/item.ts
+- [X] T017 [P] Define StatusType enum and Status interface with id, type, duration, appliedAt, playerId in src/types/status.ts
+- [X] T018 [P] Define Player interface with all attributes (id, name, avatar, isBot, botLevel, lives, resistance, resistanceCap, extraResistance, inventory, pillCoins, activeStatuses, isEliminated, isLastChance, isActiveTurn, totalCollapses, shapeQuest, wantsShop) in src/types/game.ts
+- [X] T019 [P] Define Pool interface with roundNumber, pills, size, counters, revealed, unlockedShapes in src/types/game.ts
+- [X] T020 [P] Define ShapeQuest interface with id, roundNumber, playerId, sequence, progress, reward, status in src/types/game.ts
+- [X] T021 [P] Define Turn interface with playerId, timerRemaining, itemsUsed, pillConsumed, statusesApplied, startedAt, endedAt, targetingActive in src/types/game.ts
+- [X] T022 [P] Define Round interface with number, pool, turns, shapeQuests, boostsToApply, state, startedAt, endedAt in src/types/game.ts
+- [X] T023 [P] Define MatchPhase enum and Match interface with id, phase, players, rounds, currentRound, turnOrder, activeTurnIndex, seasonalShapes, shopSignals, winnerId, startedAt, endedAt in src/types/game.ts
+- [X] T024 [P] Define ShoppingPhase interface with qualifiedPlayers, timerRemaining, carts, confirmations, state in src/types/game.ts
+- [X] T025 [P] Define Profile interface with id, name, avatar, level, xp, schmeckles, gamesPlayed, wins, totalRoundsSurvived, mostUsedItems, lastUpdated in src/types/game.ts
+- [X] T026 [P] Define 8 core GameEvent types (PLAYER_JOINED, TURN_STARTED, ITEM_USED, PILL_CONSUMED, EFFECT_APPLIED, COLLAPSE_TRIGGERED, ROUND_COMPLETED, MATCH_ENDED) in src/types/events.ts with all required payload fields per research.md Decision 6
+- [X] T027 [P] Define GameConfig interface in src/types/config.ts matching structure from data-model.md section "Configuration Schema" with timers, health, economy, pool, shapes, items, boosts, inventory, xp sections
+- [X] T028 Implement DEFAULT_GAME_CONFIG in src/config/game-config.ts with all values from FR-182 specification (30s turn timer, 60s draft, 3 lives, 6 resistance, 100 initial coins, base pool size 6, 16 base shapes, etc.)
 
 **Checkpoint**: Foundation ready - core types and configuration complete.
 
@@ -107,9 +107,9 @@
 
 ### Test Configuration & Utilities
 
-- [x] T028a [P] Setup Vitest config in vitest.config.ts with coverage thresholds: statements 70%, branches 60%, functions 70%
-- [x] T028b [P] Setup fast-check integration in src/core/__tests__/setup.ts for property-based testing
-- [ ] T057a [P] Implement seeded RNG utility in src/core/utils/random.ts (mersenne twister or similar) ensuring deterministic output for testing
+- [X] T028a [P] Setup Vitest config in vitest.config.ts with coverage thresholds: statements 70%, branches 60%, functions 70%
+- [X] T028b [P] Setup fast-check integration in src/core/__tests__/setup.ts for property-based testing
+- [X] T057a [P] Implement seeded RNG utility in src/core/utils/random.ts (mersenne twister or similar) ensuring deterministic output for testing
 
 **Checkpoint**: Testing infrastructure complete. Core logic can be implemented with TDD approach.
 
@@ -127,59 +127,59 @@
 
 ### Core Logic for User Story 1
 
-#### Pool Generation (FR-170 to FR-181)
+#### Pool Generation (FR-170 to FR-181) ✅
 
-- [ ] T029 [P] [US1] Implement calculatePoolSize(roundNumber) in src/core/pool-generator.ts (base 6, +1 per 3 rounds, cap 12 per FR-172)
-- [ ] T030 [P] [US1] Implement calculateDistribution(roundNumber, config) in src/core/pool-generator.ts with linear interpolation between initial and final percentages per FR-171
-- [ ] T031 [P] [US1] Implement getUnlockedShapes(roundNumber, config) in src/core/pool-generator.ts filtering shapes by unlockRound and including active seasonal shapes per FR-175 to FR-179
-- [ ] T032 [US1] Implement generatePool(roundNumber, config) in src/core/pool-generator.ts generating pills with types, shapes, validating min 3 shape diversity per FR-177, per data-model.md "Generation Algorithm"
-- [ ] T033 [US1] Add pool validation function validatePoolInvariants(pool) in src/core/pool-generator.ts checking size bounds, shape diversity, distribution within ±5% per data-model.md "Invariantes"
+- [X] T029 [P] [US1] Implement calculatePoolSize(roundNumber) in src/core/pool-generator.ts (base 6, +1 per 3 rounds, cap 12 per FR-172)
+- [X] T030 [P] [US1] Implement calculateDistribution(roundNumber, config) in src/core/pool-generator.ts with linear interpolation between initial and final percentages per FR-171
+- [X] T031 [P] [US1] Implement getUnlockedShapes(roundNumber, config) in src/core/pool-generator.ts filtering shapes by unlockRound and including active seasonal shapes per FR-175 to FR-179
+- [X] T032 [US1] Implement generatePool(roundNumber, config) in src/core/pool-generator.ts generating pills with types, shapes, validating min 3 shape diversity per FR-177, per data-model.md "Generation Algorithm"
+- [X] T033 [US1] Add pool validation function validatePoolInvariants(pool) in src/core/pool-generator.ts checking size bounds, shape diversity, distribution within ±5% per data-model.md "Invariantes"
 
-#### Effect Resolution (FR-090 to FR-099)
+#### Effect Resolution (FR-090 to FR-099) ✅
 
-- [ ] T034 [P] [US1] Implement resolvePillEffect(pill, player) in src/core/effect-resolver.ts handling all 6 pill types (SAFE, DMG_LOW, DMG_HIGH, HEAL, FATAL, LIFE) per FR-093
-- [ ] T035 [P] [US1] Add modifier handling (INVERTED, DOUBLED) in resolvePillEffect per FR-092 and FR-093 (Inverted flips DMG/HEAL, Doubled multiplies by 2, FATAL/LIFE unaffected)
-- [ ] T036 [US1] Add Shield status check in resolvePillEffect blocking damage when SHIELDED active per FR-094 and FR-296 to FR-297
-- [ ] T037 [US1] Add resistance cap enforcement in resolvePillEffect respecting resistanceCap and extraResistanceCap per FR-070
+- [X] T034 [P] [US1] Implement resolvePillEffect(pill, player) in src/core/effect-resolver.ts handling all 6 pill types (SAFE, DMG_LOW, DMG_HIGH, HEAL, FATAL, LIFE) per FR-093
+- [X] T035 [P] [US1] Add modifier handling (INVERTED, DOUBLED) in resolvePillEffect per FR-092 and FR-093 (Inverted flips DMG/HEAL, Doubled multiplies by 2, FATAL/LIFE unaffected)
+- [X] T036 [US1] Add Shield status check in resolvePillEffect blocking damage when SHIELDED active per FR-094 and FR-296 to FR-297
+- [X] T037 [US1] Add resistance cap enforcement in resolvePillEffect respecting resistanceCap and extraResistanceCap per FR-070
 
-#### Collapse Mechanics (FR-095 to FR-100)
+#### Collapse Mechanics (FR-095 to FR-100) ✅
 
-- [ ] T038 [P] [US1] Implement handleCollapse(player) in src/core/collapse-handler.ts reducing lives by 1, resetting resistance to 6, checking if isLastChance (lives === 0) per FR-095 to FR-099
-- [ ] T039 [P] [US1] Add elimination check in handleCollapse: if already isLastChance and resistance <= 0, set isEliminated = true per FR-099
-- [ ] T040 [US1] Add collapse validation ensuring lives >= 0 always and resistance resets correctly per data-model.md "Player State Transitions"
+- [X] T038 [P] [US1] Implement handleCollapse(player) in src/core/collapse-handler.ts reducing lives by 1, resetting resistance to 6, checking if isLastChance (lives === 0) per FR-095 to FR-099
+- [X] T039 [P] [US1] Add elimination check in handleCollapse: if already isLastChance and resistance <= 0, set isEliminated = true per FR-099
+- [X] T040 [US1] Add collapse validation ensuring lives >= 0 always and resistance resets correctly per data-model.md "Player State Transitions"
 
-#### Inventory Management (FR-012 to FR-018, FR-050 to FR-058)
+#### Inventory Management (FR-012 to FR-018, FR-050 to FR-058) ✅
 
-- [ ] T041 [P] [US1] Implement addItemToInventory(player, item) in src/core/inventory-manager.ts handling stackable vs non-stackable, 5 slot limit per FR-012 to FR-017
-- [ ] T042 [P] [US1] Implement removeItemFromInventory(player, itemId) in src/core/inventory-manager.ts decrementing stack or removing slot per FR-018
-- [ ] T043 [P] [US1] Implement useItem(player, item, target) in src/core/inventory-manager.ts applying item effects (Scanner reveals pill, Inverter adds modifier, Shield applies status, etc.) per FR-021 to FR-042 and FR-050 to FR-058
-- [ ] T044 [US1] Add inventory validation function validateInventory(player) ensuring length <= 5, stackables within limits, per data-model.md "InventorySlot Invariantes"
+- [X] T041 [P] [US1] Implement addItemToInventory(player, item) in src/core/inventory-manager.ts handling stackable vs non-stackable, 5 slot limit per FR-012 to FR-017
+- [X] T042 [P] [US1] Implement removeItemFromInventory(player, itemId) in src/core/inventory-manager.ts decrementing stack or removing slot per FR-018
+- [X] T043 [P] [US1] Implement useItem(player, item, target) in src/core/inventory-manager.ts applying item effects (Scanner reveals pill, Inverter adds modifier, Shield applies status, etc.) per FR-021 to FR-042 and FR-050 to FR-058
+- [X] T044 [US1] Add inventory validation function validateInventory(player) ensuring length <= 5, stackables within limits, per data-model.md "InventorySlot Invariantes"
 
-#### Turn Management (FR-048 to FR-067)
+#### Turn Management (FR-048 to FR-067) ✅
 
-- [ ] T045 [P] [US1] Implement initializeTurnOrder(players) in src/core/turn-manager.ts randomizing player order once at match start per FR-048
-- [ ] T046 [P] [US1] Implement getNextPlayer(turnOrder, currentIndex, players) in src/core/turn-manager.ts skipping eliminated players, maintaining round-robin order per FR-049, FR-065, FR-066
-- [ ] T047 [US1] Implement startTurn(match, playerId) in src/core/turn-manager.ts initializing turn timer (30s default), setting isActiveTurn per FR-062, FR-064
-- [ ] T048 [US1] Implement endTurn(match, turn) in src/core/turn-manager.ts finalizing turn when pill consumed or timer expires, auto-consuming random pill on timeout per FR-061, FR-063
+- [X] T045 [P] [US1] Implement initializeTurnOrder(players) in src/core/turn-manager.ts randomizing player order once at match start per FR-048
+- [X] T046 [P] [US1] Implement getNextPlayer(turnOrder, currentIndex, players) in src/core/turn-manager.ts skipping eliminated players, maintaining round-robin order per FR-049, FR-065, FR-066
+- [X] T047 [US1] Implement startTurn(match, playerId) in src/core/turn-manager.ts initializing turn timer (30s default), setting isActiveTurn per FR-062, FR-064
+- [X] T048 [US1] Implement endTurn(match, turn) in src/core/turn-manager.ts finalizing turn when pill consumed or timer expires, auto-consuming random pill on timeout per FR-061, FR-063
 
-#### State Machine (FR-001 to FR-020, FR-043 to FR-067)
+#### State Machine (FR-001 to FR-020, FR-043 to FR-067) ✅
 
-- [ ] T049 [P] [US1] Define MatchPhase state machine (LOBBY → DRAFT → MATCH → SHOPPING → RESULTS) in src/core/state-machine.ts with transition validation per plan.md "Phase Transitions"
-- [ ] T050 [US1] Implement transitionToPhase(match, newPhase) in src/core/state-machine.ts validating allowed transitions, initializing phase-specific state (e.g., starting draft timer, generating first round pool)
-- [ ] T051 [US1] Implement checkMatchEnd(match) in src/core/state-machine.ts detecting when only 1 player alive, setting winnerId, transitioning to RESULTS per FR-111 to FR-113
+- [X] T049 [P] [US1] Define MatchPhase state machine (LOBBY → DRAFT → MATCH → SHOPPING → RESULTS) in src/core/state-machine.ts with transition validation per plan.md "Phase Transitions"
+- [X] T050 [US1] Implement transitionToPhase(match, newPhase) in src/core/state-machine.ts validating allowed transitions, initializing phase-specific state (e.g., starting draft timer, generating first round pool)
+- [X] T051 [US1] Implement checkMatchEnd(match) in src/core/state-machine.ts detecting when only 1 player alive, setting winnerId, transitioning to RESULTS per FR-111 to FR-113
 
-#### Event Processor (FR-186.1 to FR-186.19, research.md Decision 6)
+#### Event Processor (FR-186.1 to FR-186.19, research.md Decision 6) ✅
 
-- [ ] T052 [P] [US1] Implement processEvent(state, event) reducer in src/core/event-processor.ts handling all 8 core event types deterministicly per research.md Decision 6
-- [ ] T053 [P] [US1] Add state validation after each event in processEvent checking invariants (lives >= 0, inventory <= 5, resistance valid, pool non-empty mid-round) per FR-186.19
-- [ ] T054 [US1] Add error recovery in processEvent: DEV mode pauses with debug overlay, PROD mode retries then fallback to Home saving XP/Schmeckles partial per FR-186.8 to FR-186.10 and research.md Decision 3
+- [X] T052 [P] [US1] Implement processEvent(state, event) reducer in src/core/event-processor.ts handling all 8 core event types deterministicly per research.md Decision 6
+- [X] T053 [P] [US1] Add state validation after each event in processEvent checking invariants (lives >= 0, inventory <= 5, resistance valid, pool non-empty mid-round) per FR-186.19
+- [X] T054 [US1] Add error recovery in processEvent: DEV mode pauses with debug overlay, PROD mode retries then fallback to Home saving XP/Schmeckles partial per FR-186.8 to FR-186.10 and research.md Decision 3
 
-#### Bot AI - Easy Level (FR-007, FR-114 to FR-124a, research.md Decision 7)
+#### Bot AI - Easy Level (FR-007, FR-114 to FR-124a, research.md Decision 7) ✅
 
-- [ ] T055 [P] [US1] Define BotInterface with decideDraftAction, decideTurnAction, decideShoppingAction methods in src/core/bot/bot-interface.ts
-- [ ] T056 [US1] Implement botEasyDecision(state, seed) in src/core/bot/bot-easy.ts with conservative logic: prefer revealed SAFE pills (80% when available), use Pocket Pill/Shield when health low, avoid risks per FR-115
-- [ ] T057 [US1] Add deterministic seeded RNG in src/core/utils/random.ts ensuring same seed produces same decisions for replay and testing
-- [ ] T058 [US1] Add bot timeout handling: if no action in 5s, force random pill consumption from available pool (simplest valid action); if 3+ consecutive failures, eliminate bot with log error per FR-124a and research.md Decision 3
+- [X] T055 [P] [US1] Define BotInterface with decideDraftAction, decideTurnAction, decideShoppingAction methods in src/core/bot/bot-interface.ts
+- [X] T056 [US1] Implement botEasyDecision(state, seed) in src/core/bot/bot-easy.ts with conservative logic: prefer revealed SAFE pills (80% when available), use Pocket Pill/Shield when health low, avoid risks per FR-115
+- [X] T057 [US1] Add deterministic seeded RNG in src/core/utils/random.ts ensuring same seed produces same decisions for replay and testing
+- [ ] T058 [US1] Add bot timeout handling: if no action in 5s, force random pill consumption from available pool (simplest valid action); if 3+ consecutive failures, eliminate bot with log error per FR-124a and research.md Decision 3 (será implementado em turnManager)
 
 ---
 
