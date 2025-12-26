@@ -1,13 +1,26 @@
 <!--
 Sync Impact Report:
-- Version: 1.1.0 (pragmatic event limit)
+- Version: 1.2.0 → 1.3.0 (MINOR - simplificação de princípio existente)
 - Last Amended: 2025-12-25
-- Changes: Principle III event limit relaxed from "máximo 8" to "8-12 principais"
-- Rationale: Maintains simplicity while allowing organic expansion (Quest, Shop, Status events)
-- Impact: No immediate changes (MVP already has 8 events) - allows future flexibility
-- Templates requiring updates: None (guideline change only)
-- Follow-up: Update spec/plan references to reflect 8-12 range
+- Changes: Princípio I simplificado - removido enforcement obrigatório e referências a steering/
+- Rationale: 
+  * Simplificar governança de documentação focando apenas em docs/ como fonte única
+  * Remover overhead de scripts e validações que não agregavam valor proporcional
+  * Manter essência do princípio (docs como verdade) sem burocracia excessiva
+- Impact:
+  * Scripts .cursor/rules/docs-workflow/scripts/ não são mais obrigatórios
+  * Diretório steering/ não é mais mencionado na constitution (pode ser deprecated)
+  * Apêndice docs/99-apendice/fontes-e-recencia.md não requer manutenção obrigatória
+  * Reduz fricção no workflow de desenvolvimento mantendo clareza documental
+- Templates requiring updates:
+  * ✅ Nenhuma mudança necessária - templates não referenciam enforcement específico do Princípio I
+- Follow-up:
+  * Avaliar deprecação do diretório steering/
+  * Considerar remoção de scripts em .cursor/rules/docs-workflow/ se não mais utilizados
+  * Atualizar docs/ se houver menções ao processo antigo
 - Previous versions:
+  * 1.2.0 (2025-12-25): Princípio VIII adicionado (DRY/KISS/YAGNI/SOLID enforcement)
+  * 1.1.0 (2025-12-25): Event limit relaxed from "máximo 8" to "8-12 principais"
   * 1.0.0 (2025-12-25): Initial constitution with rigid 8-event limit
 -->
 
@@ -17,14 +30,9 @@ Sync Impact Report:
 
 ### I. Documentação como Fonte da Verdade
 
-A documentação completa e normativa reside em `docs/`. O diretório `steering/` é normativo e curto, devendo sempre refletir e apontar para `docs/`. Em caso de conflito, a prioridade é: `docs/` > `steering/` > demais fontes.
+A documentação completa e normativa reside em `docs/`.
 
 **Rationale**: Para um projeto solo dev, manter uma única fonte confiável evita dispersão e inconsistências que consomem tempo de desenvolvimento. A documentação rastreável permite evolução sustentável do projeto.
-
-**Enforcement**:
-- DEVE rodar `python .cursor/rules/docs-workflow/scripts/update_fontes_recencia.py` após alterações em `docs/` ou `steering/`
-- DEVE rodar `python .cursor/rules/docs-workflow/scripts/check_steering.py` para validar consistência
-- Apêndice de recência em `docs/99-apendice/fontes-e-recencia.md` DEVE ser mantido atualizado
 
 ### II. Solo Dev First (Simplicidade)
 
@@ -103,6 +111,50 @@ Toda documentação, mensagens de commit, código de agentes e comunicação do 
 - Código (identificadores) em inglês
 - NÃO usar emojis em código ou documentação
 
+### VIII. Princípios de Design de Software (DRY, KISS, YAGNI, SOLID)
+
+Aderência rigorosa aos princípios fundamentais de engenharia de software. Código DEVE ser DRY (Don't Repeat Yourself), KISS (Keep It Simple, Stupid), YAGNI (You Aren't Gonna Need It) e seguir princípios SOLID. Duplicação e complexidade prematura são violações não-negociáveis.
+
+**Rationale**: Estes princípios são pilares da engenharia de software sustentável. Para um solo dev, violá-los resulta em débito técnico exponencial que compromete velocidade e qualidade de longo prazo. Enforcement rigoroso previne erosão gradual da qualidade do código.
+
+**DRY (Don't Repeat Yourself)**:
+- NUNCA duplicar lógica de negócio
+- DEVE extrair código duplicado em funções/componentes reutilizáveis após segunda ocorrência
+- Configurações e constantes DEVEM estar centralizadas
+- EXCEÇÃO: Duplicação acidental (código similar mas com propósitos distintos) é aceitável
+
+**KISS (Keep It Simple, Stupid)**:
+- DEVE escolher a solução mais simples que atende aos requisitos
+- EVITAR abstrações prematuras sem necessidade comprovada
+- PREFERIR composição sobre herança complexa
+- Código DEVE ser legível por humanos sem necessidade de documentação extensa
+
+**YAGNI (You Aren't Gonna Need It)**:
+- NÃO implementar funcionalidade especulativa (features "para o futuro")
+- DEVE implementar apenas o necessário para requisitos atuais
+- Extensibilidade DEVE ser considerada mas não pré-implementada
+- Refatoração posterior é preferível a design prematuro
+
+**SOLID Principles**:
+- **S (Single Responsibility)**: Cada módulo/classe DEVE ter uma única razão para mudar
+- **O (Open/Closed)**: Código DEVE ser aberto para extensão, fechado para modificação
+- **L (Liskov Substitution)**: Subtipos DEVEM ser substituíveis por seus tipos base
+- **I (Interface Segregation)**: Interfaces específicas são melhores que interfaces gerais
+- **D (Dependency Inversion)**: Depender de abstrações, não de implementações concretas
+
+**Enforcement**:
+- Code reviews DEVEM incluir checklist DRY/KISS/YAGNI/SOLID explícito
+- Violações DEVEM ser justificadas em "Complexity Tracking" com rationale forte
+- Pull requests com duplicação não justificada DEVEM ser rejeitados
+- Refactoring para compliance DEVE ser priorizado em debt management
+- Constitution checks DEVEM validar conformidade antes de Phase 0 research
+- Exemplos práticos:
+  * DRY: Lógica de validação de eventos NÃO DEVE existir em cliente e servidor separadamente
+  * KISS: Preferir funções puras a state machines complexas quando possível
+  * YAGNI: NÃO implementar sistema de achievements até ser requisito de spec
+  * SOLID-S: Hook de timer NÃO DEVE também gerenciar lógica de pontuação
+  * SOLID-D: Componentes UI DEVEM depender de interfaces de stores, não de implementações Zustand específicas
+
 ## Arquitetura e Estrutura
 
 ### Camadas da Aplicação
@@ -131,8 +183,7 @@ dosed/
 │   ├── screens/           # Screens (PascalCase)
 │   ├── stores/            # Zustand stores
 │   └── types/             # Contratos TypeScript
-├── docs/                  # Documentação oficial (fonte da verdade)
-└── steering/              # Normativo curto (reflete docs)
+└── docs/                  # Documentação oficial (fonte da verdade)
 ```
 
 ### Rules e Ferramentas
@@ -152,6 +203,7 @@ Esta Constitution supersede todas as outras práticas e diretrizes. Em caso de c
 - Todas as PRs e reviews DEVEM verificar compliance com os princípios
 - Violações DEVEM ser justificadas em "Complexity Tracking" no plano
 - Constitution checks são gates obrigatórios antes de Phase 0 (research)
+- Princípio VIII (DRY/KISS/YAGNI/SOLID) DEVE ter checklist explícito em code reviews
 
 ### Emendas
 
@@ -175,4 +227,4 @@ Para orientações operacionais durante desenvolvimento, consultar:
 - `.cursor/rules/` para rules específicas por domínio
 - `docs/00-start-here/dev-workflow.md` para workflow de desenvolvimento
 
-**Version**: 1.1.0 | **Ratified**: 2025-12-25 | **Last Amended**: 2025-12-25
+**Version**: 1.3.0 | **Ratified**: 2025-12-25 | **Last Amended**: 2025-12-25
