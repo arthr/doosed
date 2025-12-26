@@ -107,7 +107,7 @@ export function useGameLoop() {
       setTimeout(() => {
         checkMatchEnd();
         
-        // ✅ Ler estado ATUALIZADO diretamente do store (evita closure stale)
+        // Ler estado ATUALIZADO diretamente do store (evita closure stale)
         const { match: currentMatch } = useMatchStore.getState();
         const { players: currentPlayers } = usePlayerStore.getState();
         

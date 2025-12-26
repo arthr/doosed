@@ -152,7 +152,7 @@ React.useEffect(() => {
 - [ ] Testar manualmente: consumir DMG_LOW e validar Colapso
 - [X] Implementar T091b (pool exhaustion)
 - [X] Fix adicional: Corrigir closure stale (usar getState() direto)
-- [ ] Testar manualmente: esgotar pool e validar Round 2
+- [X] Testar manualmente: esgotar pool e validar Round 2 ✅ PASSOU
 - [ ] Implementar T091c (turn cycle - useGameLoop)
 - [ ] Implementar T091d (turn cycle - MatchScreen)
 - [ ] Testar manualmente: alternância de turnos

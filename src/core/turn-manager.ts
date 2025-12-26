@@ -6,7 +6,7 @@
  * - Round-robin (pular jogadores eliminados)
  * - Início e fim de turno
  * - Timer management (30s default)
- * - Auto-consumo de pill aleat
+ * - Auto-consumo de pill aleatória
 
 ória em timeout
  *

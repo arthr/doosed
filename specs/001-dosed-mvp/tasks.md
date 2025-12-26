@@ -260,7 +260,7 @@
 
 **Problema**: Quando pool esgota, jogo trava (não avança para Round 2). Causa: lógica de detecção de pool vazio não existe - `nextRound()` nunca é chamado após pool esgotar.
 
-- [ ] T091b [US1] Implement pool exhaustion detection in src/hooks/useGameLoop.ts handlePillConsume: After checkMatchEnd(), check if currentPool.pills.length === 0 AND alivePlayers >= 2, if true call nextRound() + startNextTurn(), else call clearActiveTurns() + nextTurn() + startNextTurn() per FR-045 and Bug #2 solution in bug-report-2025-12-25.md
+- [X] T091b [US1] Implement pool exhaustion detection in src/hooks/useGameLoop.ts handlePillConsume: After checkMatchEnd(), check if currentPool.pills.length === 0 AND alivePlayers >= 2, if true call nextRound() + startNextTurn(), else call clearActiveTurns() + nextTurn() + startNextTurn() per FR-045 and Bug #2 solution in bug-report-2025-12-25.md
 
 #### Bug #3: Bot Para de Jogar Após Primeira Ação
 
