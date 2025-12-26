@@ -1,21 +1,24 @@
 /**
  * DraftScreen - Tela de draft de itens
  * 
- * T076: 60s timer, shop grid (DRAFT/BOTH), inventory (5 slots), pill coins, confirm
- * T084: Wire DraftScreen → Match (Integration)
+ * STATUS: DESINTEGRADO - Apenas estrutura visual
+ * TODO REFACTOR: Reintegrar após refatoração de hooks e stores
+ * 
+ * Componentes visuais mantidos:
+ * - ShopGrid, InventorySlot, TimerDisplay
+ * 
+ * Lógica removida (será reintegrada):
+ * - useTurnTimer (draft timeout)
+ * - Compra de itens
+ * - Gestão de inventário
+ * - Transição automática para MATCH
  */
 
 import React from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
-import { useProgressionStore } from '../stores/progressionStore';
-import { useTurnTimer } from '../hooks/useTurnTimer';
 import { Button } from '../components/ui/button';
 import { TimerDisplay } from '../components/ui/timer-display';
 import { ShopGrid } from '../components/game/ShopGrid';
 import { InventorySlot } from '../components/ui/inventory-slot';
-import type { Item } from '../types/game';
-import { MatchPhase } from '../types/game';
 import { ItemCategory, Targeting, Availability } from '../types/item';
 
 // Mock de itens (será substituído por config real)
@@ -58,44 +61,29 @@ const MOCK_ITEMS: Item[] = [
 const DRAFT_TIME = 60;
 
 export function DraftScreen() {
-  const { transitionPhase, nextRound } = useMatchStore();
-  const { players, addToInventory, spendPillCoins } = usePlayerStore();
-  const profile = useProgressionStore();
+  // TODO REFACTOR: Reintegrar hooks refatorados aqui
+  // - useDraftData() - dados do draft (player, coins, inventory)
+  // - useDraftTimer() - timer com auto-transição
+  // - useItemPurchase() - compra de itens
 
-  const humanPlayer = players.find((p) => p.id === profile.id);
-  const playerCoins = humanPlayer?.pillCoins || 100;
-
-  // T084: Timer com auto-transição para MATCH
-  const handleDraftTimeout = React.useCallback(() => {
-    // Bots fazem compras automáticas (simplificado)
-    
-    // Inicia match
-    nextRound();
-    transitionPhase(MatchPhase.MATCH);
-  }, [nextRound, transitionPhase]);
-
-  const { timeRemaining } = useTurnTimer({
-    duration: DRAFT_TIME,
-    onTimeout: handleDraftTimeout,
-    autoStart: true,
-  });
+  // Mock data para manter estrutura visual
+  const mockTimeRemaining = 60;
+  const mockPlayerCoins = 100;
+  const mockInventorySlots = Array.from({ length: 5 }, (_, i) => ({
+    slotIndex: i,
+    item: null,
+    quantity: 0,
+  }));
 
   const handleConfirm = () => {
-    handleDraftTimeout();
+    console.log('[DESINTEGRADO] Confirm clicked');
+    // TODO REFACTOR: Reintegrar transição para MATCH
   };
 
-  const handleItemPurchase = (item: Item) => {
-    if (!humanPlayer || playerCoins < item.cost) return;
-    
-    spendPillCoins(humanPlayer.id, item.cost);
-    addToInventory(humanPlayer.id, item);
+  const handleItemPurchase = (item: any) => {
+    console.log('[DESINTEGRADO] Item purchase:', item);
+    // TODO REFACTOR: Reintegrar com useItemPurchase
   };
-
-  // Preenche slots vazios até 5
-  const inventorySlots = humanPlayer ? [...humanPlayer.inventory] : [];
-  while (inventorySlots.length < 5) {
-    inventorySlots.push({ slotIndex: inventorySlots.length, item: null, quantity: 0 });
-  }
 
   return (
     <div className="min-h-screen bg-gray-900 p-8">
@@ -110,9 +98,9 @@ export function DraftScreen() {
           <div className="flex items-center gap-6">
             <div className="text-right">
               <div className="text-gray-400 text-sm">Pill Coins</div>
-              <div className="text-yellow-500 font-bold text-3xl">{playerCoins}</div>
+              <div className="text-yellow-500 font-bold text-3xl">{mockPlayerCoins}</div>
             </div>
-            <TimerDisplay seconds={timeRemaining} maxSeconds={DRAFT_TIME} size="lg" />
+            <TimerDisplay seconds={mockTimeRemaining} maxSeconds={DRAFT_TIME} size="lg" />
           </div>
         </div>
 
@@ -120,7 +108,7 @@ export function DraftScreen() {
         <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 mb-6">
           <div className="text-white font-bold mb-3">Seu Inventário (5 slots)</div>
           <div className="flex gap-2">
-            {inventorySlots.map((slot, index) => (
+            {mockInventorySlots.map((slot, index) => (
               <InventorySlot key={index} slot={slot} slotIndex={index} isDisabled={true} />
             ))}
           </div>
@@ -131,7 +119,7 @@ export function DraftScreen() {
           <div className="text-white font-bold text-xl mb-4">Loja</div>
           <ShopGrid
             items={MOCK_ITEMS}
-            playerCoins={playerCoins}
+            playerCoins={mockPlayerCoins}
             onItemPurchase={handleItemPurchase}
             availability="DRAFT"
           />

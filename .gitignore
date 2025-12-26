@@ -34,8 +34,9 @@ Thumbs.db
 Desktop.ini
 
 # IDEs
-.vscode/
 .idea/
+# VS Code - manter configurações compartilhadas, ignorar apenas debug cache
+.chrome-debug/
 
 # Context Files
 CHAT-CONTEXT.md

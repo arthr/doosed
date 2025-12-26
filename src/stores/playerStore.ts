@@ -14,6 +14,7 @@ import { immer } from 'zustand/middleware/immer';
 import type { Player, Status, Item } from '../types/game';
 import { addItemToInventory, removeItemFromInventory } from '../core/inventory-manager';
 import { processCollapseOrElimination } from '../core/collapse-handler';
+import { useMatchStore } from './matchStore';
 
 interface PlayerState {
   // Estado dos jogadores (sincronizado com matchStore.match.players)
@@ -40,20 +41,41 @@ export const usePlayerStore = create<PlayerState>()(
 
     /**
      * Inicializa array de players
+     * IMPORTANTE: playerStore.players agora é sincronizado com matchStore
      */
     setPlayers: (players: Player[]) =>
       set((state) => {
         state.players = players;
+        
+        // Sincroniza com matchStore (single source of truth)
+        const matchStore = useMatchStore.getState();
+        if (matchStore.match) {
+          matchStore.updateMatch((m) => {
+            m.players = players;
+          });
+        }
       }),
 
     /**
      * Atualiza player específico com função customizada
+     * IMPORTANTE: Sincroniza automaticamente com matchStore
      */
     updatePlayer: (playerId: string, updater) =>
       set((state) => {
         const player = state.players.find((p: Player) => p.id === playerId);
         if (player) {
           updater(player);
+          
+          // Sincroniza com matchStore (single source of truth)
+          const matchStore = useMatchStore.getState();
+          if (matchStore.match) {
+            matchStore.updateMatch((m) => {
+              const matchPlayer = m.players.find((p: Player) => p.id === playerId);
+              if (matchPlayer) {
+                Object.assign(matchPlayer, player);
+              }
+            });
+          }
         }
       }),
 
@@ -87,6 +109,17 @@ export const usePlayerStore = create<PlayerState>()(
             player.isActiveTurn = false;
           }
         }
+        
+        // Sincroniza com matchStore após damage/collapse
+        const matchStore = useMatchStore.getState();
+        if (matchStore.match) {
+          matchStore.updateMatch((m) => {
+            const matchPlayer = m.players.find((p: Player) => p.id === playerId);
+            if (matchPlayer) {
+              Object.assign(matchPlayer, player);
+            }
+          });
+        }
       }),
 
     /**
@@ -106,6 +139,17 @@ export const usePlayerStore = create<PlayerState>()(
           const overflow = player.resistance - player.resistanceCap;
           player.resistance = player.resistanceCap;
           player.extraResistance = Math.min(overflow, player.resistanceCap);
+        }
+        
+        // Sincroniza com matchStore após heal
+        const matchStore = useMatchStore.getState();
+        if (matchStore.match) {
+          matchStore.updateMatch((m) => {
+            const matchPlayer = m.players.find((p: Player) => p.id === playerId);
+            if (matchPlayer) {
+              Object.assign(matchPlayer, player);
+            }
+          });
         }
       }),
 

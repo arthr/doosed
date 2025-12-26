@@ -1,24 +1,28 @@
 /**
  * ResultsScreen - Tela de resultados da partida
  * 
- * T078: Winner, match stats, XP/Schmeckles earned, "Jogar Novamente" e "Menu Principal"
+ * STATUS: DESINTEGRADO - Apenas estrutura visual
+ * TODO REFACTOR: Reintegrar após refatoração de hooks e stores
+ * 
+ * Lógica removida (será reintegrada):
+ * - Cálculo de stats (pills, damage, collapses)
+ * - Cálculo de rewards (XP, Schmeckles)
+ * - Reset de match
+ * - Transições de fase
  */
 
 import React from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
-import { useProgressionStore } from '../stores/progressionStore';
 import { Button } from '../components/ui/button';
-import { MatchPhase } from '../types/game';
 
 export function ResultsScreen() {
-  const { match, resetMatch, transitionPhase } = useMatchStore();
-  const { players } = usePlayerStore();
-  const profile = useProgressionStore();
+  // TODO REFACTOR: Reintegrar hooks refatorados aqui
+  // - useMatchResults() - dados de resultados
+  // - useRewardsCalculation() - cálculo de XP/Schmeckles
+  // - useMatchReset() - reset de partida
 
-  const winner = players.find((p) => p.id === match?.winnerId);
-  const humanPlayer = players.find((p) => p.id === profile.id);
-  const isPlayerWinner = winner?.id === humanPlayer?.id;
+  // Mock data para manter estrutura visual
+  const mockIsPlayerWinner = true;
+  const mockWinner = { name: 'Você' };
 
   // Mock stats - será calculado dinamicamente
   const stats = {
@@ -47,15 +51,13 @@ export function ResultsScreen() {
   };
 
   const handlePlayAgain = () => {
-    // T089: Wire "Jogar Novamente" button
-    resetMatch();
-    transitionPhase(MatchPhase.LOBBY);
+    console.log('[DESINTEGRADO] Play again clicked');
+    // TODO REFACTOR: Reintegrar reset + transição
   };
 
   const handleMainMenu = () => {
-    // T090: Wire "Menu Principal" button
-    resetMatch();
-    transitionPhase(MatchPhase.LOBBY);
+    console.log('[DESINTEGRADO] Main menu clicked');
+    // TODO REFACTOR: Reintegrar reset + transição
   };
 
   return (
@@ -63,7 +65,7 @@ export function ResultsScreen() {
       <div className="max-w-4xl mx-auto">
         {/* Winner Announcement */}
         <div className="text-center mb-8">
-          {isPlayerWinner ? (
+          {mockIsPlayerWinner ? (
             <>
               <h1 className="text-6xl font-bold text-green-500 mb-4">VITÓRIA!</h1>
               <p className="text-gray-400 text-xl">Você sobreviveu ao caos farmacêutico!</p>
@@ -72,7 +74,7 @@ export function ResultsScreen() {
             <>
               <h1 className="text-6xl font-bold text-red-500 mb-4">ELIMINADO</h1>
               <p className="text-gray-400 text-xl">
-                Vencedor: <span className="text-white font-bold">{winner?.name || 'Desconhecido'}</span>
+                Vencedor: <span className="text-white font-bold">{mockWinner?.name || 'Desconhecido'}</span>
               </p>
             </>
           )}

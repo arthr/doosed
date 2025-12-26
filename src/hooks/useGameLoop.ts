@@ -1,65 +1,50 @@
 /**
- * useGameLoop - Hook principal do game loop
+ * useGameLoop - Hook orquestrador do game loop (REFATORADO)
  * 
- * Gerencia o ciclo de turnos, consumo de pills, bot AI, e transições
+ * SOLID-S Compliant: Single Responsibility
+ * Responsabilidade: Orquestrar hooks especializados (Composition over Monolith)
+ * 
+ * Hooks compostos:
+ * - usePillConsumption: consumo de pills
+ * - useTurnManagement: gestão de turnos
+ * - useBotExecution: execução de bot AI
+ * - useMatchEndDetection: detecção de fim de jogo
+ * - useItemActions: uso de itens
+ * 
  * T085-T088: Wire gameplay mechanics
  */
 
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useMatchStore } from '../stores/matchStore';
 import { usePlayerStore } from '../stores/playerStore';
-import { useProgressionStore } from '../stores/progressionStore';
-import { useEventLogger } from './useEventLogger';
-import { resolvePillEffect } from '../core/effect-resolver';
-import { BotEasy } from '../core/bot/bot-easy';
-import type { Player } from '../types/game';
+import { usePillConsumption } from './usePillConsumption';
+import { useTurnManagement } from './useTurnManagement';
+import { useBotExecution } from './useBotExecution';
+import { useMatchEndDetection } from './useMatchEndDetection';
+import { useItemActions } from './useItemActions';
 
 export function useGameLoop() {
-  const { match, nextTurn, nextRound, endMatch, updateMatch } = useMatchStore();
-  const { players, updatePlayer, applyDamage, applyHeal, setActiveTurn, clearActiveTurns } = usePlayerStore();
-  const { addXP, incrementGamesPlayed, incrementWins, addRoundsSurvived } = useProgressionStore();
-  const { logPill, logTurn, logItem, logMatch, logBotDecision } = useEventLogger();
+  const { match } = useMatchStore();
+  const { players } = usePlayerStore();
+
+  // Hooks especializados (SOLID-S)
+  const { consumePill } = usePillConsumption();
+  const {
+    getCurrentTurnPlayer,
+    advanceToNextTurn,
+    startTurnForPlayer,
+    skipEliminatedPlayerTurn,
+    handleTurnTimeout: getTurnTimeoutPillId,
+  } = useTurnManagement();
+  const { executeBotDecision, canBotAct } = useBotExecution();
+  const { checkAndHandleMatchEnd } = useMatchEndDetection();
+  const { handleItemClick } = useItemActions();
 
   // Pool vem do currentRound (fonte única da verdade)
   const pool = match?.currentRound?.pool || null;
 
-  // Instância do bot Easy
-  const botEasy = useMemo(() => new BotEasy(), []);
-
   /**
-   * Checa se match terminou
-   * T088: Wire match end detection
-   */
-  const checkMatchEnd = useCallback(() => {
-    const alivePlayers = players.filter((p) => !p.isEliminated);
-
-    if (alivePlayers.length === 1) {
-      const winner = alivePlayers[0];
-      
-      logMatch(`Partida terminada! Vencedor: ${winner.name}`, {
-        winnerId: winner.id,
-      });
-
-      // Calcula recompensas (mock - será refinado)
-      const xpReward = 150;
-      const isWinner = !winner.isBot;
-
-      if (isWinner) {
-        addXP(xpReward);
-        incrementWins();
-      }
-
-      incrementGamesPlayed();
-      addRoundsSurvived(match?.rounds.length || 0);
-
-      // Finaliza match
-      endMatch(winner.id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [players, match?.rounds.length]);
-
-  /**
-   * Consume pill e aplica efeitos
+   * Handler de consumo de pill (orquestra hooks especializados)
    * T085: Wire MatchScreen pill clicks
    */
   const handlePillConsume = useCallback(
@@ -71,179 +56,111 @@ export function useGameLoop() {
 
       if (!pill || !player) return;
 
-      // Consume pill - atualiza no matchStore
-      updateMatch((m) => {
-        if (!m.currentRound) return;
-        const pillIndex = m.currentRound.pool.pills.findIndex((p) => p.id === pillId);
-        if (pillIndex !== -1) {
-          m.currentRound.pool.pills.splice(pillIndex, 1);
-          m.currentRound.pool.size = m.currentRound.pool.pills.length;
-        }
-      });
+      // Consome pill (hook especializado)
+      consumePill(pill, player);
 
-      // Resolve efeito
-      const effect = resolvePillEffect(pill, player);
-
-      // Aplica efeito baseado no type
-      if (effect.type === 'HEAL') {
-        applyHeal(playerId, Math.abs(effect.value));
-      } else if (effect.type === 'DAMAGE') {
-        applyDamage(playerId, Math.abs(effect.value));
-      } else if (effect.type === 'LIFE') {
-        updatePlayer(playerId, (p) => {
-          p.lives = Math.min(3, p.lives + Math.abs(effect.value));
-        });
-      }
-
-      // Log
-      logPill(`${player.name} consumiu pill ${pill.shape} (${pill.type})`, {
-        playerId,
-        pillId,
-        pillType: pill.type,
-        effect,
-      });
-
-      // Checa eliminação e fim de jogo, depois avança turno ou rodada
+      // Após consumo, checa fim de jogo e avança turno
       setTimeout(() => {
-        checkMatchEnd();
+        const matchEnded = checkAndHandleMatchEnd();
         
-        // Ler estado ATUALIZADO diretamente do store (evita closure stale)
-        const { match: currentMatch } = useMatchStore.getState();
-        const { players: currentPlayers } = usePlayerStore.getState();
-        
-        const currentPool = currentMatch?.currentRound?.pool;
-        const alivePlayers = currentPlayers.filter((p) => !p.isEliminated);
-        
-        // Jogo terminou? Não avança (checkMatchEnd já lidou com transição)
-        if (alivePlayers.length <= 1) return;
-        
-        // Pool esgotou? Nova rodada (FR-045)
-        if (currentPool && currentPool.pills.length === 0) {
-          nextRound();  // Gera novo pool + reseta activeTurnIndex = 0
-          // NÃO chamar nextTurn() - nextRound() já resetou índice
-        } else {
-          // Pool tem pills → próximo turno normal
-          nextTurn();  // Incrementa activeTurnIndex
+        if (!matchEnded) {
+          advanceToNextTurn();
         }
-        
-        // Limpa turno ativo para triggar useEffect
-        clearActiveTurns();
-        // Note: useEffect detectará !activePlayer e chamará startNextTurn()
       }, 500);
     },
-    [pool, updateMatch, applyDamage, applyHeal, updatePlayer, logPill, clearActiveTurns, nextTurn, nextRound, checkMatchEnd]
+    [pool, players, consumePill, checkAndHandleMatchEnd, advanceToNextTurn]
   );
 
   /**
-   * Executa turno do bot
+   * Executa turno do bot (orquestra decisão + ação)
    */
-  const executeBotTurn = useCallback(
-    (bot: Player) => {
-      if (!pool || !match) return;
+  const executeBotTurnAction = useCallback(
+    (bot: typeof players[0]) => {
+      if (!canBotAct(bot)) return;
 
-      logBotDecision(`Bot ${bot.name} pensando...`, { botId: bot.id });
+      const decision = executeBotDecision(bot);
 
-      const opponents = players.filter((p) => p.id !== bot.id);
-      const seed = Date.now() + Math.random() * 1000;
-
-      const decision = botEasy.decideTurnAction(bot, opponents, pool, match, seed);
+      if (!decision) return;
 
       if (decision.type === 'CONSUME_PILL') {
         setTimeout(() => {
           handlePillConsume(decision.pillId, bot.id);
         }, 1000);
       } else if (decision.type === 'USE_ITEM') {
-        logBotDecision(`Bot tentou usar item ${decision.itemId}`, { botId: bot.id });
+        setTimeout(() => {
+          handleItemClick(bot.id, decision.itemId);
+        }, 1000);
       }
     },
-    [pool, match, players, botEasy, logBotDecision, handlePillConsume]
+    [canBotAct, executeBotDecision, handlePillConsume, handleItemClick]
   );
 
   /**
-   * Inicia próximo turno (inclui bot AI)
+   * Inicia próximo turno (orquestra hooks especializados)
    */
   const startNextTurn = useCallback(() => {
     if (!match) return;
 
-    const alivePlayers = players.filter((p) => !p.isEliminated);
-    if (alivePlayers.length <= 1) {
-      checkMatchEnd();
-      return;
-    }
+    // Checa fim de jogo
+    const matchEnded = checkAndHandleMatchEnd();
+    if (matchEnded) return;
 
-    const currentPlayerId = match.turnOrder[match.activeTurnIndex];
-    const currentPlayer = players.find((p) => p.id === currentPlayerId);
+    const currentPlayer = getCurrentTurnPlayer();
 
+    // Player eliminado? Pula turno
     if (!currentPlayer || currentPlayer.isEliminated) {
-      nextTurn();
+      skipEliminatedPlayerTurn();
       setTimeout(() => {
-        startNextTurn(); // Recursivo - tentar próximo jogador
+        startNextTurn(); // Recursivo - tenta próximo jogador
       }, 100);
       return;
     }
 
-    setActiveTurn(currentPlayerId);
-
-    logTurn(`Turno de ${currentPlayer.name}`, {
-      playerId: currentPlayerId,
-      roundNumber: match.currentRound?.number || 0,
-    });
+    // Inicia turno do player
+    startTurnForPlayer(currentPlayer);
 
     // Se é bot, executa IA
-    if (currentPlayer.isBot && pool) {
+    if (canBotAct(currentPlayer)) {
       setTimeout(() => {
-        executeBotTurn(currentPlayer);
+        executeBotTurnAction(currentPlayer);
       }, 2000);
     }
-  }, [match, players, pool, setActiveTurn, logTurn, nextTurn, checkMatchEnd, executeBotTurn]);
+  }, [
+    match,
+    checkAndHandleMatchEnd,
+    getCurrentTurnPlayer,
+    skipEliminatedPlayerTurn,
+    startTurnForPlayer,
+    canBotAct,
+    executeBotTurnAction,
+  ]);
 
   /**
-   * Usa item do inventário
+   * Usa item do inventário (delegado ao hook especializado)
    * T086: Wire item usage
    */
-  const handleItemUse = useCallback(
-    (playerId: string, itemId: string) => {
-      const player = players.find((p) => p.id === playerId);
-      if (!player) return;
-
-      const slot = player.inventory.find((s) => s.item?.id === itemId);
-      if (!slot || !slot.item) return;
-      
-      logItem(`${player.name} usou ${slot.item.name}`, {
-        playerId,
-        itemId,
-      });
-    },
-    [players, logItem]
-  );
+  const handleItemUse = handleItemClick;
 
   /**
    * Auto-consume random pill quando timer expira
    * T087: Wire turn timer expiration
    */
   const handleTurnTimeout = useCallback(() => {
-    if (!pool || !match) return;
-
     const activePlayer = players.find((p) => p.isActiveTurn);
-    if (!activePlayer || pool.pills.length === 0) return;
+    if (!activePlayer) return;
 
-    // Seleciona pill aleatória
-    const randomIndex = Math.floor(Math.random() * pool.pills.length);
-    const randomPill = pool.pills[randomIndex];
-
-    logTurn(`Timer expirou! ${activePlayer.name} consumiu pill aleatória`, {
-      playerId: activePlayer.id,
-      pillId: randomPill.id,
-    });
-
-    handlePillConsume(randomPill.id, activePlayer.id);
-  }, [pool, match, players, logTurn, handlePillConsume]);
+    const randomPillId = getTurnTimeoutPillId();
+    
+    if (randomPillId) {
+      handlePillConsume(randomPillId, activePlayer.id);
+    }
+  }, [players, getTurnTimeoutPillId, handlePillConsume]);
 
   return {
+    // Handlers públicos (compatibilidade com MatchScreen)
     handlePillConsume,
     handleItemUse,
     handleTurnTimeout,
     startNextTurn,
-    checkMatchEnd,
   };
 }

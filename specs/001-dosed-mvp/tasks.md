@@ -230,16 +230,16 @@
 
 ### Integration & Validation for User Story 1
 
-- [x] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to matchStore.transitionToPhase('LOBBY')
-- [x] T083 [US1] Wire LobbyScreen "Start" button to matchStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
-- [x] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to matchStore.transitionToPhase('MATCH'), generating first round pool, initializing turn 1
-- [x] T085 [US1] Wire MatchScreen pill clicks to poolStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
-- [x] T086 [US1] Wire MatchScreen item usage to playerStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
-- [x] T087 [US1] Wire turn timer expiration in MatchScreen to auto-consume random pill per FR-063
-- [x] T088 [US1] Wire match end detection (1 survivor) to matchStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
-- [x] T089 [US1] Wire ResultsScreen "Jogar Novamente" to reset matchStore and transition to LOBBY
-- [x] T090 [US1] Wire ResultsScreen "Menu Principal" to reset matchStore and transition to HOME
-- [x] T091 [US1] Add all event logging throughout match flow: PLAYER_JOINED on lobby, TURN_STARTED on turn start, ITEM_USED on item use, PILL_CONSUMED on pill consume, EFFECT_APPLIED on damage/heal, COLLAPSE_TRIGGERED on collapse, ROUND_COMPLETED on round end, MATCH_ENDED on match end per FR-186.14 to FR-186.18
+- [ ] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to matchStore.transitionToPhase('LOBBY')
+- [ ] T083 [US1] Wire LobbyScreen "Start" button to matchStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
+- [ ] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to matchStore.transitionToPhase('MATCH'), generating first round pool, initializing turn 1
+- [ ] T085 [US1] Wire MatchScreen pill clicks to poolStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
+- [ ] T086 [US1] Wire MatchScreen item usage to playerStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
+- [ ] T087 [US1] Wire turn timer expiration in MatchScreen to auto-consume random pill per FR-063
+- [ ] T088 [US1] Wire match end detection (1 survivor) to matchStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
+- [ ] T089 [US1] Wire ResultsScreen "Jogar Novamente" to reset matchStore and transition to LOBBY
+- [ ] T090 [US1] Wire ResultsScreen "Menu Principal" to reset matchStore and transition to HOME
+- [ ] T091 [US1] Add all event logging throughout match flow: PLAYER_JOINED on lobby, TURN_STARTED on turn start, ITEM_USED on item use, PILL_CONSUMED on pill consume, EFFECT_APPLIED on damage/heal, COLLAPSE_TRIGGERED on collapse, ROUND_COMPLETED on round end, MATCH_ENDED on match end per FR-186.14 to FR-186.18
 
 ---
 
@@ -251,13 +251,13 @@
 
 **Problema**: Pills são consumidas mas efeitos não são aplicados ao jogador (resistência/vidas não mudam). Causa: condição incorreta `effect.value > 0` para dano (valores negativos nunca satisfazem condição).
 
-- [X] T091a [US1] Fix pill effect application logic in src/hooks/useGameLoop.ts (L87-96): Remove sign checking, use Math.abs() for all effect types, rely only on effect.type to determine action (HEAL → applyHeal, DAMAGE → applyDamage, LIFE → updatePlayer with lives increment) per Bug #1 solution in bug-report-2025-12-25.md
+- [ ] T091a [US1] Fix pill effect application logic in src/hooks/useGameLoop.ts (L87-96): Remove sign checking, use Math.abs() for all effect types, rely only on effect.type to determine action (HEAL → applyHeal, DAMAGE → applyDamage, LIFE → updatePlayer with lives increment) per Bug #1 solution in bug-report-2025-12-25.md - **NOTA**: Bug foi corrigido mas código foi refatorado e desintegrado. Precisa ser revalidado após reintegração.
 
 #### Bug #2: Pool Não Avança para Nova Rodada
 
 **Problema**: Quando pool esgota, jogo trava (não avança para Round 2). Causa: lógica de detecção de pool vazio não existe - `nextRound()` nunca é chamado após pool esgotar.
 
-- [X] T091b [US1] Implement pool exhaustion detection in src/hooks/useGameLoop.ts handlePillConsume: After checkMatchEnd(), check if currentPool.pills.length === 0 AND alivePlayers >= 2, if true call nextRound() + startNextTurn(), else call clearActiveTurns() + nextTurn() + startNextTurn() per FR-045 and Bug #2 solution in bug-report-2025-12-25.md
+- [ ] T091b [US1] Implement pool exhaustion detection in src/hooks/useGameLoop.ts handlePillConsume: After checkMatchEnd(), check if currentPool.pills.length === 0 AND alivePlayers >= 2, if true call nextRound() + startNextTurn(), else call clearActiveTurns() + nextTurn() + startNextTurn() per FR-045 and Bug #2 solution in bug-report-2025-12-25.md - **NOTA**: Bug foi corrigido mas código foi refatorado e desintegrado. Precisa ser revalidado após reintegração.
 
 #### Bug #3: Bot Para de Jogar Após Primeira Ação
 
@@ -540,12 +540,19 @@ T037: Add resistance cap enforcement
 **Full MVP Tasks (US1-US3)**: 175 (Setup + Foundational + Testing + US1 + US2 + US3 + Bug Fixes + minimal Polish)
 
 **Suggested Next Step**: 
-- **CURRENT STATUS**: Setup, Foundational, and Integration phases complete (T001-T091 ✅)
-- **IMMEDIATE ACTION REQUIRED**: Fix 3 critical bugs blocking MVP (T091a-T091d) before proceeding to validation
-- **Bug Fixes Priority Order**:
-  1. T091a - Fix effect application (pill damage/heal/life not working)
-  2. T091b - Fix round transition (pool exhaustion not detected)
-  3. T091c + T091d - Fix turn cycle (bot stops playing after first action)
-- **After Bug Fixes**: Run validation tasks (T092a-T092c) to confirm each fix, then complete full validation (T092)
-- **Next Phase**: Once US1 is validated, proceed to User Story 2 (Economy) or Polish phase based on MVP priorities
+- **CURRENT STATUS (2025-12-26)**: 
+  - ✅ Setup, Foundational phases complete (T001-T081)
+  - ⚠️ Integration phase DESINTEGRADA (T082-T091) - Refatoração em progresso
+  - 🔄 Refatoração SOLID-S completa:
+    - ✅ Hooks especializados criados (usePillConsumption, useTurnManagement, useBotExecution, useMatchEndDetection, useItemActions)
+    - ✅ useGameLoop refatorado como orquestrador
+    - ✅ Todos os componentes desintegrados (MatchScreen, DraftScreen, LobbyScreen, ResultsScreen)
+    - ⏳ playerStore consolidação pendente (Single Source of Truth com matchStore)
+- **IMMEDIATE ACTION REQUIRED**: 
+  1. Concluir consolidação do playerStore (Opção A: matchStore como fonte única)
+  2. Reintegrar MatchScreen com hooks refatorados
+  3. Reintegrar outras screens (Draft, Lobby, Results)
+  4. Revalidar bugs T091a-T091d após reintegração
+- **After Reintegration**: Run validation tasks (T092a-T092c) to confirm bugs are still fixed, then complete full validation (T092)
+- **Next Phase**: Once US1 is reintegrated and validated, proceed to User Story 2 (Economy) or Polish phase based on MVP priorities
 

@@ -1,90 +1,47 @@
 /**
  * LobbyScreen - Tela de configuração de partida
  * 
- * T075: Add bot controls (1-5, difficulty), participants list, Start button
+ * STATUS: DESINTEGRADO - Apenas estrutura visual
+ * TODO REFACTOR: Reintegrar após refatoração de hooks e stores
+ * 
+ * Lógica removida (será reintegrada):
+ * - Criação de participantes (Player objects)
+ * - Inicialização de match
+ * - Transição para DRAFT phase
  */
 
 import React, { useState } from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
-import { useProgressionStore } from '../stores/progressionStore';
 import { Button } from '../components/ui/button';
-import { BotLevel, MatchPhase } from '../types/game';
-import type { Player } from '../types/game';
+import { BotLevel } from '../types/game';
 
 export function LobbyScreen() {
-  const { startMatch, transitionPhase } = useMatchStore();
-  const { setPlayers } = usePlayerStore();
-  const profile = useProgressionStore();
+  // TODO REFACTOR: Reintegrar hooks refatorados aqui
+  // - useMatchSetup() - criação de partida
+  // - useLobbyParticipants() - gestão de participantes
 
   const [botCount, setBotCount] = useState(1);
   const [botDifficulty, setBotDifficulty] = useState<BotLevel>(BotLevel.EASY);
-  const [participants, setParticipants] = useState<Player[]>([]);
 
-  React.useEffect(() => {
-    // Inicializa participantes: jogador humano + bots
-    const humanPlayer: Player = {
-      id: profile.id,
-      name: profile.name,
-      avatar: profile.avatar,
-      isBot: false,
-      lives: 3,
-      resistance: 6,
-      resistanceCap: 6,
-      extraResistance: 0,
-      inventory: [],
-      pillCoins: 100,
-      activeStatuses: [],
-      isEliminated: false,
-      isLastChance: false,
-      isActiveTurn: false,
-      totalCollapses: 0,
-      shapeQuest: null,
-      wantsShop: false,
-    };
-
-    const bots: Player[] = Array.from({ length: botCount }, (_, i) => ({
-      id: crypto.randomUUID(),
+  // Mock participants para manter estrutura visual
+  const mockParticipants = [
+    { id: '1', name: 'Você', avatar: 'player', isBot: false, botLevel: null },
+    ...Array.from({ length: botCount }, (_, i) => ({
+      id: `bot-${i}`,
       name: `Bot ${i + 1}`,
       avatar: `bot${i + 1}`,
       isBot: true,
       botLevel: botDifficulty,
-      lives: 3,
-      resistance: 6,
-      resistanceCap: 6,
-      extraResistance: 0,
-      inventory: [],
-      pillCoins: 100,
-      activeStatuses: [],
-      isEliminated: false,
-      isLastChance: false,
-      isActiveTurn: false,
-      totalCollapses: 0,
-      shapeQuest: null,
-      wantsShop: false,
-    }));
-
-    setParticipants([humanPlayer, ...bots]);
-  }, [botCount, botDifficulty, profile]);
+    })),
+  ];
 
   const handleStart = () => {
-    // T083: Wire LobbyScreen → Match start
-    if (participants.length < 2) {
-      alert('É necessário pelo menos 1 bot para iniciar');
-      return;
-    }
-
-    // Inicializa match e players
-    startMatch(participants);
-    setPlayers(participants);
-    
-    // Transição para Draft
-    transitionPhase(MatchPhase.DRAFT);
+    console.log('[DESINTEGRADO] Start match clicked');
+    // TODO REFACTOR: Reintegrar inicialização de match
   };
 
   const handleBack = () => {
-    // Volta para LOBBY (não há fase HOME no MatchPhase)
-    transitionPhase(MatchPhase.LOBBY);
+    console.log('[DESINTEGRADO] Back clicked');
+    // TODO REFACTOR: Reintegrar navegação
   };
 
   return (
@@ -139,11 +96,11 @@ export function LobbyScreen() {
           {/* Participantes */}
           <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
             <h2 className="text-white font-bold text-xl mb-4">
-              Participantes ({participants.length})
+              Participantes ({mockParticipants.length})
             </h2>
 
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              {participants.map((participant, index) => (
+              {mockParticipants.map((participant, index) => (
                 <div
                   key={participant.id}
                   className="bg-gray-900 rounded-lg p-3 border border-gray-700"
