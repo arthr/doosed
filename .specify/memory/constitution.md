@@ -182,7 +182,8 @@ dosed/
 │   │   └── ui/            # UI kit genérico (kebab-case)
 │   ├── screens/           # Screens (PascalCase)
 │   ├── stores/            # Zustand stores
-│   └── types/             # Contratos TypeScript
+│   ├── types/             # Contratos TypeScript
+│   └── config/            # Configurações centralizadas (game-config.ts)
 └── docs/                  # Documentação oficial (fonte da verdade)
 ```
 

@@ -41,7 +41,7 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
 - UI mínima reduz escopo e acelera validação de mecânicas
 
 ### ✅ III. Event-Driven & Determinístico
-**Core Events (8 tipos máximo)**:
+**Core Events (8 tipos - design choice dentro do limite constitucional 8-12)**:
 1. `PLAYER_JOINED` - Jogador entra no lobby
 2. `TURN_STARTED` - Turno de jogador inicia
 3. `ITEM_USED` - Item do inventário usado
@@ -50,6 +50,8 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
 6. `COLLAPSE_TRIGGERED` - Colapso ocorre (Resistência ≤ 0)
 7. `ROUND_COMPLETED` - Rodada termina (pool esgotado)
 8. `MATCH_ENDED` - Partida termina (1 sobrevivente)
+
+**Rationale para 8 eventos (não 12)**: 8 eventos cobrem 100% do state space do MVP. Eventos adicionais (SHOPPING_STARTED, QUEST_COMPLETED, LEVEL_UP, BOOST_APPLIED) seriam redundantes - são sub-estados já capturados pelos 8 core events. Simplicidade (8) vs granularidade excessiva (12) alinha com Princípio II (Solo Dev First).
 
 **Estado Imutável**: Zustand stores com reducer pattern (produce novo estado via Immer)
 **Determinismo**: Mesma sequência de eventos → mesmo estado final (testável)
@@ -111,7 +113,9 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
    - **Mitigation**: Testes de distribuição, validar bounds (min/max por tipo)
 
 ### Complexity Tracking
-- **Total Events**: 8 (dentro do limite constitucional)
+- **Total Events**: 8 (design choice dentro do limite constitucional 8-12)
+  - **Rationale**: 8 eventos cobrem todo o MVP state space. Eventos 9-12 seriam redundantes ou sub-estados (Shopping, Quest, LevelUp já capturados por ROUND_COMPLETED, EFFECT_APPLIED, MATCH_ENDED). Preferimos simplicidade (Princípio II) sem perder expressividade.
+  - **Extensibilidade futura**: Se multiplayer real exigir eventos adicionais (PLAYER_DISCONNECTED, RECONNECT_ATTEMPT, SERVER_ROLLBACK), podemos expandir até 12 mantendo Constitution compliance.
 - **Zustand Stores**: 5 (match, player, pool, economy, progression)
 - **Key Entities**: 29 (alto mas necessário para domínio complexo)
 - **FRs**: 187 (alto - priorizar P1 user story primeiro)

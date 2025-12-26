@@ -179,7 +179,7 @@
 - [X] T055 [P] [US1] Define BotInterface with decideDraftAction, decideTurnAction, decideShoppingAction methods in src/core/bot/bot-interface.ts
 - [X] T056 [US1] Implement botEasyDecision(state, seed) in src/core/bot/bot-easy.ts with conservative logic: prefer revealed SAFE pills (80% when available), use Pocket Pill/Shield when health low, avoid risks per FR-115
 - [X] T057 [US1] Add deterministic seeded RNG in src/core/utils/random.ts ensuring same seed produces same decisions for replay and testing
-- [ ] T058 [US1] Add bot timeout handling: if no action in 5s, force random pill consumption from available pool (simplest valid action); if 3+ consecutive failures, eliminate bot with log error per FR-124a and research.md Decision 3 (será implementado em turnManager) - ⚠️ GAP: Prioridade BAIXA, Bot Easy raramente falha
+- [ ] T058 [US1] **RECLASSIFIED: MEDIUM PRIORITY** - Implement bot timeout and recovery handling in src/core/turn-manager.ts: (1) if bot takes no action in 5s (configurable), force random pill consumption from available pool, (2) log timeout with bot level and state context (structured log category: bot_error), (3) if bot has 3+ consecutive timeouts/invalid actions, attempt recovery by forcing valid random action, (4) if recovery fails 2+ times, eliminate bot from match with critical log, (5) in DEV mode: pause and show debug overlay per FR-124a and research.md Decision 3. Edge case crítico que não pode ser ignorado no MVP.
 
 ---
 
@@ -223,11 +223,8 @@
 
 - [X] T079 [US1] Implement App router in src/App.tsx using matchStore.phase to switch between screens (HOME → HomeScreen, LOBBY → LobbyScreen, DRAFT → DraftScreen, MATCH → MatchScreen, SHOPPING → ShoppingScreen, RESULTS → ResultsScreen) per FR-002
 - [X] T080 [US1] Add Error Boundary to App.tsx wrapping all screens, implementing dual-mode error handling (DEV pause + debug, PROD retry + fallback) per FR-186.7 to FR-186.10 and research.md Decision 3
-- [ ] T081 [US1] Create DevTools structure and toggle in src/DevTools.tsx (DEV mode only, triggered by VITE_DEV_MODE=true) with overlay UI and tabs: (a) Phase Controls, (b) State Manipulation, (c) Logs, (d) Performance per FR-187 - ⚠️ GAP: Phase 6 (Polish)
-- [ ] T081a [US1] Implement Phase Controls tab in DevTools: buttons to skip phases (Lobby→Draft→Match→Shopping→Results), force round end, force turn end, trigger match end - ⚠️ GAP: Phase 6 (Polish)
-- [ ] T081b [US1] Implement State Manipulation tab in DevTools: controls to add/remove Pill Coins, add/remove Lives, set Resistance value, apply/remove Status (Shielded/Handcuffed), reveal specific pills, add modifiers to pills (Inverted/Doubled) - ⚠️ GAP: Phase 6 (Polish)
-- [ ] T081c [US1] Implement Logs tab in DevTools: filter logs by category (turn/item/pill/status/bot_decision/error), severity (debug/info/warn/error), export logs as JSON, clear logs button - ⚠️ GAP: Phase 6 (Polish)
-- [ ] T081d [US1] Implement Performance tab in DevTools: display FPS graph (last 60 frames), frame time histogram, transition duration tracker, long frame warnings (>33ms) - ⚠️ GAP: Phase 6 (Polish)
+- [ ] T081-minimal [US1] **DEV MODE MÍNIMO (US1)** - Create basic DevTools overlay in src/DevTools.tsx (DEV mode only, triggered by VITE_DEV_MODE=true) with: (1) toggle visibility (keyboard shortcut: Ctrl+Shift+D), (2) Pause/Resume game button (congela state), (3) Current state viewer (JSON display of matchStore, playerStore, poolStore current state - read-only), (4) Simple log viewer showing last 50 structured logs with severity colors per FR-186.9 and research.md Decision 3. Suficiente para debugging durante desenvolvimento US1.
+- [ ] T081-full [Phase 6] **DEV MODE COMPLETO (Phase 6 Polish)** - Expand DevTools com 4 tabs completos per FR-187: (a) Phase Controls (skip phases, force round/turn end), (b) State Manipulation (add/remove coins/lives/resistance, apply status, reveal pills, add modifiers), (c) Advanced Logs (filter by category/severity, export JSON, clear), (d) Performance (FPS graph, frame time histogram, transition tracking). Implementar apenas após US1 completo e validado.
 
 ---
 
@@ -410,7 +407,7 @@
 **Purpose**: Improvements affecting multiple user stories, performance, robustness
 
 - [ ] T137 [P] Implement state validation after every event: validatePlayerInvariants (lives >= 0, inventory <= 5, resistance valid), validatePoolInvariants (size bounds, distribution), validateMatchInvariants (turnOrder length, currentRound sync) in src/core/utils/validation.ts per FR-186.19
-- [ ] T153 [P] Validate event system has exactly 8-12 core event types per Constitution Principle III (v1.1.0) in src/types/events.ts - add compile-time check or runtime validation that GameEvent union has 8-12 members
+- [ ] T153 [P] Validate event system has exactly 8 core event types per Constitution Principle III and plan.md design choice in src/types/events.ts - add compile-time check or runtime validation that GameEvent union has exactly 8 members (PLAYER_JOINED, TURN_STARTED, ITEM_USED, PILL_CONSUMED, EFFECT_APPLIED, COLLAPSE_TRIGGERED, ROUND_COMPLETED, MATCH_ENDED)
 - [ ] T154 [P] Setup performance profiling infrastructure: (a) FPS monitoring in DevTools using performance.now(), (b) track frame time and warn if >33ms (below 30 FPS), (c) measure transition durations for pill consume, collapse, turn change, (d) display FPS graph in DevTools per FR-186.11 to FR-186.13
 - [ ] T155 [P] Validate game config schema in src/config/game-config.ts: (a) all required sections present (timers, health, economy, pool, shapes, items, boosts), (b) fallback to defaults if any section missing/corrupted, (c) validate types and ranges (e.g., timers > 0, lives >= 1), (d) export validateConfig() utility
 - [ ] T138 [P] Add structured logging throughout: logTurn, logItem, logPill, logStatus, logBotDecision, logStateTransition, logError, logPerformance in src/hooks/useEventLogger.ts per FR-186.14 to FR-186.18
@@ -526,7 +523,9 @@ T037: Add resistance cap enforcement
 - **[Story] label**: Maps task to user story (US1, US2, US3) for traceability and independent delivery
 - **File paths**: All tasks include explicit file paths (e.g., src/core/pool-generator.ts)
 - **Tests omitted**: No test tasks included (not requested in spec, focus is mechanics-first per plan.md)
-- **Constitution compliance**: 8 core events (T026), deterministic event processor (T052), structured logs (T138), Portuguese BR (all strings), no emojis per AGENTS.md
+- **Constitution compliance**: 8 core events design choice (T026, T153), deterministic event processor (T052), structured logs (T138), Portuguese BR (all strings), no emojis per AGENTS.md, DRY/KISS/YAGNI/SOLID checklist in .cursor/rules/code-review/
+- **DevTools split**: T081-minimal (basic debugging para US1) vs T081-full (4 tabs completos em Phase 6)
+- **Bot recovery**: T058 reclassified from GAP to MEDIUM priority (edge case crítico)
 - **Checkpoints**: End of each user story phase is independently testable and deployable
 - **MVP scope**: User Story 1 (P1) alone is sufficient for playable vertical slice demo
 - **Full MVP scope**: User Stories 1-3 (P1-P3) deliver complete feature set with gameplay, economy, and progression
@@ -536,7 +535,8 @@ T037: Add resistance cap enforcement
 **Total Tasks**: 191 (includes 26 test tasks + 6 additional validation/performance tasks + 4 bug fix tasks + 3 bug validation tasks)  
 **Testing Tasks**: 26 (Phase 2.5 - unit, property-based, integration tests)  
 **Bug Fix Tasks**: 7 (T091a-T091d implementation + T092a-T092c validation)  
-**MVP Tasks (US1 only)**: 131 (Setup + Foundational + Testing + US1 + Bug Fixes + minimal Polish)  
+**Bot Recovery Task**: T058 reclassified from GAP to MEDIUM priority (critical edge case)
+**MVP Tasks (US1 only)**: 131 (Setup + Foundational + Testing + US1 + Bug Fixes + Bot Recovery + minimal Polish)  
 **Full MVP Tasks (US1-US3)**: 175 (Setup + Foundational + Testing + US1 + US2 + US3 + Bug Fixes + minimal Polish)
 
 **Suggested Next Step**: 
