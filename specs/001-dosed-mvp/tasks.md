@@ -243,41 +243,9 @@
 
 ---
 
-### Bug Fixes Críticos (Bloqueiam MVP - Identificados em 2025-12-25)
+### Final Validation for User Story 1
 
-**Context**: Bugs críticos identificados em testes manuais que bloqueiam completamente o gameplay core. Ver `specs/001-dosed-mvp/checklists/bug-report-2025-12-25.md` para análise detalhada.
-
-#### Bug #1: Efeitos de Pills Não São Aplicados
-
-**Problema**: Pills são consumidas mas efeitos não são aplicados ao jogador (resistência/vidas não mudam). Causa: condição incorreta `effect.value > 0` para dano (valores negativos nunca satisfazem condição).
-
-- [ ] T091a [US1] Fix pill effect application logic in src/hooks/useGameLoop.ts (L87-96): Remove sign checking, use Math.abs() for all effect types, rely only on effect.type to determine action (HEAL → applyHeal, DAMAGE → applyDamage, LIFE → updatePlayer with lives increment) per Bug #1 solution in bug-report-2025-12-25.md - **NOTA**: Bug foi corrigido mas código foi refatorado e desintegrado. Precisa ser revalidado após reintegração.
-
-#### Bug #2: Pool Não Avança para Nova Rodada
-
-**Problema**: Quando pool esgota, jogo trava (não avança para Round 2). Causa: lógica de detecção de pool vazio não existe - `nextRound()` nunca é chamado após pool esgotar.
-
-- [ ] T091b [US1] Implement pool exhaustion detection in src/hooks/useGameLoop.ts handlePillConsume: After checkMatchEnd(), check if currentPool.pills.length === 0 AND alivePlayers >= 2, if true call nextRound() + startNextTurn(), else call clearActiveTurns() + nextTurn() + startNextTurn() per FR-045 and Bug #2 solution in bug-report-2025-12-25.md - **NOTA**: Bug foi corrigido mas código foi refatorado e desintegrado. Precisa ser revalidado após reintegração.
-
-#### Bug #3: Bot Para de Jogar Após Primeira Ação
-
-**Problema**: Bot executa uma ação no turno inicial mas depois não volta a jogar. Causa: race condition no fluxo assíncrono (setTimeout + useEffect + Zustand) com dependency tracking issues.
-
-- [ ] T091c [US1] Fix turn cycle race condition in src/hooks/useGameLoop.ts (L106-116): Replace useEffect-dependent flow with direct startNextTurn() call after nextTurn() (add setTimeout(() => startNextTurn(), 200) after both nextTurn() and nextRound() calls) per Bug #3 solution in bug-report-2025-12-25.md
-
-- [ ] T091d [US1] Simplify turn initialization useEffect in src/screens/MatchScreen.tsx (L41-50): Change to only initialize first turn of match (check activePlayer && match.rounds.length === 1), remove activePlayer and startNextTurn from dependencies, use only [match?.phase, currentRound?.number] as dependencies per Bug #3 solution in bug-report-2025-12-25.md
-
----
-
-### Post-Fix Validation
-
-- [ ] T092a [US1] Validate Bug #1 fix (Effect Application): Start match, consume DMG_LOW pill, verify resistance reduces from 6 to 4, consume DMG_HIGH, verify resistance reduces by 4, consume multiple DMG pills until resistance ≤ 0, verify Collapse occurs (lives 3→2, resistance resets to 6) per FR-093, FR-095
-
-- [ ] T092b [US1] Validate Bug #2 fix (Round Transition): Consume all 6 pills from Round 1 pool, verify system automatically advances to Round 2, verify new pool is generated with 7 pills (base 6 + 1 for round 2), verify turn order is preserved and starts from first player per FR-045, FR-046
-
-- [ ] T092c [US1] Validate Bug #3 fix (Turn Alternation): Observe turn sequence through multiple rounds, verify Player → Bot → Player → Bot alternation continues correctly without skipping bot turns, verify bot takes actions consistently every turn (not just first turn) per FR-049
-
-- [ ] T092 [US1] Validate complete flow manually per quickstart.md checklist (lines 463-481): (a) Home→Lobby→Draft flow (items 1-4), (b) Match core mechanics (items 5-11: Scanner, pills, collapse, última chance, elimination), (c) Results and persistence (items 12-15). All 15 checklist items MUST pass before US1 considered complete - ⚠️ AÇÃO REQUERIDA: Executar validação manual completa após T092a-T092c passarem
+- [ ] T091 [US1] Validate complete flow manually per quickstart.md checklist (lines 463-481): (a) Home→Lobby→Draft flow (items 1-4), (b) Match core mechanics (items 5-11: Scanner, pills, collapse, última chance, elimination), (c) Results and persistence (items 12-15). All 15 checklist items MUST pass before US1 considered complete.
 
 **Checkpoint**: User Story 1 (P1) MVP is complete and independently testable. Can deploy/demo vertical slice.
 
@@ -532,27 +500,31 @@ T037: Add resistance cap enforcement
 
 ---
 
-**Total Tasks**: 191 (includes 26 test tasks + 6 additional validation/performance tasks + 4 bug fix tasks + 3 bug validation tasks)  
+**Total Tasks**: 181 (includes 26 test tasks + 6 additional validation/performance tasks)  
 **Testing Tasks**: 26 (Phase 2.5 - unit, property-based, integration tests)  
-**Bug Fix Tasks**: 7 (T091a-T091d implementation + T092a-T092c validation)  
 **Bot Recovery Task**: T058 reclassified from GAP to MEDIUM priority (critical edge case)
-**MVP Tasks (US1 only)**: 131 (Setup + Foundational + Testing + US1 + Bug Fixes + Bot Recovery + minimal Polish)  
-**Full MVP Tasks (US1-US3)**: 175 (Setup + Foundational + Testing + US1 + US2 + US3 + Bug Fixes + minimal Polish)
+**MVP Tasks (US1 only)**: 124 (Setup + Foundational + Testing + US1 + Bot Recovery + minimal Polish)  
+**Full MVP Tasks (US1-US3)**: 168 (Setup + Foundational + Testing + US1 + US2 + US3 + minimal Polish)
 
 **Suggested Next Step**: 
-- **CURRENT STATUS (2025-12-26)**: 
-  - ✅ Setup, Foundational phases complete (T001-T081)
-  - ⚠️ Integration phase DESINTEGRADA (T082-T091) - Refatoração em progresso
-  - 🔄 Refatoração SOLID-S completa:
+- **CURRENT STATUS (2025-12-26 - REFATORAÇÃO CLEAN SLATE)**: 
+  - ✅ Setup, Foundational, Core Logic phases complete (T001-T081)
+  - ⚠️ Integration phase DESINTEGRADA (T082-T091) - **Reimplementação necessária seguindo specs**
+  - 🔄 **Refatoração SOLID-S completa** (seguindo Constitution.md):
     - ✅ Hooks especializados criados (usePillConsumption, useTurnManagement, useBotExecution, useMatchEndDetection, useItemActions)
-    - ✅ useGameLoop refatorado como orquestrador
-    - ✅ Todos os componentes desintegrados (MatchScreen, DraftScreen, LobbyScreen, ResultsScreen)
+    - ✅ useGameLoop refatorado como orquestrador (composição > monolito)
+    - ✅ Todos os componentes desintegrados (estrutura visual mantida, lógica removida)
     - ⏳ playerStore consolidação pendente (Single Source of Truth com matchStore)
+  - 🎯 **Nova abordagem**: Reimplementar T082-T091 do zero, seguindo rigorosamente specs + Constitution.md
+    - Garantir SOLID-S compliance em cada integração
+    - Validar cada task contra FR correspondente
+    - Evitar bugs anteriores através de design correto desde o início
 - **IMMEDIATE ACTION REQUIRED**: 
-  1. Concluir consolidação do playerStore (Opção A: matchStore como fonte única)
-  2. Reintegrar MatchScreen com hooks refatorados
-  3. Reintegrar outras screens (Draft, Lobby, Results)
-  4. Revalidar bugs T091a-T091d após reintegração
-- **After Reintegration**: Run validation tasks (T092a-T092c) to confirm bugs are still fixed, then complete full validation (T092)
-- **Next Phase**: Once US1 is reintegrated and validated, proceed to User Story 2 (Economy) or Polish phase based on MVP priorities
+  1. ✅ Consolidar playerStore (Opção A: matchStore como fonte única da verdade)
+  2. ✅ Reintegrar MatchScreen com hooks refatorados (T085, T086, T087)
+  3. ✅ Reintegrar outras screens seguindo mesma abordagem (T082, T083, T084, T088, T089, T090)
+  4. ✅ Adicionar event logging completo (T091)
+  5. ✅ Validar fluxo completo (T091) contra quickstart.md checklist
+- **After Reintegration**: Validação manual completa (T091) - todos os 15 items do checklist devem passar
+- **Next Phase**: Once US1 is validated with clean implementation, proceed to User Story 2 (Economy) or Polish phase
 
