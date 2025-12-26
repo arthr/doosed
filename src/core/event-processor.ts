@@ -1,14 +1,32 @@
 /**
- * Event Processor: Processamento Determinístico de Eventos
+ * Event Processor: Processamento Deterministico de Eventos
  *
  * Implementa:
  * - Reducer puro para todos os 8 core events
- * - Validação de estado após cada evento
+ * - Validacao de estado apos cada evento
  * - Error recovery (DEV: pause+debug, PROD: retry+fallback)
- * - Determinismo: mesmos eventos → mesmo estado final
+ * - Determinismo: mesmos eventos -> mesmo estado final
  *
- * Constitution Principle III: Event-Driven & Determinístico
+ * Constitution Principle III: Event-Driven & Deterministico
  * research.md Decision 6
+ *
+ * ARQUITETURA MVP:
+ * ================
+ * Os handlers de eventos neste arquivo estao SIMPLIFICADOS (retornam estado
+ * sem modificar). Isso e INTENCIONAL para o MVP:
+ *
+ * 1. A logica de estado REAL esta nos stores (gameStore/slices) e hooks
+ * 2. Este processor serve para:
+ *    - Auditoria: logar sequencia de eventos para debug
+ *    - Replay futuro: reproduzir partidas a partir de event log
+ *    - Testes de determinismo: validar que mesmos eventos = mesmo estado
+ *
+ * 3. Implementacao completa dos handlers sera feita em Phase 6 (Replays)
+ *    quando houver necessidade real de replay server-side
+ *
+ * Para operacoes em runtime, use:
+ * - gameStore actions (consumePill, applyDamage, nextTurn, etc.)
+ * - hooks especializados (usePillConsumption, useTurnManagement, etc.)
  */
 
 import type {

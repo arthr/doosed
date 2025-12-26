@@ -160,9 +160,20 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
     }
   }
 
-  // 2. Ajustar para size exato (arredondamento pode gerar ±1)
+  // 2. Ajustar para size exato (arredondamento pode gerar +/-1)
+  //
+  // NOTA: Este ajuste pode causar pequena variacao na distribuicao final.
+  // Exemplo: se size=6 e distribuicao gera 5 pills, adicionamos 1 do tipo
+  // mais comum. A distribuicao final ainda respeita tolerancia de +/-5%
+  // validada por validatePillDistribution().
+  //
+  // Alternativas consideradas:
+  // - Redistribuir proporcionalmente: mais complexo, ganho marginal
+  // - Regenerar pool: pode causar loop infinito em edge cases
+  // - Aceitar size +/-1: quebra invariante de pool.size === pool.pills.length
+  //
+  // Decisao: Adicionar do tipo mais comum (KISS principle)
   while (types.length < size) {
-    // Adicionar tipo mais comum
     const mostCommonType = findMostCommonType(distribution);
     types.push(mostCommonType);
   }

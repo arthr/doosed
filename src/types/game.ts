@@ -138,18 +138,34 @@ export interface Round {
   endedAt: number | null; // Fim da rodada (timestamp)
 }
 
+/**
+ * Match Interface - Estrutura canonica para event-processor/replays
+ *
+ * NOTA IMPORTANTE: Esta interface representa o modelo conceitual completo.
+ * O gameStore usa estrutura otimizada diferente:
+ * - players: Map<string, Player> em playersSlice (O(1) lookup)
+ * - rounds: RoundSummary[] em matchSlice (historico resumido)
+ * - currentRound: objeto inline em matchSlice (com pool)
+ *
+ * Use esta interface para:
+ * - Event processor (replays, auditoria)
+ * - Serializacao/deserializacao de estado
+ * - Validacao de invariantes de match
+ *
+ * Para operacoes em runtime, use os hooks e stores diretamente.
+ */
 export interface Match {
   id: string; // UUID
   phase: MatchPhase; // Fase atual
-  players: Player[]; // Jogadores (length 2-6)
-  rounds: Round[]; // Rodadas jogadas
-  currentRound: Round | null; // Rodada atual (null se nenhuma rodada iniciada)
+  players: Player[]; // Jogadores (length 2-6) - em runtime: playersSlice.players
+  rounds: Round[]; // Rodadas jogadas - em runtime: matchSlice.rounds (RoundSummary[])
+  currentRound: Round | null; // Rodada atual - em runtime: matchSlice.currentRound
   turnOrder: string[]; // Ordem de turnos (PlayerIds, fixa)
-  activeTurnIndex: number; // Índice do turno ativo (≥ 0)
+  activeTurnIndex: number; // Indice do turno ativo (>= 0)
   seasonalShapes: string[]; // Shapes sazonais ativas (ShapeIds)
   shopSignals: string[]; // Jogadores que sinalizaram loja (PlayerIds)
   winnerId: string | null; // Vencedor (se partida terminou)
-  startedAt: number; // Início da partida (timestamp)
+  startedAt: number; // Inicio da partida (timestamp)
   endedAt: number | null; // Fim da partida (timestamp)
 }
 
