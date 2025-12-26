@@ -24,7 +24,7 @@ export function ResultsScreen() {
   const mockIsPlayerWinner = true;
   const mockWinner = { name: 'Você' };
 
-  // Mock stats - será calculado dinamicamente
+  // Mock stats - sera calculado dinamicamente
   const stats = {
     pillsConsumed: {
       SAFE: 5,
@@ -37,17 +37,17 @@ export function ResultsScreen() {
     itemsUsed: 8,
     damageDealt: 24,
     damageReceived: 18,
-    collapses: humanPlayer?.totalCollapses || 0,
+    collapses: 0,
     questsCompleted: 2,
     pillCoinsEarned: 45,
     pillCoinsSpent: 100,
-    totalRounds: match?.rounds.length || 0,
+    totalRounds: 3,
   };
 
-  // Mock rewards - será calculado pela progressionStore
+  // Mock rewards - sera calculado pela progressionStore
   const rewards = {
     xp: 150,
-    schmeckles: isPlayerWinner ? 75 : 0,
+    schmeckles: mockIsPlayerWinner ? 75 : 0,
   };
 
   const handlePlayAgain = () => {

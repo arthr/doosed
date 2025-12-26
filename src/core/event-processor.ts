@@ -88,7 +88,7 @@ export function processEvent(state: Match, event: GameEvent): Match {
 
 function handlePlayerJoined(state: Match, event: PlayerJoinedEvent): Match {
   // Adicionar jogador ao match (simplificado - usado em Lobby)
-  // Implementação completa em matchStore
+  // Implementacao completa em gameStore (matchSlice)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _ = event; // Placeholder para futura implementação
   return state;
@@ -96,7 +96,7 @@ function handlePlayerJoined(state: Match, event: PlayerJoinedEvent): Match {
 
 function handleTurnStarted(state: Match, event: TurnStartedEvent): Match {
   // Marcar jogador como ativo (simplificado)
-  // Implementação completa em matchStore/turnManager
+  // Implementacao completa em gameStore (playersSlice) + turnManager
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _ = event; // Placeholder para futura implementação
   return state;
@@ -112,7 +112,7 @@ function handleItemUsed(state: Match, event: ItemUsedEvent): Match {
 
 function handlePillConsumed(state: Match, event: PillConsumedEvent): Match {
   // Processar consumo de pill (simplificado)
-  // Implementação completa em poolStore/effectResolver
+  // Implementacao completa em gameStore (poolSlice) + effectResolver
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _ = event; // Placeholder para futura implementação
   return state;
@@ -136,7 +136,7 @@ function handleCollapseTriggered(state: Match, event: CollapseTriggeredEvent): M
 
 function handleRoundCompleted(state: Match, event: RoundCompletedEvent): Match {
   // Finalizar rodada (simplificado)
-  // Implementação completa em matchStore
+  // Implementacao completa em gameStore (matchSlice)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _ = event; // Placeholder para futura implementação
   return state;
@@ -144,7 +144,7 @@ function handleRoundCompleted(state: Match, event: RoundCompletedEvent): Match {
 
 function handleMatchEnded(state: Match, event: MatchEndedEvent): Match {
   // Finalizar match (simplificado)
-  // Implementação completa em matchStore
+  // Implementacao completa em gameStore (matchSlice)
   return {
     ...state,
     winnerId: event.winnerId,

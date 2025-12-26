@@ -1,22 +1,21 @@
 /**
  * useGameLoop - Hook orquestrador do game loop (REFATORADO)
- * 
+ *
  * SOLID-S Compliant: Single Responsibility
  * Responsabilidade: Orquestrar hooks especializados (Composition over Monolith)
- * 
+ *
  * Hooks compostos:
  * - usePillConsumption: consumo de pills
- * - useTurnManagement: gestão de turnos
- * - useBotExecution: execução de bot AI
- * - useMatchEndDetection: detecção de fim de jogo
+ * - useTurnManagement: gestao de turnos
+ * - useBotExecution: execucao de bot AI
+ * - useMatchEndDetection: deteccao de fim de jogo
  * - useItemActions: uso de itens
- * 
+ *
  * T085-T088: Wire gameplay mechanics
  */
 
 import { useCallback } from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
+import { useGameStore } from '../stores/gameStore';
 import { usePillConsumption } from './usePillConsumption';
 import { useTurnManagement } from './useTurnManagement';
 import { useBotExecution } from './useBotExecution';
@@ -24,8 +23,10 @@ import { useMatchEndDetection } from './useMatchEndDetection';
 import { useItemActions } from './useItemActions';
 
 export function useGameLoop() {
-  const { match } = useMatchStore();
-  const { players } = usePlayerStore();
+  // Usar useGameStore com seletores para performance
+  const match = useGameStore((state) => state.match);
+  const getPool = useGameStore((state) => state.getPool);
+  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
 
   // Hooks especializados (SOLID-S)
   const { consumePill } = usePillConsumption();
@@ -40,15 +41,15 @@ export function useGameLoop() {
   const { checkAndHandleMatchEnd } = useMatchEndDetection();
   const { handleItemClick } = useItemActions();
 
-  // Pool vem do currentRound (fonte única da verdade)
-  const pool = match?.currentRound?.pool || null;
-
   /**
    * Handler de consumo de pill (orquestra hooks especializados)
    * T085: Wire MatchScreen pill clicks
    */
   const handlePillConsume = useCallback(
     (pillId: string, playerId: string) => {
+      const pool = getPool();
+      const players = getAllPlayers();
+
       if (!pool) return;
 
       const pill = pool.pills.find((p) => p.id === pillId);
@@ -59,23 +60,23 @@ export function useGameLoop() {
       // Consome pill (hook especializado)
       consumePill(pill, player);
 
-      // Após consumo, checa fim de jogo e avança turno
+      // Apos consumo, checa fim de jogo e avanca turno
       setTimeout(() => {
         const matchEnded = checkAndHandleMatchEnd();
-        
+
         if (!matchEnded) {
           advanceToNextTurn();
         }
       }, 500);
     },
-    [pool, players, consumePill, checkAndHandleMatchEnd, advanceToNextTurn]
+    [getPool, getAllPlayers, consumePill, checkAndHandleMatchEnd, advanceToNextTurn]
   );
 
   /**
-   * Executa turno do bot (orquestra decisão + ação)
+   * Executa turno do bot (orquestra decisao + acao)
    */
   const executeBotTurnAction = useCallback(
-    (bot: typeof players[0]) => {
+    (bot: ReturnType<typeof getAllPlayers>[0]) => {
       if (!canBotAct(bot)) return;
 
       const decision = executeBotDecision(bot);
@@ -96,7 +97,7 @@ export function useGameLoop() {
   );
 
   /**
-   * Inicia próximo turno (orquestra hooks especializados)
+   * Inicia proximo turno (orquestra hooks especializados)
    */
   const startNextTurn = useCallback(() => {
     if (!match) return;
@@ -111,7 +112,7 @@ export function useGameLoop() {
     if (!currentPlayer || currentPlayer.isEliminated) {
       skipEliminatedPlayerTurn();
       setTimeout(() => {
-        startNextTurn(); // Recursivo - tenta próximo jogador
+        startNextTurn(); // Recursivo - tenta proximo jogador
       }, 100);
       return;
     }
@@ -119,7 +120,7 @@ export function useGameLoop() {
     // Inicia turno do player
     startTurnForPlayer(currentPlayer);
 
-    // Se é bot, executa IA
+    // Se e bot, executa IA
     if (canBotAct(currentPlayer)) {
       setTimeout(() => {
         executeBotTurnAction(currentPlayer);
@@ -136,7 +137,7 @@ export function useGameLoop() {
   ]);
 
   /**
-   * Usa item do inventário (delegado ao hook especializado)
+   * Usa item do inventario (delegado ao hook especializado)
    * T086: Wire item usage
    */
   const handleItemUse = handleItemClick;
@@ -146,18 +147,19 @@ export function useGameLoop() {
    * T087: Wire turn timer expiration
    */
   const handleTurnTimeout = useCallback(() => {
+    const players = getAllPlayers();
     const activePlayer = players.find((p) => p.isActiveTurn);
     if (!activePlayer) return;
 
     const randomPillId = getTurnTimeoutPillId();
-    
+
     if (randomPillId) {
       handlePillConsume(randomPillId, activePlayer.id);
     }
-  }, [players, getTurnTimeoutPillId, handlePillConsume]);
+  }, [getAllPlayers, getTurnTimeoutPillId, handlePillConsume]);
 
   return {
-    // Handlers públicos (compatibilidade com MatchScreen)
+    // Handlers publicos (compatibilidade com MatchScreen)
     handlePillConsume,
     handleItemUse,
     handleTurnTimeout,

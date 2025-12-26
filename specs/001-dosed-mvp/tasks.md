@@ -31,7 +31,7 @@
 - [X] T002 [P] Create TypeScript types structure in src/types/ (game.ts, pill.ts, item.ts, status.ts, events.ts, config.ts)
 - [X] T003 [P] Create core logic structure in src/core/ (empty files for pool-generator, effect-resolver, collapse-handler, inventory-manager, quest-generator, state-machine, turn-manager, event-processor)
 - [X] T004 [P] Create bot AI structure in src/core/bot/ (bot-interface.ts, bot-easy.ts, bot-normal.ts, bot-hard.ts, bot-insane.ts)
-- [X] T005 [P] Create Zustand stores structure in src/stores/ (matchStore.ts, playerStore.ts, poolStore.ts, economyStore.ts, progressionStore.ts, logStore.ts)
+- [X] T005 [P] Create Zustand stores structure in src/stores/ usando Slices Pattern (slices/types.ts, slices/matchSlice.ts, slices/playersSlice.ts, slices/poolSlice.ts, gameStore.ts, economyStore.ts, progressionStore.ts, logStore.ts)
 - [X] T006 [P] Create UI components structure in src/components/ui/ (button.tsx, pill-display.tsx, player-card.tsx, inventory-slot.tsx, timer-display.tsx, log-viewer.tsx)
 - [X] T007 [P] Create game components structure in src/components/game/ (PillPool.tsx, PlayerHUD.tsx, OpponentLine.tsx, ShopGrid.tsx, QuestTracker.tsx)
 - [X] T008 [P] Create screens structure in src/screens/ (HomeScreen.tsx, LobbyScreen.tsx, DraftScreen.tsx, MatchScreen.tsx, ShoppingScreen.tsx, ResultsScreen.tsx)
@@ -185,9 +185,12 @@
 
 ### Zustand Stores for User Story 1 ✅
 
-- [X] T059 [P] [US1] Implement matchStore in src/stores/matchStore.ts managing phase, players, rounds, currentRound, turnOrder, activeTurnIndex, shopSignals, winnerId with actions: startMatch, nextRound, nextTurn, endMatch
-- [X] T060 [P] [US1] Implement playerStore in src/stores/playerStore.ts managing players array with lives, resistance, inventory, activeStatuses, pillCoins, shapeQuest, isEliminated, isLastChance with actions: updatePlayer, applyDamage, applyStatus, addToInventory, removeFromInventory
-- [X] T061 [P] [US1] Implement poolStore in src/stores/poolStore.ts managing current pool (pills, counters, revealed) with actions: generateNewPool, revealPill, consumePill, applyModifierToPill, shufflePool
+**Arquitetura: Zustand Slices Pattern** ([documentacao oficial](https://zustand.docs.pmnd.rs/guides/slices-pattern))
+
+- [X] T059 [P] [US1] Implement matchSlice in src/stores/slices/matchSlice.ts managing match lifecycle (phase, turnOrder, activeTurnIndex, currentRound, rounds) with actions: navigateToLobby, startMatch, transitionPhase, nextRound, nextTurn, endMatch, resetMatch
+- [X] T060 [P] [US1] Implement playersSlice in src/stores/slices/playersSlice.ts managing players Map<string, Player> with lives, resistance, inventory, activeStatuses, pillCoins with actions: setPlayers, updatePlayer, applyDamage, applyHeal, applyStatus, addToInventory, removeFromInventory + queries: getPlayer, getAllPlayers, getAlivePlayers
+- [X] T061 [P] [US1] Implement poolSlice in src/stores/slices/poolSlice.ts with actions that operate on currentRound.pool: revealPill, consumePill, applyModifierToPill, shufflePool + queries: getPool, getPill
+- [X] T059b [P] [US1] Implement gameStore in src/stores/gameStore.ts combining all slices using Slices Pattern: createMatchSlice + createPlayersSlice + createPoolSlice with Immer middleware
 - [X] T062 [P] [US1] Implement logStore in src/stores/logStore.ts managing event log array with structured logs (timestamp, category, severity, message, context) with actions: addLog, filterLogs, exportLogs per FR-186.14 to FR-186.17
 - [X] T063 [US1] Implement progressionStore in src/stores/progressionStore.ts managing level, xp, schmeckles, gamesPlayed, wins with Zustand persist middleware to localStorage namespace "dosed:profile" per research.md Decision 2 and FR-165 to FR-169
 
@@ -221,24 +224,24 @@
 
 #### App Integration
 
-- [X] T079 [US1] Implement App router in src/App.tsx using matchStore.phase to switch between screens (HOME → HomeScreen, LOBBY → LobbyScreen, DRAFT → DraftScreen, MATCH → MatchScreen, SHOPPING → ShoppingScreen, RESULTS → ResultsScreen) per FR-002
+- [X] T079 [US1] Implement App router in src/App.tsx using gameStore.match.phase to switch between screens (HOME -> HomeScreen, LOBBY -> LobbyScreen, DRAFT -> DraftScreen, MATCH -> MatchScreen, SHOPPING -> ShoppingScreen, RESULTS -> ResultsScreen) per FR-002
 - [X] T080 [US1] Add Error Boundary to App.tsx wrapping all screens, implementing dual-mode error handling (DEV pause + debug, PROD retry + fallback) per FR-186.7 to FR-186.10 and research.md Decision 3
-- [ ] T081-minimal [US1] **DEV MODE MÍNIMO (US1)** - Create basic DevTools overlay in src/DevTools.tsx (DEV mode only, triggered by VITE_DEV_MODE=true) with: (1) toggle visibility (keyboard shortcut: Ctrl+Shift+D), (2) Pause/Resume game button (congela state), (3) Current state viewer (JSON display of matchStore, playerStore, poolStore current state - read-only), (4) Simple log viewer showing last 50 structured logs with severity colors per FR-186.9 and research.md Decision 3. Suficiente para debugging durante desenvolvimento US1.
+- [ ] T081-minimal [US1] **DEV MODE MINIMO (US1)** - Create basic DevTools overlay in src/DevTools.tsx (DEV mode only, triggered by VITE_DEV_MODE=true) with: (1) toggle visibility (keyboard shortcut: Ctrl+Shift+D), (2) Pause/Resume game button (congela state), (3) Current state viewer (JSON display of gameStore state - read-only), (4) Simple log viewer showing last 50 structured logs with severity colors per FR-186.9 and research.md Decision 3. Suficiente para debugging durante desenvolvimento US1.
 - [ ] T081-full [Phase 6] **DEV MODE COMPLETO (Phase 6 Polish)** - Expand DevTools com 4 tabs completos per FR-187: (a) Phase Controls (skip phases, force round/turn end), (b) State Manipulation (add/remove coins/lives/resistance, apply status, reveal pills, add modifiers), (c) Advanced Logs (filter by category/severity, export JSON, clear), (d) Performance (FPS graph, frame time histogram, transition tracking). Implementar apenas após US1 completo e validado.
 
 ---
 
 ### Integration & Validation for User Story 1
 
-- [ ] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to matchStore.transitionToPhase('LOBBY')
-- [ ] T083 [US1] Wire LobbyScreen "Start" button to matchStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
-- [ ] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to matchStore.transitionToPhase('MATCH'), generating first round pool, initializing turn 1
-- [ ] T085 [US1] Wire MatchScreen pill clicks to poolStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
-- [ ] T086 [US1] Wire MatchScreen item usage to playerStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
+- [ ] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to gameStore.navigateToLobby()
+- [ ] T083 [US1] Wire LobbyScreen "Start" button to gameStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
+- [ ] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to gameStore.transitionPhase('MATCH'), generating first round pool, initializing turn 1
+- [ ] T085 [US1] Wire MatchScreen pill clicks to gameStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
+- [ ] T086 [US1] Wire MatchScreen item usage to gameStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
 - [ ] T087 [US1] Wire turn timer expiration in MatchScreen to auto-consume random pill per FR-063
-- [ ] T088 [US1] Wire match end detection (1 survivor) to matchStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
-- [ ] T089 [US1] Wire ResultsScreen "Jogar Novamente" to reset matchStore and transition to LOBBY
-- [ ] T090 [US1] Wire ResultsScreen "Menu Principal" to reset matchStore and transition to HOME
+- [ ] T088 [US1] Wire match end detection (1 survivor) to gameStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
+- [ ] T089 [US1] Wire ResultsScreen "Jogar Novamente" to gameStore.resetMatch() and navigate to LOBBY
+- [ ] T090 [US1] Wire ResultsScreen "Menu Principal" to gameStore.resetMatch() and navigate to HOME
 - [ ] T091 [US1] Add all event logging throughout match flow: PLAYER_JOINED on lobby, TURN_STARTED on turn start, ITEM_USED on item use, PILL_CONSUMED on pill consume, EFFECT_APPLIED on damage/heal, COLLAPSE_TRIGGERED on collapse, ROUND_COMPLETED on round end, MATCH_ENDED on match end per FR-186.14 to FR-186.18
 
 ---
@@ -288,7 +291,7 @@
 ### Zustand Stores for User Story 2
 
 - [ ] T104 [P] [US2] Implement economyStore in src/stores/economyStore.ts managing pill coins per player, active shape quests, shopping phase state (qualified players, carts, confirmations, timer) with actions: grantCoins, spendCoins, createQuest, completeQuest, startShopping, addToCart, confirmCart
-- [ ] T105 [US2] Add Shape Quest tracking to playerStore updating player.shapeQuest on round start, progress on pill consume, completion reward per FR-128 to FR-137
+- [ ] T105 [US2] Add Shape Quest tracking to playersSlice updating player.shapeQuest on round start, progress on pill consume, completion reward per FR-128 to FR-137
 
 ---
 
@@ -507,24 +510,21 @@ T037: Add resistance cap enforcement
 **Full MVP Tasks (US1-US3)**: 168 (Setup + Foundational + Testing + US1 + US2 + US3 + minimal Polish)
 
 **Suggested Next Step**: 
-- **CURRENT STATUS (2025-12-26 - REFATORAÇÃO CLEAN SLATE)**: 
-  - ✅ Setup, Foundational, Core Logic phases complete (T001-T081)
-  - ⚠️ Integration phase DESINTEGRADA (T082-T091) - **Reimplementação necessária seguindo specs**
-  - 🔄 **Refatoração SOLID-S completa** (seguindo Constitution.md):
-    - ✅ Hooks especializados criados (usePillConsumption, useTurnManagement, useBotExecution, useMatchEndDetection, useItemActions)
-    - ✅ useGameLoop refatorado como orquestrador (composição > monolito)
-    - ✅ Todos os componentes desintegrados (estrutura visual mantida, lógica removida)
-    - ⏳ playerStore consolidação pendente (Single Source of Truth com matchStore)
-  - 🎯 **Nova abordagem**: Reimplementar T082-T091 do zero, seguindo rigorosamente specs + Constitution.md
-    - Garantir SOLID-S compliance em cada integração
-    - Validar cada task contra FR correspondente
-    - Evitar bugs anteriores através de design correto desde o início
+- **CURRENT STATUS (2025-12-26 - REFATORACAO SLICES PATTERN COMPLETA)**: 
+  - Setup, Foundational, Core Logic phases complete (T001-T081)
+  - **Refatoracao de Stores COMPLETA** usando Zustand Slices Pattern:
+    - Hooks especializados criados (usePillConsumption, useTurnManagement, useBotExecution, useMatchEndDetection, useItemActions)
+    - useGameLoop refatorado como orquestrador (composicao > monolito)
+    - **gameStore unico combinando 3 slices** (matchSlice, playersSlice, poolSlice)
+    - Zero sincronizacao entre stores (problema anterior resolvido)
+    - Players em `Map<string, Player>` para O(1) lookup
+    - SOLID-S mantido via arquivos separados por dominio
+  - Screens atualizados para usar useGameStore
+  - Stores legados removidos (matchStore.ts, playerStore.ts, poolStore.ts)
+  - TypeScript compila sem erros
 - **IMMEDIATE ACTION REQUIRED**: 
-  1. ✅ Consolidar playerStore (Opção A: matchStore como fonte única da verdade)
-  2. ✅ Reintegrar MatchScreen com hooks refatorados (T085, T086, T087)
-  3. ✅ Reintegrar outras screens seguindo mesma abordagem (T082, T083, T084, T088, T089, T090)
-  4. ✅ Adicionar event logging completo (T091)
-  5. ✅ Validar fluxo completo (T091) contra quickstart.md checklist
-- **After Reintegration**: Validação manual completa (T091) - todos os 15 items do checklist devem passar
+  1. Reintegrar screens desintegrados com hooks refatorados (T082-T091)
+  2. Validar fluxo completo (T091) contra quickstart.md checklist
+- **After Reintegration**: Validacao manual completa (T091) - todos os 15 items do checklist devem passar
 - **Next Phase**: Once US1 is validated with clean implementation, proceed to User Story 2 (Economy) or Polish phase
 

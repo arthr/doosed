@@ -25,8 +25,8 @@ const handleEnterGame = () => {
   navigateToLobby();
 };
 ```
-**Status**: ✅ COMPLETO  
-**Validação**: Botão "ENTER THE VOID" chama `navigateToLobby()` do matchStore
+**Status**: COMPLETO  
+**Validacao**: Botao "ENTER THE VOID" chama `navigateToLobby()` do gameStore (matchSlice)
 
 ---
 
@@ -39,8 +39,7 @@ const handleEnterGame = () => {
 
 **Status**: ✅ COMPLETO  
 **Validação**: 
-- `startMatch(participants)` cria match estruturado
-- `setPlayers(participants)` popula playerStore
+- `startMatch(participants)` cria match estruturado e popula players (via playersSlice)
 - `transitionPhase(MatchPhase.DRAFT)` transiciona corretamente
 
 ---
@@ -152,61 +151,114 @@ const handlePlayAgain = () => {
 
 ---
 
-## 2. Análise de Stores (T059-T063)
+## 2. Analise de Stores (Zustand Slices Pattern)
 
-### ✅ T059 - matchStore
-**Arquivo**: `src/stores/matchStore.ts`  
+**NOTA**: A arquitetura de stores foi refatorada para usar o [Zustand Slices Pattern](https://zustand.docs.pmnd.rs/guides/slices-pattern), eliminando problemas de sincronizacao entre stores.
+
+### Estrutura Atual
+
+```
+src/stores/
+  slices/
+    types.ts           # Tipos compartilhados (GameStore, SliceCreator)
+    matchSlice.ts      # Match lifecycle (phases, turns, rounds)
+    playersSlice.ts    # Player management (health, inventory, status)
+    poolSlice.ts       # Pool operations (consume, reveal, modify)
+  gameStore.ts         # Bounded store (combina todos os slices)
+  index.ts             # Re-exports
+  economyStore.ts
+  progressionStore.ts
+  logStore.ts
+```
+
+### T059 - matchSlice
+**Arquivo**: `src/stores/slices/matchSlice.ts`  
 **Responsabilidades**:
-- Gerenciar fases (LOBBY → DRAFT → MATCH → RESULTS)
-- Controlar players, rounds, turnOrder, activeTurnIndex
-- Detectar fim de partida
+- Gerenciar fases (LOBBY -> DRAFT -> MATCH -> RESULTS)
+- Controlar match state, turnOrder, activeTurnIndex, currentRound, rounds
 
 **Features Implementadas**:
-- ✅ `navigateToLobby()` - HOME → LOBBY
-- ✅ `startMatch(players)` - Inicializa match
-- ✅ `transitionPhase(newPhase)` - State machine
-- ✅ `nextRound()` - Gera novo pool
-- ✅ `nextTurn()` - Avança turnos (pula eliminados)
-- ✅ `endMatch(winnerId)` - Finaliza partida
-- ✅ `updateMatch(updater)` - Updates via Immer
+- `navigateToLobby()` - HOME -> LOBBY
+- `startMatch(players)` - Inicializa match + chama setPlayers
+- `transitionPhase(newPhase)` - State machine
+- `nextRound()` - Gera novo pool
+- `nextTurn()` - Avanca turnos (pula eliminados via getAlivePlayers)
+- `endMatch(winnerId)` - Finaliza partida
+- `updateCurrentRound(updater)` - Updates via Immer
+- `resetMatch()` - Limpa estado
 
-**Status**: ✅ COMPLETO (~95%)  
-**Gaps Menores**:
-- Shopping phase activation (US2)
-- Seasonal shapes logic (US2+)
+**Status**: COMPLETO
 
 ---
 
-### ✅ T060 - playerStore
-**Arquivo**: `src/stores/playerStore.ts`  
+### T060 - playersSlice
+**Arquivo**: `src/stores/slices/playersSlice.ts`  
 **Responsabilidades**:
-- Gerenciar players array
+- Gerenciar players em `Map<string, Player>` (O(1) lookup)
 - Lives, resistance, inventory, activeStatuses, pillCoins
-- Colapso, eliminação, última chance
+- Colapso, eliminacao, ultima chance
 
 **Features Implementadas**:
-- ✅ `setPlayers()` - Inicializa jogadores
-- ✅ `updatePlayer(updater)` - Updates via callback
-- ✅ `applyDamage()` - Dano + colapso check
-- ✅ `applyHeal()` - Cura (respeitando cap)
-- ✅ `setActiveTurn()` - Marca jogador ativo
-- ✅ `addToInventory()` - Adiciona item (stackable logic)
-- ✅ `removeFromInventory()` - Remove item
-- ✅ `spendPillCoins()` / `grantPillCoins()` - Economia
+- `setPlayers()` - Inicializa jogadores (converte para Map)
+- `updatePlayer(id, updater)` - Updates via callback
+- `applyDamage(id, damage)` - Dano + colapso check
+- `applyHeal(id, heal)` - Cura (respeitando cap)
+- `setActiveTurn(id)` - Marca jogador ativo
+- `clearActiveTurns()` - Limpa turnos ativos
+- `addToInventory(id, item)` - Adiciona item
+- `removeFromInventory(id, itemId)` - Remove item
+- `grantPillCoins(id, amount)` / `spendPillCoins(id, amount)` - Economia
+- `applyStatus(id, status)` / `removeStatus(id, statusId)` - Status
 
-**Status**: ✅ COMPLETO (~90%)  
-**Gaps Menores**:
-- Status application/removal (Shielded, Handcuffed) - US2
-- Shape Quest tracking - US2
+**Queries**:
+- `getPlayer(id)` - Retorna player (O(1))
+- `getAllPlayers()` - Retorna array de players
+- `getAlivePlayers()` - Retorna players nao eliminados
+
+**Status**: COMPLETO
 
 ---
 
-### ✅ T061 - poolStore
-**Arquivo**: `src/stores/poolStore.ts`  
-**Status**: 🟡 NÃO IMPLEMENTADO  
-**Razão**: Pool é gerenciado dentro de `match.currentRound.pool` (matchStore)  
-**Decisão de Arquitetura**: Fonte única da verdade no matchStore  
-**Impacto**: ZERO - Arquitetura simplificada, não há necessidade de store separado
+### T061 - poolSlice
+**Arquivo**: `src/stores/slices/poolSlice.ts`  
+**Responsabilidades**:
+- Operacoes no pool de pilulas (via currentRound.pool)
+
+**Features Implementadas**:
+- `revealPill(pillId)` - Revela pilula
+- `consumePill(pillId)` - Consome pilula
+- `applyModifierToPill(pillId, modifier)` - Aplica modificador
+- `shufflePool()` - Embaralha pool
+
+**Queries**:
+- `getPool()` - Retorna pool atual
+- `getPill(pillId)` - Retorna pilula por ID
+
+**Status**: COMPLETO
+
+---
+
+### T059b - gameStore (Bounded Store)
+**Arquivo**: `src/stores/gameStore.ts`  
+**Responsabilidades**:
+- Combinar todos os slices em store unico usando Slices Pattern
+
+```typescript
+export const useGameStore = create<GameStore>()(
+  immer((...a) => ({
+    ...createMatchSlice(...a),
+    ...createPlayersSlice(...a),
+    ...createPoolSlice(...a),
+  }))
+);
+```
+
+**Beneficios**:
+- Zero sincronizacao (problema anterior resolvido)
+- SOLID-S mantido via arquivos separados
+- Slices acessam uns aos outros via `get()`
+
+**Status**: COMPLETO
 
 ---
 
@@ -395,12 +447,14 @@ const handlePlayAgain = () => {
 
 ## 6. Validação Técnica
 
-### Arquitetura de Integração
+### Arquitetura de Integracao
 
-**State Management**:
-- ✅ Zustand stores bem estruturados (matchStore, playerStore, progressionStore, logStore)
-- ✅ Immer middleware para imutabilidade
-- ✅ Fonte única da verdade: `match.currentRound.pool`
+**State Management (Zustand Slices Pattern)**:
+- Zustand gameStore combinando 3 slices (matchSlice, playersSlice, poolSlice)
+- Immer middleware para imutabilidade
+- Players em `Map<string, Player>` para O(1) lookup
+- Fonte unica da verdade: gameStore (zero sincronizacao entre stores)
+- Stores auxiliares: economyStore, progressionStore, logStore
 
 **Hooks Customizados**:
 - ✅ `useGameLoop()` - Game loop principal (consumo, turnos, fim de jogo)

@@ -60,7 +60,7 @@ export function MatchScreen() {
           <div>
             <h1 className="text-2xl font-bold text-green-500">Match em Andamento</h1>
             <p className="text-gray-400 text-sm">
-              Rodada {mockCurrentRound.number} | Turno: {mockActivePlayer?.name || '...'}
+              Rodada {mockCurrentRound.number} | Turno: {'...'}
             </p>
           </div>
 
@@ -81,7 +81,7 @@ export function MatchScreen() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Left Column - Opponents */}
           <div className="lg:col-span-1 space-y-4">
-            <OpponentLine opponents={mockOpponents} activePlayerId={mockActivePlayer?.id} />
+            <OpponentLine opponents={mockOpponents} activePlayerId={undefined} />
             
             {/* Log Viewer */}
             <LogViewer maxHeight="400px" />
@@ -92,11 +92,13 @@ export function MatchScreen() {
             <PillPool pool={mockPool} onPillClick={handlePillClick} isTargeting={false} />
 
             {/* Player HUD */}
-            <PlayerHUD
-              player={mockHumanPlayer}
-              onItemClick={handleItemClick}
-              isItemsDisabled={true}
-            />
+            {mockHumanPlayer && (
+              <PlayerHUD
+                player={mockHumanPlayer}
+                onItemClick={handleItemClick}
+                isItemsDisabled={true}
+              />
+            )}
 
             {/* Action Buttons */}
             <div className="flex gap-2">

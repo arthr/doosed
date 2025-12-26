@@ -1,20 +1,25 @@
 /**
  * usePillConsumption - Hook especializado para consumo de pills
- * 
+ *
  * SOLID-S Compliant: Single Responsibility
- * Responsabilidade: Gerenciar consumo de pills e aplicação de efeitos
+ * Responsabilidade: Gerenciar consumo de pills e aplicacao de efeitos
  */
 
 import { useCallback } from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
+import { useGameStore } from '../stores/gameStore';
 import { useEventLogger } from './useEventLogger';
 import { resolvePillEffect } from '../core/effect-resolver';
 import type { Player, Pill } from '../types/game';
 
 export function usePillConsumption() {
-  const { updateMatch } = useMatchStore();
-  const { players, updatePlayer, applyDamage, applyHeal } = usePlayerStore();
+  // Usar useGameStore com seletores para performance
+  const consumePillAction = useGameStore((state) => state.consumePill);
+  const updatePlayer = useGameStore((state) => state.updatePlayer);
+  const applyDamage = useGameStore((state) => state.applyDamage);
+  const applyHeal = useGameStore((state) => state.applyHeal);
+  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
+  const getPool = useGameStore((state) => state.getPool);
+
   const { logPill } = useEventLogger();
 
   /**
@@ -22,15 +27,8 @@ export function usePillConsumption() {
    */
   const consumePill = useCallback(
     (pill: Pill, player: Player): void => {
-      // Remove pill do pool (mutação via Immer no matchStore)
-      updateMatch((m) => {
-        if (!m.currentRound) return;
-        const pillIndex = m.currentRound.pool.pills.findIndex((p) => p.id === pill.id);
-        if (pillIndex !== -1) {
-          m.currentRound.pool.pills.splice(pillIndex, 1);
-          m.currentRound.pool.size = m.currentRound.pool.pills.length;
-        }
-      });
+      // Remove pill do pool (action do poolSlice)
+      consumePillAction(pill.id);
 
       // Resolve efeito da pill
       const effect = resolvePillEffect(pill, player);
@@ -58,17 +56,17 @@ export function usePillConsumption() {
         effect,
       });
     },
-    [updateMatch, applyDamage, applyHeal, updatePlayer, logPill]
+    [consumePillAction, applyDamage, applyHeal, updatePlayer, logPill]
   );
 
   /**
-   * Handler para consumo de pill via UI (wrapper com validações)
+   * Handler para consumo de pill via UI (wrapper com validacoes)
    */
   const handlePillClick = useCallback(
     (pillId: string, playerId: string) => {
-      const { match } = useMatchStore.getState();
-      const pool = match?.currentRound?.pool;
-      
+      const pool = getPool();
+      const players = getAllPlayers();
+
       if (!pool) return;
 
       const pill = pool.pills.find((p) => p.id === pillId);
@@ -78,7 +76,7 @@ export function usePillConsumption() {
 
       consumePill(pill, player);
     },
-    [players, consumePill]
+    [getPool, getAllPlayers, consumePill]
   );
 
   return {
@@ -86,4 +84,3 @@ export function usePillConsumption() {
     handlePillClick,
   };
 }
-

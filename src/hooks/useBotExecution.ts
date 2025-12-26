@@ -1,34 +1,38 @@
 /**
- * useBotExecution - Hook especializado para execução de bot AI
- * 
+ * useBotExecution - Hook especializado para execucao de bot AI
+ *
  * SOLID-S Compliant: Single Responsibility
- * Responsabilidade: Executar decisões de bot AI
+ * Responsabilidade: Executar decisoes de bot AI
  */
 
 import { useCallback, useMemo } from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
+import { useGameStore } from '../stores/gameStore';
 import { useEventLogger } from './useEventLogger';
 import { BotEasy } from '../core/bot/bot-easy';
-import type { Player } from '../types/game';
+import type { Player, Match } from '../types/game';
 
 export function useBotExecution() {
-  const { match } = useMatchStore();
-  const { players } = usePlayerStore();
+  // Usar useGameStore com seletores para performance
+  const match = useGameStore((state) => state.match);
+  const currentRound = useGameStore((state) => state.currentRound);
+  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
+  const getPool = useGameStore((state) => state.getPool);
+
   const { logBotDecision } = useEventLogger();
 
-  // Instância singleton do bot Easy
+  // Instancia singleton do bot Easy
   const botEasy = useMemo(() => new BotEasy(), []);
 
   /**
-   * Executa turno do bot (decide ação e retorna decisão)
-   * Note: Não aplica a ação, apenas retorna a decisão
+   * Executa turno do bot (decide acao e retorna decisao)
+   * Note: Nao aplica a acao, apenas retorna a decisao
    */
   const executeBotDecision = useCallback(
     (bot: Player) => {
-      const pool = match?.currentRound?.pool;
-      
-      if (!pool || !match) {
+      const pool = getPool();
+      const players = getAllPlayers();
+
+      if (!pool || !match || !currentRound) {
         return null;
       }
 
@@ -37,7 +41,29 @@ export function useBotExecution() {
       const opponents = players.filter((p) => p.id !== bot.id);
       const seed = Date.now() + Math.random() * 1000;
 
-      const decision = botEasy.decideTurnAction(bot, opponents, pool, match, seed);
+      // Criar objeto Match compativel para o bot
+      const matchForBot: Match = {
+        id: match.id,
+        phase: match.phase,
+        players,
+        rounds: [],
+        currentRound,
+        turnOrder: match.turnOrder,
+        activeTurnIndex: match.activeTurnIndex,
+        seasonalShapes: match.seasonalShapes,
+        shopSignals: match.shopSignals,
+        winnerId: match.winnerId,
+        startedAt: match.startedAt,
+        endedAt: match.endedAt,
+      };
+
+      const decision = botEasy.decideTurnAction(
+        bot,
+        opponents,
+        pool,
+        matchForBot,
+        seed
+      );
 
       if (decision.type === 'CONSUME_PILL') {
         logBotDecision(`Bot decidiu consumir pill ${decision.pillId}`, {
@@ -53,11 +79,11 @@ export function useBotExecution() {
 
       return decision;
     },
-    [match, players, botEasy, logBotDecision]
+    [match, currentRound, getAllPlayers, getPool, botEasy, logBotDecision]
   );
 
   /**
-   * Verifica se player é bot e pode agir
+   * Verifica se player e bot e pode agir
    */
   const canBotAct = useCallback((player: Player): boolean => {
     return player.isBot && !player.isEliminated;
@@ -68,4 +94,3 @@ export function useBotExecution() {
     canBotAct,
   };
 }
-

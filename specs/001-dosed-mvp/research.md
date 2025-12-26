@@ -31,33 +31,76 @@ Jogo turn-based complexo com state distribuído: match state, player state, pool
 - **XState**: Especializado em state machines mas curva de aprendizado maior, over-engineering para MVP
 
 ### Implementation Details
-**Store Organization** (5 stores):
-- `matchStore.ts` - Partida, rodadas, turnos, fase atual
-- `playerStore.ts` - Jogadores, inventários, vidas, resistência, status ativos
-- `poolStore.ts` - Pool de pills, revelações, modificadores
-- `economyStore.ts` - Pill Coins, Shape Quests, Shopping Phase
-- `progressionStore.ts` - XP, Schmeckles, nível (com persist para localStorage)
 
-**Pattern**:
+**Arquitetura: Zustand Slices Pattern** ([documentacao oficial](https://zustand.docs.pmnd.rs/guides/slices-pattern))
+
+Apos analise, a arquitetura original de 5 stores separados foi refatorada para usar o Slices Pattern oficial do Zustand, eliminando problemas de sincronizacao entre stores.
+
+**Store Organization**:
+```
+src/stores/
+  slices/
+    types.ts           # Tipos compartilhados (GameStore, SliceCreator)
+    matchSlice.ts      # Match lifecycle (phases, turns, rounds)
+    playersSlice.ts    # Player management (health, inventory, status)
+    poolSlice.ts       # Pool operations (consume, reveal, modify)
+  gameStore.ts         # Bounded store (combina todos os slices)
+  index.ts             # Re-exports
+  economyStore.ts      # Pill Coins, Shape Quests, Shopping Phase
+  progressionStore.ts  # XP, Schmeckles, nivel (com persist para localStorage)
+  logStore.ts          # Event log + Game Log para UI
+```
+
+**Rationale para Slices Pattern**:
+1. **Zero sincronizacao**: Store unico elimina necessidade de sincronizar estado entre stores
+2. **SOLID-S mantido**: Cada slice em arquivo separado com responsabilidade unica
+3. **Performance**: Players em `Map<string, Player>` para O(1) lookup
+4. **Slices colaboram**: Acessam estado uns dos outros via `get()` sem overhead
+
+**Pattern (Slices)**:
 ```typescript
+// src/stores/slices/matchSlice.ts
+import type { SliceCreator, MatchSlice } from './types';
+
+export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
+  match: null,
+  currentRound: null,
+  
+  startMatch: (players) => set((state) => {
+    // Usa playersSlice para armazenar players via get()
+    get().setPlayers(players);
+    // ... inicializa match
+  }),
+});
+
+// src/stores/gameStore.ts
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { createMatchSlice } from './slices/matchSlice';
+import { createPlayersSlice } from './slices/playersSlice';
+import { createPoolSlice } from './slices/poolSlice';
 
-export const useMatchStore = create(immer((set) => ({
-  phase: 'LOBBY',
-  roundNumber: 0,
-  turnIndex: 0,
-  // ... state
-  
-  startTurn: (playerId) => set((state) => {
-    // Immer permite mutação direta (produz novo state)
-    state.turnIndex++;
-    state.currentPlayerId = playerId;
-  }),
-})));
+export const useGameStore = create(
+  immer((...a) => ({
+    ...createMatchSlice(...a),
+    ...createPlayersSlice(...a),
+    ...createPoolSlice(...a),
+  }))
+);
+```
+
+**Uso nos componentes**:
+```typescript
+import { useGameStore } from '../stores/gameStore';
+
+// Selecionar apenas o que precisa (performance)
+const match = useGameStore((state) => state.match);
+const applyDamage = useGameStore((state) => state.applyDamage);
+const players = useGameStore((state) => state.getAllPlayers());
 ```
 
 **References**:
+- [Zustand Slices Pattern](https://zustand.docs.pmnd.rs/guides/slices-pattern)
 - [Zustand Docs](https://github.com/pmndrs/zustand)
 - [Immer Middleware](https://docs.pmnd.rs/zustand/integrations/immer-middleware)
 

@@ -1,19 +1,27 @@
 /**
- * useTurnManagement - Hook especializado para gestão de turnos
- * 
+ * useTurnManagement - Hook especializado para gestao de turnos
+ *
  * SOLID-S Compliant: Single Responsibility
  * Responsabilidade: Gerenciar ciclo de turnos (next, skip, timeout)
  */
 
 import { useCallback } from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
+import { useGameStore } from '../stores/gameStore';
 import { useEventLogger } from './useEventLogger';
 import type { Player } from '../types/game';
 
 export function useTurnManagement() {
-  const { match, nextTurn, nextRound } = useMatchStore();
-  const { players, setActiveTurn, clearActiveTurns } = usePlayerStore();
+  // Usar useGameStore com seletores para performance
+  const match = useGameStore((state) => state.match);
+  const currentRound = useGameStore((state) => state.currentRound);
+  const nextTurn = useGameStore((state) => state.nextTurn);
+  const nextRound = useGameStore((state) => state.nextRound);
+  const setActiveTurn = useGameStore((state) => state.setActiveTurn);
+  const clearActiveTurns = useGameStore((state) => state.clearActiveTurns);
+  const getPlayer = useGameStore((state) => state.getPlayer);
+  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
+  const getAlivePlayers = useGameStore((state) => state.getAlivePlayers);
+
   const { logTurn } = useEventLogger();
 
   /**
@@ -23,45 +31,54 @@ export function useTurnManagement() {
     if (!match) return null;
 
     const currentPlayerId = match.turnOrder[match.activeTurnIndex];
-    return players.find((p) => p.id === currentPlayerId) || null;
-  }, [match, players]);
+    return getPlayer(currentPlayerId) || null;
+  }, [match, getPlayer]);
 
   /**
    * Verifica se pool esgotou e precisa de nova rodada
    */
   const shouldStartNewRound = useCallback((): boolean => {
-    const pool = match?.currentRound?.pool;
+    const pool = currentRound?.pool;
     return pool ? pool.pills.length === 0 : false;
-  }, [match]);
+  }, [currentRound]);
 
   /**
-   * Avança para próximo turno (ou rodada se pool esgotou)
-   * Lógica FR-045: Pool vazio → nova rodada
+   * Avanca para proximo turno (ou rodada se pool esgotou)
+   * Logica FR-045: Pool vazio -> nova rodada
    */
   const advanceToNextTurn = useCallback(() => {
     if (!match) return;
 
-    const alivePlayers = players.filter((p) => !p.isEliminated);
-    
-    // Jogo terminou? Não avança
+    const alivePlayers = getAlivePlayers();
+
+    // Jogo terminou? Nao avanca
     if (alivePlayers.length <= 1) return;
 
     // Pool esgotou? Nova rodada
     if (shouldStartNewRound()) {
       logTurn('Pool esgotado - iniciando nova rodada', {
-        roundNumber: (match.currentRound?.number || 0) + 1,
+        roundNumber: (currentRound?.number || 0) + 1,
       });
       nextRound(); // Gera novo pool + reseta activeTurnIndex = 0
     } else {
       nextTurn(); // Incrementa activeTurnIndex
     }
 
-    // Limpa turno ativo para triggar detecção de próximo turno
+    // Limpa turno ativo para triggar deteccao de proximo turno
     clearActiveTurns();
-  }, [match, players, shouldStartNewRound, nextTurn, nextRound, clearActiveTurns, logTurn]);
+  }, [
+    match,
+    currentRound,
+    getAlivePlayers,
+    shouldStartNewRound,
+    nextTurn,
+    nextRound,
+    clearActiveTurns,
+    logTurn,
+  ]);
 
   /**
-   * Inicia turno de um player específico
+   * Inicia turno de um player especifico
    */
   const startTurnForPlayer = useCallback(
     (player: Player) => {
@@ -69,42 +86,43 @@ export function useTurnManagement() {
 
       logTurn(`Turno de ${player.name}`, {
         playerId: player.id,
-        roundNumber: match?.currentRound?.number || 0,
+        roundNumber: currentRound?.number || 0,
       });
     },
-    [match?.currentRound?.number, setActiveTurn, logTurn]
+    [currentRound?.number, setActiveTurn, logTurn]
   );
 
   /**
-   * Pula turno de player eliminado e tenta próximo
+   * Pula turno de player eliminado e tenta proximo
    */
   const skipEliminatedPlayerTurn = useCallback(() => {
     nextTurn();
   }, [nextTurn]);
 
   /**
-   * Handler para timeout de turno - consome pill aleatória
-   * Retorna pillId da pill aleatória ou null se não há pills
+   * Handler para timeout de turno - consome pill aleatoria
+   * Retorna pillId da pill aleatoria ou null se nao ha pills
    */
   const handleTurnTimeout = useCallback((): string | null => {
-    const pool = match?.currentRound?.pool;
+    const pool = currentRound?.pool;
+    const players = getAllPlayers();
     const activePlayer = players.find((p) => p.isActiveTurn);
 
     if (!pool || !activePlayer || pool.pills.length === 0) {
       return null;
     }
 
-    // Seleciona pill aleatória
+    // Seleciona pill aleatoria
     const randomIndex = Math.floor(Math.random() * pool.pills.length);
     const randomPill = pool.pills[randomIndex];
 
-    logTurn(`Timer expirou! ${activePlayer.name} consumirá pill aleatória`, {
+    logTurn(`Timer expirou! ${activePlayer.name} consumira pill aleatoria`, {
       playerId: activePlayer.id,
       pillId: randomPill.id,
     });
 
     return randomPill.id;
-  }, [match, players, logTurn]);
+  }, [currentRound, getAllPlayers, logTurn]);
 
   return {
     getCurrentTurnPlayer,
@@ -115,4 +133,3 @@ export function useTurnManagement() {
     handleTurnTimeout,
   };
 }
-

@@ -114,10 +114,10 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
 
 ### Complexity Tracking
 - **Total Events**: 8 (design choice dentro do limite constitucional 8-12)
-  - **Rationale**: 8 eventos cobrem todo o MVP state space. Eventos 9-12 seriam redundantes ou sub-estados (Shopping, Quest, LevelUp já capturados por ROUND_COMPLETED, EFFECT_APPLIED, MATCH_ENDED). Preferimos simplicidade (Princípio II) sem perder expressividade.
-  - **Extensibilidade futura**: Se multiplayer real exigir eventos adicionais (PLAYER_DISCONNECTED, RECONNECT_ATTEMPT, SERVER_ROLLBACK), podemos expandir até 12 mantendo Constitution compliance.
-- **Zustand Stores**: 5 (match, player, pool, economy, progression)
-- **Key Entities**: 29 (alto mas necessário para domínio complexo)
+  - **Rationale**: 8 eventos cobrem todo o MVP state space. Eventos 9-12 seriam redundantes ou sub-estados (Shopping, Quest, LevelUp ja capturados por ROUND_COMPLETED, EFFECT_APPLIED, MATCH_ENDED). Preferimos simplicidade (Principio II) sem perder expressividade.
+  - **Extensibilidade futura**: Se multiplayer real exigir eventos adicionais (PLAYER_DISCONNECTED, RECONNECT_ATTEMPT, SERVER_ROLLBACK), podemos expandir ate 12 mantendo Constitution compliance.
+- **Zustand Store**: 1 bounded store (gameStore) usando Slices Pattern com 3 slices (match, players, pool) + 2 stores auxiliares (economy, progression)
+- **Key Entities**: 29 (alto mas necessario para dominio complexo)
 - **FRs**: 187 (alto - priorizar P1 user story primeiro)
 
 ## Implementation Strategy
@@ -157,12 +157,28 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
 - `bot-interface.ts` - Interface comum para todos os bots
 
 #### 1.4 Zustand Stores (`src/stores/`)
-- `matchStore.ts` - Partida, rodadas, turnos, fase atual
-- `playerStore.ts` - Jogadores, inventários, vidas, resistência, status
-- `poolStore.ts` - Pool atual, pills, revelações, modificadores
-- `economyStore.ts` - Pill Coins, Shape Quests, Shopping
-- `progressionStore.ts` - XP, Schmeckles, nível (persiste em localStorage)
-- `logStore.ts` - Event log + Game Log para UI
+
+**Arquitetura: Zustand Slices Pattern** ([documentacao oficial](https://zustand.docs.pmnd.rs/guides/slices-pattern))
+
+```
+src/stores/
+  slices/
+    types.ts           # Tipos compartilhados (GameStore, SliceCreator)
+    matchSlice.ts      # Match lifecycle (phases, turns, rounds)
+    playersSlice.ts    # Player management (health, inventory, status)
+    poolSlice.ts       # Pool operations (consume, reveal, modify)
+  gameStore.ts         # Bounded store (combina todos os slices)
+  index.ts             # Re-exports
+  economyStore.ts      # Pill Coins, Shape Quests, Shopping
+  progressionStore.ts  # XP, Schmeckles, nivel (persiste em localStorage)
+  logStore.ts          # Event log + Game Log para UI
+```
+
+**Beneficios**:
+- SOLID-S mantido via arquivos separados por dominio
+- Zero sincronizacao (store unico combinado)
+- Slices acessam uns aos outros via `get()`
+- Players em `Map<string, Player>` para O(1) lookup
 
 ### Phase 2: Minimal UI (Testability-First)
 

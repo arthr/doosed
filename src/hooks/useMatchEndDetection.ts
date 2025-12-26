@@ -1,44 +1,47 @@
 /**
- * useMatchEndDetection - Hook especializado para detecção de fim de jogo
- * 
+ * useMatchEndDetection - Hook especializado para deteccao de fim de jogo
+ *
  * SOLID-S Compliant: Single Responsibility
  * Responsabilidade: Detectar fim de jogo e calcular recompensas
  */
 
 import { useCallback } from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { usePlayerStore } from '../stores/playerStore';
+import { useGameStore } from '../stores/gameStore';
 import { useProgressionStore } from '../stores/progressionStore';
 import { useEventLogger } from './useEventLogger';
 
 export function useMatchEndDetection() {
-  const { match, endMatch } = useMatchStore();
-  const { players } = usePlayerStore();
-  const { addXP, incrementGamesPlayed, incrementWins, addRoundsSurvived } = useProgressionStore();
+  // Usar useGameStore com seletores para performance
+  const rounds = useGameStore((state) => state.rounds);
+  const endMatch = useGameStore((state) => state.endMatch);
+  const getAlivePlayers = useGameStore((state) => state.getAlivePlayers);
+
+  const { addXP, incrementGamesPlayed, incrementWins, addRoundsSurvived } =
+    useProgressionStore();
   const { logMatch } = useEventLogger();
 
   /**
-   * Checa se há apenas 1 jogador vivo (condição de vitória)
+   * Checa se ha apenas 1 jogador vivo (condicao de vitoria)
    * Retorna o vencedor ou null se jogo continua
    */
   const checkForWinner = useCallback(() => {
-    const alivePlayers = players.filter((p) => !p.isEliminated);
+    const alivePlayers = getAlivePlayers();
 
     if (alivePlayers.length === 1) {
       return alivePlayers[0];
     }
 
     return null;
-  }, [players]);
+  }, [getAlivePlayers]);
 
   /**
    * Calcula recompensas de XP baseado em performance
-   * TODO: Refinar cálculo com base em stats reais
+   * TODO: Refinar calculo com base em stats reais
    */
   const calculateXPReward = useCallback((isWinner: boolean): number => {
     const baseXP = 100;
     const winBonus = isWinner ? 50 : 0;
-    
+
     return baseXP + winBonus;
   }, []);
 
@@ -61,17 +64,26 @@ export function useMatchEndDetection() {
       }
 
       incrementGamesPlayed();
-      addRoundsSurvived(match?.rounds.length || 0);
+      addRoundsSurvived(rounds.length || 0);
 
       // Finaliza match no store
       endMatch(winner.id);
     },
-    [match?.rounds.length, logMatch, calculateXPReward, addXP, incrementWins, incrementGamesPlayed, addRoundsSurvived, endMatch]
+    [
+      rounds.length,
+      logMatch,
+      calculateXPReward,
+      addXP,
+      incrementWins,
+      incrementGamesPlayed,
+      addRoundsSurvived,
+      endMatch,
+    ]
   );
 
   /**
-   * Checa fim de jogo e finaliza se necessário
-   * Retorna true se jogo terminou, false caso contrário
+   * Checa fim de jogo e finaliza se necessario
+   * Retorna true se jogo terminou, false caso contrario
    */
   const checkAndHandleMatchEnd = useCallback((): boolean => {
     const winner = checkForWinner();
@@ -90,4 +102,3 @@ export function useMatchEndDetection() {
     finalizeMatch,
   };
 }
-

@@ -79,12 +79,16 @@ src/
 │       ├── random.ts        # Seeded RNG para determinismo
 │       └── validation.ts    # Validações de invariantes
 │
-├── stores/             # Zustand stores
-│   ├── matchStore.ts
-│   ├── playerStore.ts
-│   ├── poolStore.ts
+├── stores/             # Zustand stores (Slices Pattern)
+│   ├── slices/
+│   │   ├── types.ts          # Tipos compartilhados
+│   │   ├── matchSlice.ts     # Match lifecycle
+│   │   ├── playersSlice.ts   # Player management
+│   │   └── poolSlice.ts      # Pool operations
+│   ├── gameStore.ts          # Bounded store (combina slices)
+│   ├── index.ts              # Re-exports
 │   ├── economyStore.ts
-│   ├── progressionStore.ts  # Com persist para localStorage
+│   ├── progressionStore.ts   # Com persist para localStorage
 │   └── logStore.ts
 │
 ├── components/
@@ -225,14 +229,24 @@ pnpm test src/core/bot/__tests__/bot-easy.test.ts
 
 **Validação**: Bot Easy toma decisões válidas e razoáveis
 
-#### 1.4 Implementar Zustand Stores
+#### 1.4 Implementar Zustand Stores (Slices Pattern)
+
+Arquitetura usando [Zustand Slices Pattern](https://zustand.docs.pmnd.rs/guides/slices-pattern):
 
 ```bash
-# Criar stores
-touch src/stores/{matchStore,playerStore,poolStore,economyStore,progressionStore,logStore}.ts
+# Criar estrutura de slices
+mkdir -p src/stores/slices
+touch src/stores/slices/{types,matchSlice,playersSlice,poolSlice}.ts
+touch src/stores/{gameStore,index,economyStore,progressionStore,logStore}.ts
 ```
 
-**Validação**: Stores compilam e têm tipos corretos
+**Beneficios**:
+- SOLID-S mantido (arquivos separados por dominio)
+- Zero sincronizacao (store unico combinado)
+- Slices colaboram via `get()`
+- Players em `Map<string, Player>` para O(1) lookup
+
+**Validacao**: TypeScript compila sem erros, stores funcionam
 
 ### Fase 2: Minimal UI (Testability-First)
 

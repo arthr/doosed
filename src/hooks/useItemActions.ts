@@ -1,35 +1,38 @@
 /**
  * useItemActions - Hook especializado para uso de itens
- * 
+ *
  * SOLID-S Compliant: Single Responsibility
- * Responsabilidade: Gerenciar uso de itens do inventário
+ * Responsabilidade: Gerenciar uso de itens do inventario
  */
 
 import { useCallback } from 'react';
-import { usePlayerStore } from '../stores/playerStore';
+import { useGameStore } from '../stores/gameStore';
 import { useEventLogger } from './useEventLogger';
 import type { Player, Item } from '../types/game';
 
 export function useItemActions() {
-  const { players } = usePlayerStore();
+  // Usar useGameStore com seletores para performance
+  const getPlayer = useGameStore((state) => state.getPlayer);
+  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
+
   const { logItem } = useEventLogger();
 
   /**
-   * Encontra item no inventário do player
+   * Encontra item no inventario do player
    */
   const findItemInInventory = useCallback(
     (playerId: string, itemId: string) => {
-      const player = players.find((p) => p.id === playerId);
+      const player = getPlayer(playerId);
       if (!player) return null;
 
       const slot = player.inventory.find((s) => s.item?.id === itemId);
       return slot && slot.item ? { player, slot, item: slot.item } : null;
     },
-    [players]
+    [getPlayer]
   );
 
   /**
-   * Usa item do inventário
+   * Usa item do inventario
    * TODO: Implementar efeitos de itens (US2)
    */
   const useItem = useCallback(
@@ -49,14 +52,17 @@ export function useItemActions() {
   );
 
   /**
-   * Handler para uso de item via UI (wrapper com validações)
+   * Handler para uso de item via UI (wrapper com validacoes)
    */
   const handleItemClick = useCallback(
     (playerId: string, itemId: string) => {
       const result = findItemInInventory(playerId, itemId);
-      
+
       if (!result) {
-        console.warn('[useItemActions] Item não encontrado no inventário', { playerId, itemId });
+        console.warn('[useItemActions] Item nao encontrado no inventario', {
+          playerId,
+          itemId,
+        });
         return;
       }
 
@@ -71,4 +77,3 @@ export function useItemActions() {
     handleItemClick,
   };
 }
-

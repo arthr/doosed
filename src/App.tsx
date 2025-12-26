@@ -1,12 +1,12 @@
 /**
- * App - Router principal baseado em matchStore.phase
- * 
+ * App - Router principal baseado em gameStore.match.phase
+ *
  * T079: Router com Error Boundary
  * T080: Error Boundary com dual-mode handling
  */
 
 import React from 'react';
-import { useMatchStore } from './stores/matchStore';
+import { useGameStore } from './stores/gameStore';
 import { MatchPhase } from './types/game';
 import { HomeScreen } from './screens/HomeScreen';
 import { LobbyScreen } from './screens/LobbyScreen';
@@ -32,7 +32,7 @@ class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Game Error:', error, errorInfo);
-    
+
     // Em DEV: pausa com debug overlay
     if (import.meta.env.DEV) {
       console.log('DEV MODE: Error paused for debugging');
@@ -54,11 +54,14 @@ class ErrorBoundary extends React.Component<
       return (
         <div className="min-h-screen bg-gray-900 flex items-center justify-center p-8">
           <div className="max-w-md w-full bg-gray-800 rounded-lg p-6 border border-red-500">
-            <h1 className="text-2xl font-bold text-red-500 mb-4">Erro no Jogo</h1>
+            <h1 className="text-2xl font-bold text-red-500 mb-4">
+              Erro no Jogo
+            </h1>
             <p className="text-gray-300 mb-4">
-              Ocorreu um erro inesperado. Você pode tentar novamente ou voltar ao menu principal.
+              Ocorreu um erro inesperado. Voce pode tentar novamente ou voltar
+              ao menu principal.
             </p>
-            
+
             {import.meta.env.DEV && this.state.error && (
               <div className="bg-gray-900 p-3 rounded mb-4 text-xs text-gray-400 font-mono">
                 {this.state.error.toString()}
@@ -90,14 +93,14 @@ class ErrorBoundary extends React.Component<
 
 // App Router
 function App() {
-  const { match } = useMatchStore();
+  const match = useGameStore((state) => state.match);
   const phase = match?.phase || MatchPhase.LOBBY;
 
   // Router baseado em phase
   const renderScreen = () => {
     switch (phase) {
       case MatchPhase.LOBBY:
-        // Se não tem match, mostra HOME, senão mostra LOBBY
+        // Se nao tem match, mostra HOME, senao mostra LOBBY
         return match ? <LobbyScreen /> : <HomeScreen />;
       case MatchPhase.DRAFT:
         return <DraftScreen />;
@@ -112,11 +115,7 @@ function App() {
     }
   };
 
-  return (
-    <ErrorBoundary>
-      {renderScreen()}
-    </ErrorBoundary>
-  );
+  return <ErrorBoundary>{renderScreen()}</ErrorBoundary>;
 }
 
 export default App;

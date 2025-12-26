@@ -25,7 +25,7 @@ dosed/
 │   ├── hooks/                    # Hooks (bridge)
 │   ├── lib/                      # Utils não-domínio (cn, systemMessages, etc.)
 │   ├── screens/                  # Screens (Home/Lobby/Draft/Match/Results)
-│   ├── stores/                   # Zustand stores (matchStore, uiStore, etc.)
+│   ├── stores/                   # Zustand stores (gameStore com Slices Pattern)
 │   └── types/                    # Contratos/Types (game, lobby, draft, etc.)
 ├── public/
 │   └── assets/

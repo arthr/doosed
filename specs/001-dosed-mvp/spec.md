@@ -518,7 +518,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 
 - **FR-186.1**: Frontend DEVE ser implementado com React + TypeScript + Vite (stack atual confirmada)
 - **FR-186.2**: State management DEVE usar Zustand para gerenciar estado do jogo (Match state machine, inventários, turnos, rodadas, pools, jogadores)
-- **FR-186.3**: Zustand stores DEVEM ser organizados por domínio: matchStore (partida/rodadas/turnos), playerStore (jogadores/inventários/status), poolStore (pills/revelações/modificadores), economyStore (Pill Coins/Shape Quests/Shopping), progressionStore (XP/Schmeckles/nível)
+- **FR-186.3**: Zustand stores DEVEM usar o Slices Pattern (https://zustand.docs.pmnd.rs/guides/slices-pattern): gameStore combinando matchSlice (partida/rodadas/turnos), playersSlice (jogadores/inventarios/status), poolSlice (pills/revelacoes/modificadores) + stores auxiliares: economyStore (Pill Coins/Shape Quests/Shopping), progressionStore (XP/Schmeckles/nivel)
 - **FR-186.4**: State machines de fase (Home/Lobby/Draft/Match/Shopping/Results) DEVEM ser implementados com Zustand com transições explícitas e validadas
 - **FR-186.5**: Persistência de progressão (XP, Schmeckles, nível) DEVE usar localStorage com chave namespace "dosed:profile"
 - **FR-186.6**: Dados em localStorage DEVEM ser serializados como JSON com validação de schema ao carregar (fallback para valores default se corrompido)

@@ -1,22 +1,24 @@
-
 /**
  * HomeScreen - Tela inicial do jogo
- * 
+ *
  * T074: "ENTER THE VOID" button + profile info (level, xp, schmeckles)
  */
 
 import React from 'react';
-import { useMatchStore } from '../stores/matchStore';
-import { useProgressionStore, useProgressionInfo } from '../stores/progressionStore';
+import { useGameStore } from '../stores/gameStore';
+import {
+  useProgressionStore,
+  useProgressionInfo,
+} from '../stores/progressionStore';
 import { Button } from '../components/ui/button';
 
 export function HomeScreen() {
-  const { navigateToLobby } = useMatchStore();
+  const navigateToLobby = useGameStore((state) => state.navigateToLobby);
   const profile = useProgressionStore();
   const progressionInfo = useProgressionInfo();
 
   const handleEnterGame = () => {
-    // T082: HOME → LOBBY navigation
+    // T082: HOME -> LOBBY navigation
     navigateToLobby();
   };
 
@@ -37,10 +39,12 @@ export function HomeScreen() {
             </div>
             <div className="flex-1">
               <div className="text-white font-bold text-xl">{profile.name}</div>
-              <div className="text-gray-400">Nível {profile.level}</div>
+              <div className="text-gray-400">Nivel {profile.level}</div>
             </div>
             <div className="text-right">
-              <div className="text-yellow-500 font-bold text-2xl">{profile.schmeckles}</div>
+              <div className="text-yellow-500 font-bold text-2xl">
+                {profile.schmeckles}
+              </div>
               <div className="text-gray-400 text-sm">Schmeckles</div>
             </div>
           </div>
@@ -48,7 +52,7 @@ export function HomeScreen() {
           {/* XP Progress Bar */}
           <div>
             <div className="flex justify-between text-xs text-gray-400 mb-1">
-              <span>XP para Nível {profile.level + 1}</span>
+              <span>XP para Nivel {profile.level + 1}</span>
               <span>
                 {progressionInfo.xpProgress}/{progressionInfo.xpNeeded}
               </span>
@@ -64,22 +68,31 @@ export function HomeScreen() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-700">
             <div className="text-center">
-              <div className="text-white font-bold text-lg">{profile.gamesPlayed}</div>
+              <div className="text-white font-bold text-lg">
+                {profile.gamesPlayed}
+              </div>
               <div className="text-gray-400 text-xs">Partidas</div>
             </div>
             <div className="text-center">
               <div className="text-white font-bold text-lg">{profile.wins}</div>
-              <div className="text-gray-400 text-xs">Vitórias</div>
+              <div className="text-gray-400 text-xs">Vitorias</div>
             </div>
             <div className="text-center">
-              <div className="text-white font-bold text-lg">{profile.totalRoundsSurvived}</div>
+              <div className="text-white font-bold text-lg">
+                {profile.totalRoundsSurvived}
+              </div>
               <div className="text-gray-400 text-xs">Rodadas</div>
             </div>
           </div>
         </div>
 
         {/* Enter Button */}
-        <Button onClick={handleEnterGame} variant="primary" size="lg" className="w-full">
+        <Button
+          onClick={handleEnterGame}
+          variant="primary"
+          size="lg"
+          className="w-full"
+        >
           ENTER THE VOID
         </Button>
 

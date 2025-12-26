@@ -19,7 +19,7 @@ import { Button } from '../components/ui/button';
 import { TimerDisplay } from '../components/ui/timer-display';
 import { ShopGrid } from '../components/game/ShopGrid';
 import { InventorySlot } from '../components/ui/inventory-slot';
-import { ItemCategory, Targeting, Availability } from '../types/item';
+import { ItemCategory, Targeting, Availability, Item } from '../types/item';
 
 // Mock de itens (será substituído por config real)
 const MOCK_ITEMS: Item[] = [

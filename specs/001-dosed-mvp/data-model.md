@@ -1229,5 +1229,50 @@ Este modelo de dados cobre todas as 29 Key Entities especificadas no spec, com a
 
 **Total de Entities**: 15 principais (Player, Pill, Shape, Item, InventorySlot, Status, Pool, ShapeQuest, Boost, Turn, Round, Match, ShoppingPhase, Profile, GameEvent)
 
+---
+
+## Store Architecture (Zustand Slices Pattern)
+
+A implementacao usa o [Zustand Slices Pattern](https://zustand.docs.pmnd.rs/guides/slices-pattern) para gerenciamento de estado:
+
+### Estrutura
+
+```
+src/stores/
+  slices/
+    types.ts           # Tipos compartilhados (GameStore, SliceCreator)
+    matchSlice.ts      # Match lifecycle (phases, turns, rounds)
+    playersSlice.ts    # Player management (health, inventory, status)
+    poolSlice.ts       # Pool operations (consume, reveal, modify)
+  gameStore.ts         # Bounded store (combina todos os slices)
+  index.ts             # Re-exports
+```
+
+### Responsabilidades
+
+| Slice | Responsabilidade | State |
+|-------|------------------|-------|
+| matchSlice | Ciclo de vida da partida | match, currentRound, rounds |
+| playersSlice | Gerenciamento de jogadores | players (Map) |
+| poolSlice | Operacoes no pool de pilulas | Opera sobre currentRound.pool |
+
+### Beneficios
+
+1. **SOLID-S**: Cada slice em arquivo separado com responsabilidade unica
+2. **Zero Sincronizacao**: Store unico combinado, slices acessam uns aos outros via `get()`
+3. **Performance**: Map para O(1) lookup de players
+4. **Padrao Oficial**: Documentacao do Zustand
+
+### Uso
+
+```typescript
+import { useGameStore } from '../stores/gameStore';
+
+// Selecionar apenas o que precisa (performance)
+const match = useGameStore((state) => state.match);
+const applyDamage = useGameStore((state) => state.applyDamage);
+const players = useGameStore((state) => state.getAllPlayers());
+```
+
 **Next Step**: Implementar types TypeScript (`src/types/`) baseado neste modelo.
 
