@@ -39,6 +39,7 @@ export function LobbyScreen() {
       isBot: false,
       botLevel: undefined,
       lives: DEFAULT_GAME_CONFIG.health.initialLives,
+      maxLives: DEFAULT_GAME_CONFIG.health.initialLives,
       resistance: DEFAULT_GAME_CONFIG.health.initialResistance,
       resistanceCap: DEFAULT_GAME_CONFIG.health.resistanceCap,
       extraResistance: 0,
@@ -60,6 +61,7 @@ export function LobbyScreen() {
       isBot: true,
       botLevel: botDifficulty,
       lives: DEFAULT_GAME_CONFIG.health.initialLives,
+      maxLives: DEFAULT_GAME_CONFIG.health.initialLives,
       resistance: DEFAULT_GAME_CONFIG.health.initialResistance,
       resistanceCap: DEFAULT_GAME_CONFIG.health.resistanceCap,
       extraResistance: 0,
@@ -79,7 +81,8 @@ export function LobbyScreen() {
 
   const handleStart = () => {
     // T083: Inicializa match com players e transiciona para DRAFT
-    startMatch(participants);
+    const seed = Date.now();
+    startMatch(participants, seed);
     // Usa setTimeout para garantir que o state seja atualizado antes de transicionar
     setTimeout(() => {
       transitionPhase(MatchPhase.DRAFT);

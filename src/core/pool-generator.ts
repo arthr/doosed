@@ -13,7 +13,7 @@
 import { PillType, PillState, type Pill, type Shape } from '../types/pill';
 import type { Pool } from '../types/game';
 import type { GameConfig } from '../types/config';
-import { randomInt, choice, shuffle } from './utils/random';
+import { choice, shuffle } from './utils/random';
 import { validatePoolInvariants, validatePillDistribution } from './utils/validation';
 
 // ============================================================================
@@ -183,7 +183,8 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
 
   // 3. Atribuir shapes aleatórias e criar pills
   const pills: Pill[] = types.map((type, i) => ({
-    id: `pill-${roundNumber}-${i}-${Date.now()}-${randomInt(1000, 9999)}`,
+    // ID determinístico baseado em round, tipo e índice.
+    id: `pill-${roundNumber}-${type}-${i}`,
     type,
     shape: choice(unlockedShapes).id,
     modifiers: [],
@@ -213,6 +214,9 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
   }
 
   // Contar tipos
+  // BUG: Se 'counters' deve representar apenas pílulas REVELADAS (conforme usado no poolSlice e UI),
+  // inicializá-lo com os totais aqui causará exibição incorreta e contagem duplicada.
+  // Sugestão: Inicializar com 0 para todos os tipos se for apenas para reveladas.
   const counters: Record<string, number> = {};
   for (const pill of shuffledPills) {
     counters[pill.type] = (counters[pill.type] || 0) + 1;

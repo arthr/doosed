@@ -40,6 +40,9 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
       state.currentRound.pool.revealed.push(pill);
 
       // Atualiza contador
+      // BUG: Se o pool-generator já inicializa os counters com os totais, incrementar aqui
+      // gera uma contagem inconsistente (misto de total inicial + revelações).
+      // Sugestão: Decidir se counters representa TOTAL ou REVELADAS e ajustar pool-generator ou este handler.
       state.currentRound.pool.counters[pill.type] =
         (state.currentRound.pool.counters[pill.type] || 0) + 1;
     }),
@@ -104,6 +107,7 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
       for (const pill of state.currentRound.pool.pills) {
         pill.isRevealed = false;
       }
+      state.currentRound.pool.counters = {};
     }),
 
   // ==================== QUERIES ====================

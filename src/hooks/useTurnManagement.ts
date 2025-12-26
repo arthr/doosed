@@ -8,6 +8,7 @@
 import { useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useEventLogger } from './useEventLogger';
+import { randomInt } from '../core/utils/random';
 import type { Player } from '../types/game';
 
 export function useTurnManagement() {
@@ -112,8 +113,8 @@ export function useTurnManagement() {
       return null;
     }
 
-    // Seleciona pill aleatoria
-    const randomIndex = Math.floor(Math.random() * pool.pills.length);
+    // Seleciona pill aleatoria usando o RNG global semeado
+    const randomIndex = randomInt(0, pool.pills.length - 1);
     const randomPill = pool.pills[randomIndex];
 
     logTurn(`Timer expirou! ${activePlayer.name} consumira pill aleatoria`, {

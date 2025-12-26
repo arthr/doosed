@@ -9,7 +9,6 @@ import { useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useEventLogger } from './useEventLogger';
 import { resolvePillEffect } from '../core/effect-resolver';
-import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 import type { Player, Pill } from '../types/game';
 
 export function usePillConsumption() {
@@ -44,8 +43,7 @@ export function usePillConsumption() {
           break;
         case 'LIFE':
           updatePlayer(player.id, (p) => {
-            const maxLives = DEFAULT_GAME_CONFIG.health.initialLives;
-            p.lives = Math.min(maxLives, p.lives + Math.abs(effect.value));
+            p.lives = Math.min(p.maxLives, p.lives + Math.abs(effect.value));
           });
           break;
       }

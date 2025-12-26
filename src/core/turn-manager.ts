@@ -6,9 +6,7 @@
  * - Round-robin (pular jogadores eliminados)
  * - Início e fim de turno
  * - Timer management (via config)
- * - Auto-consumo de pill aleatória
-
-ória em timeout
+ * - Auto-consumo de pill aleatória em timeout
  *
  * Baseado em data-model.md "Match -> Turn Order"
  * FR-048, FR-049, FR-061 a FR-067
@@ -24,10 +22,10 @@ import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 // ============================================================================
 
 /**
- * Inicializa ordem de turnos aleatória no início da partida
- * Ordem é mantida durante toda a partida (round-robin)
+ * Ordem de turnos (randomizada uma vez no início)
  *
- * FR-048: Ordem determinada aleatoriamente uma vez
+ * BUG: Uso de shuffle (que usa Math.random() por padrão se não re-seeded) quebra o determinismo.
+ * Sugestão: Usar uma semente (seed) vinda do match setup para inicializar a ordem.
  */
 export function initializeTurnOrder(players: Player[]): string[] {
   if (players.length === 0) {
@@ -215,4 +213,3 @@ export function getActivePlayer(match: Match): Player | null {
   const activePlayerId = match.turnOrder[match.activeTurnIndex];
   return match.players.find((p) => p.id === activePlayerId) || null;
 }
-

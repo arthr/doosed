@@ -39,11 +39,13 @@ export function useBotExecution() {
       logBotDecision(`Bot ${bot.name} pensando...`, { botId: bot.id });
 
       const opponents = players.filter((p) => p.id !== bot.id);
-      const seed = Date.now() + Math.random() * 1000;
+      const baseSeed = match.seed || Date.now();
+      const derivedSeed = baseSeed * 137 + match.activeTurnIndex;
 
       // Criar objeto Match compativel para o bot
       const matchForBot: Match = {
         id: match.id,
+        seed: match.seed,
         phase: match.phase,
         players,
         rounds: [],
@@ -62,7 +64,7 @@ export function useBotExecution() {
         opponents,
         pool,
         matchForBot,
-        seed
+        derivedSeed
       );
 
       if (decision.type === 'CONSUME_PILL') {

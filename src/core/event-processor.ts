@@ -24,6 +24,11 @@
  * 3. Implementacao completa dos handlers sera feita em Phase 6 (Replays)
  *    quando houver necessidade real de replay server-side
  *
+ * BUG: Handlers simplificados violam o Princípio III (Event-Driven & Deterministico).
+ * Se o estado é alterado diretamente nos stores sem que o Event Processor seja o único
+ * driver de estado, perdemos a garantia de reprodução e auditoria exigida pela Constitution.
+ * Sugestão: Migrar a lógica de alteração de estado dos stores para os handlers aqui definidos.
+ *
  * Para operacoes em runtime, use:
  * - gameStore actions (consumePill, applyDamage, nextTurn, etc.)
  * - hooks especializados (usePillConsumption, useTurnManagement, etc.)

@@ -40,6 +40,7 @@ export interface MatchSlice {
   // State
   match: {
     id: string;
+    seed: number;
     phase: MatchPhase;
     turnOrder: string[];
     activeTurnIndex: number;
@@ -65,7 +66,7 @@ export interface MatchSlice {
 
   // Actions
   navigateToLobby: () => void;
-  startMatch: (players: Player[]) => void;
+  startMatch: (players: Player[], seed?: number) => void;
   transitionPhase: (phase: MatchPhase) => void;
   nextRound: () => void;
   nextTurn: () => void;

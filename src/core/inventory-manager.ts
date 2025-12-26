@@ -72,42 +72,35 @@ export function addItemToInventory(
 ): AddItemResult {
   const maxSlots = config.inventory.maxSlots;
 
-  // Verificar se inventário já atingiu limite de slots
-  if (inventory.length >= maxSlots) {
-    // Se item é stackable, tentar stackar em slot existente
-    if (item.isStackable) {
-      const existingSlotIndex = inventory.findIndex(
-        (slot) => slot.item?.id === item.id
-      );
+  const existingSlotIndex = item.isStackable
+    ? inventory.findIndex((slot) => slot.item?.id === item.id)
+    : -1;
 
-      if (existingSlotIndex !== -1) {
-        const existingSlot = inventory[existingSlotIndex];
-        const newQuantity = existingSlot.quantity + 1;
+  if (existingSlotIndex !== -1) {
+    const existingSlot = inventory[existingSlotIndex];
+    const newQuantity = existingSlot.quantity + 1;
 
-        // Verificar stack limit
-        if (item.stackLimit && newQuantity > item.stackLimit) {
-          return {
-            success: false,
-            reason: `Stack limit reached (${item.stackLimit})`,
-            updatedInventory: inventory,
-          };
-        }
-
-        // Incrementar quantidade
-        const updatedInventory = [...inventory];
-        updatedInventory[existingSlotIndex] = {
-          ...existingSlot,
-          quantity: newQuantity,
-        };
-
-        return {
-          success: true,
-          updatedInventory,
-        };
-      }
+    if (item.stackLimit && newQuantity > item.stackLimit) {
+      return {
+        success: false,
+        reason: `Stack limit reached (${item.stackLimit})`,
+        updatedInventory: inventory,
+      };
     }
 
-    // Nao pode adicionar (inventario cheio)
+    const updatedInventory = [...inventory];
+    updatedInventory[existingSlotIndex] = {
+      ...existingSlot,
+      quantity: newQuantity,
+    };
+
+    return {
+      success: true,
+      updatedInventory,
+    };
+  }
+
+  if (inventory.length >= maxSlots) {
     return {
       success: false,
       reason: `Inventory full (${maxSlots} slots)`,
@@ -115,39 +108,6 @@ export function addItemToInventory(
     };
   }
 
-  // Se item é stackable E já existe no inventário, incrementar
-  if (item.isStackable) {
-    const existingSlotIndex = inventory.findIndex(
-      (slot) => slot.item?.id === item.id
-    );
-
-    if (existingSlotIndex !== -1) {
-      const existingSlot = inventory[existingSlotIndex];
-      const newQuantity = existingSlot.quantity + 1;
-
-      // Verificar stack limit
-      if (item.stackLimit && newQuantity > item.stackLimit) {
-        return {
-          success: false,
-          reason: `Stack limit reached (${item.stackLimit})`,
-          updatedInventory: inventory,
-        };
-      }
-
-      const updatedInventory = [...inventory];
-      updatedInventory[existingSlotIndex] = {
-        ...existingSlot,
-        quantity: newQuantity,
-      };
-
-      return {
-        success: true,
-        updatedInventory,
-      };
-    }
-  }
-
-  // Adicionar novo slot
   const newSlot: InventorySlot = {
     slotIndex: inventory.length,
     item,

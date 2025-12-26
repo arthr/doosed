@@ -66,6 +66,7 @@ export interface Player {
 
   // Health
   lives: number; // Vidas atuais (≥ 0, ≤ 3)
+  maxLives: number; // Limite superior de vidas (configurável)
   resistance: number; // Resistência atual (pode ser negativa)
   resistanceCap: number; // Resistência máxima (> 0)
   extraResistance: number; // Resistência extra/overflow (≥ 0, ≤ cap)
@@ -156,6 +157,7 @@ export interface Round {
  */
 export interface Match {
   id: string; // UUID
+  seed: number; // Seed determinístico da partida
   phase: MatchPhase; // Fase atual
   players: Player[]; // Jogadores (length 2-6) - em runtime: playersSlice.players
   rounds: Round[]; // Rodadas jogadas - em runtime: matchSlice.rounds (RoundSummary[])

@@ -15,10 +15,11 @@ import { MatchPhase, RoundState } from '../../types/game';
 import { generatePool } from '../../core/pool-generator';
 import { initializeTurnOrder } from '../../core/turn-manager';
 import { DEFAULT_GAME_CONFIG } from '../../config/game-config';
+import { setSeed } from '../../core/utils/random';
 
 export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
   // ==================== STATE ====================
-  match: null,
+    match: null,
   currentRound: null,
   rounds: [],
 
@@ -30,10 +31,14 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    */
   navigateToLobby: () =>
     set((state) => {
+      setSeed(0);
+      // BUG: Uso de Date.now() para ID torna a criação de partida não-determinística.
+      // Sugestão: IDs devem ser passados como payload de evento ou gerados deterministicamente.
       const now = Date.now();
 
       state.match = {
         id: `match_${now}`,
+        seed: 0,
         phase: MatchPhase.LOBBY,
         turnOrder: [],
         activeTurnIndex: 0,
@@ -50,15 +55,18 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    * - Armazena players no playersSlice
    * - Randomiza ordem de turnos
    */
-  startMatch: (players: Player[]) =>
+  startMatch: (players: Player[], seed: number = Date.now()) =>
     set((state) => {
+      setSeed(seed);
       // Armazena players diretamente no state (nao usar get() dentro de set())
       state.players = new Map(players.map((p) => [p.id, p]));
 
       const turnOrder = initializeTurnOrder(players);
+      const matchId = `match-${seed}`;
 
       state.match = {
-        id: crypto.randomUUID(),
+        id: matchId,
+        seed,
         phase: MatchPhase.LOBBY,
         turnOrder,
         activeTurnIndex: 0,
@@ -188,6 +196,7 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    */
   resetMatch: () =>
     set((state) => {
+      setSeed(0);
       state.match = null;
       state.currentRound = null;
       state.rounds = [];
