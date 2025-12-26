@@ -45,6 +45,7 @@ function createMockPlayer(overrides: Partial<Player> = {}): Player {
     avatar: '',
     isBot: false,
     lives: 3,
+    maxLives: 3,
     resistance: 6,
     resistanceCap: 6,
     extraResistance: 0,

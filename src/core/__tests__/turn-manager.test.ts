@@ -36,6 +36,7 @@ function createMockPlayer(id: string, overrides: Partial<Player> = {}): Player {
     avatar: '',
     isBot: false,
     lives: 3,
+    maxLives: 3,
     resistance: 6,
     resistanceCap: 6,
     extraResistance: 0,
@@ -55,6 +56,7 @@ function createMockPlayer(id: string, overrides: Partial<Player> = {}): Player {
 function createMockMatch(players: Player[], overrides: Partial<Match> = {}): Match {
   return {
     id: 'match-1',
+    seed: 12345,
     phase: MatchPhase.MATCH,
     players,
     rounds: [],

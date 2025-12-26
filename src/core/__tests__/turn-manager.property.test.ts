@@ -27,6 +27,7 @@ const playerArbitrary = fc.record({
   avatar: fc.constant(''),
   isBot: fc.boolean(),
   lives: fc.integer({ min: 0, max: 5 }),
+  maxLives: fc.constant(3),
   resistance: fc.integer({ min: 0, max: 10 }),
   resistanceCap: fc.constant(6),
   extraResistance: fc.integer({ min: 0, max: 6 }),
