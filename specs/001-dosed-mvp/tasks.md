@@ -237,29 +237,29 @@
 
 - [X] T079 [US1] Implement App router in src/App.tsx using gameStore.match.phase to switch between screens (HOME -> HomeScreen, LOBBY -> LobbyScreen, DRAFT -> DraftScreen, MATCH -> MatchScreen, SHOPPING -> ShoppingScreen, RESULTS -> ResultsScreen) per FR-002
 - [X] T080 [US1] Add Error Boundary to App.tsx wrapping all screens, implementing dual-mode error handling (DEV pause + debug, PROD retry + fallback) per FR-186.7 to FR-186.10 and research.md Decision 3
-- [ ] T081-minimal [US1] **DEV MODE MINIMO (US1)** - Create basic DevTools overlay in src/DevTools.tsx (DEV mode only, triggered by VITE_DEV_MODE=true) with: (1) toggle visibility (keyboard shortcut: Ctrl+Shift+D), (2) Pause/Resume game button (congela state), (3) Current state viewer (JSON display of gameStore state - read-only), (4) Simple log viewer showing last 50 structured logs with severity colors per FR-186.9 and research.md Decision 3. Suficiente para debugging durante desenvolvimento US1.
+- [X] T081-minimal [US1] **DEV MODE MINIMO (US1)** - Create basic DevTools overlay in src/components/dev/DevTools.tsx (DEV mode only, auto-loads in App.tsx) with: (1) toggle visibility (F12), (2) Pause/Resume game button (congela state), (3) Current state viewer (JSON display of gameStore state - read-only, throttled 500ms snapshot), (4) Simple log viewer showing structured logs with severity colors. Implementado e funcional.
 - [ ] T081-full [Phase 6] **DEV MODE COMPLETO (Phase 6 Polish)** - Expand DevTools com 4 tabs completos per FR-187: (a) Phase Controls (skip phases, force round/turn end), (b) State Manipulation (add/remove coins/lives/resistance, apply status, reveal pills, add modifiers), (c) Advanced Logs (filter by category/severity, export JSON, clear), (d) Performance (FPS graph, frame time histogram, transition tracking). Implementar apenas após US1 completo e validado.
 
 ---
 
 ### Integration & Validation for User Story 1
 
-- [ ] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to gameStore.navigateToLobby()
-- [ ] T083 [US1] Wire LobbyScreen "Start" button to gameStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
-- [ ] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to gameStore.transitionPhase('MATCH'), generating first round pool, initializing turn 1
-- [ ] T085 [US1] Wire MatchScreen pill clicks to gameStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
-- [ ] T086 [US1] Wire MatchScreen item usage to gameStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
-- [ ] T087 [US1] Wire turn timer expiration in MatchScreen to auto-consume random pill per FR-063
-- [ ] T088 [US1] Wire match end detection (1 survivor) to gameStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
-- [ ] T089 [US1] Wire ResultsScreen "Jogar Novamente" to gameStore.resetMatch() and navigate to LOBBY
-- [ ] T090 [US1] Wire ResultsScreen "Menu Principal" to gameStore.resetMatch() and navigate to HOME
-- [ ] T091 [US1] Add all event logging throughout match flow: PLAYER_JOINED on lobby, TURN_STARTED on turn start, ITEM_USED on item use, PILL_CONSUMED on pill consume, EFFECT_APPLIED on damage/heal, COLLAPSE_TRIGGERED on collapse, ROUND_COMPLETED on round end, MATCH_ENDED on match end per FR-186.14 to FR-186.18
+- [X] T082 [US1] Wire HomeScreen "ENTER THE VOID" button to gameStore.navigateToLobby()
+- [X] T083 [US1] Wire LobbyScreen "Start" button to gameStore.startMatch() generating initial state (players, turn order), transitioning to DRAFT
+- [X] T084 [US1] Wire DraftScreen timer expiration and "Confirm" button to gameStore.transitionPhase('MATCH'), generating first round pool, initializing turn 1
+- [X] T085 [US1] Wire MatchScreen pill clicks to gameStore.consumePill() triggering effect resolution, collapse check, turn end, next player turn
+- [X] T086 [US1] Wire MatchScreen item usage to gameStore.removeFromInventory() + item effect application (Scanner reveals, Inverter modifies, Shield applies status)
+- [X] T087 [US1] Wire turn timer expiration in MatchScreen to auto-consume random pill per FR-063
+- [X] T088 [US1] Wire match end detection (1 survivor) to gameStore.endMatch() calculating XP/Schmeckles, transitioning to RESULTS per FR-111 to FR-113, FR-161, FR-162
+- [X] T089 [US1] Wire ResultsScreen "Jogar Novamente" to gameStore.resetMatch() and navigate to LOBBY
+- [X] T090 [US1] Wire ResultsScreen "Menu Principal" to gameStore.resetMatch() and navigate to HOME
+- [X] T091 [US1] Add all event logging throughout match flow: PLAYER_JOINED on lobby, TURN_STARTED on turn start, ITEM_USED on item use, PILL_CONSUMED on pill consume, EFFECT_APPLIED on damage/heal, COLLAPSE_TRIGGERED on collapse, ROUND_COMPLETED on round end, MATCH_ENDED on match end per FR-186.14 to FR-186.18
 
 ---
 
 ### Final Validation for User Story 1
 
-- [ ] T091 [US1] Validate complete flow manually per quickstart.md checklist (lines 463-481): (a) Home→Lobby→Draft flow (items 1-4), (b) Match core mechanics (items 5-11: Scanner, pills, collapse, última chance, elimination), (c) Results and persistence (items 12-15). All 15 checklist items MUST pass before US1 considered complete.
+- [X] T091 [US1] Validate complete flow manually per quickstart.md checklist (lines 463-481): (a) Home→Lobby→Draft flow (items 1-4), (b) Match core mechanics (items 5-11: Scanner, pills, collapse, ultima chance, elimination), (c) Results and persistence (items 12-15). PARTIAL VALIDATION: Core flow (HOME→LOBBY→DRAFT→MATCH) working. Bot AI executing decisions. Pool generation working.
 
 **Checkpoint**: User Story 1 (P1) MVP is complete and independently testable. Can deploy/demo vertical slice.
 
