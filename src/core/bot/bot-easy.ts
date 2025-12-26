@@ -13,7 +13,9 @@
 
 import type { Match, Player, Pool } from '../../types/game';
 import type { Item } from '../../types/item';
+import type { GameConfig } from '../../types/config';
 import { createRNG } from '../utils/random';
+import { DEFAULT_GAME_CONFIG } from '../../config/game-config';
 import type { BotAI, BotAction } from './bot-interface';
 import {
   getAvailablePills,
@@ -35,7 +37,8 @@ export class BotEasy implements BotAI {
   decideDraftAction(
     player: Player,
     availableItems: Item[],
-    config: { budget: number }
+    config: { budget: number },
+    _gameConfig: GameConfig = DEFAULT_GAME_CONFIG
   ): { itemId: string } | null {
     const affordableItems = availableItems
       .filter((item) => item.cost <= config.budget)
@@ -64,19 +67,20 @@ export class BotEasy implements BotAI {
   /**
    * Turn: Jogar conservadoramente
    *
-   * Lógica:
-   * 1. Se health baixo E tem item defensivo → usar
-   * 2. Se tem Scanner E pills não reveladas → usar
-   * 3. Se tem SAFE revelada → consumir (80% chance)
-   * 4. Se tem HEAL revelada E health < max → consumir
-   * 5. Senão → consumir pill aleatória não revelada
+   * Logica:
+   * 1. Se health baixo E tem item defensivo -> usar
+   * 2. Se tem Scanner E pills nao reveladas -> usar
+   * 3. Se tem SAFE revelada -> consumir (80% chance)
+   * 4. Se tem HEAL revelada E health < max -> consumir
+   * 5. Senao -> consumir pill aleatoria nao revelada
    */
   decideTurnAction(
     player: Player,
-    opponents: Player[],
+    _opponents: Player[],
     pool: Pool,
-    match: Match,
-    seed: number
+    _match: Match,
+    seed: number,
+    _gameConfig: GameConfig = DEFAULT_GAME_CONFIG
   ): BotAction {
     const rng = createRNG(seed);
     const inDanger = isPlayerInDanger(player);
@@ -162,19 +166,22 @@ export class BotEasy implements BotAI {
 
   /**
    * Shopping: Comprar boosts defensivos
-   * Prioridade: 1-Up (se lives < 3) > Reboot (se resistance < 6) > Scanner-2X
+   * Prioridade: 1-Up (se lives < max) > Reboot (se resistance < max) > Scanner-2X
    */
   decideShoppingAction(
     player: Player,
     availableBoosts: Item[],
-    config: { budget: number }
+    config: { budget: number },
+    gameConfig: GameConfig = DEFAULT_GAME_CONFIG
   ): { itemId: string } | null {
     const affordableBoosts = availableBoosts
       .filter((item) => item.cost <= config.budget)
       .sort((a, b) => b.cost - a.cost);
 
-    // Priorizar 1-Up se lives < 3
-    if (player.lives < 3) {
+    const maxLives = gameConfig.health.initialLives;
+
+    // Priorizar 1-Up se lives < max
+    if (player.lives < maxLives) {
       const oneUp = affordableBoosts.find((i) => i.id === 'one-up');
       if (oneUp) return { itemId: oneUp.id };
     }

@@ -14,6 +14,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { Profile } from '../types/game';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 interface ProgressionState extends Profile {
   // Actions
@@ -45,18 +46,22 @@ const DEFAULT_PROFILE: Profile = {
 
 /**
  * Calcula level baseado em XP
- * Formula: level = floor(sqrt(xp / 100)) + 1
+ * Formula: level = floor(sqrt(xp / levelCurve)) + 1
+ * Usa config.xp.levelCurve (FR-168)
  */
 function calculateLevel(xp: number): number {
-  return Math.floor(Math.sqrt(xp / 100)) + 1;
+  const levelCurve = DEFAULT_GAME_CONFIG.xp.levelCurve;
+  return Math.floor(Math.sqrt(xp / levelCurve)) + 1;
 }
 
 /**
  * Calcula XP necessário para próximo nível
+ * Usa config.xp.levelCurve para a curva de progressão
  */
 function getXPForNextLevel(currentLevel: number): number {
+  const levelCurve = DEFAULT_GAME_CONFIG.xp.levelCurve;
   const nextLevel = currentLevel + 1;
-  return (nextLevel - 1) ** 2 * 100;
+  return (nextLevel - 1) ** 2 * levelCurve;
 }
 
 export const useProgressionStore = create<ProgressionState>()(

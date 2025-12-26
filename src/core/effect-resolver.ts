@@ -13,6 +13,8 @@
 import { PillType, PillModifier, PILL_BASE_VALUES, type Pill } from '../types/pill';
 import { StatusType, type Status } from '../types/status';
 import type { Player } from '../types/game';
+import type { GameConfig } from '../types/config';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 // ============================================================================
 // Types
@@ -199,7 +201,11 @@ export function resolvePillEffect(pill: Pill, player: Player): EffectResult {
  * Aplica EffectResult ao Player, retornando novo Player
  * Esta função é helper e DEVE ser chamada após resolvePillEffect
  */
-export function applyEffectToPlayer(player: Player, effect: EffectResult): Player {
+export function applyEffectToPlayer(
+  player: Player,
+  effect: EffectResult,
+  config: GameConfig = DEFAULT_GAME_CONFIG
+): Player {
   let updatedPlayer = { ...player };
 
   switch (effect.type) {
@@ -237,8 +243,9 @@ export function applyEffectToPlayer(player: Player, effect: EffectResult): Playe
     }
 
     case 'LIFE': {
-      // +1 Vida (cap 3)
-      updatedPlayer.lives = Math.min(updatedPlayer.lives + 1, 3);
+      // +1 Vida (cap via config)
+      const maxLives = config.health.initialLives;
+      updatedPlayer.lives = Math.min(updatedPlayer.lives + 1, maxLives);
       break;
     }
   }

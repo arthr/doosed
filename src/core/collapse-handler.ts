@@ -12,7 +12,9 @@
  */
 
 import type { Player } from '../types/game';
+import type { GameConfig } from '../types/config';
 import { validatePlayerInvariants } from './utils/validation';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 // ============================================================================
 // Types
@@ -37,18 +39,19 @@ export interface CollapseResult {
  *
  * Fluxo:
  * 1. Reduz Vidas em 1
- * 2. Reseta Resistência para 6 (configurável)
+ * 2. Reseta Resistência para config.health.initialResistance
  * 3. Se Vidas === 0 → Última Chance (isLastChance = true)
  * 4. Incrementa totalCollapses
  *
  * FR-095: Colapso ocorre quando resistance <= 0
- * FR-096: Vidas reduz em 1, Resistência reseta para 6
+ * FR-096: Vidas reduz em 1, Resistência reseta para valor configurado
  * FR-097: Feedback visual claro (implementado em UI)
  */
 export function handleCollapse(
   player: Player,
-  resistanceResetValue: number = 6
+  config: GameConfig = DEFAULT_GAME_CONFIG
 ): CollapseResult {
+  const resistanceResetValue = config.health.initialResistance;
   const previousLives = player.lives;
   const newLives = Math.max(player.lives - 1, 0); // Lives nunca negativo
   const newResistance = resistanceResetValue;
@@ -128,12 +131,12 @@ export function validateCollapseState(player: Player): boolean {
  * 3. Aplicar CollapseResult ao Player
  *
  * @param player - Jogador atual
- * @param resistanceResetValue - Valor de reset de Resistência (default 6)
+ * @param config - Configuração do jogo (opcional, usa DEFAULT_GAME_CONFIG)
  * @returns CollapseResult com informações do colapso/eliminação
  */
 export function processCollapseOrElimination(
   player: Player,
-  resistanceResetValue: number = 6
+  config: GameConfig = DEFAULT_GAME_CONFIG
 ): CollapseResult | null {
   // Não processa se resistência > 0
   if (player.resistance > 0) {
@@ -146,7 +149,7 @@ export function processCollapseOrElimination(
   }
 
   // Colapso normal
-  return handleCollapse(player, resistanceResetValue);
+  return handleCollapse(player, config);
 }
 
 // ============================================================================

@@ -13,6 +13,10 @@
 
 import { MatchPhase, type Match, type Player } from '../types/game';
 
+// Constantes de partida (match constraints)
+const MIN_PLAYERS = 2;
+const MAX_PLAYERS = 6;
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -217,12 +221,12 @@ export function canStartDraft(match: Match): { can: boolean; reason?: string } {
     return { can: false, reason: 'Not in LOBBY phase' };
   }
 
-  if (match.players.length < 2) {
-    return { can: false, reason: 'Need at least 2 players' };
+  if (match.players.length < MIN_PLAYERS) {
+    return { can: false, reason: `Need at least ${MIN_PLAYERS} players` };
   }
 
-  if (match.players.length > 6) {
-    return { can: false, reason: 'Maximum 6 players' };
+  if (match.players.length > MAX_PLAYERS) {
+    return { can: false, reason: `Maximum ${MAX_PLAYERS} players` };
   }
 
   return { can: true };

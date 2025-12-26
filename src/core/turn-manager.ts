@@ -5,7 +5,7 @@
  * - Ordem de turnos (randomizada uma vez no início)
  * - Round-robin (pular jogadores eliminados)
  * - Início e fim de turno
- * - Timer management (30s default)
+ * - Timer management (via config)
  * - Auto-consumo de pill aleatória
 
 ória em timeout
@@ -15,7 +15,9 @@
  */
 
 import type { Player, Match, Turn } from '../types/game';
+import type { GameConfig } from '../types/config';
 import { shuffle as shuffleArray } from './utils/random';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 // ============================================================================
 // T045: Initialize Turn Order (Randomize Once)
@@ -95,15 +97,16 @@ export function getNextPlayerId(
 
 /**
  * Inicia turno de um jogador
- * Inicializa timer (30s default) e marca jogador como ativo
+ * Inicializa timer (via config) e marca jogador como ativo
  *
- * FR-062, FR-064: Timer de 30s, isActiveTurn flag
+ * FR-062, FR-064: Timer configuravel, isActiveTurn flag
  */
 export function startTurn(
   match: Match,
   playerId: string,
-  timerDuration: number = 30
+  config: GameConfig = DEFAULT_GAME_CONFIG
 ): Turn {
+  const timerDuration = config.timers.turn;
   const player = match.players.find((p) => p.id === playerId);
 
   if (!player) {

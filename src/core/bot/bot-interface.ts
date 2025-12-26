@@ -8,6 +8,8 @@
 import type { Match, Player, Pool } from '../../types/game';
 import type { Item } from '../../types/item';
 import type { Pill } from '../../types/pill';
+import type { GameConfig } from '../../types/config';
+import { DEFAULT_GAME_CONFIG } from '../../config/game-config';
 
 // ============================================================================
 // Bot Action Types
@@ -45,7 +47,8 @@ export interface BotAI {
   decideDraftAction(
     player: Player,
     availableItems: Item[],
-    config: { budget: number }
+    config: { budget: number },
+    gameConfig?: GameConfig
   ): { itemId: string } | null;
 
   /**
@@ -57,7 +60,8 @@ export interface BotAI {
     opponents: Player[],
     pool: Pool,
     match: Match,
-    seed: number
+    seed: number,
+    gameConfig?: GameConfig
   ): BotAction;
 
   /**
@@ -67,7 +71,8 @@ export interface BotAI {
   decideShoppingAction(
     player: Player,
     availableBoosts: Item[],
-    config: { budget: number }
+    config: { budget: number },
+    gameConfig?: GameConfig
   ): { itemId: string } | null;
 }
 
@@ -108,27 +113,39 @@ export function getUnrevealedPills(pool: Pool): Pill[] {
 }
 
 /**
- * Verifica se jogador está em situação crítica
+ * Verifica se jogador esta em situacao critica
+ * Usa config para thresholds de perigo
  */
-export function isPlayerInDanger(player: Player): boolean {
-  return player.isLastChance || player.resistance <= 2 || player.lives === 1;
+export function isPlayerInDanger(
+  player: Player,
+  config: GameConfig = DEFAULT_GAME_CONFIG
+): boolean {
+  const dangerResistanceThreshold = Math.floor(config.health.resistanceCap / 3);
+  return player.isLastChance || player.resistance <= dangerResistanceThreshold || player.lives === 1;
 }
 
 /**
  * Calcula "threat score" do jogador (quão perto de perder)
+ * Usa config para thresholds baseados em valores de saude
  */
-export function calculateThreatScore(player: Player): number {
+export function calculateThreatScore(
+  player: Player,
+  config: GameConfig = DEFAULT_GAME_CONFIG
+): number {
   let score = 0;
 
-  if (player.isEliminated) return 1000; // Máximo threat
+  if (player.isEliminated) return 1000; // Maximo threat
+
+  const maxLives = config.health.initialLives;
+  const maxResistance = config.health.resistanceCap;
 
   if (player.isLastChance) score += 50;
   if (player.lives === 1) score += 30;
-  if (player.lives === 2) score += 10;
+  if (player.lives === maxLives - 1) score += 10;
 
   if (player.resistance <= 0) score += 50;
-  if (player.resistance <= 2) score += 20;
-  if (player.resistance <= 4) score += 10;
+  if (player.resistance <= maxResistance / 3) score += 20;
+  if (player.resistance <= maxResistance * 2 / 3) score += 10;
 
   return score;
 }

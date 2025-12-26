@@ -7,12 +7,19 @@
 
 import type { Player, Pool, Match } from '../../types/game';
 import type { Pill } from '../../types/pill';
+import type { GameConfig } from '../../types/config';
+import { DEFAULT_GAME_CONFIG } from '../../config/game-config';
 
 // ============================================================================
 // Player Invariants
 // ============================================================================
 
-export function validatePlayerInvariants(player: Player): boolean {
+export function validatePlayerInvariants(
+  player: Player,
+  config: GameConfig = DEFAULT_GAME_CONFIG
+): boolean {
+  const maxSlots = config.inventory.maxSlots;
+
   // lives >= 0 (sempre)
   if (player.lives < 0) {
     console.error(`[INVARIANT] Player ${player.id} has negative lives: ${player.lives}`);
@@ -27,8 +34,8 @@ export function validatePlayerInvariants(player: Player): boolean {
     return false;
   }
 
-  // inventory <= 5 slots
-  if (player.inventory.length > 5) {
+  // inventory <= maxSlots
+  if (player.inventory.length > maxSlots) {
     console.error(
       `[INVARIANT] Player ${player.id} has too many inventory slots: ${player.inventory.length}`
     );
@@ -54,10 +61,15 @@ export function validatePlayerInvariants(player: Player): boolean {
 // Pool Invariants
 // ============================================================================
 
-export function validatePoolInvariants(pool: Pool): boolean {
-  // size >= 6 && <= 12
-  if (pool.size < 6 || pool.size > 12) {
-    console.error(`[INVARIANT] Pool size out of bounds: ${pool.size}`);
+export function validatePoolInvariants(
+  pool: Pool,
+  config: GameConfig = DEFAULT_GAME_CONFIG
+): boolean {
+  const { baseSize, maxSize, minShapeDiversity } = config.pool;
+
+  // size >= baseSize && <= maxSize
+  if (pool.size < baseSize || pool.size > maxSize) {
+    console.error(`[INVARIANT] Pool size out of bounds: ${pool.size} (expected ${baseSize}-${maxSize})`);
     return false;
   }
 
@@ -75,10 +87,10 @@ export function validatePoolInvariants(pool: Pool): boolean {
     return false;
   }
 
-  // Diversidade mínima de shapes (mínimo 3)
+  // Diversidade minima de shapes
   const uniqueShapes = new Set(pool.pills.map((p) => p.shape));
-  if (uniqueShapes.size < 3) {
-    console.error(`[INVARIANT] Pool has insufficient shape diversity: ${uniqueShapes.size}`);
+  if (uniqueShapes.size < minShapeDiversity) {
+    console.error(`[INVARIANT] Pool has insufficient shape diversity: ${uniqueShapes.size} (min ${minShapeDiversity})`);
     return false;
   }
 
@@ -89,10 +101,14 @@ export function validatePoolInvariants(pool: Pool): boolean {
 // Match Invariants
 // ============================================================================
 
+// Constantes de match (nao sao configuráveis por enquanto)
+const MIN_PLAYERS = 2;
+const MAX_PLAYERS = 6;
+
 export function validateMatchInvariants(match: Match): boolean {
-  // players.length >= 2 && <= 6
-  if (match.players.length < 2 || match.players.length > 6) {
-    console.error(`[INVARIANT] Match has invalid player count: ${match.players.length}`);
+  // players.length >= MIN_PLAYERS && <= MAX_PLAYERS
+  if (match.players.length < MIN_PLAYERS || match.players.length > MAX_PLAYERS) {
+    console.error(`[INVARIANT] Match has invalid player count: ${match.players.length} (expected ${MIN_PLAYERS}-${MAX_PLAYERS})`);
     return false;
   }
 

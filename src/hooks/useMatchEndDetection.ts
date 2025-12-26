@@ -9,6 +9,7 @@ import { useCallback } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useProgressionStore } from '../stores/progressionStore';
 import { useEventLogger } from './useEventLogger';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 export function useMatchEndDetection() {
   // Usar useGameStore com seletores para performance
@@ -36,11 +37,12 @@ export function useMatchEndDetection() {
 
   /**
    * Calcula recompensas de XP baseado em performance
-   * TODO: Refinar calculo com base em stats reais
+   * Usa config para valores de XP (FR-161)
    */
-  const calculateXPReward = useCallback((isWinner: boolean): number => {
-    const baseXP = 100;
-    const winBonus = isWinner ? 50 : 0;
+  const calculateXPReward = useCallback((isWinner: boolean, roundsSurvived: number = 0): number => {
+    const { xp: xpConfig } = DEFAULT_GAME_CONFIG;
+    const baseXP = roundsSurvived * xpConfig.xpPerRound;
+    const winBonus = isWinner ? xpConfig.victoryBonus : 0;
 
     return baseXP + winBonus;
   }, []);
@@ -55,7 +57,7 @@ export function useMatchEndDetection() {
       });
 
       const isPlayerWinner = !winner.isBot;
-      const xpReward = calculateXPReward(isPlayerWinner);
+      const xpReward = calculateXPReward(isPlayerWinner, rounds.length);
 
       // Aplica recompensas
       if (isPlayerWinner) {

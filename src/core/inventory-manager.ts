@@ -13,8 +13,10 @@
 
 import type { Item, InventorySlot } from '../types/item';
 import type { Player, Pool } from '../types/game';
+import type { GameConfig } from '../types/config';
 import { PillModifier } from '../types/pill';
 import { StatusType } from '../types/status';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 // ============================================================================
 // Types
@@ -59,16 +61,19 @@ export interface ItemEffect {
  * Regras:
  * - Stackable: incrementa quantity se item já existe (respeitando stackLimit)
  * - Non-stackable: adiciona novo slot
- * - Máximo 5 slots
+ * - Maximo de slots via config
  *
  * FR-012 a FR-017
  */
 export function addItemToInventory(
   inventory: InventorySlot[],
-  item: Item
+  item: Item,
+  config: GameConfig = DEFAULT_GAME_CONFIG
 ): AddItemResult {
-  // Verificar se inventário já tem 5 slots
-  if (inventory.length >= 5) {
+  const maxSlots = config.inventory.maxSlots;
+
+  // Verificar se inventário já atingiu limite de slots
+  if (inventory.length >= maxSlots) {
     // Se item é stackable, tentar stackar em slot existente
     if (item.isStackable) {
       const existingSlotIndex = inventory.findIndex(
@@ -102,10 +107,10 @@ export function addItemToInventory(
       }
     }
 
-    // Não pode adicionar (inventário cheio)
+    // Nao pode adicionar (inventario cheio)
     return {
       success: false,
-      reason: 'Inventory full (5 slots)',
+      reason: `Inventory full (${maxSlots} slots)`,
       updatedInventory: inventory,
     };
   }
@@ -332,15 +337,20 @@ export function useItem(
  * Valida invariantes do inventário
  *
  * Invariantes:
- * - inventory.length <= 5
+ * - inventory.length <= maxSlots (via config)
  * - Se item stackable, quantity <= stackLimit
  * - Se item non-stackable, quantity === 1
  * - Slots com item === null devem ter quantity === 0
  */
-export function validateInventory(inventory: InventorySlot[]): boolean {
-  // Max 5 slots
-  if (inventory.length > 5) {
-    console.error(`[INVARIANT] Inventory has too many slots: ${inventory.length}`);
+export function validateInventory(
+  inventory: InventorySlot[],
+  config: GameConfig = DEFAULT_GAME_CONFIG
+): boolean {
+  const maxSlots = config.inventory.maxSlots;
+
+  // Max slots check
+  if (inventory.length > maxSlots) {
+    console.error(`[INVARIANT] Inventory has too many slots: ${inventory.length} (max ${maxSlots})`);
     return false;
   }
 
