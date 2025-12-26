@@ -1,89 +1,145 @@
 /**
  * DraftScreen - Tela de draft de itens
- * 
- * STATUS: DESINTEGRADO - Apenas estrutura visual
- * TODO REFACTOR: Reintegrar após refatoração de hooks e stores
- * 
- * Componentes visuais mantidos:
- * - ShopGrid, InventorySlot, TimerDisplay
- * 
- * Lógica removida (será reintegrada):
- * - useTurnTimer (draft timeout)
- * - Compra de itens
- * - Gestão de inventário
- * - Transição automática para MATCH
+ *
+ * T084: Wire DraftScreen timer expiration and Confirm button
+ *
+ * Funcionalidades:
+ * - Timer de 60s com auto-transicao para MATCH
+ * - Compra de itens para inventario
+ * - Visualizacao de inventario (5 slots)
+ * - Confirmacao manual antecipada
  */
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Button } from '../components/ui/button';
 import { TimerDisplay } from '../components/ui/timer-display';
 import { ShopGrid } from '../components/game/ShopGrid';
 import { InventorySlot } from '../components/ui/inventory-slot';
-import { ItemCategory, Targeting, Availability, Item } from '../types/item';
+import { useGameStore } from '../stores/gameStore';
+import { useTurnTimer } from '../hooks/useTurnTimer';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
+import { Availability, ItemCategory, Targeting } from '../types/item';
+import type { Item, InventorySlot as IInventorySlot } from '../types/item';
+import { MatchPhase } from '../types/game';
 
-// Mock de itens (será substituído por config real)
-const MOCK_ITEMS: Item[] = [
-  {
-    id: 'scanner',
-    name: 'Scanner',
-    description: 'Revela o tipo de uma pílula',
-    category: ItemCategory.INTEL,
-    cost: 15,
-    targeting: Targeting.PILL,
-    isStackable: true,
-    stackLimit: 3,
-    availability: Availability.BOTH,
-  },
-  {
-    id: 'inverter',
-    name: 'Inverter',
-    description: 'Inverte o efeito de uma pílula',
-    category: ItemCategory.INTEL,
-    cost: 20,
-    targeting: Targeting.PILL,
-    isStackable: false,
-    stackLimit: 1,
-    availability: Availability.BOTH,
-  },
-  {
-    id: 'pocket-pill',
-    name: 'Pocket Pill',
-    description: 'Pílula SAFE garantida',
-    category: ItemCategory.SUSTAIN,
-    cost: 25,
-    targeting: Targeting.SELF,
-    isStackable: false,
-    stackLimit: 1,
-    availability: Availability.DRAFT,
-  },
-];
+// Item descriptions
+const ITEM_DESCRIPTIONS: Record<string, { name: string; description: string; category: ItemCategory }> = {
+  scanner: { name: 'Scanner', description: 'Revela o tipo de uma pilula', category: ItemCategory.INTEL },
+  shapeScanner: { name: 'Shape Scanner', description: 'Revela todas as pilulas de uma forma', category: ItemCategory.INTEL },
+  inverter: { name: 'Inverter', description: 'Inverte o efeito de uma pilula', category: ItemCategory.INTEL },
+  double: { name: 'Double', description: 'Dobra o efeito de uma pilula', category: ItemCategory.INTEL },
+  pocketPill: { name: 'Pocket Pill', description: 'Pilula SAFE garantida', category: ItemCategory.SUSTAIN },
+  shield: { name: 'Shield', description: 'Bloqueia proximo dano', category: ItemCategory.SUSTAIN },
+  handcuffs: { name: 'Handcuffs', description: 'Pula turno do oponente', category: ItemCategory.CONTROL },
+  forceFeed: { name: 'Force Feed', description: 'Forca oponente a consumir pilula', category: ItemCategory.CONTROL },
+  shuffle: { name: 'Shuffle', description: 'Embaralha o pool', category: ItemCategory.CHAOS },
+  discard: { name: 'Discard', description: 'Descarta uma pilula', category: ItemCategory.CHAOS },
+};
 
-const DRAFT_TIME = 60;
+// Converte config para array de Items filtrando por disponibilidade
+const createItemCatalog = (): Item[] => {
+  const items: Item[] = [];
+  
+  for (const [id, config] of Object.entries(DEFAULT_GAME_CONFIG.items)) {
+    const meta = ITEM_DESCRIPTIONS[id];
+    if (!meta) continue;
+    
+    if (config.availability === Availability.DRAFT || config.availability === Availability.BOTH) {
+      items.push({
+        id,
+        name: meta.name,
+        description: meta.description,
+        category: meta.category,
+        cost: config.cost,
+        targeting: config.targeting,
+        isStackable: config.stackable,
+        stackLimit: config.stackLimit ?? 1,
+        availability: config.availability,
+      });
+    }
+  }
+  
+  return items;
+};
+
+const DRAFT_ITEMS: Item[] = createItemCatalog();
+
+const DRAFT_TIME = DEFAULT_GAME_CONFIG.timers.draft;
 
 export function DraftScreen() {
-  // TODO REFACTOR: Reintegrar hooks refatorados aqui
-  // - useDraftData() - dados do draft (player, coins, inventory)
-  // - useDraftTimer() - timer com auto-transição
-  // - useItemPurchase() - compra de itens
+  // Store state e actions
+  const transitionPhase = useGameStore((state) => state.transitionPhase);
+  const nextRound = useGameStore((state) => state.nextRound);
+  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
+  const addToInventory = useGameStore((state) => state.addToInventory);
+  const spendPillCoins = useGameStore((state) => state.spendPillCoins);
 
-  // Mock data para manter estrutura visual
-  const mockTimeRemaining = 60;
-  const mockPlayerCoins = 100;
-  const mockInventorySlots = Array.from({ length: 5 }, (_, i) => ({
-    slotIndex: i,
-    item: null,
-    quantity: 0,
-  }));
+  // Encontra player humano
+  const humanPlayer = useMemo(() => {
+    const players = getAllPlayers();
+    return players.find((p) => !p.isBot) || null;
+  }, [getAllPlayers]);
 
-  const handleConfirm = () => {
-    console.log('[DESINTEGRADO] Confirm clicked');
-    // TODO REFACTOR: Reintegrar transição para MATCH
-  };
+  // Handler de confirmacao - transiciona para MATCH
+  const handleConfirmDraft = useCallback(() => {
+    // Gera primeira rodada (pool)
+    nextRound();
+    // Transiciona para MATCH
+    transitionPhase(MatchPhase.MATCH);
+  }, [nextRound, transitionPhase]);
 
-  const handleItemPurchase = (item: any) => {
-    console.log('[DESINTEGRADO] Item purchase:', item);
-    // TODO REFACTOR: Reintegrar com useItemPurchase
-  };
+  // Timer de draft com auto-transicao
+  const { timeRemaining, stopTimer } = useTurnTimer({
+    duration: DRAFT_TIME,
+    onTimeout: handleConfirmDraft,
+    autoStart: true,
+  });
+
+  // Handler de compra de item
+  const handleItemPurchase = useCallback(
+    (item: Item) => {
+      if (!humanPlayer) return;
+
+      // Verifica se tem coins suficientes
+      if (humanPlayer.pillCoins < item.cost) return;
+
+      // Verifica se tem espaco no inventario
+      if (humanPlayer.inventory.length >= 5) {
+        // Verifica se e stackable e ja tem o item
+        const existingSlot = humanPlayer.inventory.find(
+          (slot) => slot.item?.id === item.id && item.isStackable
+        );
+        if (!existingSlot) return;
+      }
+
+      // Gasta coins e adiciona ao inventario
+      spendPillCoins(humanPlayer.id, item.cost);
+      addToInventory(humanPlayer.id, item);
+    },
+    [humanPlayer, spendPillCoins, addToInventory]
+  );
+
+  // Confirmacao manual (antecipada)
+  const handleConfirm = useCallback(() => {
+    stopTimer();
+    handleConfirmDraft();
+  }, [stopTimer, handleConfirmDraft]);
+
+  // Slots de inventario (sempre 5)
+  const inventorySlots: IInventorySlot[] = useMemo(() => {
+    const slots: IInventorySlot[] = [];
+    for (let i = 0; i < 5; i++) {
+      const existingSlot = humanPlayer?.inventory[i];
+      slots.push(
+        existingSlot || {
+          slotIndex: i,
+          item: null,
+          quantity: 0,
+        }
+      );
+    }
+    return slots;
+  }, [humanPlayer?.inventory]);
 
   return (
     <div className="min-h-screen bg-gray-900 p-8">
@@ -98,17 +154,19 @@ export function DraftScreen() {
           <div className="flex items-center gap-6">
             <div className="text-right">
               <div className="text-gray-400 text-sm">Pill Coins</div>
-              <div className="text-yellow-500 font-bold text-3xl">{mockPlayerCoins}</div>
+              <div className="text-yellow-500 font-bold text-3xl">
+                {humanPlayer?.pillCoins ?? 0}
+              </div>
             </div>
-            <TimerDisplay seconds={mockTimeRemaining} maxSeconds={DRAFT_TIME} size="lg" />
+            <TimerDisplay seconds={timeRemaining} maxSeconds={DRAFT_TIME} size="lg" />
           </div>
         </div>
 
-        {/* Inventário */}
+        {/* Inventario */}
         <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 mb-6">
-          <div className="text-white font-bold mb-3">Seu Inventário (5 slots)</div>
+          <div className="text-white font-bold mb-3">Seu Inventario (5 slots)</div>
           <div className="flex gap-2">
-            {mockInventorySlots.map((slot, index) => (
+            {inventorySlots.map((slot, index) => (
               <InventorySlot key={index} slot={slot} slotIndex={index} isDisabled={true} />
             ))}
           </div>
@@ -117,12 +175,14 @@ export function DraftScreen() {
         {/* Shop Grid */}
         <div className="mb-6">
           <div className="text-white font-bold text-xl mb-4">Loja</div>
-          <ShopGrid
-            items={MOCK_ITEMS}
-            playerCoins={mockPlayerCoins}
-            onItemPurchase={handleItemPurchase}
-            availability="DRAFT"
-          />
+          <div className="max-h-[400px] overflow-y-auto">
+            <ShopGrid
+              items={DRAFT_ITEMS}
+              playerCoins={humanPlayer?.pillCoins ?? 0}
+              onItemPurchase={handleItemPurchase}
+              availability="DRAFT"
+            />
+          </div>
         </div>
 
         {/* Confirm Button */}

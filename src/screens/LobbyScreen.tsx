@@ -1,47 +1,94 @@
 /**
- * LobbyScreen - Tela de configuração de partida
- * 
- * STATUS: DESINTEGRADO - Apenas estrutura visual
- * TODO REFACTOR: Reintegrar após refatoração de hooks e stores
- * 
- * Lógica removida (será reintegrada):
- * - Criação de participantes (Player objects)
- * - Inicialização de match
- * - Transição para DRAFT phase
+ * LobbyScreen - Tela de configuracao de partida
+ *
+ * T083: Wire LobbyScreen Start button to gameStore.startMatch()
+ *
+ * Funcionalidades:
+ * - Configuracao de quantidade de bots (1-5)
+ * - Selecao de dificuldade do bot
+ * - Inicializacao de match com players
+ * - Transicao para DRAFT phase
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button } from '../components/ui/button';
-import { BotLevel } from '../types/game';
+import { useGameStore } from '../stores/gameStore';
+import { useProgressionStore } from '../stores/progressionStore';
+import { BotLevel, MatchPhase } from '../types/game';
+import type { Player } from '../types/game';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 export function LobbyScreen() {
-  // TODO REFACTOR: Reintegrar hooks refatorados aqui
-  // - useMatchSetup() - criação de partida
-  // - useLobbyParticipants() - gestão de participantes
+  // Store actions
+  const startMatch = useGameStore((state) => state.startMatch);
+  const transitionPhase = useGameStore((state) => state.transitionPhase);
+  const resetMatch = useGameStore((state) => state.resetMatch);
+
+  // Profile data para criar player humano
+  const profile = useProgressionStore();
 
   const [botCount, setBotCount] = useState(1);
   const [botDifficulty, setBotDifficulty] = useState<BotLevel>(BotLevel.EASY);
 
-  // Mock participants para manter estrutura visual
-  const mockParticipants = [
-    { id: '1', name: 'Você', avatar: 'player', isBot: false, botLevel: null },
-    ...Array.from({ length: botCount }, (_, i) => ({
-      id: `bot-${i}`,
+  // Cria lista de participantes (player + bots)
+  const participants = useMemo(() => {
+    const humanPlayer: Player = {
+      id: crypto.randomUUID(),
+      name: profile.name || 'Player',
+      avatar: profile.avatar || 'default',
+      isBot: false,
+      botLevel: undefined,
+      lives: DEFAULT_GAME_CONFIG.health.initialLives,
+      resistance: DEFAULT_GAME_CONFIG.health.initialResistance,
+      resistanceCap: DEFAULT_GAME_CONFIG.health.resistanceCap,
+      extraResistance: 0,
+      inventory: [],
+      pillCoins: DEFAULT_GAME_CONFIG.economy.initialPillCoins,
+      activeStatuses: [],
+      isEliminated: false,
+      isLastChance: false,
+      isActiveTurn: false,
+      totalCollapses: 0,
+      shapeQuest: null,
+      wantsShop: false,
+    };
+
+    const bots: Player[] = Array.from({ length: botCount }, (_, i) => ({
+      id: crypto.randomUUID(),
       name: `Bot ${i + 1}`,
       avatar: `bot${i + 1}`,
       isBot: true,
       botLevel: botDifficulty,
-    })),
-  ];
+      lives: DEFAULT_GAME_CONFIG.health.initialLives,
+      resistance: DEFAULT_GAME_CONFIG.health.initialResistance,
+      resistanceCap: DEFAULT_GAME_CONFIG.health.resistanceCap,
+      extraResistance: 0,
+      inventory: [],
+      pillCoins: DEFAULT_GAME_CONFIG.economy.initialPillCoins,
+      activeStatuses: [],
+      isEliminated: false,
+      isLastChance: false,
+      isActiveTurn: false,
+      totalCollapses: 0,
+      shapeQuest: null,
+      wantsShop: false,
+    }));
+
+    return [humanPlayer, ...bots];
+  }, [profile.name, profile.avatar, botCount, botDifficulty]);
 
   const handleStart = () => {
-    console.log('[DESINTEGRADO] Start match clicked');
-    // TODO REFACTOR: Reintegrar inicialização de match
+    // T083: Inicializa match com players e transiciona para DRAFT
+    startMatch(participants);
+    // Usa setTimeout para garantir que o state seja atualizado antes de transicionar
+    setTimeout(() => {
+      transitionPhase(MatchPhase.DRAFT);
+    }, 0);
   };
 
   const handleBack = () => {
-    console.log('[DESINTEGRADO] Back clicked');
-    // TODO REFACTOR: Reintegrar navegação
+    // Reseta e volta para HOME (navegateToLobby cria novo match vazio)
+    resetMatch();
   };
 
   return (
@@ -96,11 +143,11 @@ export function LobbyScreen() {
           {/* Participantes */}
           <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
             <h2 className="text-white font-bold text-xl mb-4">
-              Participantes ({mockParticipants.length})
+              Participantes ({participants.length})
             </h2>
 
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              {mockParticipants.map((participant, index) => (
+              {participants.map((participant, index) => (
                 <div
                   key={participant.id}
                   className="bg-gray-900 rounded-lg p-3 border border-gray-700"

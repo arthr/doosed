@@ -13,6 +13,7 @@ interface PillPoolProps {
   pool: Pool | null;
   onPillClick?: (pillId: string) => void;
   isTargeting?: boolean;
+  disabled?: boolean;
 }
 
 const PILL_TYPE_LABELS: Record<PillType, string> = {
@@ -24,7 +25,7 @@ const PILL_TYPE_LABELS: Record<PillType, string> = {
   [PillType.LIFE]: '+1 Vida',
 };
 
-export function PillPool({ pool, onPillClick, isTargeting = false }: PillPoolProps) {
+export function PillPool({ pool, onPillClick, isTargeting = false, disabled = false }: PillPoolProps) {
   if (!pool || pool.pills.length === 0) {
     return (
       <div className="bg-gray-800 rounded-lg p-8 border border-gray-700">
@@ -52,7 +53,7 @@ export function PillPool({ pool, onPillClick, isTargeting = false }: PillPoolPro
             key={pill.id}
             pill={pill}
             onClick={() => onPillClick?.(pill.id)}
-            isClickable={!isTargeting}
+            isClickable={!isTargeting && !disabled}
             size="md"
           />
         ))}

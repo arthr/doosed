@@ -52,8 +52,8 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    */
   startMatch: (players: Player[]) =>
     set((state) => {
-      // Usa playersSlice para armazenar players (via get())
-      get().setPlayers(players);
+      // Armazena players diretamente no state (nao usar get() dentro de set())
+      state.players = new Map(players.map((p) => [p.id, p]));
 
       const turnOrder = initializeTurnOrder(players);
 

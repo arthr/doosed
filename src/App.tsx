@@ -14,6 +14,7 @@ import { DraftScreen } from './screens/DraftScreen';
 import { MatchScreen } from './screens/MatchScreen';
 import { ShoppingScreen } from './screens/ShoppingScreen';
 import { ResultsScreen } from './screens/ResultsScreen';
+import { DevTools } from './components/dev/DevTools';
 import './index.css';
 
 // Error Boundary Component
@@ -115,7 +116,12 @@ function App() {
     }
   };
 
-  return <ErrorBoundary>{renderScreen()}</ErrorBoundary>;
+  return (
+    <ErrorBoundary>
+      {renderScreen()}
+      {import.meta.env.DEV && <DevTools />}
+    </ErrorBoundary>
+  );
 }
 
 export default App;
