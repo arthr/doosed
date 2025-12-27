@@ -160,8 +160,6 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
         startedAt: Date.now(),
         endedAt: null,
       };
-
-      state.match.activeTurnIndex = 0;
     }),
 
   /**

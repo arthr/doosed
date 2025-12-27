@@ -62,10 +62,10 @@ export function useTurnManagement() {
       logTurn('Pool esgotado - iniciando nova rodada', {
         roundNumber: nextRoundNumber,
       });
-      nextRound(); // Gera novo pool + reseta activeTurnIndex = 0
-    } else {
-      nextTurn(); // Incrementa activeTurnIndex
+      nextRound(); // Gera novo pool
     }
+
+    nextTurn(); // Incrementa activeTurnIndex
 
     // Limpa turno ativo DEPOIS de avancar o indice
     // Isso permite que useEffect detecte !activePlayer e chame startNextTurn()
