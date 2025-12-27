@@ -13,15 +13,16 @@ import type { Player } from '../types/game';
 
 export function useTurnManagement() {
   // Usar useGameStore com seletores para performance
-  const match = useGameStore((state) => state.match);
-  const currentRound = useGameStore((state) => state.currentRound);
-  const nextTurn = useGameStore((state) => state.nextTurn);
-  const nextRound = useGameStore((state) => state.nextRound);
-  const setActiveTurn = useGameStore((state) => state.setActiveTurn);
-  const clearActiveTurns = useGameStore((state) => state.clearActiveTurns);
-  const getPlayer = useGameStore((state) => state.getPlayer);
-  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
-  const getAlivePlayers = useGameStore((state) => state.getAlivePlayers);
+  const match = useGameStore(state => state.match);
+  const currentRound = useGameStore(state => state.currentRound);
+  const nextTurn = useGameStore(state => state.nextTurn);
+  const nextRound = useGameStore(state => state.nextRound);
+  const setActiveTurn = useGameStore(state => state.setActiveTurn);
+  const clearActiveTurns = useGameStore(state => state.clearActiveTurns);
+  const bumpTurnToken = useGameStore(state => state.bumpTurnToken);
+  const getPlayer = useGameStore(state => state.getPlayer);
+  const getAllPlayers = useGameStore(state => state.getAllPlayers);
+  const getAlivePlayers = useGameStore(state => state.getAlivePlayers);
 
   const { logTurn } = useEventLogger();
 
@@ -68,6 +69,7 @@ export function useTurnManagement() {
     // Limpa turno ativo DEPOIS de avancar o indice
     // Isso permite que useEffect detecte !activePlayer e chame startNextTurn()
     clearActiveTurns();
+    bumpTurnToken();
   }, [
     match,
     currentRound,
@@ -76,6 +78,7 @@ export function useTurnManagement() {
     nextTurn,
     nextRound,
     clearActiveTurns,
+    bumpTurnToken,
     logTurn,
   ]);
 
@@ -85,13 +88,14 @@ export function useTurnManagement() {
   const startTurnForPlayer = useCallback(
     (player: Player) => {
       setActiveTurn(player.id);
+      bumpTurnToken();
 
       logTurn(`Turno de ${player.name}`, {
         playerId: player.id,
         roundNumber: currentRound?.number || 0,
       });
     },
-    [currentRound?.number, setActiveTurn, logTurn]
+    [currentRound?.number, setActiveTurn, bumpTurnToken, logTurn],
   );
 
   /**
@@ -108,7 +112,7 @@ export function useTurnManagement() {
   const handleTurnTimeout = useCallback((): string | null => {
     const pool = currentRound?.pool;
     const players = getAllPlayers();
-    const activePlayer = players.find((p) => p.isActiveTurn);
+    const activePlayer = players.find(p => p.isActiveTurn);
 
     if (!pool || !activePlayer || pool.pills.length === 0) {
       return null;

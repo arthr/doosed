@@ -13,10 +13,10 @@ import type { Player, Match } from '../types/game';
 
 export function useBotExecution() {
   // Usar useGameStore com seletores para performance
-  const match = useGameStore((state) => state.match);
-  const currentRound = useGameStore((state) => state.currentRound);
-  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
-  const getPool = useGameStore((state) => state.getPool);
+  const match = useGameStore(state => state.match);
+  const currentRound = useGameStore(state => state.currentRound);
+  const getAllPlayers = useGameStore(state => state.getAllPlayers);
+  const getPool = useGameStore(state => state.getPool);
 
   const { logBotDecision } = useEventLogger();
 
@@ -38,7 +38,7 @@ export function useBotExecution() {
 
       logBotDecision(`Bot ${bot.name} pensando...`, { botId: bot.id });
 
-      const opponents = players.filter((p) => p.id !== bot.id);
+      const opponents = players.filter(p => p.id !== bot.id);
       const baseSeed = match.seed || Date.now();
       const derivedSeed = baseSeed * 137 + match.activeTurnIndex;
 
@@ -59,13 +59,7 @@ export function useBotExecution() {
         endedAt: match.endedAt,
       };
 
-      const decision = botEasy.decideTurnAction(
-        bot,
-        opponents,
-        pool,
-        matchForBot,
-        derivedSeed
-      );
+      const decision = botEasy.decideTurnAction(bot, opponents, pool, matchForBot, derivedSeed);
 
       if (decision.type === 'CONSUME_PILL') {
         logBotDecision(`Bot decidiu consumir pill ${decision.pillId}`, {
@@ -81,14 +75,14 @@ export function useBotExecution() {
 
       return decision;
     },
-    [match, currentRound, getAllPlayers, getPool, botEasy, logBotDecision]
+    [match, currentRound, getAllPlayers, getPool, botEasy, logBotDecision],
   );
 
   /**
    * Verifica se player e bot e pode agir
    */
   const canBotAct = useCallback((player: Player): boolean => {
-    return player.isBot && !player.isEliminated && player.isActiveTurn;
+    return player.isBot && !player.isEliminated;
   }, []);
 
   return {

@@ -21,6 +21,8 @@ import { useTurnManagement } from './useTurnManagement';
 import { useBotExecution } from './useBotExecution';
 import { useMatchEndDetection } from './useMatchEndDetection';
 import { useItemActions } from './useItemActions';
+import { DEFAULT_GAME_CONFIG } from '../config/game-config';
+import { MatchPhase } from '../types/game';
 
 export function useGameLoop() {
   // Usar useGameStore com seletores para performance
@@ -42,6 +44,24 @@ export function useGameLoop() {
   const { checkAndHandleMatchEnd } = useMatchEndDetection();
   const { handleItemClick } = useItemActions();
 
+  const botTimeoutMs = DEFAULT_GAME_CONFIG.timers.botTimeout * 1000;
+
+  const isStillSameTurn = useCallback(
+    (expectedTurnToken: number, expectedActivePlayerId?: string | null) => {
+      const state = useGameStore.getState();
+      if (!state.match || state.match.phase !== MatchPhase.MATCH) return false;
+      if (state.turnToken !== expectedTurnToken) return false;
+
+      if (typeof expectedActivePlayerId !== 'undefined') {
+        const active = state.getAllPlayers().find(p => p.isActiveTurn) || null;
+        if ((active?.id || null) !== expectedActivePlayerId) return false;
+      }
+
+      return true;
+    },
+    [],
+  );
+
   /**
    * Handler de consumo de pill (orquestra hooks especializados)
    * T085: Wire MatchScreen pill clicks
@@ -62,7 +82,15 @@ export function useGameLoop() {
       consumePill(pill, player);
 
       // Apos consumo, checa fim de jogo e avanca turno
+      const { turnToken } = useGameStore.getState();
+      const activePlayerIdAtConsume =
+        useGameStore
+          .getState()
+          .getAllPlayers()
+          .find(p => p.isActiveTurn)?.id || null;
+
       setTimeout(() => {
+        if (!isStillSameTurn(turnToken, activePlayerIdAtConsume)) return;
         const matchEnded = checkAndHandleMatchEnd();
 
         if (!matchEnded) {
@@ -70,7 +98,14 @@ export function useGameLoop() {
         }
       }, 500);
     },
-    [getPool, getAllPlayers, consumePill, checkAndHandleMatchEnd, advanceToNextTurn],
+    [
+      getPool,
+      getAllPlayers,
+      consumePill,
+      isStillSameTurn,
+      checkAndHandleMatchEnd,
+      advanceToNextTurn,
+    ],
   );
 
   /**
@@ -85,17 +120,37 @@ export function useGameLoop() {
       if (!decision) return;
 
       if (decision.type === 'CONSUME_PILL') {
+        const token = useGameStore.getState().turnToken;
         setTimeout(() => {
+          if (!isStillSameTurn(token, bot.id)) return;
           handlePillConsume(decision.pillId, bot.id);
         }, 1000);
       } else if (decision.type === 'USE_ITEM') {
+        const token = useGameStore.getState().turnToken;
         setTimeout(() => {
+          if (!isStillSameTurn(token, bot.id)) return;
           handleItemClick(bot.id, decision.itemId);
         }, 1000);
       }
     },
-    [canBotAct, executeBotDecision, handlePillConsume, handleItemClick],
+    [canBotAct, executeBotDecision, isStillSameTurn, handlePillConsume, handleItemClick],
   );
+
+  /**
+   * Auto-consume random pill quando timer expira
+   * T087: Wire turn timer expiration
+   */
+  const handleTurnTimeout = useCallback(() => {
+    const players = getAllPlayers();
+    const activePlayer = players.find(p => p.isActiveTurn);
+    if (!activePlayer) return;
+
+    const randomPillId = getTurnTimeoutPillId();
+
+    if (randomPillId) {
+      handlePillConsume(randomPillId, activePlayer.id);
+    }
+  }, [getAllPlayers, getTurnTimeoutPillId, handlePillConsume]);
 
   /**
    * Inicia proximo turno (orquestra hooks especializados)
@@ -134,18 +189,31 @@ export function useGameLoop() {
 
     // Se e bot, executa IA
     if (canBotAct(currentPlayer)) {
+      const tokenAtStart = useGameStore.getState().turnToken;
       setTimeout(() => {
+        if (!isStillSameTurn(tokenAtStart, currentPlayer.id)) return;
         executeBotTurnAction(currentPlayer);
       }, 2000);
+
+      // Fallback: se o bot nao agir em tempo razoavel, forca consumo automatico (timers.botTimeout).
+      setTimeout(() => {
+        if (!isStillSameTurn(tokenAtStart, currentPlayer.id)) return;
+        // Reusa o mesmo mecanismo do timeout do turno.
+        // Se o bot ja tiver agido, o turnToken ja tera mudado e este callback sera ignorado.
+        handleTurnTimeout();
+      }, botTimeoutMs);
     }
   }, [
     match,
     setProcessingTurn,
+    botTimeoutMs,
+    isStillSameTurn,
     checkAndHandleMatchEnd,
     getCurrentTurnPlayer,
     skipEliminatedPlayerTurn,
     startTurnForPlayer,
     canBotAct,
+    handleTurnTimeout,
     executeBotTurnAction,
   ]);
 
@@ -154,22 +222,6 @@ export function useGameLoop() {
    * T086: Wire item usage
    */
   const handleItemUse = handleItemClick;
-
-  /**
-   * Auto-consume random pill quando timer expira
-   * T087: Wire turn timer expiration
-   */
-  const handleTurnTimeout = useCallback(() => {
-    const players = getAllPlayers();
-    const activePlayer = players.find(p => p.isActiveTurn);
-    if (!activePlayer) return;
-
-    const randomPillId = getTurnTimeoutPillId();
-
-    if (randomPillId) {
-      handlePillConsume(randomPillId, activePlayer.id);
-    }
-  }, [getAllPlayers, getTurnTimeoutPillId, handlePillConsume]);
 
   return {
     // Handlers publicos (compatibilidade com MatchScreen)

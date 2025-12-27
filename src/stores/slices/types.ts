@@ -63,6 +63,7 @@ export interface MatchSlice {
 
   rounds: RoundSummary[];
   isProcessingTurn: boolean;
+  turnToken: number;
 
   // Actions
   navigateToLobby: () => void;
@@ -73,6 +74,7 @@ export interface MatchSlice {
   endMatch: (winnerId: string) => void;
   resetMatch: () => void;
   setProcessingTurn: (isProcessing: boolean) => void;
+  bumpTurnToken: () => void;
   updateCurrentRound: (updater: (round: NonNullable<MatchSlice['currentRound']>) => void) => void;
 }
 

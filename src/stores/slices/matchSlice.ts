@@ -23,11 +23,17 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
   currentRound: null,
   rounds: [],
   isProcessingTurn: false,
+  turnToken: 0,
 
   // ==================== ACTIONS ====================
   setProcessingTurn: (isProcessing: boolean) =>
     set(state => {
       state.isProcessingTurn = isProcessing;
+    }),
+
+  bumpTurnToken: () =>
+    set(state => {
+      state.turnToken = (state.turnToken || 0) + 1;
     }),
 
   /**
@@ -38,6 +44,7 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
     set(state => {
       setSeed(0);
       state.isProcessingTurn = false;
+      state.turnToken = 0;
       // BUG: Uso de Date.now() para ID torna a criação de partida não-determinística.
       // Sugestão: IDs devem ser passados como payload de evento ou gerados deterministicamente.
       const now = Date.now();
@@ -65,6 +72,7 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
     set(state => {
       setSeed(seed);
       state.isProcessingTurn = false;
+      state.turnToken = 0;
       // Armazena players diretamente no state (nao usar get() dentro de set())
       state.players = new Map(players.map(p => [p.id, p]));
 
@@ -95,6 +103,8 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
 
       state.match.phase = newPhase;
       state.isProcessingTurn = false;
+      // Troca de fase invalida timeouts pendentes do turno anterior.
+      state.turnToken = (state.turnToken || 0) + 1;
 
       // Se transiciona para MATCH e nao tem round, gera primeiro
       if (newPhase === MatchPhase.MATCH && !state.currentRound) {
@@ -122,6 +132,8 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
     set(state => {
       if (!state.match || !state.currentRound) return;
       state.isProcessingTurn = false;
+      // Nova rodada invalida timeouts pendentes.
+      state.turnToken = (state.turnToken || 0) + 1;
 
       // Salvar resumo da rodada anterior
       const roundSummary: RoundSummary = {
@@ -161,6 +173,8 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
     set(state => {
       if (!state.match) return;
       state.isProcessingTurn = false;
+      // Mudanca de indice do turno invalida timeouts pendentes.
+      state.turnToken = (state.turnToken || 0) + 1;
 
       // Usa playersSlice query via get()
       const alivePlayers = get().getAlivePlayers();
@@ -197,6 +211,7 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
       state.match.phase = MatchPhase.RESULTS;
       state.match.endedAt = Date.now();
       state.isProcessingTurn = false;
+      state.turnToken = (state.turnToken || 0) + 1;
     }),
 
   /**
@@ -210,6 +225,7 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
       state.rounds = [];
       state.players = new Map();
       state.isProcessingTurn = false;
+      state.turnToken = 0;
     }),
 
   /**
