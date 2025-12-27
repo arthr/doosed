@@ -72,6 +72,37 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
     }),
 
   /**
+   * Descarta uma pilula (sem ativar efeito)
+   * - Remove do array pills
+   * - Remove de revealed (se estava revelada)
+   * - Atualiza counters (remanescente por tipo)
+   */
+  discardPill: (pillId: string) =>
+    set(state => {
+      if (!state.currentRound) return;
+
+      const pillIndex = state.currentRound.pool.pills.findIndex((p: Pill) => p.id === pillId);
+      if (pillIndex === -1) {
+        console.warn('[poolSlice.discardPill] Pill nao encontrada no pool', { pillId });
+        return;
+      }
+
+      const pill = state.currentRound.pool.pills[pillIndex];
+
+      // Remove do pool
+      state.currentRound.pool.pills.splice(pillIndex, 1);
+
+      // Remove de revealed (se aplicavel)
+      state.currentRound.pool.revealed = state.currentRound.pool.revealed.filter(
+        (p: Pill) => p.id !== pillId,
+      );
+
+      // Atualiza counters para refletir as pills REMANESCENTES por tipo (FR-072)
+      const currentCount = state.currentRound.pool.counters[pill.type] || 0;
+      state.currentRound.pool.counters[pill.type] = Math.max(0, currentCount - 1);
+    }),
+
+  /**
    * Aplica modificador a uma pilula
    */
   applyModifierToPill: (pillId: string, modifier: PillModifier) =>

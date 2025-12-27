@@ -42,7 +42,7 @@ export function useGameLoop() {
   } = useTurnManagement();
   const { executeBotDecision, canBotAct } = useBotExecution();
   const { checkAndHandleMatchEnd } = useMatchEndDetection();
-  const { handleItemClick } = useItemActions();
+  const { handleItemUse: handleItemUseWithTargets } = useItemActions();
 
   const botTimeoutMs = DEFAULT_GAME_CONFIG.timers.botTimeout * 1000;
 
@@ -129,11 +129,15 @@ export function useGameLoop() {
         const token = useGameStore.getState().turnToken;
         setTimeout(() => {
           if (!isStillSameTurn(token, bot.id)) return;
-          handleItemClick(bot.id, decision.itemId);
+          handleItemUseWithTargets(bot.id, decision.itemId, {
+            targetPillId: decision.targetPillId,
+            targetShape: decision.targetShape,
+            targetPlayerId: decision.targetPlayerId,
+          });
         }, 1000);
       }
     },
-    [canBotAct, executeBotDecision, isStillSameTurn, handlePillConsume, handleItemClick],
+    [canBotAct, executeBotDecision, isStillSameTurn, handlePillConsume, handleItemUseWithTargets],
   );
 
   /**
@@ -217,16 +221,10 @@ export function useGameLoop() {
     executeBotTurnAction,
   ]);
 
-  /**
-   * Usa item do inventario (delegado ao hook especializado)
-   * T086: Wire item usage
-   */
-  const handleItemUse = handleItemClick;
-
   return {
     // Handlers publicos (compatibilidade com MatchScreen)
     handlePillConsume,
-    handleItemUse,
+    handleItemUse: handleItemUseWithTargets,
     handleTurnTimeout,
     startNextTurn,
   };

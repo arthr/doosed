@@ -9,6 +9,7 @@ import { useCallback, useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useEventLogger } from './useEventLogger';
 import { BotEasy } from '../core/bot/bot-easy';
+import { BotLevel } from '../types/game';
 import type { Player, Match } from '../types/game';
 
 export function useBotExecution() {
@@ -20,8 +21,24 @@ export function useBotExecution() {
 
   const { logBotDecision } = useEventLogger();
 
-  // Instancia singleton do bot Easy
-  const botEasy = useMemo(() => new BotEasy(), []);
+  // Instancias memoizadas por nivel (por enquanto NORMAL/HARD/INSANE delegam para Easy)
+  const bots = useMemo(() => {
+    const easy = new BotEasy();
+    return {
+      [BotLevel.EASY]: easy,
+      [BotLevel.NORMAL]: easy,
+      [BotLevel.HARD]: easy,
+      [BotLevel.INSANE]: easy,
+    };
+  }, []);
+
+  const getBotAI = useCallback(
+    (player: Player) => {
+      const level = player.botLevel || BotLevel.EASY;
+      return bots[level] || bots[BotLevel.EASY];
+    },
+    [bots],
+  );
 
   /**
    * Executa turno do bot (decide acao e retorna decisao)
@@ -59,7 +76,8 @@ export function useBotExecution() {
         endedAt: match.endedAt,
       };
 
-      const decision = botEasy.decideTurnAction(bot, opponents, pool, matchForBot, derivedSeed);
+      const ai = getBotAI(bot);
+      const decision = ai.decideTurnAction(bot, opponents, pool, matchForBot, derivedSeed);
 
       if (decision.type === 'CONSUME_PILL') {
         logBotDecision(`Bot decidiu consumir pill ${decision.pillId}`, {
@@ -75,13 +93,15 @@ export function useBotExecution() {
 
       return decision;
     },
-    [match, currentRound, getAllPlayers, getPool, botEasy, logBotDecision],
+    [match, currentRound, getAllPlayers, getPool, getBotAI, logBotDecision],
   );
 
   /**
    * Verifica se player e bot e pode agir
    */
   const canBotAct = useCallback((player: Player): boolean => {
+    // Nao depende de isActiveTurn para evitar objetos stale em callbacks agendados.
+    // A validade do turno eh garantida pelo turnToken/activePlayerId no useGameLoop.
     return player.isBot && !player.isEliminated;
   }, []);
 

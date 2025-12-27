@@ -18,20 +18,24 @@ import { InventorySlot } from '../components/ui/inventory-slot';
 import { useGameStore } from '../stores/gameStore';
 import { useTurnTimer } from '../hooks/useTurnTimer';
 import { DEFAULT_GAME_CONFIG } from '../config/game-config';
-import { Availability, ItemCategory, Targeting } from '../types/item';
+import { Availability, ItemCategory } from '../types/item';
 import type { Item, InventorySlot as IInventorySlot } from '../types/item';
 import { MatchPhase } from '../types/game';
 
 // Item descriptions
 const ITEM_DESCRIPTIONS: Record<string, { name: string; description: string; category: ItemCategory }> = {
   scanner: { name: 'Scanner', description: 'Revela o tipo de uma pilula', category: ItemCategory.INTEL },
-  shapeScanner: { name: 'Shape Scanner', description: 'Revela todas as pilulas de uma forma', category: ItemCategory.INTEL },
+  'shape-scanner': {
+    name: 'Shape Scanner',
+    description: 'Revela todas as pilulas de uma forma',
+    category: ItemCategory.INTEL,
+  },
   inverter: { name: 'Inverter', description: 'Inverte o efeito de uma pilula', category: ItemCategory.INTEL },
   double: { name: 'Double', description: 'Dobra o efeito de uma pilula', category: ItemCategory.INTEL },
-  pocketPill: { name: 'Pocket Pill', description: 'Pilula SAFE garantida', category: ItemCategory.SUSTAIN },
+  'pocket-pill': { name: 'Pocket Pill', description: 'Pilula SAFE garantida', category: ItemCategory.SUSTAIN },
   shield: { name: 'Shield', description: 'Bloqueia proximo dano', category: ItemCategory.SUSTAIN },
   handcuffs: { name: 'Handcuffs', description: 'Pula turno do oponente', category: ItemCategory.CONTROL },
-  forceFeed: { name: 'Force Feed', description: 'Forca oponente a consumir pilula', category: ItemCategory.CONTROL },
+  'force-feed': { name: 'Force Feed', description: 'Forca oponente a consumir pilula', category: ItemCategory.CONTROL },
   shuffle: { name: 'Shuffle', description: 'Embaralha o pool', category: ItemCategory.CHAOS },
   discard: { name: 'Discard', description: 'Descarta uma pilula', category: ItemCategory.CHAOS },
 };

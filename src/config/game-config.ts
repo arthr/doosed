@@ -136,7 +136,7 @@ export const DEFAULT_GAME_CONFIG: GameConfig = {
       stackLimit: 3,
       availability: Availability.BOTH,
     },
-    shapeScanner: {
+    'shape-scanner': {
       cost: 20, // FR-023
       targeting: Targeting.SHAPE,
       stackable: true,
@@ -157,7 +157,7 @@ export const DEFAULT_GAME_CONFIG: GameConfig = {
     },
 
     // SUSTAIN (Sobrevivência)
-    pocketPill: {
+    'pocket-pill': {
       cost: 20, // FR-029
       targeting: Targeting.SELF,
       stackable: true,
@@ -179,7 +179,7 @@ export const DEFAULT_GAME_CONFIG: GameConfig = {
       stackLimit: 2,
       availability: Availability.BOTH,
     },
-    forceFeed: {
+    'force-feed': {
       cost: 35, // FR-035
       targeting: Targeting.PILL, // + OPPONENT (dual targeting)
       stackable: false,

@@ -114,6 +114,7 @@ export interface PoolSlice {
   // Actions (operam sobre currentRound.pool via get())
   revealPill: (pillId: string) => void;
   consumePill: (pillId: string) => void;
+  discardPill: (pillId: string) => void;
   applyModifierToPill: (pillId: string, modifier: PillModifier) => void;
   shufflePool: () => void;
 
