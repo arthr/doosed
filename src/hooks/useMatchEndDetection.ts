@@ -13,12 +13,10 @@ import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 
 export function useMatchEndDetection() {
   // Usar useGameStore com seletores para performance
-  const rounds = useGameStore((state) => state.rounds);
-  const endMatch = useGameStore((state) => state.endMatch);
-  const getAlivePlayers = useGameStore((state) => state.getAlivePlayers);
+  const endMatch = useGameStore(state => state.endMatch);
+  const getAlivePlayers = useGameStore(state => state.getAlivePlayers);
 
-  const { addXP, incrementGamesPlayed, incrementWins, addRoundsSurvived } =
-    useProgressionStore();
+  const { addXP, incrementGamesPlayed, incrementWins, addRoundsSurvived } = useProgressionStore();
   const { logMatch } = useEventLogger();
 
   /**
@@ -57,7 +55,8 @@ export function useMatchEndDetection() {
       });
 
       const isPlayerWinner = !winner.isBot;
-      const xpReward = calculateXPReward(isPlayerWinner, rounds.length);
+      const roundsCount = useGameStore.getState().rounds.length;
+      const xpReward = calculateXPReward(isPlayerWinner, roundsCount);
 
       // Aplica recompensas
       if (isPlayerWinner) {
@@ -66,13 +65,12 @@ export function useMatchEndDetection() {
       }
 
       incrementGamesPlayed();
-      addRoundsSurvived(rounds.length || 0);
+      addRoundsSurvived(roundsCount || 0);
 
       // Finaliza match no store
       endMatch(winner.id);
     },
     [
-      rounds.length,
       logMatch,
       calculateXPReward,
       addXP,
@@ -80,7 +78,7 @@ export function useMatchEndDetection() {
       incrementGamesPlayed,
       addRoundsSurvived,
       endMatch,
-    ]
+    ],
   );
 
   /**

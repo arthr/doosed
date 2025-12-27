@@ -14,8 +14,6 @@ import type { Player, Match } from '../types/game';
 
 export function useBotExecution() {
   // Usar useGameStore com seletores para performance
-  const match = useGameStore(state => state.match);
-  const currentRound = useGameStore(state => state.currentRound);
   const getAllPlayers = useGameStore(state => state.getAllPlayers);
   const getPool = useGameStore(state => state.getPool);
 
@@ -46,6 +44,7 @@ export function useBotExecution() {
    */
   const executeBotDecision = useCallback(
     (bot: Player) => {
+      const { match, currentRound } = useGameStore.getState();
       const pool = getPool();
       const players = getAllPlayers();
 
@@ -93,7 +92,7 @@ export function useBotExecution() {
 
       return decision;
     },
-    [match, currentRound, getAllPlayers, getPool, getBotAI, logBotDecision],
+    [getAllPlayers, getPool, getBotAI, logBotDecision],
   );
 
   /**

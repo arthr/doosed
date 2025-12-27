@@ -26,7 +26,6 @@ import { MatchPhase } from '../types/game';
 
 export function useGameLoop() {
   // Usar useGameStore com seletores para performance
-  const match = useGameStore(state => state.match);
   const getPool = useGameStore(state => state.getPool);
   const getAllPlayers = useGameStore(state => state.getAllPlayers);
   const setProcessingTurn = useGameStore(state => state.setProcessingTurn);
@@ -164,7 +163,7 @@ export function useGameLoop() {
     if (state.isProcessingTurn) return;
 
     setProcessingTurn(true);
-    if (!match) {
+    if (!state.match) {
       setProcessingTurn(false);
       return;
     }
@@ -208,7 +207,6 @@ export function useGameLoop() {
       }, botTimeoutMs);
     }
   }, [
-    match,
     setProcessingTurn,
     botTimeoutMs,
     isStillSameTurn,
