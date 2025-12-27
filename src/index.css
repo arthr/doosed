@@ -297,7 +297,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-void-black font-pixel text-text-primary overflow-hidden;
+    @apply bg-void-black font-pixel text-text-primary;
     image-rendering: pixelated;
     position: relative;
   }

@@ -22,7 +22,7 @@ export function PlayerCard({ player, isActive = false, compact = false }: Player
   return (
     <div
       className={`
-        bg-gray-800 rounded-lg p-3 border-2
+        bg-gray-800 rounded-xs p-3 border-2
         ${isActive ? 'border-green-500 shadow-lg shadow-green-500/50' : 'border-gray-700'}
         ${player.isEliminated ? 'opacity-50' : ''}
         ${compact ? 'w-32' : 'w-48'}
@@ -49,9 +49,8 @@ export function PlayerCard({ player, isActive = false, compact = false }: Player
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className={`w-3 h-3 rounded-full ${
-                i < player.lives ? 'bg-red-500' : 'bg-gray-700'
-              }`}
+              className={`w-3 h-3 rounded-full ${i < player.lives ? 'bg-red-500' : 'bg-gray-700'
+                }`}
             />
           ))}
         </div>
@@ -71,13 +70,12 @@ export function PlayerCard({ player, isActive = false, compact = false }: Player
         </div>
         <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
           <div
-            className={`h-full transition-all duration-300 ${
-              resistancePercent > 60
+            className={`h-full transition-all duration-300 ${resistancePercent > 60
                 ? 'bg-green-500'
                 : resistancePercent > 30
                   ? 'bg-yellow-500'
                   : 'bg-red-500'
-            }`}
+              }`}
             style={{ width: `${resistancePercent}%` }}
           />
         </div>

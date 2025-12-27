@@ -105,7 +105,7 @@ export function LobbyScreen() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Configurações */}
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+          <div className="bg-gray-800 rounded-xs p-6 border border-gray-700">
             <h2 className="text-white font-bold text-xl mb-4">Bots</h2>
 
             {/* Quantidade de bots */}
@@ -144,7 +144,7 @@ export function LobbyScreen() {
           </div>
 
           {/* Participantes */}
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+          <div className="bg-gray-800 rounded-xs p-6 border border-gray-700">
             <h2 className="text-white font-bold text-xl mb-4">
               Participantes ({participants.length})
             </h2>
@@ -153,7 +153,7 @@ export function LobbyScreen() {
               {participants.map((participant, index) => (
                 <div
                   key={participant.id}
-                  className="bg-gray-900 rounded-lg p-3 border border-gray-700"
+                  className="bg-gray-900 rounded-xs p-3 border border-gray-700"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold">

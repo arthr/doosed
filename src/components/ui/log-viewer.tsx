@@ -42,11 +42,11 @@ export function LogViewer({ maxHeight = '300px' }: LogViewerProps) {
   });
 
   return (
-    <div className="bg-gray-900 rounded-lg p-3 border border-gray-700">
+    <div className="bg-gray-900 rounded-xs p-3 border border-gray-700">
       {/* Header com filtros */}
       <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-700">
         <div className="text-white font-bold text-sm">Game Log</div>
-        
+
         <div className="flex gap-2">
           {/* Filtro de categoria */}
           <select
@@ -109,7 +109,7 @@ export function LogViewer({ maxHeight = '300px' }: LogViewerProps) {
                     </span>
                   </div>
                   <div className="text-gray-300 mt-0.5">{log.message}</div>
-                  
+
                   {/* Contexto (se houver) */}
                   {log.context && Object.keys(log.context).length > 0 && (
                     <div className="text-gray-500 text-xs mt-1 font-mono">

@@ -21,7 +21,7 @@ export function InventorySlot({ slot, slotIndex, onClick, isDisabled = false }: 
     <div
       onClick={!isEmpty && !isDisabled ? onClick : undefined}
       className={`
-        relative w-16 h-16 bg-gray-800 border-2 border-gray-700 rounded-lg
+        relative w-16 h-16 bg-gray-800 border-2 border-gray-700 rounded-xs
         flex items-center justify-center
         ${!isEmpty && !isDisabled ? 'cursor-pointer hover:border-green-500' : ''}
         ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}

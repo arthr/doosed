@@ -40,7 +40,7 @@ export function DevTools() {
     const captureSnapshot = () => {
       const store = useGameStore.getState();
       const logStore = useLogStore.getState();
-      
+
       const match = store.match;
       const currentRound = store.currentRound;
       const players = store.getAllPlayers();
@@ -99,7 +99,7 @@ export function DevTools() {
 
   if (!isVisible) {
     return (
-      <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-3 py-2 rounded-lg text-xs border border-gray-600 shadow-lg">
+      <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-3 py-2 rounded-xs text-xs border border-gray-600 shadow-lg">
         Press <kbd className="bg-gray-700 px-2 py-1 rounded">ALT+SHIFT+D</kbd> to open DevTools
       </div>
     );
@@ -113,25 +113,23 @@ export function DevTools() {
         <div className="flex items-center justify-between bg-gray-800 px-4 py-2 border-b border-gray-700">
           <div className="flex items-center gap-4">
             <h3 className="text-green-500 font-bold text-sm">DOSED DevTools</h3>
-            
+
             <div className="flex gap-1">
               <button
                 onClick={() => setActiveTab('state')}
-                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                  activeTab === 'state'
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'state'
                     ? 'bg-green-600 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
+                  }`}
               >
                 State
               </button>
               <button
                 onClick={() => setActiveTab('logs')}
-                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                  activeTab === 'logs'
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'logs'
                     ? 'bg-green-600 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
+                  }`}
               >
                 Logs ({logs.length})
               </button>
@@ -141,15 +139,14 @@ export function DevTools() {
           <div className="flex items-center gap-2">
             <button
               onClick={handlePauseToggle}
-              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                isPaused
+              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${isPaused
                   ? 'bg-yellow-600 text-white hover:bg-yellow-700'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              }`}
+                }`}
             >
               {isPaused ? 'Paused' : 'Live'}
             </button>
-            
+
             <button
               onClick={handleCopyState}
               className="px-3 py-1 rounded text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
@@ -176,21 +173,21 @@ export function DevTools() {
                 </div>
               )}
 
-              <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
+              <div className="bg-gray-800 rounded-xs p-3 border border-gray-700">
                 <h4 className="text-white font-bold text-sm mb-2">Match State</h4>
                 <pre className="text-xs text-green-400 overflow-x-auto">
                   {JSON.stringify(stateSnapshot?.match, null, 2)}
                 </pre>
               </div>
 
-              <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
+              <div className="bg-gray-800 rounded-xs p-3 border border-gray-700">
                 <h4 className="text-white font-bold text-sm mb-2">Current Round</h4>
                 <pre className="text-xs text-green-400 overflow-x-auto">
                   {JSON.stringify(stateSnapshot?.currentRound, null, 2)}
                 </pre>
               </div>
 
-              <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
+              <div className="bg-gray-800 rounded-xs p-3 border border-gray-700">
                 <h4 className="text-white font-bold text-sm mb-2">Players ({stateSnapshot?.players?.length || 0})</h4>
                 <pre className="text-xs text-green-400 overflow-x-auto">
                   {JSON.stringify(stateSnapshot?.players, null, 2)}
@@ -209,15 +206,14 @@ export function DevTools() {
               {logs.slice().reverse().map((log, index) => (
                 <div
                   key={`${log.timestamp}-${index}`}
-                  className={`text-xs p-2 rounded border ${
-                    log.severity === 'error'
+                  className={`text-xs p-2 rounded border ${log.severity === 'error'
                       ? 'bg-red-900 border-red-600 text-red-200'
                       : log.severity === 'warn'
-                      ? 'bg-yellow-900 border-yellow-600 text-yellow-200'
-                      : log.severity === 'info'
-                      ? 'bg-blue-900 border-blue-600 text-blue-200'
-                      : 'bg-gray-800 border-gray-600 text-gray-300'
-                  }`}
+                        ? 'bg-yellow-900 border-yellow-600 text-yellow-200'
+                        : log.severity === 'info'
+                          ? 'bg-blue-900 border-blue-600 text-blue-200'
+                          : 'bg-gray-800 border-gray-600 text-gray-300'
+                    }`}
                 >
                   <div className="flex items-start gap-2">
                     <span className="text-gray-400 font-mono">

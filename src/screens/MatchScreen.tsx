@@ -1,50 +1,47 @@
 /**
- * MatchScreen - Tela principal da partida
+ * MatchScreen - Tela principal da partida (REFATORADO)
  *
  * T085: Wire MatchScreen pill clicks
  * T086: Wire MatchScreen item usage
  * T087: Wire turn timer expiration
  *
- * Funcionalidades:
- * - Pool de pilulas com click para consumo
- * - HUD do jogador com inventario
- * - Linha de oponentes
- * - Timer de turno com auto-consumo
- * - Execucao automatica de bots
- * - Deteccao de fim de jogo
+ * Refactoring:
+ * - Seletores diretos do Zustand (performance)
+ * - Subcomponentes em components/match/
+ * - Efeitos consolidados
+ * - Reducao de complexidade
+ *
+ * @see .specify/memory/constitution.md - Principio VIII (SOLID, DRY, KISS)
  */
 
 import React, { useEffect, useMemo, useCallback } from 'react';
-import { PillPool } from '../components/game/PillPool';
-import { PlayerHUD } from '../components/game/PlayerHUD';
-import { OpponentLine } from '../components/game/OpponentLine';
-import { LogViewer } from '../components/ui/log-viewer';
-import { TimerDisplay } from '../components/ui/timer-display';
-import { Button } from '../components/ui/button';
 import { useGameStore } from '../stores/gameStore';
 import { useGameLoop } from '../hooks/useGameLoop';
 import { useTurnTimer } from '../hooks/useTurnTimer';
+import { MatchHeader } from '../components/game/match/MatchHeader';
+import { MatchMainContent } from '../components/game/match/MatchMainContent';
+import { MatchLoadingState } from '../components/game/match/MatchLoadingState';
 import { DEFAULT_GAME_CONFIG } from '../config/game-config';
 import { MatchPhase } from '../types/game';
 
 const TURN_TIME = DEFAULT_GAME_CONFIG.timers.turn;
 
 export function MatchScreen() {
-  // Store state
+  // Store state - seletores diretos (otimizado)
   const match = useGameStore((state) => state.match);
   const currentRound = useGameStore((state) => state.currentRound);
+  const pool = useGameStore((state) => state.currentRound?.pool || null);
   const getAllPlayers = useGameStore((state) => state.getAllPlayers);
-  const getPool = useGameStore((state) => state.getPool);
   const resetMatch = useGameStore((state) => state.resetMatch);
+
+  // Players array (derivado do Map via getter)
+  const players = getAllPlayers();
 
   // Game loop hooks
   const { handlePillConsume, handleItemUse, handleTurnTimeout, startNextTurn } =
     useGameLoop();
 
-  // Dados derivados
-  const players = useMemo(() => getAllPlayers(), [getAllPlayers]);
-  const pool = useMemo(() => getPool(), [getPool]);
-
+  // Dados derivados - memoizados localmente (especificos desta tela)
   const humanPlayer = useMemo(
     () => players.find((p) => !p.isBot) || null,
     [players]
@@ -76,140 +73,77 @@ export function MatchScreen() {
     autoStart: isHumanTurn,
   });
 
-  // Efeito para iniciar primeiro turno e resetar timer quando turno muda
+  // Efeito consolidado: iniciar turno e gerenciar timer
   useEffect(() => {
     if (!match || match.phase !== MatchPhase.MATCH) return;
 
     // Se nenhum player tem turno ativo, inicia proximo turno
     if (!activePlayer) {
       startNextTurn();
+      return;
     }
-  }, [match, activePlayer, startNextTurn]);
 
-  // Reseta timer quando turno do humano comeca
-  useEffect(() => {
+    // Gerencia timer baseado no turno
     if (isHumanTurn) {
       resetTimer();
     } else {
       stopTimer();
     }
-  }, [isHumanTurn, resetTimer, stopTimer]);
+  }, [match, activePlayer, isHumanTurn, startNextTurn, resetTimer, stopTimer]);
 
-  // Handler de click em pill (T085)
+  // Handlers (T085, T086)
   const handlePillClick = useCallback(
     (pillId: string) => {
       if (!isHumanTurn || !humanPlayer) return;
-
       stopTimer();
       handlePillConsume(pillId, humanPlayer.id);
     },
     [isHumanTurn, humanPlayer, stopTimer, handlePillConsume]
   );
 
-  // Handler de click em item (T086)
   const handleItemClick = useCallback(
     (slotIndex: number) => {
       if (!isHumanTurn || !humanPlayer) return;
-
       const slot = humanPlayer.inventory[slotIndex];
       if (!slot?.item) return;
-
       handleItemUse(humanPlayer.id, slot.item.id);
     },
     [isHumanTurn, humanPlayer, handleItemUse]
   );
 
-  // Handler de saida
   const handleLeave = useCallback(() => {
     if (window.confirm('Tem certeza que deseja sair? Seu progresso sera perdido.')) {
       resetMatch();
     }
   }, [resetMatch]);
 
-  // Guarda de seguranca - se nao tem match ou round, mostra loading
-  if (!match || !currentRound || !pool) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-xl">Carregando partida...</div>
-      </div>
-    );
+  // Loading state (early return)
+  if (!match || !currentRound || !pool || !humanPlayer) {
+    return <MatchLoadingState />;
   }
 
   return (
     <div className="min-h-screen bg-gray-900 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-green-500">Match em Andamento</h1>
-            <p className="text-gray-400 text-sm">
-              Rodada {currentRound.number} | Turno: {activePlayer?.name || '...'}
-            </p>
-          </div>
+        <MatchHeader
+          roundNumber={currentRound.number}
+          activePlayerName={activePlayer?.name}
+          isHumanTurn={isHumanTurn}
+          timeRemaining={timeRemaining}
+          turnTime={TURN_TIME}
+          isOpponentBot={activePlayer?.isBot ?? false}
+          onLeave={handleLeave}
+        />
 
-          <div className="flex items-center gap-4">
-            {isHumanTurn && (
-              <TimerDisplay
-                seconds={timeRemaining}
-                maxSeconds={TURN_TIME}
-                label="Seu Turno"
-                size="md"
-              />
-            )}
-            {!isHumanTurn && activePlayer?.isBot && (
-              <div className="text-yellow-500 text-sm font-bold animate-pulse">
-                Bot pensando...
-              </div>
-            )}
-            <Button onClick={handleLeave} variant="danger" size="sm">
-              Sair
-            </Button>
-          </div>
-        </div>
-
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Left Column - Opponents + Log */}
-          <div className="lg:col-span-1 space-y-4">
-            <OpponentLine
-              opponents={opponents}
-              activePlayerId={activePlayer?.id}
-            />
-
-            {/* Log Viewer */}
-            <LogViewer maxHeight="400px" />
-          </div>
-
-          {/* Right Column - Pool + HUD */}
-          <div className="lg:col-span-2 space-y-4">
-            <PillPool
-              pool={pool}
-              onPillClick={handlePillClick}
-              isTargeting={false}
-              disabled={!isHumanTurn}
-            />
-
-            {/* Player HUD */}
-            {humanPlayer && (
-              <PlayerHUD
-                player={humanPlayer}
-                onItemClick={handleItemClick}
-                isItemsDisabled={!isHumanTurn}
-              />
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex gap-2">
-              <Button
-                variant="secondary"
-                className="flex-1"
-                disabled={true}
-              >
-                Sinalizar Loja (US2)
-              </Button>
-            </div>
-          </div>
-        </div>
+        <MatchMainContent
+          opponents={opponents}
+          activePlayerId={activePlayer?.id}
+          pool={pool}
+          humanPlayer={humanPlayer}
+          isHumanTurn={isHumanTurn}
+          onPillClick={handlePillClick}
+          onItemClick={handleItemClick}
+        />
       </div>
     </div>
   );

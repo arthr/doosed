@@ -28,7 +28,7 @@ export function ShopGrid({ items, playerCoins, onItemPurchase, availability }: S
         return (
           <div
             key={item.id}
-            className="bg-gray-800 rounded-lg p-4 border border-gray-700 flex flex-col"
+            className="bg-gray-800 rounded-xs p-4 border border-gray-700 flex flex-col"
           >
             {/* Header */}
             <div className="flex items-start justify-between mb-2">

@@ -39,11 +39,11 @@ const ITEM_DESCRIPTIONS: Record<string, { name: string; description: string; cat
 // Converte config para array de Items filtrando por disponibilidade
 const createItemCatalog = (): Item[] => {
   const items: Item[] = [];
-  
+
   for (const [id, config] of Object.entries(DEFAULT_GAME_CONFIG.items)) {
     const meta = ITEM_DESCRIPTIONS[id];
     if (!meta) continue;
-    
+
     if (config.availability === Availability.DRAFT || config.availability === Availability.BOTH) {
       items.push({
         id,
@@ -58,7 +58,7 @@ const createItemCatalog = (): Item[] => {
       });
     }
   }
-  
+
   return items;
 };
 
@@ -163,7 +163,7 @@ export function DraftScreen() {
         </div>
 
         {/* Inventario */}
-        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 mb-6">
+        <div className="bg-gray-800 rounded-xs p-4 border border-gray-700 mb-6">
           <div className="text-white font-bold mb-3">Seu Inventario (5 slots)</div>
           <div className="flex gap-2">
             {inventorySlots.map((slot, index) => (

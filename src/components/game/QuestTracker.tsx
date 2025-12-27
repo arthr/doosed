@@ -23,7 +23,7 @@ export function QuestTracker({ quest }: QuestTrackerProps) {
   return (
     <div
       className={`
-        bg-gray-800 rounded-lg p-3 border-2
+        bg-gray-800 rounded-xs p-3 border-2
         ${isCompleted ? 'border-green-500' : isFailed ? 'border-red-500' : 'border-gray-700'}
       `}
     >
@@ -39,12 +39,11 @@ export function QuestTracker({ quest }: QuestTrackerProps) {
             <div
               className={`
                 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold
-                ${
-                  index < quest.progress
-                    ? 'bg-green-600 text-white'
-                    : index === quest.progress
-                      ? 'bg-blue-600 text-white animate-pulse'
-                      : 'bg-gray-700 text-gray-400'
+                ${index < quest.progress
+                  ? 'bg-green-600 text-white'
+                  : index === quest.progress
+                    ? 'bg-blue-600 text-white animate-pulse'
+                    : 'bg-gray-700 text-gray-400'
                 }
               `}
             >

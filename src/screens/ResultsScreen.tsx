@@ -150,11 +150,11 @@ export function ResultsScreen() {
 
         {/* Rewards */}
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 text-center">
+          <div className="bg-gray-800 rounded-xs p-6 border border-gray-700 text-center">
             <div className="text-gray-400 text-sm mb-2">XP Ganho</div>
             <div className="text-green-500 font-bold text-4xl">+{rewards.xp}</div>
           </div>
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 text-center">
+          <div className="bg-gray-800 rounded-xs p-6 border border-gray-700 text-center">
             <div className="text-gray-400 text-sm mb-2">Schmeckles</div>
             <div className="text-yellow-500 font-bold text-4xl">
               {rewards.schmeckles > 0 ? `+${rewards.schmeckles}` : '0'}
@@ -163,7 +163,7 @@ export function ResultsScreen() {
         </div>
 
         {/* Match Stats */}
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 mb-8">
+        <div className="bg-gray-800 rounded-xs p-6 border border-gray-700 mb-8">
           <h2 className="text-white font-bold text-2xl mb-4">
             Estatisticas da Partida
           </h2>

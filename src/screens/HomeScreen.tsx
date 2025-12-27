@@ -32,7 +32,7 @@ export function HomeScreen() {
         </div>
 
         {/* Profile Info */}
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 mb-8">
+        <div className="bg-gray-800 rounded-xs p-6 border border-gray-700 mb-8">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-2xl">
               {profile.avatar.slice(0, 2).toUpperCase()}

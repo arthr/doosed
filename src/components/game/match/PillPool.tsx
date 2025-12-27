@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import type { Pool } from '../../types/game';
-import { PillDisplay } from '../ui/pill-display';
-import { PillType } from '../../types/pill';
+import type { Pool } from '../../../types/game';
+import { PillDisplay } from '../../ui/pill-display';
+import { PillType } from '../../../types/pill';
 
 interface PillPoolProps {
   pool: Pool | null;
@@ -28,14 +28,14 @@ const PILL_TYPE_LABELS: Record<PillType, string> = {
 export function PillPool({ pool, onPillClick, isTargeting = false, disabled = false }: PillPoolProps) {
   if (!pool || pool.pills.length === 0) {
     return (
-      <div className="bg-gray-800 rounded-lg p-8 border border-gray-700">
+      <div className="bg-gray-800 rounded-xs p-8 border border-gray-700">
         <div className="text-gray-500 text-center">Nenhuma pill disponível</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+    <div className="bg-gray-800 rounded-xs p-4 border border-gray-700">
       {/* Header com contador de pills */}
       <div className="flex items-center justify-between mb-4">
         <div className="text-white font-bold">

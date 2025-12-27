@@ -54,7 +54,7 @@ class ErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-gray-900 flex items-center justify-center p-8">
-          <div className="max-w-md w-full bg-gray-800 rounded-lg p-6 border border-red-500">
+          <div className="max-w-md w-full bg-gray-800 rounded-xs p-6 border border-red-500">
             <h1 className="text-2xl font-bold text-red-500 mb-4">
               Erro no Jogo
             </h1>
