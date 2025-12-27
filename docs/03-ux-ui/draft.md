@@ -6,7 +6,7 @@ Comprar/selecionar loadout sob pressão de tempo.
 ## Regras
 - Timer global.
 - Ao expirar: autocompletar.
-- Inventário: 8 slots.
+- Inventário: **5 slots** (com itens stackable ocupando o mesmo slot quando aplicável).
 
 ## Componentes
 - Header de economia + timer

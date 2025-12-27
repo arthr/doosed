@@ -1,4 +1,4 @@
-# UX — Match
+# UX — Partida (MATCH)
 
 ## Objetivo
 Gameplay por turnos com leitura de contadores e uso de itens.
@@ -9,6 +9,8 @@ Gameplay por turnos com leitura de contadores e uso de itens.
 - Oponentes eliminados ficam “mortos” visualmente.
 - Sistema de saúde é **duplo**: Vidas + Resistência (com possível Resistência extra).
 - Colapso deve ter feedback visual claro (perda de Vida + reset de Resistência).
+- **Última Chance**: quando um jogador chega a **0 Vidas**, ele continua vivo (estado crítico) até o próximo Colapso.
+- **Shop Signal**: deve ficar acessível durante a rodada, mas a loja abre apenas em **SHOPPING** (entre rodadas).
 
 ## Componentes
 - Linha de oponentes

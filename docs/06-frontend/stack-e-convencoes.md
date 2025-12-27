@@ -3,8 +3,8 @@
 ## Stack
 - React + TypeScript + Vite
 - Tailwind v4
-- Zustand
-- Framer Motion
+- Zustand (+ Immer para imutabilidade)
+- Animações: CSS transitions (e utilitários de animação leves quando necessário)
 
 ## Restrições
 - Evitar novas libs sem justificativa.
@@ -30,32 +30,25 @@
 - `src/components/ui/` deve conter apenas componentes realmente genéricos (promover por evidência de reuso).
 
 ## ScreenShell (container do “monitor”)
-- A aplicação deve ter um **container único** no topo (o “monitor”) responsável por **overlays globais** e por renderizar a Screen atual dentro do viewport.
-- Nome: `ScreenShell`
-- Local: `src/components/app/ScreenShell.tsx`
-
-### Responsabilidades do ScreenShell
-- Renderizar **background global** (decorativo) quando aplicável.
-- Renderizar **Chat dock** e **NotificationBar** (globais).
-- Renderizar **dev tools** apenas em DEV (ex.: dock/preview), fora das Screens.
-- Renderizar a **Screen atual** via `children`.
+O app deve ter um **router simples** no topo que escolhe a Screen atual a partir do estado global do jogo.
+Na prática, isso vive em `src/App.tsx` e é baseado em `match.phase`, com Error Boundary para fallback.
 
 ### Nota sobre fases vs screens
-- As **Phases do jogo** são: `LOBBY -> DRAFT -> MATCH -> RESULTS`.
+- As **Phases do jogo** são: `LOBBY -> DRAFT -> MATCH -> SHOPPING -> RESULTS`.
 - A `HomeScreen` é uma **Screen fora das Phases** (antes de entrar no fluxo do jogo).
 
 ## Estado básico do App (preparação para FSM)
 Para evitar confusão entre **Screen** e **Phase**, o app deve separar:
 - **AppScreen** (alto nível): `HOME | GAME`
-- **Phase** (jogo): `LOBBY | DRAFT | MATCH | RESULTS`
+- **Phase** (jogo): `LOBBY | DRAFT | MATCH | SHOPPING | RESULTS`
 
 ### Regras
 - `HomeScreen` deve ser controlada por `AppScreen=HOME` (não é Phase).
 - Enquanto `AppScreen=GAME`, a Screen renderizada deve ser derivada da `Phase`.
 
 ### Implementação recomendada (sem libs extras)
-- Criar um store do app (ex.: `appShellStore`) com `appScreen` e um `devOverride` (apenas DEV).
-- Criar um `ScreenRouter` (componente pequeno) que resolve a Screen real baseada em:
-  - `appScreen` (estado real)
-  - `phase` (do `flowStore`)
-  - `devOverride` (somente DEV)
+- Implementação atual: `src/App.tsx` resolve a Screen via `match.phase` e renderiza `HomeScreen` quando ainda não existe uma partida.
+
+## Convenções de export
+- Preferir **exports nomeados** no código do domínio e componentes.
+- `default export` é aceitável para **entrypoints** (ex.: `App.tsx`) quando simplifica integração com tooling.

@@ -1,43 +1,33 @@
-# Estrutura do projeto (Renovada)
+# Estrutura do projeto
 
-Este documento define a **estrutura alvo** do projeto para a versão Renovada.
+Este documento descreve a estrutura atual do repositório e o “shape” desejado para manter o core do jogo simples (Solo Dev) e preparado para multiplayer no futuro.
 
-## Estrutura alvo (recomendada)
+## Estrutura atual (principal)
 
 ```text
 dosed/
-├── supabase/
-│   ├── functions/
-│   │   ├── _shared/              # Lógica core compartilhada (game-engine)
-│   │   ├── match-action/         # Endpoint: processa ações/turnos (server-authoritative)
-│   │   └── create-match/         # Endpoint: inicializa sala/partida
-│   └── migrations/               # SQL schemas
 ├── src/
-│   ├── core/
-│   │   ├── adapters/             # Wrappers/clients (Supabase, etc.)
-│   │   └── state-machines/       # FSM (XState opcional) ou lógica de fases
+│   ├── core/                # Lógica pura (determinística, testável)
+│   ├── types/               # Contratos TypeScript (game, events, config, etc.)
+│   ├── stores/              # Zustand stores (slices por domínio)
+│   ├── hooks/               # Bridge: orquestração UI ↔ stores/core
 │   ├── components/
-│   │   ├── app/                   # Shell da aplicação (ex.: ScreenShell)
-│   │   ├── game/
-│   │   │   ├── table/            # Mesa de jogo (bottle, conveyor, pills)
-│   │   │   └── hud/              # HUD (barras, stats, inventário)
-│   │   └── ui/                   # UI kit (8bit)
-│   ├── hooks/                    # Hooks (bridge)
-│   ├── lib/                      # Utils não-domínio (cn, systemMessages, etc.)
-│   ├── screens/                  # Screens (Home/Lobby/Draft/Match/Results)
-│   ├── stores/                   # Zustand stores (gameStore com Slices Pattern)
-│   └── types/                    # Contratos/Types (game, lobby, draft, etc.)
-├── public/
-│   └── assets/
-│       └── sprites/              # Spritesheets otimizados (assets grandes)
-├── docs/                         # Documentação (fonte da verdade)
-└── steering/                     # Normativo curto (deve refletir docs)
+│   │   ├── ui/              # Componentes genéricos (primitivos)
+│   │   ├── game/            # Componentes de domínio do jogo
+│   │   └── dev/             # DevTools (apenas DEV)
+│   ├── screens/             # Screens (Home/Lobby/Draft/Match/Shopping/Results)
+│   ├── config/              # Configuração central (timers/balance)
+│   ├── App.tsx              # Router de screens baseado em phase
+│   └── main.tsx             # Bootstrap React
+├── public/                  # Assets públicos
+└── docs/                    # Documentação (fonte de consulta)
 ```
 
 ## Por que esta estrutura
-- **Solo Dev**: reduz dispersão, deixa claro onde colocar o quê.
-- **Multiplayer**: separa claramente core/pure logic do que é infra (Supabase).
-- **Manutenção**: components/hud/table organizam a UI do jogo por domínio.
+- **Solo Dev**: reduz dispersão e mantém responsabilidades claras (core ≠ UI ≠ store).
+- **Determinismo**: core isolado permite testes e replay/diagnóstico por eventos.
+- **Evolução**: fica fácil mover lógica para server-authoritative no futuro sem reescrever UI inteira.
 
-## Nota sobre o estado atual do repo
-O repositório hoje ainda pode ter variações (ex.: `src/store/` em vez de `src/stores/`). A decisão acima é o **target**; migrações devem ser feitas de forma incremental.
+## Caminho de evolução (multiplayer futuro)
+- Quando houver multiplayer real, a lógica “authoritative” pode migrar para funções de backend (ex.: Edge Functions).
+- O alvo é manter `src/core/` como “motor” portável, e trocar apenas o “transport” (client-only → server-authoritative).

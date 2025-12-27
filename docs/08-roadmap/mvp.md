@@ -1,10 +1,11 @@
-# Roadmap — MVP (Renovada)
+# Roadmap — MVP
 
 ## Vertical slice (recomendado)
-- Home -> Lobby (solo) -> Draft -> Match vs IA -> Results
-- Progressão mínima: XP + Schmeckles (mock)
+- Home → Lobby (solo) → Draft → Partida vs IA → Shopping (entre rodadas) → Results
+- Progressão mínima: XP + Schmeckles
+- Economia da partida: Pill Coins (Draft + Partida + Shopping)
 
 ## Multiplayer (fase 2)
 - Lobby realtime
-- Match com `match-action` (Edge Function)
+- Partida server-authoritative (Edge Functions)
 - Rollback e reconexão

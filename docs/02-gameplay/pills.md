@@ -19,27 +19,29 @@ O pool é um **baralho (sampling sem reposição)**. A HUD mostra **contadores p
 - **Resistência extra (Over-resistance)**: começa em 0; só existe com **Overflow positivo**
 
 ### Colapso (normativo)
-- Se, após aplicar um efeito, a **Resistência** ficar em **0**, ocorre **Colapso**:
+- Se, após aplicar um efeito, a **Resistência** ficar em **≤ 0**, ocorre **Colapso**:
   - **Vidas -= 1**
   - **Resistência = Resistência Máxima**
   - Sem perder turno
+- **Última Chance**: quando as Vidas chegam em **0**, o jogador **não é eliminado imediatamente**.
+- **Eliminação**: ocorre apenas quando a Resistência zera novamente **já estando em 0 Vidas**.
 
 ### Regras de aplicação (normativas)
 - Dano **normal** afeta **Resistência** (consome **Resistência extra** primeiro, se existir).
 - Cura normal restaura **Resistência** (até a máxima). Excedente pode virar **Resistência extra** via **Overflow positivo**.
-- **Piercing** (quando houver) causa perda direta de **Vida** e ignora Resistência.
+- **Piercing** pode existir no futuro, mas não é requisito do MVP.
 
 ### Tabela de efeitos (determinístico)
 - **SAFE**: nenhum efeito
 - **DMG_LOW**: -2 Resistência
 - **DMG_HIGH**: -4 Resistência
 - **HEAL**: +2 Resistência
-- **FATAL**: zera Resistência (força 1 Colapso; não é morte instantânea)
+- **FATAL**: zera Resistência (força Colapso; não é morte instantânea)
 - **LIFE**: +1 Vida (respeitando cap de design, quando houver)
 
 ### Overflow (conceitual)
-- **Overflow (negativo)**: em efeitos de dano específicos, o dano restante pode continuar após um Colapso, causando cascata de Colapsos.
 - **Overflow positivo**: cura excedente acima da Resistência máxima vira **Resistência extra** (segunda camada acima da Resistência padrão). Cap da Resistência extra é um parâmetro de balance (ex.: igual ao máximo de Resistência).
+- **Overflow (negativo)**: pode existir como extensão futura (cascata de Colapsos em um único efeito). Não é requisito do MVP.
 
 ## Mapeamento de fantasia (opcional)
 - "Placebo" = SAFE (e/ou pílulas sem dano)

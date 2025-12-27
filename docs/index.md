@@ -1,6 +1,6 @@
-# DOSED Renovada — Documentação
+# DOSED — Documentação
 
-Esta pasta contém a documentação oficial (PT-BR) para iniciar o desenvolvimento greenfield da versão Renovada do DOSED.
+Esta pasta contém a documentação oficial (PT-BR) do DOSED, para consulta e evolução do projeto.
 
 ## Como ler (ordem recomendada)
 - [00-start-here/index.md](00-start-here/index.md)
@@ -39,15 +39,20 @@ Esta pasta contém a documentação oficial (PT-BR) para iniciar o desenvolvimen
 - [08-roadmap/mvp.md](08-roadmap/mvp.md)
   - [/backlog.md](08-roadmap/backlog.md)
 
-## Decisões normativas (Renovada)
-- Inventário padrão: 8 slots (2x4)
+## Decisões normativas
+- Inventário padrão: **5 slots**
 - Economia separada:
-  - Schmeckles: meta-moeda persistente (cosméticos, daily challenges)
-  - Pill Coins/Tokens: moeda de partida (Shape Quests -> Loja)
+  - **Schmeckles**: meta-moeda persistente (progressão)
+  - **Pill Coins**: moeda da partida (começa em 100, acumula entre rodadas, reseta a cada nova partida)
 - Pool de pílulas: baralho (sem reposição) + contadores visíveis (card counting)
-- Fases do jogo: LOBBY -> DRAFT -> MATCH -> RESULTS
-- Multiplayer: server-authoritative (Edge Functions) + UI otimista com rollback
-- Arquitetura: event-driven, determinística, no máximo 8 tipos de eventos
+- Fases do jogo (Phase): `LOBBY -> DRAFT -> MATCH -> SHOPPING -> RESULTS`
+  - **Home** é uma Screen fora das Phases (antes de entrar no fluxo do jogo)
+- Loja: **Shopping Phase entre rodadas**, ativada por **Shop Signal** durante a rodada
+- Arquitetura: event-driven e determinística, com **8 tipos de eventos core**
+- Multiplayer (futuro): server-authoritative (Edge Functions) + UI otimista com rollback
 
 ## Nota sobre recência
 As fontes foram avaliadas por autoridade + recência (Git + mtime). Veja: [99-apendice/fontes-e-recencia.md](99-apendice/fontes-e-recencia.md)
+
+## Nota sobre `docs/legacy/`
+O conteúdo em `docs/legacy/` é **arquivo histórico** e pode conter decisões antigas. A documentação normativa está nas pastas numeradas (00–08) e apêndices.

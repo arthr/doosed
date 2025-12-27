@@ -556,7 +556,7 @@ generateNewPool, setPool, revealPill, consumePill, etc. // ❌ NÃO USADAS
 ## 4. Checklist de Conformidade com Constitution
 
 ### Princípio I: Documentação como Fonte da Verdade
-- ✅ specs/ como referência implementada
+- ✅ artefatos de requisitos e planejamento existem e estão rastreáveis (IDs e checklists)
 - ⚠️ **VIOLAÇÃO**: playerStore + matchStore duplicam fonte da verdade
 
 ### Princípio III: Event-Driven & Determinístico
