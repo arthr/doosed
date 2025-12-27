@@ -535,6 +535,7 @@ Um jogador pode desafiar amigos em partidas amistosas (2-6 jogadores), competir 
 - **FR-186.17**: Em DEV MODE, sistema DEVE permitir filtrar logs por categoria, exportar logs como JSON, e limpar logs
 - **FR-186.18**: Sistema DEVE logar decisões de BOT (nível de dificuldade, reasoning simplificado, ação escolhida) para análise de comportamento de IA
 - **FR-186.19**: Sistema DEVE validar state integrity após cada evento processado. Invariantes validados: lives ≥ 0, resistance sem NaN/undefined, inventory.length ≤ 5, pillCoins ≥ 0, roundNumber válido, pool não vazio em meio de rodada. Se inconsistência detectada: (a) em DEV: pausar e exibir debug overlay com estado corrompido + evento que causou corrupção, (b) em PROD: tentar recovery resetando para último estado válido conhecido (se event log disponível) OU fallback para Home salvando XP/Schmeckles parcial. Logar erro com estado corrompido + stack trace para análise
+- **FR-186.20**: Em qualquer lógica assíncrona que decide estado de gameplay (ex.: timers de turno, timeouts de bot, callbacks agendados), o sistema DEVE usar estado “fresco” no momento da decisão (snapshot via store `getState()` ou snapshot passado por parâmetro) e NUNCA depender de valores capturados por render (closures stale). Callbacks assíncronos DEVEM ser invalidáveis por token/snapshot (ex.: `turnToken`) para evitar aplicar efeitos/avanços em turnos/rodadas já alterados
 
 #### Dev Tools
 

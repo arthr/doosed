@@ -59,6 +59,9 @@ design focado sem ser restritivo demais para expansões naturais.
 - DEVE usar entre 8-12 tipos de eventos principais no sistema de jogo
 - Eventos adicionais além de 8 DEVEM ser justificados com rationale claro (não micro-eventos triviais)
 - Estado DEVE ser imutável (operações produzem novo estado)
+- Lógica de jogo NÃO DEVE depender de timing de render/UI (ex.: closures “stale” em callbacks assíncronos)
+- Qualquer lógica assíncrona que decide estado de jogo (timers, bot/IA, setTimeout, promises) DEVE ler um snapshot “fresco” do estado (ex.: `store.getState()` no momento da decisão) OU receber snapshot por parâmetro
+- Callbacks assíncronos DEVEM ser invalidáveis por token/snapshot (ex.: `turnToken`) para evitar aplicar efeitos/avanços em turnos/rodadas que já mudaram
 - Processador de eventos DEVE ser testado para garantir determinismo
 - Eventos DEVEM ser auditáveis e reproduzíveis
 
