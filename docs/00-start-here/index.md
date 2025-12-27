@@ -26,4 +26,4 @@ Permitir que 1 dev (modo solo) consiga:
 - Setup local: setup-local.md
 - Workflow: dev-workflow.md
 - Estrutura do projeto (target): estrutura-do-projeto.md
-- Glossário e terminologia: ../99-apendice/fontes-e-decisoes.md
+- Glossário e terminologia: [dosed-game.md (seção Glossário)](../dosed-game.md#glossário)

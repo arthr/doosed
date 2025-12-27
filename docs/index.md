@@ -1,5 +1,8 @@
 # DOSED — Documentação
 
+## Documento único (recomendado)
+- Para uma visão consolidada e padronizada (sem depender de navegação por pastas), leia: [`dosed-game.md`](dosed-game.md)
+
 Esta pasta contém a documentação oficial (PT-BR) do DOSED, para consulta e evolução do projeto.
 
 ## Como ler (ordem recomendada)
@@ -51,8 +54,5 @@ Esta pasta contém a documentação oficial (PT-BR) do DOSED, para consulta e ev
 - Arquitetura: event-driven e determinística, com **8 tipos de eventos core**
 - Multiplayer (futuro): server-authoritative (Edge Functions) + UI otimista com rollback
 
-## Nota sobre recência
-As fontes foram avaliadas por autoridade + recência (Git + mtime). Veja: [99-apendice/fontes-e-recencia.md](99-apendice/fontes-e-recencia.md)
-
 ## Nota sobre `docs/legacy/`
-O conteúdo em `docs/legacy/` é **arquivo histórico** e pode conter decisões antigas. A documentação normativa está nas pastas numeradas (00–08) e apêndices.
+O conteúdo em `docs/legacy/` é **arquivo histórico** e pode conter decisões antigas. A documentação normativa está nas pastas numeradas (00–08).
