@@ -28,23 +28,14 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
    * - Adiciona a pool.revealed
    */
   revealPill: (pillId: string) =>
-    set((state) => {
+    set(state => {
       if (!state.currentRound) return;
 
-      const pill = state.currentRound.pool.pills.find(
-        (p: Pill) => p.id === pillId
-      );
+      const pill = state.currentRound.pool.pills.find((p: Pill) => p.id === pillId);
       if (!pill || pill.isRevealed) return;
 
       pill.isRevealed = true;
       state.currentRound.pool.revealed.push(pill);
-
-      // Atualiza contador
-      // BUG: Se o pool-generator já inicializa os counters com os totais, incrementar aqui
-      // gera uma contagem inconsistente (misto de total inicial + revelações).
-      // Sugestão: Decidir se counters representa TOTAL ou REVELADAS e ajustar pool-generator ou este handler.
-      state.currentRound.pool.counters[pill.type] =
-        (state.currentRound.pool.counters[pill.type] || 0) + 1;
     }),
 
   /**
@@ -53,32 +44,41 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
    * - Remove do array pills
    */
   consumePill: (pillId: string) =>
-    set((state) => {
+    set(state => {
       if (!state.currentRound) return;
 
-      const pillIndex = state.currentRound.pool.pills.findIndex(
-        (p: Pill) => p.id === pillId
-      );
-      if (pillIndex === -1) return;
+      const pillIndex = state.currentRound.pool.pills.findIndex((p: Pill) => p.id === pillId);
+      if (pillIndex === -1) {
+        console.warn('[poolSlice.consumePill] Pill nao encontrada no pool', {
+          pillId,
+        });
+        return;
+      }
 
       const pill = state.currentRound.pool.pills[pillIndex];
+      if (pill.state === PillState.CONSUMED) {
+        console.warn('[poolSlice.consumePill] Pill ja consumida', { pillId });
+        return;
+      }
       pill.state = PillState.CONSUMED;
 
       // Remove do pool
       state.currentRound.pool.pills.splice(pillIndex, 1);
-      state.currentRound.pool.size = state.currentRound.pool.pills.length;
+
+      // Mantem pool.size como tamanho inicial do baralho (usado para stats).
+      // Atualiza counters para refletir as pills REMANESCENTES por tipo (FR-072).
+      const currentCount = state.currentRound.pool.counters[pill.type] || 0;
+      state.currentRound.pool.counters[pill.type] = Math.max(0, currentCount - 1);
     }),
 
   /**
    * Aplica modificador a uma pilula
    */
   applyModifierToPill: (pillId: string, modifier: PillModifier) =>
-    set((state) => {
+    set(state => {
       if (!state.currentRound) return;
 
-      const pill = state.currentRound.pool.pills.find(
-        (p: Pill) => p.id === pillId
-      );
+      const pill = state.currentRound.pool.pills.find((p: Pill) => p.id === pillId);
       if (!pill) return;
 
       if (!pill.modifiers.includes(modifier)) {
@@ -92,7 +92,7 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
    * - Reseta revelacoes
    */
   shufflePool: () =>
-    set((state) => {
+    set(state => {
       if (!state.currentRound) return;
 
       state.currentRound.pool.pills = shuffle(state.currentRound.pool.pills);
@@ -107,7 +107,13 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
       for (const pill of state.currentRound.pool.pills) {
         pill.isRevealed = false;
       }
-      state.currentRound.pool.counters = {};
+      // Counters representam as pills REMANESCENTES por tipo (FR-072).
+      // Shuffle nao muda tipos/quantidades, mas recomputamos para garantir consistencia.
+      const counters: Record<string, number> = {};
+      for (const pill of state.currentRound.pool.pills) {
+        counters[pill.type] = (counters[pill.type] || 0) + 1;
+      }
+      state.currentRound.pool.counters = counters;
     }),
 
   // ==================== QUERIES ====================
@@ -123,4 +129,3 @@ export const createPoolSlice: SliceCreator<PoolSlice> = (set, get) => ({
   getPill: (pillId: string): Pill | undefined =>
     get().currentRound?.pool.pills.find((p: Pill) => p.id === pillId),
 });
-

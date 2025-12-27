@@ -50,7 +50,7 @@ export function calculatePoolSize(roundNumber: number, config: GameConfig): numb
  */
 export function calculateDistribution(
   roundNumber: number,
-  config: GameConfig
+  config: GameConfig,
 ): Record<PillType, number> {
   const distribution: Record<PillType, number> = {} as Record<PillType, number>;
 
@@ -69,7 +69,8 @@ export function calculateDistribution(
     }
 
     // Interpolação linear
-    const percentage = config_.initialPercentage + t * (config_.finalPercentage - config_.initialPercentage);
+    const percentage =
+      config_.initialPercentage + t * (config_.finalPercentage - config_.initialPercentage);
     distribution[type] = percentage;
   }
 
@@ -146,7 +147,7 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
 
   if (unlockedShapes.length < config.pool.minShapeDiversity) {
     throw new Error(
-      `Insufficient unlocked shapes (${unlockedShapes.length}) for minimum diversity (${config.pool.minShapeDiversity})`
+      `Insufficient unlocked shapes (${unlockedShapes.length}) for minimum diversity (${config.pool.minShapeDiversity})`,
     );
   }
 
@@ -200,13 +201,11 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
   }));
 
   // 5. Validar diversidade mínima de shapes
-  const uniqueShapes = new Set(shuffledPills.map((p) => p.shape));
+  const uniqueShapes = new Set(shuffledPills.map(p => p.shape));
   if (uniqueShapes.size < config.pool.minShapeDiversity) {
     // Forçar diversidade: substituir pills até atingir mínimo
     const shapesNeeded = config.pool.minShapeDiversity - uniqueShapes.size;
-    const availableShapes = unlockedShapes
-      .map((s) => s.id)
-      .filter((id) => !uniqueShapes.has(id));
+    const availableShapes = unlockedShapes.map(s => s.id).filter(id => !uniqueShapes.has(id));
 
     for (let i = 0; i < shapesNeeded && i < availableShapes.length; i++) {
       shuffledPills[i].shape = availableShapes[i];
@@ -214,9 +213,8 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
   }
 
   // Contar tipos
-  // BUG: Se 'counters' deve representar apenas pílulas REVELADAS (conforme usado no poolSlice e UI),
-  // inicializá-lo com os totais aqui causará exibição incorreta e contagem duplicada.
-  // Sugestão: Inicializar com 0 para todos os tipos se for apenas para reveladas.
+  // Counters representam a quantidade de pills REMANESCENTES por tipo no pool (FR-072).
+  // No inicio da rodada, isso equivale ao total gerado; conforme consome, o poolSlice decrementa.
   const counters: Record<string, number> = {};
   for (const pill of shuffledPills) {
     counters[pill.type] = (counters[pill.type] || 0) + 1;
@@ -228,7 +226,7 @@ export function generatePool(roundNumber: number, config: GameConfig): Pool {
     size,
     counters,
     revealed: [],
-    unlockedShapes: unlockedShapes.map((s) => s.id),
+    unlockedShapes: unlockedShapes.map(s => s.id),
   };
 
   return pool;
@@ -275,4 +273,3 @@ function findMostCommonType(distribution: Record<PillType, number>): PillType {
 
   return maxType;
 }
-

@@ -19,19 +19,25 @@ import { setSeed } from '../../core/utils/random';
 
 export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
   // ==================== STATE ====================
-    match: null,
+  match: null,
   currentRound: null,
   rounds: [],
+  isProcessingTurn: false,
 
   // ==================== ACTIONS ====================
+  setProcessingTurn: (isProcessing: boolean) =>
+    set(state => {
+      state.isProcessingTurn = isProcessing;
+    }),
 
   /**
    * Navega do HOME para LOBBY
    * Cria um match vazio na fase LOBBY
    */
   navigateToLobby: () =>
-    set((state) => {
+    set(state => {
       setSeed(0);
+      state.isProcessingTurn = false;
       // BUG: Uso de Date.now() para ID torna a criação de partida não-determinística.
       // Sugestão: IDs devem ser passados como payload de evento ou gerados deterministicamente.
       const now = Date.now();
@@ -56,10 +62,11 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    * - Randomiza ordem de turnos
    */
   startMatch: (players: Player[], seed: number = Date.now()) =>
-    set((state) => {
+    set(state => {
       setSeed(seed);
+      state.isProcessingTurn = false;
       // Armazena players diretamente no state (nao usar get() dentro de set())
-      state.players = new Map(players.map((p) => [p.id, p]));
+      state.players = new Map(players.map(p => [p.id, p]));
 
       const turnOrder = initializeTurnOrder(players);
       const matchId = `match-${seed}`;
@@ -83,10 +90,11 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    * Se transiciona para MATCH, gera primeira rodada
    */
   transitionPhase: (newPhase: MatchPhase) =>
-    set((state) => {
+    set(state => {
       if (!state.match) return;
 
       state.match.phase = newPhase;
+      state.isProcessingTurn = false;
 
       // Se transiciona para MATCH e nao tem round, gera primeiro
       if (newPhase === MatchPhase.MATCH && !state.currentRound) {
@@ -111,17 +119,16 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    * - Gera novo pool
    */
   nextRound: () =>
-    set((state) => {
+    set(state => {
       if (!state.match || !state.currentRound) return;
+      state.isProcessingTurn = false;
 
       // Salvar resumo da rodada anterior
       const roundSummary: RoundSummary = {
         number: state.currentRound.number,
-        pillsConsumed:
-          state.currentRound.pool.size - state.currentRound.pool.pills.length,
-        questsCompleted: state.currentRound.shapeQuests.filter(
-          (q) => q.status === 'COMPLETED'
-        ).length,
+        pillsConsumed: state.currentRound.pool.size - state.currentRound.pool.pills.length,
+        questsCompleted: state.currentRound.shapeQuests.filter(q => q.status === 'COMPLETED')
+          .length,
         collapses: 0, // TODO: calcular via playersSlice
         duration: Date.now() - state.currentRound.startedAt,
       };
@@ -151,8 +158,9 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    * - Pula jogadores eliminados
    */
   nextTurn: () =>
-    set((state) => {
+    set(state => {
       if (!state.match) return;
+      state.isProcessingTurn = false;
 
       // Usa playersSlice query via get()
       const alivePlayers = get().getAlivePlayers();
@@ -165,8 +173,7 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
       // Pular eliminados (max 10 tentativas para evitar loop infinito)
       let attempts = 0;
       while (attempts < 10) {
-        const currentPlayerId =
-          state.match.turnOrder[state.match.activeTurnIndex];
+        const currentPlayerId = state.match.turnOrder[state.match.activeTurnIndex];
         const currentPlayer = get().getPlayer(currentPlayerId);
 
         if (currentPlayer && !currentPlayer.isEliminated) break;
@@ -183,34 +190,35 @@ export const createMatchSlice: SliceCreator<MatchSlice> = (set, get) => ({
    * - Transiciona para RESULTS
    */
   endMatch: (winnerId: string) =>
-    set((state) => {
+    set(state => {
       if (!state.match) return;
 
       state.match.winnerId = winnerId;
       state.match.phase = MatchPhase.RESULTS;
       state.match.endedAt = Date.now();
+      state.isProcessingTurn = false;
     }),
 
   /**
    * Reseta estado para novo jogo
    */
   resetMatch: () =>
-    set((state) => {
+    set(state => {
       setSeed(0);
       state.match = null;
       state.currentRound = null;
       state.rounds = [];
       state.players = new Map();
+      state.isProcessingTurn = false;
     }),
 
   /**
    * Atualiza currentRound com funcao customizada
    * Util para updates complexos via Immer
    */
-  updateCurrentRound: (updater) =>
-    set((state) => {
+  updateCurrentRound: updater =>
+    set(state => {
       if (!state.currentRound) return;
       updater(state.currentRound);
     }),
 });
-

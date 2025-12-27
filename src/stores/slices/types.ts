@@ -9,7 +9,6 @@ import type { StateCreator } from 'zustand';
 import type {
   Player,
   Pool,
-  Round,
   Turn,
   MatchPhase,
   RoundState,
@@ -63,6 +62,7 @@ export interface MatchSlice {
   } | null;
 
   rounds: RoundSummary[];
+  isProcessingTurn: boolean;
 
   // Actions
   navigateToLobby: () => void;
@@ -72,6 +72,7 @@ export interface MatchSlice {
   nextTurn: () => void;
   endMatch: (winnerId: string) => void;
   resetMatch: () => void;
+  setProcessingTurn: (isProcessing: boolean) => void;
   updateCurrentRound: (updater: (round: NonNullable<MatchSlice['currentRound']>) => void) => void;
 }
 
@@ -133,10 +134,4 @@ export type GameStore = MatchSlice & PlayersSlice & PoolSlice;
  * Tipo para criar slices com Immer middleware
  * Permite que cada slice acesse o state completo via get()
  */
-export type SliceCreator<T> = StateCreator<
-  GameStore,
-  [['zustand/immer', never]],
-  [],
-  T
->;
-
+export type SliceCreator<T> = StateCreator<GameStore, [['zustand/immer', never]], [], T>;

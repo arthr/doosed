@@ -24,9 +24,10 @@ import { useItemActions } from './useItemActions';
 
 export function useGameLoop() {
   // Usar useGameStore com seletores para performance
-  const match = useGameStore((state) => state.match);
-  const getPool = useGameStore((state) => state.getPool);
-  const getAllPlayers = useGameStore((state) => state.getAllPlayers);
+  const match = useGameStore(state => state.match);
+  const getPool = useGameStore(state => state.getPool);
+  const getAllPlayers = useGameStore(state => state.getAllPlayers);
+  const setProcessingTurn = useGameStore(state => state.setProcessingTurn);
 
   // Hooks especializados (SOLID-S)
   const { consumePill } = usePillConsumption();
@@ -52,8 +53,8 @@ export function useGameLoop() {
 
       if (!pool) return;
 
-      const pill = pool.pills.find((p) => p.id === pillId);
-      const player = players.find((p) => p.id === playerId);
+      const pill = pool.pills.find(p => p.id === pillId);
+      const player = players.find(p => p.id === playerId);
 
       if (!pill || !player) return;
 
@@ -69,7 +70,7 @@ export function useGameLoop() {
         }
       }, 500);
     },
-    [getPool, getAllPlayers, consumePill, checkAndHandleMatchEnd, advanceToNextTurn]
+    [getPool, getAllPlayers, consumePill, checkAndHandleMatchEnd, advanceToNextTurn],
   );
 
   /**
@@ -93,32 +94,43 @@ export function useGameLoop() {
         }, 1000);
       }
     },
-    [canBotAct, executeBotDecision, handlePillConsume, handleItemClick]
+    [canBotAct, executeBotDecision, handlePillConsume, handleItemClick],
   );
 
   /**
    * Inicia proximo turno (orquestra hooks especializados)
    */
   const startNextTurn = useCallback(() => {
-    if (!match) return;
+    const state = useGameStore.getState();
+    if (state.isProcessingTurn) return;
+
+    setProcessingTurn(true);
+    if (!match) {
+      setProcessingTurn(false);
+      return;
+    }
 
     // Checa fim de jogo
     const matchEnded = checkAndHandleMatchEnd();
-    if (matchEnded) return;
+    if (matchEnded) {
+      setProcessingTurn(false);
+      return;
+    }
 
     const currentPlayer = getCurrentTurnPlayer();
 
     // Player eliminado? Pula turno
     if (!currentPlayer || currentPlayer.isEliminated) {
       skipEliminatedPlayerTurn();
-      setTimeout(() => {
-        startNextTurn(); // Recursivo - tenta proximo jogador
-      }, 100);
+      // Nao usamos recursao aqui: o MatchScreen ja observa activePlayer === null e chama startNextTurn().
+      // Isso evita problemas de "use-before-define" e reduz reentrancia por timeouts.
+      setProcessingTurn(false);
       return;
     }
 
     // Inicia turno do player
     startTurnForPlayer(currentPlayer);
+    setProcessingTurn(false);
 
     // Se e bot, executa IA
     if (canBotAct(currentPlayer)) {
@@ -128,6 +140,7 @@ export function useGameLoop() {
     }
   }, [
     match,
+    setProcessingTurn,
     checkAndHandleMatchEnd,
     getCurrentTurnPlayer,
     skipEliminatedPlayerTurn,
@@ -148,7 +161,7 @@ export function useGameLoop() {
    */
   const handleTurnTimeout = useCallback(() => {
     const players = getAllPlayers();
-    const activePlayer = players.find((p) => p.isActiveTurn);
+    const activePlayer = players.find(p => p.isActiveTurn);
     if (!activePlayer) return;
 
     const randomPillId = getTurnTimeoutPillId();
