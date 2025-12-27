@@ -88,7 +88,7 @@ export function useBotExecution() {
    * Verifica se player e bot e pode agir
    */
   const canBotAct = useCallback((player: Player): boolean => {
-    return player.isBot && !player.isEliminated;
+    return player.isBot && !player.isEliminated && player.isActiveTurn;
   }, []);
 
   return {

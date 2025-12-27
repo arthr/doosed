@@ -65,7 +65,8 @@ export function useTurnManagement() {
       nextTurn(); // Incrementa activeTurnIndex
     }
 
-    // Limpa turno ativo para triggar deteccao de proximo turno
+    // Limpa turno ativo DEPOIS de avancar o indice
+    // Isso permite que useEffect detecte !activePlayer e chame startNextTurn()
     clearActiveTurns();
   }, [
     match,
