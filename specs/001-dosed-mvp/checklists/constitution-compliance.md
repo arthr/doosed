@@ -80,6 +80,7 @@
 
 - [x] CHK019 - Todos os 8 eventos sao auditaveis e reproduziveis conforme enforcement? [Completeness, Constitution SIII L62-63] - Verificado: events.ts inclui BaseEvent com timestamp, matchId, roundNumber, turnIndex
 - [x] CHK020 - Event processor (T052) tem requirements de testes de determinismo documentados? [Completeness, Tasks.md L52a] - Verificado: T052a e T052b em tasks.md L91 e L100 definem testes de determinismo
+- [ ] CHK020a - Runtime de gameplay e dirigido por dispatcher unico (engine) e scheduler centralizado (timers/bot), sem drivers concorrentes em UI/hooks; callbacks invalidaveis por token/snapshot conforme FR-186.20
 
 ---
 

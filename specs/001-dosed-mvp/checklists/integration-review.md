@@ -417,6 +417,16 @@ export const useGameStore = create<GameStore>()(
 
 ---
 
+### 🟡 Gap 5: Driver Determinístico Único (Engine) + Scheduler Central
+**Arquivo**: N/A (não implementado)  
+**Descrição**: Driver único para fluxo de turno/rodada (fila de comandos/eventos) e scheduler central para timers/bot, removendo drivers concorrentes em UI/hooks
+
+**Prioridade**: ALTA  
+**Escopo**: Phase 6 (Cross-Cutting)  
+**Ação Requerida**: Implementar T156-T162
+
+---
+
 ## 5. Fluxo de Integração Completo
 
 ### Estado Atual do Fluxo
@@ -457,7 +467,7 @@ export const useGameStore = create<GameStore>()(
 - Stores auxiliares: economyStore, progressionStore, logStore
 
 **Hooks Customizados**:
-- ✅ `useGameLoop()` - Game loop principal (consumo, turnos, fim de jogo)
+- ✅ `useGameLoop()` - Bridge para dispatch do engine (intents) e integração de UI (sem driver concorrente)
 - ✅ `useTurnTimer()` - Timer de turnos (30s) e draft (60s)
 - ✅ `useEventLogger()` - Logging estruturado
 

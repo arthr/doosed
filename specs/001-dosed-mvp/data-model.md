@@ -34,7 +34,7 @@ Representa um participante na partida (humano ou bot).
 | `activeStatuses` | `Status[]` | - | `[]` | Status ativos |
 | `isEliminated` | `boolean` | - | `false` | Se foi eliminado |
 | `isLastChance` | `boolean` | - | `false` | Se está em última chance (0 vidas) |
-| `isActiveTurn` | `boolean` | - | `false` | Se é turno ativo |
+| `isActiveTurn` | `boolean` | Derivado de `Match.activeTurnIndex` | `false` | Indicador derivado (não-fonte de verdade) |
 | `totalCollapses` | `number` | ≥ 0 | `0` | Total de colapsos sofridos |
 | `shapeQuest` | `ShapeQuest?` | - | `null` | Quest ativa da rodada |
 | `wantsShop` | `boolean` | - | `false` | Sinalizou interesse na loja |
@@ -57,7 +57,7 @@ LAST_CHANCE → ELIMINATED (quando resistance <= 0 estando em LAST_CHANCE)
 - `resistance` pode ser negativo (overflow negativo)
 - `extraResistance <= resistanceCap`
 - `inventory.length <= 5`
-- Se `isEliminated === true` então `isActiveTurn === false`
+- `isActiveTurn` é sempre derivado (não deve ser usado como fonte de verdade para fluxo de jogo)
 - Se `lives === 0` então `isLastChance === true`
 
 ---

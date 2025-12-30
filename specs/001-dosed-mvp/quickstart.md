@@ -69,6 +69,10 @@ src/
 │   ├── state-machine.ts
 │   ├── turn-manager.ts
 │   ├── event-processor.ts
+│   ├── engine/            # Runtime determinístico (driver único + scheduler)
+│   │   ├── game-engine.ts
+│   │   ├── game-reducer.ts
+│   │   └── game-scheduler.ts
 │   ├── bot/
 │   │   ├── bot-easy.ts
 │   │   ├── bot-normal.ts

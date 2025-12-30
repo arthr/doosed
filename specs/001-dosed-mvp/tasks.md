@@ -389,6 +389,13 @@
 **Purpose**: Improvements affecting multiple user stories, performance, robustness
 
 - [ ] T137 [P] Implement state validation after every event: validatePlayerInvariants (lives >= 0, inventory <= 5, resistance valid), validatePoolInvariants (size bounds, distribution), validateMatchInvariants (turnOrder length, currentRound sync) in src/core/utils/validation.ts per FR-186.19
+- [ ] T156 Implement deterministic runtime driver (single-writer) in src/core/engine/: (a) command dispatcher, (b) event queue, (c) reducer apply, (d) post-event auto-advancement (turn/round/match) per FR-045, FR-061, FR-111, FR-186.19, FR-186.20
+- [ ] T157 Refactor turn/round progression to be reducer-driven: move all turn/round advancement rules to src/core/engine/ (no direct advancement from UI/hook timeouts). Update src/hooks/useGameLoop.ts to only dispatch commands (no game progression setTimeouts)
+- [ ] T158 Implement central scheduler for time-based gameplay in src/core/engine/ (turn timeout, bot decision timeout, delayed bot action). Replace scattered setTimeout usage in src/hooks/useGameLoop.ts and src/hooks/useTurnTimer.ts with scheduled engine events
+- [ ] T159 Update MatchScreen integration to be passive: remove flow-driving useEffect patterns and replace with dispatch of explicit commands; MatchScreen renders derived state only (active player, phase, timer)
+- [ ] T160 Normalize active turn source of truth: remove persistent player.isActiveTurn mutation as authoritative; derive active player from match.turnOrder + match.activeTurnIndex. Update selectors and UI accordingly
+- [ ] T161 Add integration test coverage for race-condition regressions in src/__tests__/integration/edge-cases.test.ts: (a) bot consumes last pill and round advances, (b) elimination on last pill, (c) no stuck state with empty pool
+- [ ] T162 Extend structured logs with engine metadata: include engineRevision/turnId/roundNumber/activeTurnIndex/poolSizeBeforeAfter in src/hooks/useEventLogger.ts and ensure logs are emitted only from engine dispatch
 - [ ] T153 [P] Validate event system has exactly 8 core event types per Constitution Principle III and plan.md design choice in src/types/events.ts - add compile-time check or runtime validation that GameEvent union has exactly 8 members (PLAYER_JOINED, TURN_STARTED, ITEM_USED, PILL_CONSUMED, EFFECT_APPLIED, COLLAPSE_TRIGGERED, ROUND_COMPLETED, MATCH_ENDED)
 - [ ] T154 [P] Setup performance profiling infrastructure: (a) FPS monitoring in DevTools using performance.now(), (b) track frame time and warn if >33ms (below 30 FPS), (c) measure transition durations for pill consume, collapse, turn change, (d) display FPS graph in DevTools per FR-186.11 to FR-186.13
 - [ ] T155 [P] Validate game config schema in src/config/game-config.ts: (a) all required sections present (timers, health, economy, pool, shapes, items, boosts), (b) fallback to defaults if any section missing/corrupted, (c) validate types and ranges (e.g., timers > 0, lives >= 1), (d) export validateConfig() utility
@@ -514,11 +521,11 @@ T037: Add resistance cap enforcement
 
 ---
 
-**Total Tasks**: 181 (includes 26 test tasks + 6 additional validation/performance tasks)  
+**Total Tasks**: 188 (includes 26 test tasks + 6 additional validation/performance tasks)  
 **Testing Tasks**: 26 (Phase 2.5 - unit, property-based, integration tests)  
 **Bot Recovery Task**: T058 reclassified from GAP to MEDIUM priority (critical edge case)
-**MVP Tasks (US1 only)**: 124 (Setup + Foundational + Testing + US1 + Bot Recovery + minimal Polish)  
-**Full MVP Tasks (US1-US3)**: 168 (Setup + Foundational + Testing + US1 + US2 + US3 + minimal Polish)
+**MVP Tasks (US1 only)**: 131 (Setup + Foundational + Testing + US1 + Bot Recovery + minimal Polish)  
+**Full MVP Tasks (US1-US3)**: 175 (Setup + Foundational + Testing + US1 + US2 + US3 + minimal Polish)
 
 **Suggested Next Step**: 
 - **CURRENT STATUS (2025-12-26 - REFATORACAO SLICES PATTERN COMPLETA)**: 
@@ -535,7 +542,8 @@ T037: Add resistance cap enforcement
   - TypeScript compila sem erros
 - **IMMEDIATE ACTION REQUIRED**: 
   1. Reintegrar screens desintegrados com hooks refatorados (T082-T091)
-  2. Validar fluxo completo (T091) contra quickstart.md checklist
+  2. Implementar deterministic runtime driver e scheduler central (T156-T162)
+  3. Validar fluxo completo (T091) contra quickstart.md checklist
 - **After Reintegration**: Validacao manual completa (T091) - todos os 15 items do checklist devem passar
 - **Next Phase**: Once US1 is validated with clean implementation, proceed to User Story 2 (Economy) or Polish phase
 

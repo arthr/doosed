@@ -23,6 +23,7 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
 ### Architecture Decisions
 - **UI Strategy**: UI mínima funcional - componentes básicos sem polish visual
 - **Implementation Order**: Core mechanics → Minimal UI → Polish (futuro)
+- **Game Runtime**: Driver determinístico único (engine) com fila de comandos/eventos e scheduler centralizado para timers/bot (sem múltiplos drivers concorrentes em UI/hooks)
 - **Error Handling**: Dual-mode (retry + fallback produção / pause + debug dev)
 - **Logging**: Structured logs (JSON) + Game Log UI in-game
 - **Performance Target**: 30 FPS consistente, transições <100ms
@@ -106,9 +107,13 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
    
 3. **Turn Timer + Animations** (Low)
    - **Risk**: Timer preciso + animações podem conflitar
-   - **Mitigation**: Separar timers lógicos (setTimeout) de animações (CSS), priorizar lógica
+   - **Mitigation**: Timers de gameplay via scheduler centralizado (engine); animações via CSS; evitar setTimeout espalhado em UI/hooks
 
-4. **Pool Generation Fairness** (Medium)
+4. **Race Conditions no Fluxo de Jogo** (High)
+   - **Risk**: Fluxo de turno/rodada travar por múltiplos drivers concorrentes (UI + callbacks assíncronos + bot + timers)
+   - **Mitigation**: Driver determinístico único (engine) com fila de comandos/eventos; scheduler centralizado; UI apenas renderiza e emite intents
+
+5. **Pool Generation Fairness** (Medium)
    - **Risk**: RNG pode gerar pools injustos (ex: 100% SAFE ou 100% FATAL)
    - **Mitigation**: Testes de distribuição, validar bounds (min/max por tipo)
 
@@ -148,6 +153,7 @@ Vamos usar React + Zustand + Vite + Typescript na construção do jogo. Foco em 
 - `state-machine.ts` - State machine de fases (Lobby → Draft → Match → Shopping → Results)
 - `turn-manager.ts` - Gerenciar ordem de turnos (round-robin, skip eliminados)
 - `event-processor.ts` - Processar eventos deterministicamente (reducer pattern)
+- `engine/` - Runtime determinístico (driver único + scheduler centralizado)
 
 #### 1.3 Bot AI (`src/core/bot/`)
 - `bot-easy.ts` - Nível Easy (Paciente)

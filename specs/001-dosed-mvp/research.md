@@ -319,7 +319,7 @@ interface LogEntry {
 Constitution Principle III (Event-Driven & Determinístico) requer máximo 8 tipos de eventos, estado imutável, processamento determinístico.
 
 ### Decision
-**8 core events** processados por event processor determinístico com estado imutável.
+**8 core events** processados por event processor determinístico com estado imutável, com driver único (engine) para comandos/eventos e scheduler centralizado para timers.
 
 ### Rationale
 1. **Determinismo**: Essencial para testes, replays, futuro multiplayer
@@ -358,6 +358,14 @@ function processEvent(state: GameState, event: GameEvent): GameState {
 ```
 
 **Estado Imutável**: Usar Immer com Zustand para garantir imutabilidade sem boilerplate.
+
+### Runtime Driver (Engine)
+
+O runtime do jogo é dirigido por um único fluxo:
+- Comandos (intents) entram por um dispatcher único
+- O dispatcher enfileira e aplica eventos no reducer
+- Após cada evento, o engine executa auto-avanços determinísticos (fim de turno, fim de rodada, fim de partida)
+- Timers (turn timeout, bot timeout, delays) são geridos por um scheduler central que emite eventos para o dispatcher
 
 **Testes de Determinismo**:
 ```typescript
